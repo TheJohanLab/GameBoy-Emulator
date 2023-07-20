@@ -2,6 +2,6 @@
 
 int main(int argc, char** argv)
 {
-	std::cout << "sauce" << "\n";
+	std::cout << "saucer les saucisses" << "\n";
 	return 0;
 }

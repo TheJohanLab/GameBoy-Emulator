@@ -127,7 +127,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bus\Bus.cpp" />
+    <ClCompile Include="Clock\Clock.cpp" />
+    <ClCompile Include="CPU\CPU.cpp" />
+    <ClCompile Include="Instruction\InstructionJump.cpp" />
+    <ClCompile Include="Instruction\InstructionCPUControl.cpp" />
+    <ClCompile Include="Instruction\Instruction1BitOperation.cpp" />
+    <ClCompile Include="Instruction\InstructionRotateShift.cpp" />
+    <ClCompile Include="Instruction\Instruction16BitLogic.cpp" />
+    <ClCompile Include="Instruction\Instruction8BitLogic.cpp" />
+    <ClCompile Include="Instruction\Instruction16BitLoad.cpp" />
+    <ClCompile Include="Instruction\Instruction8BitLoad.cpp" />
+    <ClCompile Include="Instruction\Instruction.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Memory\Memory.cpp" />
+    <ClCompile Include="Registries\Registries.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bus\Bus.h" />
+    <ClInclude Include="Clock\Clock.h" />
+    <ClInclude Include="CPU\CPU.h" />
+    <ClInclude Include="Instruction\InstructionJump.h" />
+    <ClInclude Include="Instruction\InstructionCPUControl.h" />
+    <ClInclude Include="Instruction\Instruction1BitOperation.h" />
+    <ClInclude Include="Instruction\InstructionRotateShift.h" />
+    <ClInclude Include="Instruction\Instruction16BitLogic.h" />
+    <ClInclude Include="Instruction\Instruction8BitLogic.h" />
+    <ClInclude Include="Instruction\Instruction16BitLoad.h" />
+    <ClInclude Include="Instruction\Instruction8BitLoad.h" />
+    <ClInclude Include="Instruction\Instruction.h" />
+    <ClInclude Include="Memory\Memory.h" />
+    <ClInclude Include="Registries\Registries.h" />
+    <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

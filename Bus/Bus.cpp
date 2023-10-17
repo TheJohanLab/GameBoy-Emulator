@@ -5,14 +5,13 @@ Bus::Bus()
 	mMemory = Memory();
 }
 
-/*u8 Bus::read(u16 address) 
+u8 Bus::read(const u16 &address) const
 {
-	return 0;
-	//return mMemory[address];
-}*/
+	return mMemory.read(address);
+}
 
 
-/*void Bus::write(u16 address, u8 data) 
+void Bus::write(const u16 &address, const u8 &data)
 {
-
-}*/
+	mMemory.write(address, data);
+}

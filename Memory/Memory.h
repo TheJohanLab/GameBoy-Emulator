@@ -6,10 +6,10 @@
 class Memory
 {
 	private:
-		std::array<u8, 8 * 1024> mWRAM;
-		std::array<u8, 8 * 1024> mVRAM;
-		std::array<u8, 8 * 1024> mERAM;
-		std::array<u8, 127> mHRAM;
+		std::array<u8, 8 * kiB> mWRAM;
+		std::array<u8, 8 * kiB> mVRAM;
+		std::array<u8, 8 * kiB> mERAM;
+		std::array<u8, HRAMSize> mHRAM;
 
 	public:
 		Memory();

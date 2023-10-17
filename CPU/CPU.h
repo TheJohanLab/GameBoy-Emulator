@@ -13,7 +13,7 @@ class CPU
 
 	Bus mBus;
 	Registries mRegistries;
-	std::array<Instruction, 256> mInstructionSet;
+	std::array<Instruction, instructionAmount> mInstructionSet;
 
 	public:
 	CPU(Bus const & bus);

@@ -130,6 +130,7 @@
     <ClCompile Include="Bus\Bus.cpp" />
     <ClCompile Include="Clock\Clock.cpp" />
     <ClCompile Include="CPU\CPU.cpp" />
+    <ClCompile Include="GameLoop\GameLoop.cpp" />
     <ClCompile Include="Instruction\InstructionJump.cpp" />
     <ClCompile Include="Instruction\InstructionCPUControl.cpp" />
     <ClCompile Include="Instruction\Instruction1BitOperation.cpp" />
@@ -147,6 +148,7 @@
     <ClInclude Include="Bus\Bus.h" />
     <ClInclude Include="Clock\Clock.h" />
     <ClInclude Include="CPU\CPU.h" />
+    <ClInclude Include="GameLoop\GameLoop.h" />
     <ClInclude Include="Instruction\InstructionJump.h" />
     <ClInclude Include="Instruction\InstructionCPUControl.h" />
     <ClInclude Include="Instruction\Instruction1BitOperation.h" />

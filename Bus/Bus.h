@@ -13,8 +13,8 @@ class Bus
 		Bus();
 		virtual ~Bus() = default;
 
-		//u8 read(u16 address);
-		//void write(u16 address, u8 data);
+		u8 read(const u16 &address) const;
+		void write(const u16 &address, const u8 &data);
 
 };
 

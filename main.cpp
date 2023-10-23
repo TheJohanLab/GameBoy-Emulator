@@ -2,16 +2,19 @@
 #include "Bus/Bus.h"
 #include "Clock/Clock.h"
 #include <chrono>
+#include "CPU/CPU.h"
 
 int main(int argc, char** argv)
 {
-	//Bus bus;
-	Clock clock = Clock();
+	Bus bus;
+	CPU cpu = CPU(bus);
+	cpu.executeOpcode();
+	/*Clock clock = Clock();*/
 
 
 	std::chrono::high_resolution_clock::time_point begin = std::chrono::high_resolution_clock::now();
 
-	clock.emulateCycles(1);
+	/*clock.emulateCycles(1);*/
 	/*while ()
 	{
 

@@ -84,6 +84,7 @@
     <ClCompile Include="Clock\Clock.cpp" />
     <ClCompile Include="CPU\CPU.cpp" />
     <ClCompile Include="GameLoop\GameLoop.cpp" />
+    <ClCompile Include="Instruction\InstructionFactory.cpp" />
     <ClCompile Include="Instruction\InstructionJump.cpp" />
     <ClCompile Include="Instruction\InstructionCPUControl.cpp" />
     <ClCompile Include="Instruction\Instruction1BitOperation.cpp" />
@@ -102,6 +103,9 @@
     <ClInclude Include="Clock\Clock.h" />
     <ClInclude Include="CPU\CPU.h" />
     <ClInclude Include="GameLoop\GameLoop.h" />
+    <ClInclude Include="Instruction\InstructionEnum.h" />
+    <ClInclude Include="Instruction\InstructionFactory.h" />
+    <ClInclude Include="Instruction\InstructionInclude.h" />
     <ClInclude Include="Instruction\InstructionJump.h" />
     <ClInclude Include="Instruction\InstructionCPUControl.h" />
     <ClInclude Include="Instruction\Instruction1BitOperation.h" />

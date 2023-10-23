@@ -4,13 +4,15 @@
 
 class Instruction
 {
-	protected:
-		std::string name;
-		// Fonction ptr
-		u8 clockCycle;
+protected:
+	std::string mName;
+	void (*pmInstruction)();
+	u8 mClockCycle;
 
-	public:
-		Instruction();
-		virtual ~Instruction() = default;
+public:
+	Instruction();
+	virtual ~Instruction() = default;
+
+	auto getFunctionPointer() const { return pmInstruction; }
 };
 

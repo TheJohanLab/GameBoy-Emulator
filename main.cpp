@@ -4,8 +4,13 @@
 #include <chrono>
 #include "CPU/CPU.h"
 
+#include <SDL.h>
+
 int main(int argc, char** argv)
 {
+
+	SDL_Init(0);
+
 	Bus bus;
 	CPU cpu = CPU(bus);
 	cpu.executeOpcode();

@@ -23,6 +23,5 @@ class CPU
 		void executeOpcode();
 		void callInterruptHandler(u16 const &address);
 		
-
 };
 

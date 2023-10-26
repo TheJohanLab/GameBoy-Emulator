@@ -7,7 +7,7 @@ Instruction1BitOperation::Instruction1BitOperation(std::string const & name, voi
 
 }
 
-void Instruction1BitOperation::instruction1() 
+void Instruction1BitOperation::bit_0cB()
 {
 	std::cout << "instr 1" << "\n";
 }

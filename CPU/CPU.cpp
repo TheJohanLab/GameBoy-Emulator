@@ -11,7 +11,8 @@ void CPU::initInstructionSet()
 
 	mInstructionSet =
 	{
-		instructionFactory.createInstruction(InstructionEnum::I1BITOPERATION, "instruction1", &Instruction1BitOperation::instruction1, 1)
+		instructionFactory.createInstruction(InstructionEnum::I1BITOPERATION, "BIT 0,B", &Instruction1BitOperation::bit_0cB, 1), //CB40
+
 	};
 }
 
@@ -19,3 +20,4 @@ void CPU::executeOpcode()
 {
 	(mInstructionSet[0]->getFunctionPointer())();
 }
+

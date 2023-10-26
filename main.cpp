@@ -8,29 +8,77 @@
 
 int main(int argc, char** argv)
 {
-
-	SDL_Init(0);
+	
 
 	Bus bus;
 	CPU cpu = CPU(bus);
 	cpu.executeOpcode();
+	Uint64 frameStart;
+	Uint64 frameEnd;
 	/*Clock clock = Clock();*/
 
+	int cycles = 0;
+	const int cyclesPerFrame = 70224;
+	const double timePerFrame = 1.0 / 60.0;
+	// frameStart
+	frameStart = SDL_GetPerformanceCounter();
+	bool isRunning = true;
+	int cnt = 0;
 
-	std::chrono::high_resolution_clock::time_point begin = std::chrono::high_resolution_clock::now();
+	//std::cout << "SDL_GetPerformanceCounter start " << frameStart << "\n";
 
-	/*clock.emulateCycles(1);*/
-	/*while ()
+	while (isRunning)
 	{
+		while (cycles < cyclesPerFrame)
+		{
+			cpu.executeOpcode();
+			cycles += 4 ;
+		}
+		std::cout << "Nombre d'instructions : " << cycles / 4 << std::endl; // 17556
+		std::cout << "Nombre de cycles : " << cycles<< std::endl; // 70224
 
-		// Lecture opcode
-		// executeOpCode 
-		// clock.emulateCycles(instruction.get)
+		cycles -= cyclesPerFrame;
 
-	}*/
-	std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+		std::cout << "Nombre de cycles après reset : " << cycles << std::endl; // 0
 
-	std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds> (end - begin).count() << "[ms]" << std::endl;
+
+		frameEnd = SDL_GetPerformanceCounter();
+
+		while (true)
+		{
+			frameEnd = SDL_GetPerformanceCounter();
+			double frameElapsedInSec = (double)(frameEnd - frameStart) / SDL_GetPerformanceFrequency();
+			//std::cout << "get performance frequency " << SDL_GetPerformanceFrequency() << "\n";
+			//std::cout << "SDL_GetPerformanceCounter end " << frameEnd << "\n";
+
+			if (frameElapsedInSec >= timePerFrame)
+			{
+				std::cout << "frameElapsedInSec" << frameElapsedInSec << "\n";
+				cnt++;
+				break;
+			}
+		}
+
+		frameStart = frameEnd;
+
+		if (cnt >= 60)
+		{
+			std::cout << "fin du programme" << "\n";
+			break;
+		}
+	}
+		// while (cycles < CyclesPerFrame)
+			// excution opcode
+			// cycles += cyclesInstruction
+		// cycles -= cyclesPerFrame
+		// frameEnd
+		// while(true)
+			// frameEnd
+			// elapsedTimeInFrame
+			// if elapsedTimeInFrame >= 1/60s
+			// break
+		// frameStart = frameEnd
+
 
 
 	return 0;

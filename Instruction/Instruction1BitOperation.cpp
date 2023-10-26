@@ -9,5 +9,5 @@ Instruction1BitOperation::Instruction1BitOperation(std::string const & name, voi
 
 void Instruction1BitOperation::bit_0cB()
 {
-	std::cout << "instr 1" << "\n";
+	//std::cout << "instr 1" << "\n";
 }

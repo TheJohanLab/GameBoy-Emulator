@@ -1,5 +1,6 @@
 #pragma once
 #include "../Utils/Utils.h"
+#include <iostream>
 
 class Registries
 {
@@ -15,6 +16,9 @@ class Registries
 	public:
 		Registries();
 		virtual ~Registries() = default;
+
+		void setAF(u16 value) { AF = value;
+								std::cout << "AF = " << AF << "\n"; }
 
 
 };

@@ -1,3 +1,6 @@
 #include "Registries.h"
 
-Registries::Registries(){}
+Registries::Registries()
+{
+	AF = 0x00;
+}

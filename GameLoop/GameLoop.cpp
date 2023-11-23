@@ -21,7 +21,7 @@ void GameLoop::startGame()
 	{
 		while (cycles < cyclesPerFrame)
 		{
-			u8 currCycle = mCPU.executeOpcode(1);
+			u8 currCycle = mCPU.executeOpcode(0x0F);
 			cycles += currCycle;
 		}
 		std::cout << "Nombre d'instructions : " << cycles / 4 << std::endl; 

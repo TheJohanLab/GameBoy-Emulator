@@ -196,9 +196,9 @@ u8 CPU::executeOpcodeCB(CPU &cpu) const
 	return (4 + mInstructionSet[0x100 + opcodeCB]->getClockCycle());
 }
 
-u8 CPU::getRegistries(std::string registry)
+u8* CPU::getRegistries(const std::string& registry)
 {
-	using registryFuncPtr = u8(Registries::*)();
+	using registryFuncPtr = u8*(Registries::*)();
 	
 	std::map<std::string, registryFuncPtr > registriesMap = {
 		{"A", &Registries::getA},
@@ -210,8 +210,8 @@ u8 CPU::getRegistries(std::string registry)
 		{"L", &Registries::getL}
 	};
 
-	return (mRegistries.*(registriesMap[registry]))();
 
+	return (mRegistries.*(registriesMap[registry]))();
 
 }
 

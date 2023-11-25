@@ -62,6 +62,5 @@ class InstructionRotateShift : public Instruction
 private:
 	static void RLCr(u8& registry, flags& flagRegistry);
 
-
 };
 

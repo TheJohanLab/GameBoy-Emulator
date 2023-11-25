@@ -1,6 +1,6 @@
 #include "Registries.h"
 
-Registries::Registries()
+Registries::Registries() : A(0x00), B(0x00), C(0x00), D(0x00), E(0x00), H(0x00), L(0x00)
 {
-	A = 0x00;
+	F.F = 0x00;
 }

@@ -10,8 +10,9 @@ InstructionRotateShift::InstructionRotateShift(std::string const & name, void (*
 
 void InstructionRotateShift::RLC_B(CPU& cpu) 
 {
-	cpu.setRegistries("a", 1);
-	std::cout << cpu.getRegistries("A") << "\n";
+	u8 registry = cpu.getRegistries("B");
+	flags flagRegistry = cpu.getFlagRegistry();
+	RLCr(registry, flagRegistry);
 }
 
 void InstructionRotateShift::RLC_C(CPU& cpu) 

@@ -60,7 +60,7 @@ class InstructionRotateShift : public Instruction
 		static void SRA_A(CPU& cpu);		//0xCB1F SRA A
 
 private:
-	void RLCr(u8& registry, flags& flagRegistry);
+	static void RLCr(u8& registry, flags& flagRegistry);
 
 
 };

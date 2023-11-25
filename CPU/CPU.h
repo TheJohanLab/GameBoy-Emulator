@@ -30,7 +30,10 @@ class CPU
 		void setAF(u16 val) { mRegistries.setAF(val); }
 
 		u8 getRegistries(std::string registry);
+		flags getFlagRegistry() { return mRegistries.getF(); }
+
 		void setRegistries(std::string registry, u8 value);
+		void setFlagRegistry(u8 value) { mRegistries.setF(value); }
 
 		
 };

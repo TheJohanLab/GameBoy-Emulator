@@ -10,10 +10,12 @@ InstructionRotateShift::InstructionRotateShift(std::string const & name, void (*
 
 void InstructionRotateShift::RLC_B(CPU& cpu) 
 {
+	RLCr(cpu)
 }
 
 void InstructionRotateShift::RLC_C(CPU& cpu) 
 {
+	RLCr(cpu.getRe)
 }
 
 void InstructionRotateShift::RLC_D(CPU& cpu) 
@@ -199,3 +201,16 @@ void InstructionRotateShift::SRA_pHLq(CPU& cpu)
 void InstructionRotateShift::SRA_A(CPU& cpu)
 {
 }
+
+void InstructionRotateShift::RLCr(u8& registry, flags& flagRegistry)
+{
+	flagRegistry.flags.C = getBit(registry, 7);
+	registry = registry << 1;
+	setBit(registry, 0, flagRegistry.flags.C);
+
+	flagRegistry.flags.Z = registry == 0x00;
+	flagRegistry.flags.H = 0x00;
+	flagRegistry.flags.N = 0x00;
+}
+
+

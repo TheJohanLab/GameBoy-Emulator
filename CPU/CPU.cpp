@@ -31,14 +31,14 @@ void CPU::initInstructionSet()
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD E,d8", &Instruction8BitLoad::LD_Ecd8, 8),			//0x1E
 		//0x2
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD (HL+),A", &Instruction8BitLoad::LD_pHLaqcA, 8),	//0x22
-		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD H,d8", &Instruction8BitLoad::LD_Hcd8, 8),			//0x26
+		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD H,d8", &Instruction8BitLoad::LD_Hcd8, 8),		//0x26
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD A,(HL+)", &Instruction8BitLoad::LD_AcpHLaq, 8),	//0x2A
-		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD L,d8", &Instruction8BitLoad::LD_Lcd8, 8),			//0x2E
+		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD L,d8", &Instruction8BitLoad::LD_Lcd8, 8),		//0x2E
 		//0x3
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD (HL-),A", &Instruction8BitLoad::LD_pHLmqcA, 8),	//0x32
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD (HL),d", &Instruction8BitLoad::LD_pHLqcd8, 12),	//0x36
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD A,(HL-)", &Instruction8BitLoad::LD_AcpHLmq, 8),	//0x3A
-		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD A,d8", &Instruction8BitLoad::LD_Acd8, 8),			//0x3E
+		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD A,d8", &Instruction8BitLoad::LD_Acd8, 8),		//0x3E
 		//0x4
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD B,B", &Instruction8BitLoad::LD_BcB, 4),			//0x40
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD B,C", &Instruction8BitLoad::LD_BcC, 4),			//0x41
@@ -46,7 +46,7 @@ void CPU::initInstructionSet()
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD B,E", &Instruction8BitLoad::LD_BcE, 4),			//0x43
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD B,H", &Instruction8BitLoad::LD_BcH, 4),			//0x44
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD B,L", &Instruction8BitLoad::LD_BcL, 4),			//0x45
-		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD B,(HL)", &Instruction8BitLoad::LD_BcpHLq, 8),		//0x46
+		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD B,(HL)", &Instruction8BitLoad::LD_BcpHLq, 8),	//0x46
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD B,A", &Instruction8BitLoad::LD_BcA, 4),			//0x47
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD C,B", &Instruction8BitLoad::LD_CcB, 4),			//0x48
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD C,C", &Instruction8BitLoad::LD_CcC, 4),			//0x49
@@ -54,7 +54,7 @@ void CPU::initInstructionSet()
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD C,E", &Instruction8BitLoad::LD_CcE, 4),			//0x4B
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD C,H", &Instruction8BitLoad::LD_CcH, 4),			//0x4C
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD C,L", &Instruction8BitLoad::LD_CcL, 4),			//0x4D
-		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD C,(HL)", &Instruction8BitLoad::LD_CcpHLq, 8),		//0x4E
+		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD C,(HL)", &Instruction8BitLoad::LD_CcpHLq, 8),	//0x4E
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD C,A", &Instruction8BitLoad::LD_CcA, 4),			//0x4F
 		//0x5
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD D,B",	&Instruction8BitLoad::LD_DcB	, 4),		//0x50
@@ -80,7 +80,7 @@ void CPU::initInstructionSet()
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD H,E",	&Instruction8BitLoad::LD_HcE	, 4),		//0x63
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD H,H",	&Instruction8BitLoad::LD_HcH	, 4),		//0x64
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD H,L",	&Instruction8BitLoad::LD_HcL	, 4),		//0x65
-		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD H,(HL)", &Instruction8BitLoad::LD_HcpHLq	, 8),		//0x66
+		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD H,(HL)", &Instruction8BitLoad::LD_HcpHLq	, 8),	//0x66
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD H,A",	&Instruction8BitLoad::LD_HcA	, 4),		//0x67
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD L,B",	&Instruction8BitLoad::LD_LcB	, 4),		//0x68
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD L,C",	&Instruction8BitLoad::LD_LcC	, 4),		//0x69
@@ -196,3 +196,10 @@ u8 CPU::executeOpcodeCB(CPU &cpu) const
 	return (4 + mInstructionSet[0x100 + opcodeCB]->getClockCycle());
 }
 
+
+Registries CPU::getRegistries(std::string registry) const
+{
+	std::map<std::string, u8 > registriesMap = {
+		
+	}
+}

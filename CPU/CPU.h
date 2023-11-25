@@ -6,6 +6,7 @@
 #include "../Clock/Clock.h"
 #include "../Registries/Registries.h"
 #include <array>
+#include <map>
 
 class CPU
 {
@@ -26,6 +27,8 @@ class CPU
 		void callInterruptHandler(u16 const &address);
 
 		void setAF(u16 val) { mRegistries.setAF(val); }
+
+		Registries getRegistries(std::string registry) const;
 
 		
 };

@@ -14,3 +14,17 @@ const u8 HRAMSize = 127;
 // Screen refresh
 const int cyclesPerFrame = 70224;
 const double timePerFrame = 1.0 / 60.0;
+
+
+typedef struct s_flags {
+    u8 r : 4;
+    u8 C : 1;
+    u8 H : 1;
+    u8 N : 1;
+    u8 Z : 1;
+}s_flags;
+
+typedef union u_flags {
+	u8 F;
+	s_flags flags;
+}flags;

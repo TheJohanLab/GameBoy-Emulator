@@ -38,11 +38,11 @@ class Registries
 		u16 getAF() { return ((0x00 + A) << 8) + F.F; }
 		u16 getBC() { return ((0x00 + B) << 8) + C; }
 		u16 getDE() { return ((0x00 + D) << 8) + E; }
-		u16 getBC() { return ((0x00 + H) << 8) + L; }
+		u16 getHL() { return ((0x00 + H) << 8) + L; }
 		u16 getSP() { return SP; }
 		u16 getPC() { return PC; }
 
-		void setA(u8 A) { A = A; }
+		void setA(u8 A) { this->A = A; }
 		void setB(u8 A) { B = B; }
 		void setC(u8 A) { C = C; }
 		void setD(u8 A) { D = D; }

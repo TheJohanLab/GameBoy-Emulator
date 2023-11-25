@@ -196,10 +196,39 @@ u8 CPU::executeOpcodeCB(CPU &cpu) const
 	return (4 + mInstructionSet[0x100 + opcodeCB]->getClockCycle());
 }
 
-
-Registries CPU::getRegistries(std::string registry) const
+u8 CPU::getRegistries(std::string registry)
 {
-	std::map<std::string, u8 > registriesMap = {
-		
-	}
+	using registryFuncPtr = u8(Registries::*)();
+	
+	std::map<std::string, registryFuncPtr > registriesMap = {
+		{"A", &Registries::getA},
+		{"B", &Registries::getB},
+		{"C", &Registries::getC},
+		{"D", &Registries::getD},
+		{"E", &Registries::getE},
+		{"H", &Registries::getH},
+		{"L", &Registries::getL}
+	};
+
+	return (mRegistries.*(registriesMap[registry]))();
+
+
+}
+
+void CPU::setRegistries(std::string registry, u8 value)
+{
+	using registryFuncPtr = void(Registries::*)(u8);
+
+	std::map<std::string, registryFuncPtr > registriesMap = {
+		{"A", &Registries::setA},
+		{"B", &Registries::setB},
+		{"C", &Registries::setC},
+		{"D", &Registries::setD},
+		{"E", &Registries::setE},
+		{"H", &Registries::setH},
+		{"L", &Registries::setL}
+	};
+
+	(mRegistries.*registriesMap[registry])(value);
+
 }

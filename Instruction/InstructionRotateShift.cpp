@@ -10,12 +10,12 @@ InstructionRotateShift::InstructionRotateShift(std::string const & name, void (*
 
 void InstructionRotateShift::RLC_B(CPU& cpu) 
 {
-	RLCr(cpu)
+	cpu.setRegistries("a", 1);
+	std::cout << cpu.getRegistries("A") << "\n";
 }
 
 void InstructionRotateShift::RLC_C(CPU& cpu) 
 {
-	RLCr(cpu.getRe)
 }
 
 void InstructionRotateShift::RLC_D(CPU& cpu) 
@@ -104,6 +104,8 @@ void InstructionRotateShift::RL_pHLq(CPU& cpu)
 
 void InstructionRotateShift::RL_A(CPU& cpu)
 {
+	cpu.setRegistries("A", 0x12);
+	std::cout << std::hex << unsigned(cpu.getRegistries("A"));
 }
 
 void InstructionRotateShift::RR_B(CPU& cpu)

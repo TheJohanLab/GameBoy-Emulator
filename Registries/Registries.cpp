@@ -2,5 +2,5 @@
 
 Registries::Registries()
 {
-	AF = 0x00;
+	A = 0x00;
 }

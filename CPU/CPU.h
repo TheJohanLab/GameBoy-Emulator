@@ -7,6 +7,7 @@
 #include "../Registries/Registries.h"
 #include <array>
 #include <map>
+#include <functional>
 
 class CPU
 {
@@ -28,7 +29,8 @@ class CPU
 
 		void setAF(u16 val) { mRegistries.setAF(val); }
 
-		Registries getRegistries(std::string registry) const;
+		u8 getRegistries(std::string registry);
+		void setRegistries(std::string registry, u8 value);
 
 		
 };

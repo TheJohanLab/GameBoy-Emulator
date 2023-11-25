@@ -22,6 +22,7 @@ class CPU
 		virtual ~CPU() = default;
 
 		u8 executeOpcode(u16 opcode) const;
+		u8 executeOpcodeCB(CPU &cpu) const;
 		void callInterruptHandler(u16 const &address);
 
 		void setAF(u16 val) { mRegistries.setAF(val); }

@@ -29,21 +29,21 @@ class Registries
 		u16* getSP() { return &SP; }
 		u16* getPC() { return &PC; }
 
-		void setA(u8 A) { this->A = A; }
-		void setB(u8 A) { this->B = B; }
-		void setC(u8 A) { this->C = C; }
-		void setD(u8 A) { this->D = D; }
-		void setE(u8 A) { this->E = E; }
-		void setF(u8 A) { this->F = F; }
-		void setH(u8 A) { this->H = H; }
-		void setL(u8 A) { this->L = L; }
-		void setAF(u16 AF) { this->A = (AF & 0xF0) >> 8; this->F.F = AF & 0x0F; }
-		void setBC(u16 BC) { this->B = (BC & 0xF0) >> 8; this->C = BC & 0x0F; }
-		void setDE(u16 DE) { this->D = (DE & 0xF0) >> 8; this->E = DE & 0x0F; }
-		void setHL(u16 HL) { this->H = (HL & 0xF0) >> 8; this->L = HL & 0x0F; }
+		void setA(u8 value) { this->A = value; }
+		void setB(u8 value) { this->B = value; }
+		void setC(u8 value) { this->C = value; }
+		void setD(u8 value) { this->D = value; }
+		void setE(u8 value) { this->E = value; }
+		void setF(u8 value) { this->F.F = value; }
+		void setH(u8 value) { this->H = value; }
+		void setL(u8 value) { this->L = value; }
+		void setAF(u16 value) { this->A = (value & 0xF0) >> 8; this->F.F = value & 0x0F; }
+		void setBC(u16 value) { this->B = (value & 0xF0) >> 8; this->C = value & 0x0F; }
+		void setDE(u16 value) { this->D = (value & 0xF0) >> 8; this->E = value & 0x0F; }
+		void setHL(u16 value){ this->H = (value & 0xF0) >> 8; this->L = value & 0x0F; }
 
-		void setSP(u16 SP) { this->SP = SP; }
-		void setPC(u16 PC) { this->PC = PC; }
+		void setSP(u16 value) { this->SP = value; }
+		void setPC(u16 value) { this->PC = value; }
 		
 
 

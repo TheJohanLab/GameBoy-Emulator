@@ -215,7 +215,7 @@ u8* CPU::getRegistries(const std::string& registry)
 
 }
 
-void CPU::setRegistries(std::string registry, u8 value)
+void CPU::setRegistries(const std::string& registry, u8 value)
 {
 	using registryFuncPtr = void(Registries::*)(u8);
 

@@ -70,10 +70,15 @@ void Instruction8BitLoad::LD_Acd8(CPU& cpu)
 
 void Instruction8BitLoad::LD_BcB(CPU& cpu)
 {
+
 }
 
 void Instruction8BitLoad::LD_BcC(CPU& cpu)
 {
+	cpu.setRegistries("C", 0x03);
+	u8* registryC = cpu.getRegistries("C");
+	cpu.setRegistries("B", *registryC);
+
 }
 
 void Instruction8BitLoad::LD_BcD(CPU& cpu)

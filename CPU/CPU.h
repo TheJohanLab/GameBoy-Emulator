@@ -32,7 +32,7 @@ class CPU
 		u8* getRegistries(const std::string& registry);
 		flags* getFlagRegistry() { return mRegistries.getF(); }
 
-		void setRegistries(std::string registry, u8 value);
+		void setRegistries(const std::string & registry, u8 value);
 		void setFlagRegistry(u8 value) { mRegistries.setF(value); }
 
 		

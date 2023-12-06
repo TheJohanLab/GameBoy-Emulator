@@ -9,5 +9,4 @@ Instruction1BitOperation::Instruction1BitOperation(std::string const& name, void
 
 void Instruction1BitOperation::bit_0cB(CPU & cpu)
 {
-	cpu.setAF(12);
 }

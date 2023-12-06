@@ -5,7 +5,12 @@
 
 class Instruction8BitLoad : public Instruction
 {
-	public:
+private:
+		static void LD_Rcd8(CPU& cpu, u8& registry);
+		static void LD_pRRqcR(CPU& cpu, u16& addrRegistries, u8& destRegistry);
+		static void LD_RcpRRq(CPU& cpu, u16& addrRegistries, u8& destRegistry);
+
+public:
 		Instruction8BitLoad(std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles);
 		virtual ~Instruction8BitLoad() = default;
 	

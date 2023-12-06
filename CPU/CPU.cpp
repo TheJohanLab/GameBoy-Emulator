@@ -210,9 +210,22 @@ u8* CPU::getRegistries(const std::string& registry)
 		{"L", &Registries::getL}
 	};
 
-
 	return (mRegistries.*(registriesMap[registry]))();
 
+}
+
+u16 CPU::getCombinedRegistries(const std::string& registries)
+{
+	using registryFuncPtr = u16 (Registries::*)();
+
+	std::map<std::string, registryFuncPtr > registriesMap = {
+		{"AF", &Registries::getAF},
+		{"BC", &Registries::getBC},
+		{"DE", &Registries::getDE},
+		{"HL", &Registries::getHL}
+	};
+
+	return (mRegistries.*(registriesMap[registries]))();
 }
 
 void CPU::setRegistries(const std::string& registry, u8 value)
@@ -231,4 +244,31 @@ void CPU::setRegistries(const std::string& registry, u8 value)
 
 	(mRegistries.*registriesMap[registry])(value);
 
+}
+
+void CPU::setCombinedRegistries(const std::string& registries, u16 value)
+{
+	using registryFuncPtr = void(Registries::*)(u16);
+
+	std::map<std::string, registryFuncPtr > registriesMap = {
+		{"AF", &Registries::setAF},
+		{"BC", &Registries::setBC},
+		{"DE", &Registries::setDE},
+		{"HL", &Registries::setHL}
+	};
+
+	(mRegistries.*registriesMap[registries])(value);
+}
+
+void CPU::writeMemory(const u16 & address, const u8 value)
+{
+	//TODO Verifier si on peut stocker une reference au lieu d'une copie
+	mBus.write(address, value);
+}
+
+u8 CPU::readMemory(const u16& address) const
+{
+	//TODO Verifier si on peut envoyer une reference au lieu d'une copie
+	u8 value = mBus.read(address);
+	return value;
 }

@@ -22,7 +22,7 @@ class Registries
 		flags* getF() { return &F; }
 		u8* getH() { return &H; }
 		u8* getL() { return &L; }
-		u16 getAF() { return ((0x00 + A) << 8) + F.F; }
+		u16 getAF() { return (((0x00 + A) << 8) + F.F); }
 		u16 getBC() { return ((0x00 + B) << 8) + C; }
 		u16 getDE() { return ((0x00 + D) << 8) + E; }
 		u16 getHL() { return ((0x00 + H) << 8) + L; }

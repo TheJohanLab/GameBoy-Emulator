@@ -1,23 +1,38 @@
 #include "Instruction8BitLoad.h"
 
+
+
+
+
 Instruction8BitLoad::Instruction8BitLoad(std::string const& name, void(* pInstruction)(CPU& cpu), u8 clockCycles)
 {
 }
 
 void Instruction8BitLoad::LD_pBCqcA(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("A");
+	u16 addrRegistries = cpu.getCombinedRegistries("BC");
+	LD_pRRqcR(cpu, addrRegistries, *registry);
 }
 
 void Instruction8BitLoad::LD_Bcd8(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("B");
+	LD_Rcd8(cpu, *registry);
 }
 
 void Instruction8BitLoad::LD_AcpBCq(CPU& cpu)
 {
+
+	u16 addrRegistries = cpu.getCombinedRegistries("BC");
+	u8* destRegistry = cpu.getRegistries("A");
+	LD_RcpRRq(cpu, addrRegistries, *destRegistry);
 }
 
 void Instruction8BitLoad::LD_Ccd8(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("C");
+	LD_Rcd8(cpu, *registry);
 }
 
 void Instruction8BitLoad::LD_pDEqcA(CPU& cpu)
@@ -347,4 +362,21 @@ void Instruction8BitLoad::LD_AcpCq(CPU& cpu)
 
 void Instruction8BitLoad::LDH_Acpa16q(CPU& cpu)
 {
+}
+
+
+void Instruction8BitLoad::LD_Rcd8(CPU& cpu, u8& registry)
+{
+	//TODO Recuperer PC++ pour affecter cette valeur dans le registre
+}
+
+void Instruction8BitLoad::LD_pRRqcR(CPU& cpu, u16& addrRegistries, u8& destRegistry)
+{
+	cpu.writeMemory(addrRegistries, destRegistry);
+}
+
+void Instruction8BitLoad::LD_RcpRRq(CPU& cpu, u16& addrRegistries, u8& destRegistry)
+{
+	u8 data = cpu.readMemory(addrRegistries);
+	destRegistry = data;
 }

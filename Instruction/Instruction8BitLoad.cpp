@@ -2,17 +2,17 @@
 
 
 
-
-
 Instruction8BitLoad::Instruction8BitLoad(std::string const& name, void(* pInstruction)(CPU& cpu), u8 clockCycles)
 {
 }
 
 void Instruction8BitLoad::LD_pBCqcA(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	u16 addrRegistries = cpu.getCombinedRegistries("BC");
-	LD_pRRqcR(cpu, addrRegistries, *registry);
+	u8* Aregistry = cpu.getRegistries("A");
+	combinedRegistries* BCRegistries = cpu.getCombinedRegistries("BC");
+
+	LD_pRRqcR(cpu, *BCRegistries, *Aregistry);
+
 }
 
 void Instruction8BitLoad::LD_Bcd8(CPU& cpu)
@@ -23,10 +23,9 @@ void Instruction8BitLoad::LD_Bcd8(CPU& cpu)
 
 void Instruction8BitLoad::LD_AcpBCq(CPU& cpu)
 {
-
-	u16 addrRegistries = cpu.getCombinedRegistries("BC");
 	u8* destRegistry = cpu.getRegistries("A");
-	LD_RcpRRq(cpu, addrRegistries, *destRegistry);
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("BC");
+	LD_RcpRRq(cpu, *addrRegistries, *destRegistry);
 }
 
 void Instruction8BitLoad::LD_Ccd8(CPU& cpu)
@@ -37,307 +36,526 @@ void Instruction8BitLoad::LD_Ccd8(CPU& cpu)
 
 void Instruction8BitLoad::LD_pDEqcA(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("A");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("DE");
+	LD_pRRqcR(cpu, *addrRegistries, *registry);
 }
 
 void Instruction8BitLoad::LD_Dcd8(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("D");
+	LD_Rcd8(cpu, *registry);
 }
 
 void Instruction8BitLoad::LD_AcpDEq(CPU& cpu)
 {
+	u8* destRegistry = cpu.getRegistries("A");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("DE");
+	LD_RcpRRq(cpu, *addrRegistries, *destRegistry);
 }
 
 void Instruction8BitLoad::LD_Ecd8(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("E");
+	LD_Rcd8(cpu, *registry);
 }
 
 void Instruction8BitLoad::LD_pHLaqcA(CPU& cpu)
 {
+	u8* Aregistry = cpu.getRegistries("A");
+	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *HLRegistries, *Aregistry);
+	(*HLRegistries)++;
 }
 
 void Instruction8BitLoad::LD_Hcd8(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("H");
+	LD_Rcd8(cpu, *registry);
 }
 
 void Instruction8BitLoad::LD_AcpHLaq(CPU& cpu)
 {
+	u8* ARegistry = cpu.getRegistries("A");
+	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
+	LD_RcpRRq(cpu, *HLRegistries, *ARegistry);
+	(*HLRegistries)++;
 }
 
 void Instruction8BitLoad::LD_Lcd8(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("L");
+	LD_Rcd8(cpu, *registry);
 }
 
 void Instruction8BitLoad::LD_pHLmqcA(CPU& cpu)
 {
+	u8* Aregistry = cpu.getRegistries("A");
+	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *HLRegistries, *Aregistry);
+	(*HLRegistries)--;
 }
 
 void Instruction8BitLoad::LD_pHLqcd8(CPU& cpu)
 {
+	combinedRegistries* HLRegistry = cpu.getCombinedRegistries("HL");
+	LD_pRRqcd8(cpu, *HLRegistry);
 }
 
 void Instruction8BitLoad::LD_AcpHLmq(CPU& cpu)
 {
+	u8* ARegistry = cpu.getRegistries("A");
+	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
+	LD_RcpRRq(cpu, *HLRegistries, *ARegistry);
+	(*HLRegistries)--;
 }
 
 void Instruction8BitLoad::LD_Acd8(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("A");
+	LD_Rcd8(cpu, *registry);
 }
 
 void Instruction8BitLoad::LD_BcB(CPU& cpu)
 {
-
+	//TODO Verifier cette instruction
+	u8* dstRegistry = cpu.getRegistries("B");
+	u8* srcRegistry = cpu.getRegistries("B");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_BcC(CPU& cpu)
 {
-	cpu.setRegistries("C", 0x03);
-	u8* registryC = cpu.getRegistries("C");
-	cpu.setRegistries("B", *registryC);
-
+	u8* dstRegistry = cpu.getRegistries("B");
+	u8* srcRegistry = cpu.getRegistries("C");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_BcD(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("B");
+	u8* srcRegistry = cpu.getRegistries("D");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_BcE(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("B");
+	u8* srcRegistry = cpu.getRegistries("E");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_BcH(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("B");
+	u8* srcRegistry = cpu.getRegistries("H");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_BcL(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("B");
+	u8* srcRegistry = cpu.getRegistries("L");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_BcpHLq(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("B");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *dstRegistry);
 }
 
 void Instruction8BitLoad::LD_BcA(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("B");
+	u8* srcRegistry = cpu.getRegistries("A");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_CcB(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("C");
+	u8* srcRegistry = cpu.getRegistries("B");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_CcC(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("C");
+	u8* srcRegistry = cpu.getRegistries("C");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_CcD(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("C");
+	u8* srcRegistry = cpu.getRegistries("D");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_CcE(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("C");
+	u8* srcRegistry = cpu.getRegistries("E");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_CcH(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("C");
+	u8* srcRegistry = cpu.getRegistries("H");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_CcL(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("C");
+	u8* srcRegistry = cpu.getRegistries("L");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_CcpHLq(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("C");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *dstRegistry);
 }
 
 void Instruction8BitLoad::LD_CcA(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("C");
+	u8* srcRegistry = cpu.getRegistries("A");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_DcB(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("D");
+	u8* srcRegistry = cpu.getRegistries("B");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_DcC(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("D");
+	u8* srcRegistry = cpu.getRegistries("C");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_DcD(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("D");
+	u8* srcRegistry = cpu.getRegistries("D");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_DcE(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("D");
+	u8* srcRegistry = cpu.getRegistries("E");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_DcH(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("D");
+	u8* srcRegistry = cpu.getRegistries("H");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_DcL(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("D");
+	u8* srcRegistry = cpu.getRegistries("L");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_DcpHLq(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("D");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *dstRegistry);
 }
 
 void Instruction8BitLoad::LD_DcA(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("D");
+	u8* srcRegistry = cpu.getRegistries("A");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_EcB(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("E");
+	u8* srcRegistry = cpu.getRegistries("B");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_EcC(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("E");
+	u8* srcRegistry = cpu.getRegistries("C");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_EcD(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("E");
+	u8* srcRegistry = cpu.getRegistries("D");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_EcE(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("E");
+	u8* srcRegistry = cpu.getRegistries("E");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_EcH(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("E");
+	u8* srcRegistry = cpu.getRegistries("H");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_EcL(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("E");
+	u8* srcRegistry = cpu.getRegistries("L");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_EcpHLq(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("E");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *dstRegistry);
 }
 
 void Instruction8BitLoad::LD_EcA(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("E");
+	u8* srcRegistry = cpu.getRegistries("A");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_HcB(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("H");
+	u8* srcRegistry = cpu.getRegistries("B");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_HcC(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("H");
+	u8* srcRegistry = cpu.getRegistries("C");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_HcD(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("H");
+	u8* srcRegistry = cpu.getRegistries("D");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_HcE(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("H");
+	u8* srcRegistry = cpu.getRegistries("E");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_HcH(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("H");
+	u8* srcRegistry = cpu.getRegistries("B");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_HcL(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("H");
+	u8* srcRegistry = cpu.getRegistries("L");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_HcpHLq(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("H");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *dstRegistry);
 }
 
 void Instruction8BitLoad::LD_HcA(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("H");
+	u8* srcRegistry = cpu.getRegistries("A");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_LcB(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("L");
+	u8* srcRegistry = cpu.getRegistries("B");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_LcC(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("L");
+	u8* srcRegistry = cpu.getRegistries("C");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_LcD(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("L");
+	u8* srcRegistry = cpu.getRegistries("D");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_LcE(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("L");
+	u8* srcRegistry = cpu.getRegistries("E");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_LcH(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("L");
+	u8* srcRegistry = cpu.getRegistries("H");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_LcL(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("L");
+	u8* srcRegistry = cpu.getRegistries("L");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_LcpHLq(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("L");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *dstRegistry);
 }
 
 void Instruction8BitLoad::LD_LcA(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("L");
+	u8* srcRegistry = cpu.getRegistries("A");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_pHLqcB(CPU& cpu)
 {
+	u8* srcRegistry = cpu.getRegistries("B");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *srcRegistry);
 }
 
 void Instruction8BitLoad::LD_pHLqcC(CPU& cpu)
 {
+	u8* srcRegistry = cpu.getRegistries("C");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *srcRegistry);
 }
 
 void Instruction8BitLoad::LD_pHLqcD(CPU& cpu)
 {
+	u8* srcRegistry = cpu.getRegistries("D");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *srcRegistry);
 }
 
 void Instruction8BitLoad::LD_pHLqcE(CPU& cpu)
 {
+	u8* srcRegistry = cpu.getRegistries("E");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *srcRegistry);
 }
 
 void Instruction8BitLoad::LD_pHLqcH(CPU& cpu)
 {
+	u8* srcRegistry = cpu.getRegistries("H");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *srcRegistry);
 }
 
 void Instruction8BitLoad::LD_pHLqcL(CPU& cpu)
 {
+	u8* srcRegistry = cpu.getRegistries("L");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *srcRegistry);
 }
 
 void Instruction8BitLoad::LD_pHLqcA(CPU& cpu)
 {
+	u8* srcRegistry = cpu.getRegistries("A");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *srcRegistry);
 }
 
 void Instruction8BitLoad::LD_AcB(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("B");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_AcC(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("C");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_AcD(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("D");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_AcE(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("E");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_AcH(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("H");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_AcL(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("L");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LD_AcpHLq(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
+	LD_pRRqcR(cpu, *addrRegistries, *dstRegistry);
 }
 
 void Instruction8BitLoad::LD_AcA(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("A");
+	*dstRegistry = *srcRegistry;
 }
 
 void Instruction8BitLoad::LDH_pa8qcA(CPU& cpu)
@@ -367,16 +585,28 @@ void Instruction8BitLoad::LDH_Acpa16q(CPU& cpu)
 
 void Instruction8BitLoad::LD_Rcd8(CPU& cpu, u8& registry)
 {
-	//TODO Recuperer PC++ pour affecter cette valeur dans le registre
+	u16* PC = cpu.getPC();
+	*PC += 1;
+	u8 data = cpu.readMemory(*PC);
+	registry = data;
 }
 
-void Instruction8BitLoad::LD_pRRqcR(CPU& cpu, u16& addrRegistries, u8& destRegistry)
+void Instruction8BitLoad::LD_pRRqcR(CPU& cpu, combinedRegistries& addrRegistries, u8& srcRegistry)
 {
-	cpu.writeMemory(addrRegistries, destRegistry);
+	cpu.writeMemory(addrRegistries, srcRegistry);
 }
 
-void Instruction8BitLoad::LD_RcpRRq(CPU& cpu, u16& addrRegistries, u8& destRegistry)
+void Instruction8BitLoad::LD_RcpRRq(CPU& cpu, combinedRegistries& addrRegistries, u8& dstRegistry)
 {
 	u8 data = cpu.readMemory(addrRegistries);
-	destRegistry = data;
+	dstRegistry = data;
 }
+
+void Instruction8BitLoad::LD_pRRqcd8(CPU& cpu, combinedRegistries& registries)
+{
+	u16* PC = cpu.getPC();
+	*PC += 1;
+	u8 data = cpu.readMemory(*PC);
+	cpu.writeMemory(registries, data);
+}
+

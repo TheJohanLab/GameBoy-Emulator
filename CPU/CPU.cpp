@@ -5,7 +5,7 @@ CPU::CPU()
 
 }
 
-CPU::CPU(Bus const& bus) : mBus(bus)
+CPU::CPU(Bus* bus) : mBus(bus)
 {
 	initInstructionSet();
 }
@@ -171,26 +171,26 @@ void CPU::initInstructionSet()
 	};
 }
 
-u8 CPU::executeOpcode(u16 opcode) const
+u8 CPU::executeOpcode(u16 opcode)
 {
-	CPU cpu;
 
 	if (opcode == 0xCB) 
 	{
-		return executeOpcodeCB(cpu);
+		return executeOpcodeCB();
 	}
 
-	(mInstructionSet[opcode]->getFunctionPointer())(cpu);
+	(mInstructionSet[opcode]->getFunctionPointer())(*this);
 	std::cout << mInstructionSet[opcode]->getName() << "\n";
 	
+
 	return mInstructionSet[opcode]->getClockCycle();
 }
 
-u8 CPU::executeOpcodeCB(CPU &cpu) const
+u8 CPU::executeOpcodeCB() 
 {
 	// read opcode
 	u16 opcodeCB = 0x00;
-	(mInstructionSet[0x100 + opcodeCB]->getFunctionPointer())(cpu);
+	(mInstructionSet[0x100 + opcodeCB]->getFunctionPointer())(*this);
 	std::cout << mInstructionSet[0x100 + opcodeCB]->getName() << "\n";
 
 	return (4 + mInstructionSet[0x100 + opcodeCB]->getClockCycle());
@@ -214,9 +214,9 @@ u8* CPU::getRegistries(const std::string& registry)
 
 }
 
-u16 CPU::getCombinedRegistries(const std::string& registries)
+combinedRegistries* CPU::getCombinedRegistries(const std::string& registries)
 {
-	using registryFuncPtr = u16 (Registries::*)();
+	using registryFuncPtr = combinedRegistries * (Registries::*)();
 
 	std::map<std::string, registryFuncPtr > registriesMap = {
 		{"AF", &Registries::getAF},
@@ -263,12 +263,27 @@ void CPU::setCombinedRegistries(const std::string& registries, u16 value)
 void CPU::writeMemory(const u16 & address, const u8 value)
 {
 	//TODO Verifier si on peut stocker une reference au lieu d'une copie
-	mBus.write(address, value);
+	mBus->write(address, value);
+}
+
+void CPU::writeMemory(const combinedRegistries& registries, const u8 value)
+{
+	//TODO Verifier si on peut stocker une reference au lieu d'une copie
+	u16 address = (*registries.reg1 << 8) + *registries.reg2;
+	mBus->write(address, value);
 }
 
 u8 CPU::readMemory(const u16& address) const
 {
 	//TODO Verifier si on peut envoyer une reference au lieu d'une copie
-	u8 value = mBus.read(address);
+	u8 value = mBus->read(address);
+	return value;
+}
+
+u8 CPU::readMemory(const combinedRegistries& registries) const
+{
+	//TODO Verifier si on peut envoyer une reference au lieu d'une copie
+	u16 address = (*registries.reg1 << 8) + *registries.reg2;
+	u8 value = mBus->read(address);
 	return value;
 }

@@ -2,13 +2,15 @@
 
 #include "Instruction.h"
 #include "../CPU/CPU.h"
+#include "../Registries/Registries.h"
 
 class Instruction8BitLoad : public Instruction
 {
 private:
 		static void LD_Rcd8(CPU& cpu, u8& registry);
-		static void LD_pRRqcR(CPU& cpu, u16& addrRegistries, u8& destRegistry);
-		static void LD_RcpRRq(CPU& cpu, u16& addrRegistries, u8& destRegistry);
+		static void LD_pRRqcd8(CPU& cpu, combinedRegistries& registries);
+		static void LD_pRRqcR(CPU& cpu, combinedRegistries& addrRegistries, u8& srcRegistry);
+		static void LD_RcpRRq(CPU& cpu, combinedRegistries& addrRegistries, u8& dstRegistry);
 
 public:
 		Instruction8BitLoad(std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles);

@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 	
 
 	Bus bus;
-	CPU cpu(bus);
+	CPU cpu(&bus);
 	GameLoop gameLoop(cpu);
 
 	gameLoop.startGame();

@@ -158,6 +158,7 @@ void InstructionRotateShift::RL_L(CPU& cpu)
 
 void InstructionRotateShift::RL_pHLq(CPU& cpu)
 {
+
 }
 
 void InstructionRotateShift::RL_A(CPU& cpu)

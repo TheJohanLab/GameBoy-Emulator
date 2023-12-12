@@ -27,14 +27,14 @@ public:
 		static void LD_AcpDEq(CPU& cpu);	//0x1A LD A,(DE)
 		static void LD_Ecd8(CPU& cpu);		//0x1E LD E,d8
 
-		static void LD_pHLaqcA(CPU& cpu);	//0x22 LD (HL+),A
+		static void LDI_pHLqcA(CPU& cpu);	//0x22 LDI (HL),A
 		static void LD_Hcd8(CPU& cpu);		//0x26 LD H,d8
-		static void LD_AcpHLaq(CPU& cpu);	//0x2A LD A,(HL+)
+		static void LDI_AcpHLq(CPU& cpu);	//0x2A LDI A,(HL)
 		static void LD_Lcd8(CPU& cpu);		//0x2E LD L,d8
 
-		static void LD_pHLmqcA(CPU& cpu);	//0x32 LD (HL-),A
+		static void LDD_pHLqcA(CPU& cpu);	//0x32 LDD (HL),A
 		static void LD_pHLqcd8(CPU& cpu);	//0x36 LD (HL),d8
-		static void LD_AcpHLmq(CPU& cpu);	//0x3A LD A,(HL-)
+		static void LDD_AcpHLq(CPU& cpu);	//0x3A LDD A,(HL)
 		static void LD_Acd8(CPU& cpu);		//0x3E LD A,d8
 
 		static void LD_BcB(CPU& cpu);		//0x40 LD B,B

@@ -8,6 +8,11 @@ class InstructionRotateShift : public Instruction
 		InstructionRotateShift(std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles);
 		virtual ~InstructionRotateShift() = default;
 
+		static void RLCA(CPU& cpu);				//0x07 RLCA
+		static void RRCA(CPU& cpu);				//0x0F RRCA
+		static void RLA(CPU& cpu);				//0x17 RLA
+		static void RRA(CPU& cpu);				//0x1F RRA
+
 		static void RLC_B(CPU& cpu);			//0xCB00 RLC B
 		static void RLC_C(CPU& cpu);			//0xCB01 RLC C
 		static void RLC_D(CPU& cpu);			//0xCB02 RLC D

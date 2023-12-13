@@ -5,6 +5,11 @@
 
 class Instruction8BitLogic : public Instruction
 {
+
+	private:
+		static void INC_R(CPU& cpu, u8* registry);
+		static void DEC_R(CPU& cpu, u8* registry);
+
 	public:
 		Instruction8BitLogic(std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles);
 		virtual ~Instruction8BitLogic() = default;

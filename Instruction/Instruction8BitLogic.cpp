@@ -1,5 +1,31 @@
 #include "Instruction8BitLogic.h"
 
+
+// Private methods
+void Instruction8BitLogic::INC_R(CPU& cpu, u8* registry)
+{
+	updateHFlag(cpu, *registry, false);
+
+	*registry += 1;
+
+	updateZFlag(cpu, *registry);
+	updateNFlag(cpu, 0);
+}
+
+void Instruction8BitLogic::DEC_R(CPU& cpu, u8* registry)
+{
+	updateHFlag(cpu, *registry, true);
+
+	*registry -= 1;
+
+	updateZFlag(cpu, *registry);
+	updateNFlag(cpu, 1);
+}
+
+
+
+// Public methods
+
 Instruction8BitLogic::Instruction8BitLogic(std::string const & name, void (*pInstruction)(CPU & cpu), u8 ClockCycle)
 {
 	mName = name;
@@ -10,42 +36,62 @@ Instruction8BitLogic::Instruction8BitLogic(std::string const & name, void (*pIns
 
 void Instruction8BitLogic::INC_B(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("B");
+	INC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::DEC_B(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("B");
+	DEC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::INC_C(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("C");
+	INC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::DEC_C(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("C");
+	DEC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::INC_D(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("D");
+	INC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::DEC_D(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("D");
+	DEC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::INC_E(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("E");
+	INC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::DEC_E(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("E");
+	DEC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::INC_H(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("H");
+	INC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::DEC_H(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("H");
+	DEC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::DAA(CPU& cpu)
@@ -54,10 +100,14 @@ void Instruction8BitLogic::DAA(CPU& cpu)
 
 void Instruction8BitLogic::INC_L(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("L");
+	INC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::DEC_L(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("L");
+	DEC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::CPL(CPU& cpu)

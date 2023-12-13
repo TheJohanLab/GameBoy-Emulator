@@ -70,7 +70,7 @@ void CPU::initInstructionSet()
 		//0x3
 		instructionFactory.createInstruction(InstructionEnum::IJUMP,		"JR NC,r8",		&InstructionJump::JR_NCcr8,			12),	//0x30 TODO Verifier 12/8 cycles 
 		instructionFactory.createInstruction(InstructionEnum::I16BITLOAD,	"LD SP,d16",	&Instruction16BitLoad::LD_SPcd16,	12),	//0x31
-		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LDD (HL),A",	&Instruction8BitLoad::LD_pHLqcA,	8),		//0x32
+		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LDD (HL),A",	&Instruction8BitLoad::LDD_pHLqcA,	8),		//0x32
 		instructionFactory.createInstruction(InstructionEnum::I16BITLOGIC,	"INC SP",		&Instruction16BitLogic::INC_SP,		8),		//0x33
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOGIC,	"INC (HL)",		&Instruction8BitLogic::INC_pHLq,	4),		//0x34
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOGIC,	"DEC (HL)",		&Instruction8BitLogic::DEC_pHLq,	4),		//0x35

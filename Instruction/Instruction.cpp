@@ -32,11 +32,22 @@ void Instruction::updateHFlag(CPU& cpu, u8 byte, bool substract)
 void Instruction::setHFlag(CPU& cpu, u8 registryValue, u8 addValue, bool substract)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
-	u8 resValue = registryValue + addValue;
 
 	if (!substract)
 	{
-		if (((resValue ^ registryValue ^ addValue) & 0x10) == 0x10)
+		u8 resValue = registryValue + addValue;
+		if ( (registryValue & 0x0F) + (addValue & 0x0F) > 0x0F)
+			flagRegistry->flags.H = 1;
+		else
+			flagRegistry->flags.H = 0;
+	}
+	else
+	{
+		u8 a = (registryValue & 0x0F);
+		u8 b = (addValue & 0x0F);
+		u8 resValue = a - b;
+		//if (((registryValue & 0x0F) - (addValue & 0x0F)) > (registryValue & 0x0F))
+		if (resValue > a)
 			flagRegistry->flags.H = 1;
 		else
 			flagRegistry->flags.H = 0;
@@ -71,9 +82,11 @@ void Instruction::setCFlag(CPU& cpu, u8 registryValue, u8 addValue, bool substra
 	if (!substract)
 	{
 		u8 resValue = registryValue + addValue;
-		if (resValue < registryValue)
-			flagRegistry->flags.C = 1;
-		else
-			flagRegistry->flags.C = 0;
+		flagRegistry->flags.C = (resValue < registryValue) ? 1 : 0;
+	}
+	else
+	{
+		u8 resValue = registryValue - addValue;
+		flagRegistry->flags.C = (resValue > registryValue) ? 1 : 0;
 	}
 }

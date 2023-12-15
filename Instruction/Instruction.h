@@ -14,8 +14,10 @@ protected:
 	static void setBit(u8& byte, u8 pos, u8 val) { byte = (byte & ~(0x01 << pos) | (val << pos)); }
 	
 	static void updateHFlag(CPU& cpu, u8 byte, bool substract);
+	static void setHFlag(CPU& cpu, u8 registry, u8 addValue, bool substract);
 	static void updateZFlag(CPU& cpu, u8 byte);
 	static void updateNFlag(CPU& cpu, u8 byte);
+	static void setCFlag(CPU& cpu, u8 registry, u8 addValue, bool substract);
 
 public:
 	Instruction();

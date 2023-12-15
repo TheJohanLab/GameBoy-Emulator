@@ -22,6 +22,18 @@ void Instruction8BitLogic::DEC_R(CPU& cpu, u8* registry)
 	updateNFlag(cpu, 1);
 }
 
+void Instruction8BitLogic::ADD_RcR(CPU& cpu, u8* srcRegistry, u8* dstRegistry)
+{
+	setHFlag(cpu, *dstRegistry, *srcRegistry, false);
+	setCFlag(cpu, *dstRegistry, *srcRegistry, false);
+
+	*dstRegistry += *srcRegistry;
+
+	updateNFlag(cpu, 0);
+	updateZFlag(cpu, *dstRegistry);
+
+}
+
 
 
 // Public methods
@@ -128,10 +140,14 @@ void Instruction8BitLogic::SCF(CPU& cpu)
 
 void Instruction8BitLogic::INC_A(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("A");
+	INC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::DEC_A(CPU& cpu)
 {
+	u8* registry = cpu.getRegistries("A");
+	DEC_R(cpu, registry);
 }
 
 void Instruction8BitLogic::CCF(CPU& cpu)
@@ -140,26 +156,44 @@ void Instruction8BitLogic::CCF(CPU& cpu)
 
 void Instruction8BitLogic::ADD_AcB(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("B");
+	ADD_RcR(cpu, srcRegistry, dstRegistry);
 }
 
 void Instruction8BitLogic::ADD_AcC(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("C");
+	ADD_RcR(cpu, srcRegistry, dstRegistry);
 }
 
 void Instruction8BitLogic::ADD_AcD(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("D");
+	ADD_RcR(cpu, srcRegistry, dstRegistry);
 }
 
 void Instruction8BitLogic::ADD_AcE(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("E");
+	ADD_RcR(cpu, srcRegistry, dstRegistry);
 }
 
 void Instruction8BitLogic::ADD_AcH(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("H");
+	ADD_RcR(cpu, srcRegistry, dstRegistry);
 }
 
 void Instruction8BitLogic::ADD_AcL(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("L");
+	ADD_RcR(cpu, srcRegistry, dstRegistry);
 }
 
 void Instruction8BitLogic::ADD_AcpHLq(CPU& cpu)
@@ -168,6 +202,9 @@ void Instruction8BitLogic::ADD_AcpHLq(CPU& cpu)
 
 void Instruction8BitLogic::ADD_AcA(CPU& cpu)
 {
+	u8* dstRegistry = cpu.getRegistries("A");
+	u8* srcRegistry = cpu.getRegistries("A");
+	ADD_RcR(cpu, srcRegistry, dstRegistry);
 }
 
 void Instruction8BitLogic::ADC_AcB(CPU& cpu)

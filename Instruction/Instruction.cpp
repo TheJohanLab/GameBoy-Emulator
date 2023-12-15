@@ -29,6 +29,20 @@ void Instruction::updateHFlag(CPU& cpu, u8 byte, bool substract)
 	}
 }
 
+void Instruction::setHFlag(CPU& cpu, u8 registryValue, u8 addValue, bool substract)
+{
+	flags* flagRegistry = cpu.getFlagRegistry();
+	u8 resValue = registryValue + addValue;
+
+	if (!substract)
+	{
+		if (((resValue ^ registryValue ^ addValue) & 0x10) == 0x10)
+			flagRegistry->flags.H = 1;
+		else
+			flagRegistry->flags.H = 0;
+	}
+}
+
 void Instruction::updateZFlag(CPU& cpu, u8 byte)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
@@ -48,4 +62,18 @@ void Instruction::updateNFlag(CPU& cpu, u8 byte)
 	else
 		flagRegistry->flags.N = 1;
 
+}
+
+void Instruction::setCFlag(CPU& cpu, u8 registryValue, u8 addValue, bool substract)
+{
+	flags* flagRegistry = cpu.getFlagRegistry();
+
+	if (!substract)
+	{
+		u8 resValue = registryValue + addValue;
+		if (resValue < registryValue)
+			flagRegistry->flags.C = 1;
+		else
+			flagRegistry->flags.C = 0;
+	}
 }

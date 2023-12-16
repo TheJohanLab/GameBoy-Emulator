@@ -15,9 +15,11 @@ protected:
 	
 	static void updateHFlag(CPU& cpu, u8 byte, bool substract);
 	static void setHFlag(CPU& cpu, u8 registry, u8 addValue, bool substract);
-	static void updateZFlag(CPU& cpu, u8 byte);
-	static void updateNFlag(CPU& cpu, u8 byte);
+	static void setHFlag(CPU& cpu, u8 value);
+	static void setZFlag(CPU& cpu, u8 value);
+	static void setNFlag(CPU& cpu, u8 value);
 	static void setCFlag(CPU& cpu, u8 registry, u8 addValue, bool substract);
+	static void setCFlag(CPU& cpu, u8 value);
 
 public:
 	Instruction();

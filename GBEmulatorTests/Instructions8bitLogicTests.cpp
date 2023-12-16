@@ -224,6 +224,23 @@ namespace Instructions_tests
 
 		}
 
+		TEST_METHOD(SUB_AcpHLq)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			combinedRegistries* HL_reg = cpu->getCombinedRegistries("HL");
+
+			flags* flags = cpu->getFlagRegistry();
+
+			*A_reg = 0x08;
+			HL_reg->setValue(0xC005);
+			cpu->writeMemory(0xC005, 0x05);
+
+
+			cpu->executeOpcode(0x96);
+			Assert::AreEqual(static_cast<u8>(0x03), *A_reg);
+
+		}
+
 		TEST_METHOD(SBC_RcR)
 		{
 			u8* A_reg = cpu->getRegistries("A");
@@ -265,6 +282,88 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0xEF), *A_reg);
 			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.H);
 			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.C);
+		}
+
+		TEST_METHOD(SBC_AcpHLq)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			combinedRegistries* HL_reg = cpu->getCombinedRegistries("HL");
+
+			flags* flags = cpu->getFlagRegistry();
+			flags->flags.C = 0x01;
+
+			*A_reg = 0x08;
+			HL_reg->setValue(0xC005);
+			cpu->writeMemory(0xC005, 0x05);
+
+
+			cpu->executeOpcode(0x9E);
+			Assert::AreEqual(static_cast<u8>(0x02), *A_reg);
+
+		}
+
+		TEST_METHOD(AND_R)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			u8* B_reg = cpu->getRegistries("B");
+			flags* flags = cpu->getFlagRegistry();
+
+			*A_reg = 0x05;
+			*B_reg = 0x0B;
+			cpu->executeOpcode(0xA0);
+			Assert::AreEqual(static_cast<u8>(0x01), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.N);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+			*A_reg = 0x0A;
+			*B_reg = 0x05;
+			cpu->executeOpcode(0xA0);
+			Assert::AreEqual(static_cast<u8>(0x00), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.Z);
+
+		}
+
+		TEST_METHOD(AND_pHLq)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			combinedRegistries* HL_reg = cpu->getCombinedRegistries("HL");
+
+			flags* flags = cpu->getFlagRegistry();
+
+
+			*A_reg = 0xA2;
+			HL_reg->setValue(0xC005);
+			cpu->writeMemory(0xC005, 0x5F);
+
+
+			cpu->executeOpcode(0xA6);
+			Assert::AreEqual(static_cast<u8>(0x02), *A_reg);
+
+		}
+
+		TEST_METHOD(XOR_R)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			u8* B_reg = cpu->getRegistries("B");
+			flags* flags = cpu->getFlagRegistry();
+
+			*A_reg = 0x05;
+			*B_reg = 0x0B;
+			cpu->executeOpcode(0xA8);
+			Assert::AreEqual(static_cast<u8>(0x0E), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.N);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+			*A_reg = 0x0A;
+			*B_reg = 0x0A;
+			cpu->executeOpcode(0xA8);
+			Assert::AreEqual(static_cast<u8>(0x00), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.Z);
+
 		}
 	};
 

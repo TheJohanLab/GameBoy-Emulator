@@ -223,6 +223,49 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.C);
 
 		}
+
+		TEST_METHOD(SBC_RcR)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			u8* B_reg = cpu->getRegistries("B");
+			flags* flags = cpu->getFlagRegistry();
+			flags->flags.C = 0x00;
+
+			*A_reg = 0xFE;
+			*B_reg = 0x0E;
+			cpu->executeOpcode(0x98);
+			Assert::AreEqual(static_cast<u8>(0xF0), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.N);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+			flags->flags.C = 0x01;
+			*A_reg = 0x09;
+			*B_reg = 0x08;
+			cpu->executeOpcode(0x98);
+			Assert::AreEqual(static_cast<u8>(0x00), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+			flags->flags.C = 0x01;
+			*A_reg = 0x25;
+			*B_reg = 0x06;
+			cpu->executeOpcode(0x98);
+			Assert::AreEqual(static_cast<u8>(0x1E), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+			flags->flags.C = 0x01;
+			*A_reg = 0x20;
+			*B_reg = 0x30;
+			cpu->executeOpcode(0x98);
+			Assert::AreEqual(static_cast<u8>(0xEF), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.C);
+		}
 	};
 
 	Bus* I8BitLogicTests::bus = nullptr;

@@ -12,6 +12,7 @@ class Instruction8BitLogic : public Instruction
 		static void ADD_RcR(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
 		static void ADC_RcR(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
 		static void SUB_RcR(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
+		static void SBC_RcR(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
 
 	public:
 		Instruction8BitLogic(std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles);

@@ -365,6 +365,65 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.Z);
 
 		}
+
+		TEST_METHOD(XOR_pHLq)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			combinedRegistries* HL_reg = cpu->getCombinedRegistries("HL");
+
+			flags* flags = cpu->getFlagRegistry();
+
+
+			*A_reg = 0xAE;
+			HL_reg->setValue(0xC005);
+			cpu->writeMemory(0xC005, 0x5F);
+
+
+			cpu->executeOpcode(0xAE);
+			Assert::AreEqual(static_cast<u8>(0xF1), *A_reg);
+
+		}
+
+		TEST_METHOD(OR_R)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			u8* B_reg = cpu->getRegistries("B");
+			flags* flags = cpu->getFlagRegistry();
+
+			*A_reg = 0x15;
+			*B_reg = 0x5B;
+			cpu->executeOpcode(0xB0);
+			Assert::AreEqual(static_cast<u8>(0x5F), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.N);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+			*A_reg = 0x00;
+			*B_reg = 0x00;
+			cpu->executeOpcode(0xB0);
+			Assert::AreEqual(static_cast<u8>(0x00), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.Z);
+
+		}
+
+		TEST_METHOD(OR_pHLq)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			combinedRegistries* HL_reg = cpu->getCombinedRegistries("HL");
+
+			flags* flags = cpu->getFlagRegistry();
+
+
+			*A_reg = 0xAE;
+			HL_reg->setValue(0xC005);
+			cpu->writeMemory(0xC005, 0x2C);
+
+
+			cpu->executeOpcode(0xB6);
+			Assert::AreEqual(static_cast<u8>(0xAE), *A_reg);
+
+		}
 	};
 
 	Bus* I8BitLogicTests::bus = nullptr;

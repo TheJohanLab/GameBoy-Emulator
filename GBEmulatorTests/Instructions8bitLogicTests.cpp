@@ -424,6 +424,68 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0xAE), *A_reg);
 
 		}
+
+		TEST_METHOD(CP_R)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			u8* B_reg = cpu->getRegistries("B");
+			flags* flags = cpu->getFlagRegistry();
+
+			*A_reg = 0xFE;
+			*B_reg = 0x0E;
+			cpu->executeOpcode(0xB8);
+			Assert::AreEqual(static_cast<u8>(0xFE), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.N);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+			*A_reg = 0x08;
+			*B_reg = 0x08;
+			cpu->executeOpcode(0xB8);
+			Assert::AreEqual(static_cast<u8>(0x08), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+			*A_reg = 0x25;
+			*B_reg = 0x06;
+			cpu->executeOpcode(0xB8);
+			Assert::AreEqual(static_cast<u8>(0x25), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+			*A_reg = 0x20;
+			*B_reg = 0x30;
+			cpu->executeOpcode(0xB8);
+			Assert::AreEqual(static_cast<u8>(0x20), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
+			//Check this flag
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.C);
+
+		}
+
+		TEST_METHOD(CP_pHLq)
+		{
+			u8* A_reg = cpu->getRegistries("A");
+			combinedRegistries* HL_reg = cpu->getCombinedRegistries("HL");
+
+			flags* flags = cpu->getFlagRegistry();
+
+			*A_reg = 0x25;
+			HL_reg->setValue(0xC005);
+			cpu->writeMemory(0xC005, 0x06);
+
+
+			cpu->executeOpcode(0xBE);
+			Assert::AreEqual(static_cast<u8>(0x25), *A_reg);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
+			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.H);
+			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
+
+		}
 	};
 
 	Bus* I8BitLogicTests::bus = nullptr;

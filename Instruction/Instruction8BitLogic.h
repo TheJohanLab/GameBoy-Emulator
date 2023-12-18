@@ -16,6 +16,7 @@ class Instruction8BitLogic : public Instruction
 		static void AND_R(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
 		static void XOR_R(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
 		static void OR_R(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
+		static void CP_R(CPU& cpu, u8 ARegistry, u8 *cmpRegistry);
 
 	public:
 		Instruction8BitLogic(std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles);

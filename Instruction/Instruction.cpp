@@ -47,7 +47,9 @@ void Instruction::setHFlag(CPU& cpu, u8 registryValue, u8 addValue, bool substra
 		u8 b = (addValue & 0x0F);
 		u8 resValue = a - b;
 		//if (((registryValue & 0x0F) - (addValue & 0x0F)) > (registryValue & 0x0F))
-		if (resValue > a)
+		//if (resValue > a)
+		//TODO a verifier
+		if (a < b)
 			flagRegistry->flags.H = 1;
 		else
 			flagRegistry->flags.H = 0;

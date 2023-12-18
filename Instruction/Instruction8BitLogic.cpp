@@ -190,6 +190,7 @@ void Instruction8BitLogic::DEC_H(CPU& cpu)
 
 void Instruction8BitLogic::DAA(CPU& cpu)
 {
+	//TODO
 }
 
 void Instruction8BitLogic::INC_L(CPU& cpu)
@@ -206,6 +207,10 @@ void Instruction8BitLogic::DEC_L(CPU& cpu)
 
 void Instruction8BitLogic::CPL(CPU& cpu)
 {
+	u8* ARegistry = cpu.getRegistries("A");
+	*ARegistry = ~*ARegistry;
+	setNFlag(cpu, 0x00);
+	setHFlag(cpu, 0x00);
 }
 
 void Instruction8BitLogic::INC_pHLq(CPU& cpu)
@@ -226,6 +231,10 @@ void Instruction8BitLogic::DEC_pHLq(CPU& cpu)
 
 void Instruction8BitLogic::SCF(CPU& cpu)
 {
+	flags* flagRegistry = cpu.getFlagRegistry();
+	setCFlag(cpu, 0x01);
+	setNFlag(cpu, 0x00);
+	setHFlag(cpu, 0x00);
 }
 
 void Instruction8BitLogic::INC_A(CPU& cpu)
@@ -242,6 +251,11 @@ void Instruction8BitLogic::DEC_A(CPU& cpu)
 
 void Instruction8BitLogic::CCF(CPU& cpu)
 {
+	flags* flagRegistry = cpu.getFlagRegistry();
+	u8 carryFlag = flagRegistry->flags.C;
+	setCFlag(cpu, ~carryFlag);
+	setNFlag(cpu, 0x00);
+	setHFlag(cpu, 0x00);
 }
 
 void Instruction8BitLogic::ADD_AcB(CPU& cpu)

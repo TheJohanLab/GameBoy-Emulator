@@ -8,6 +8,13 @@ Instruction::Instruction()
 }
 
 
+u8 Instruction::readNextOpcode(CPU& cpu)
+{
+	u16* PC = cpu.getPC();
+	*PC += 1;
+	return cpu.readMemory(*PC);
+}
+
 void Instruction::updateHFlag(CPU& cpu, u8 byte, bool substract)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();

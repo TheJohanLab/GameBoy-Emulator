@@ -30,3 +30,18 @@ void Memory::write(u16 const& address, u8 const& data)
 	if (address >= 0xFF80 && address <= 0xFFFE)
 		mHRAM[address - 0xFF80] = data;
 }
+
+u8* Memory::getDataPtr(u16 const& address)
+{
+	if (address >= 0xC000 && address <= 0xDFFF)
+		return &mWRAM[address - 0xC000];
+	if (address >= 0x8000 && address <= 0x9FFF)
+		return &mVRAM[address - 0x8000];
+	if (address >= 0xA000 && address <= 0xBFFF)
+		return &mERAM[address - 0xA000];
+	if (address >= 0xFF80 && address <= 0xFFFE)
+		return &mHRAM[address - 0xFF80];
+	else
+		return nullptr;
+
+}

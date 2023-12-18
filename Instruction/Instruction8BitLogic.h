@@ -9,14 +9,14 @@ class Instruction8BitLogic : public Instruction
 	private:
 		static void INC_R(CPU& cpu, u8* registry);
 		static void DEC_R(CPU& cpu, u8* registry);
-		static void ADD_RcR(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
-		static void ADC_RcR(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
-		static void SUB_RcR(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
-		static void SBC_RcR(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
-		static void AND_R(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
-		static void XOR_R(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
-		static void OR_R(CPU& cpu, u8* srcRegistry, u8* dstRegistry);
-		static void CP_R(CPU& cpu, u8 ARegistry, u8 *cmpRegistry);
+		static void ADD_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
+		static void ADC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
+		static void SUB_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
+		static void SBC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
+		static void AND_R(CPU& cpu, u8* additionalValue, u8* dstRegistry);
+		static void XOR_R(CPU& cpu, u8* additionalValue, u8* dstRegistry);
+		static void OR_R(CPU& cpu, u8* additionalValue, u8* dstRegistry);
+		static void CP_R(CPU& cpu, u8* cmpRegistry, u8 ARegistry);
 
 	public:
 		Instruction8BitLogic(std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles);

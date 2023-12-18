@@ -459,3 +459,16 @@ u8 CPU::readMemory(const combinedRegistries& registries) const
 	u8 value = mBus->read(address);
 	return value;
 }
+
+u8* CPU::getMemoryDataPtr(const combinedRegistries& registries)
+{
+	u16 address = (*registries.reg1 << 8) + *registries.reg2;
+	u8* value = mBus->getDataPtr(address);
+	return value;
+}
+
+u8* CPU::getMemoryDataPtr(const u16& address)
+{
+	u8* value = mBus->getDataPtr(address);
+	return value;
+}

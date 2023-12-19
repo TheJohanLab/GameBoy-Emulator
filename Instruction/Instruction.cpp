@@ -15,6 +15,17 @@ u8 Instruction::readNextOpcode(CPU& cpu)
 	return cpu.readMemory(*PC);
 }
 
+u16 Instruction::readNextTwoOpcodes(CPU& cpu)
+{
+	u16* PC = cpu.getPC();
+	u16 lsbValue = static_cast<u16>(cpu.readMemory(0xC001)) & 0x00FF;
+	u16 msbValue = (static_cast<u16>(cpu.readMemory(0xC002)) << 8) & 0xFF00;
+	u16 twoBytesValue = lsbValue | msbValue;
+	*PC += 2;
+
+	return twoBytesValue;
+}
+
 void Instruction::updateHFlag(CPU& cpu, u8 byte, bool substract)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();

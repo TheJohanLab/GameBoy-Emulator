@@ -117,7 +117,6 @@ void Instruction8BitLogic::CP_R(CPU& cpu, u8 *cmpRegistry, u8 ARegistry)
 }
 
 
-
 // Public methods
 
 Instruction8BitLogic::Instruction8BitLogic(std::string const & name, void (*pInstruction)(CPU & cpu), u8 ClockCycle)

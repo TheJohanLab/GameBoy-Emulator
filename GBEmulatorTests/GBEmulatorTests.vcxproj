@@ -160,6 +160,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Instructions16bitLoadTests.cpp" />
     <ClCompile Include="Instructions8bitLoadTests.cpp" />
     <ClCompile Include="Instructions8bitLogicTests.cpp" />
     <ClCompile Include="pch.cpp">

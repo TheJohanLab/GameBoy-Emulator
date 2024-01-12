@@ -42,22 +42,40 @@ class InstructionRotateShift : public Instruction
 		static void RR_pHLq(CPU& cpu);		//0xCB1E RR (HL)
 		static void RR_A(CPU& cpu);			//0xCB1F RR A
 
-		static void SLA_B(CPU& cpu);		//0xCB10 SLA B
-		static void SLA_C(CPU& cpu);		//0xCB11 SLA C
-		static void SLA_D(CPU& cpu);		//0xCB12 SLA D
-		static void SLA_E(CPU& cpu);		//0xCB13 SLA E
-		static void SLA_H(CPU& cpu);		//0xCB14 SLA H
-		static void SLA_L(CPU& cpu);		//0xCB15 SLA L
-		static void SLA_pHLq(CPU& cpu);		//0xCB16 SLA (HL)
-		static void SLA_A(CPU& cpu);		//0xCB17 SLA A
-		static void SRA_B(CPU& cpu);		//0xCB18 SRA B
-		static void SRA_C(CPU& cpu);		//0xCB19 SRA C
-		static void SRA_D(CPU& cpu);		//0xCB1A SRA D
-		static void SRA_E(CPU& cpu);		//0xCB1B SRA E
-		static void SRA_H(CPU& cpu);		//0xCB1C SRA H
-		static void SRA_L(CPU& cpu);		//0xCB1D SRA L
-		static void SRA_pHLq(CPU& cpu);		//0xCB1E SRA (HL)
-		static void SRA_A(CPU& cpu);		//0xCB1F SRA A
+		static void SLA_B(CPU& cpu);		//0xCB20 SLA B
+		static void SLA_C(CPU& cpu);		//0xCB21 SLA C
+		static void SLA_D(CPU& cpu);		//0xCB22 SLA D
+		static void SLA_E(CPU& cpu);		//0xCB23 SLA E
+		static void SLA_H(CPU& cpu);		//0xCB24 SLA H
+		static void SLA_L(CPU& cpu);		//0xCB25 SLA L
+		static void SLA_pHLq(CPU& cpu);		//0xCB26 SLA (HL)
+		static void SLA_A(CPU& cpu);		//0xCB27 SLA A
+		static void SRA_B(CPU& cpu);		//0xCB28 SRA B
+		static void SRA_C(CPU& cpu);		//0xCB29 SRA C
+		static void SRA_D(CPU& cpu);		//0xCB2A SRA D
+		static void SRA_E(CPU& cpu);		//0xCB2B SRA E
+		static void SRA_H(CPU& cpu);		//0xCB2C SRA H
+		static void SRA_L(CPU& cpu);		//0xCB2D SRA L
+		static void SRA_pHLq(CPU& cpu);		//0xCB2E SRA (HL)
+		static void SRA_A(CPU& cpu);		//0xCB2F SRA A
+
+		static void SWAP_B(CPU& cpu);		//0xCB30 SWAP B
+		static void SWAP_C(CPU& cpu);		//0xCB31 SWAP C
+		static void SWAP_D(CPU& cpu);		//0xCB32 SWAP D
+		static void SWAP_E(CPU& cpu);		//0xCB33 SWAP E
+		static void SWAP_H(CPU& cpu);		//0xCB34 SWAP H
+		static void SWAP_L(CPU& cpu);		//0xCB35 SWAP L
+		static void SWAP_pHLq(CPU& cpu);	//0xCB36 SWAP (HL)
+		static void SWAP_A(CPU& cpu);		//0xCB37 SWAP A
+		static void SRL_B(CPU& cpu);		//0xCB38 SRL B
+		static void SRL_C(CPU& cpu);		//0xCB39 SRL C
+		static void SRL_D(CPU& cpu);		//0xCB3A SRL D
+		static void SRL_E(CPU& cpu);		//0xCB3B SRL E
+		static void SRL_H(CPU& cpu);		//0xCB3C SRL H
+		static void SRL_L(CPU& cpu);		//0xCB3D SRL L
+		static void SRL_pHLq(CPU& cpu);		//0xCB3E SRL (HL)
+		static void SRL_A(CPU& cpu);		//0xCB3F SRL A
+
 
 private:
 	static void RLCr(u8& registry, flags& flagRegistry);
@@ -66,6 +84,8 @@ private:
 	static void RRr(u8& registry, flags& flagRegistry);
 	static void SLAr(u8& registry, flags& flagRegistry);
 	static void SRAr(u8& registry, flags& flagRegistry);
+	static void SWAPr(u8& registry, flags& flagRegistry);
+	static void SRLr(u8& registry, flags& flagRegistry);
 
 };
 

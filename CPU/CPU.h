@@ -24,7 +24,7 @@ class CPU
 		virtual ~CPU() = default;
 
 		u8 executeOpcode(u16 opcode);
-		u8 executeOpcodeCB();
+		u8 executeOpcodeCB(u16 opcodeCB);
 		void callInterruptHandler(u16 const &address);
 
 		u8* getRegistries(const std::string& registry);

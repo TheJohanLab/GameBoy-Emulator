@@ -328,6 +328,114 @@ void InstructionRotateShift::SRA_A(CPU& cpu)
 	SRAr(*registry, *flagRegistry);
 }
 
+void InstructionRotateShift::SWAP_B(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("B");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SWAPr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SWAP_C(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("C");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SWAPr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SWAP_D(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("D");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SWAPr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SWAP_E(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("E");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SWAPr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SWAP_H(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("H");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SWAPr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SWAP_L(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("L");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SWAPr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SWAP_pHLq(CPU& cpu)
+{
+}
+
+void InstructionRotateShift::SWAP_A(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("A");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SWAPr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SRL_B(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("B");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SRLr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SRL_C(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("C");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SRLr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SRL_D(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("D");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SRLr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SRL_E(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("E");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SRLr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SRL_H(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("H");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SRLr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SRL_L(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("L");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SRLr(*registry, *flagRegistry);
+}
+
+void InstructionRotateShift::SRL_pHLq(CPU& cpu)
+{
+}
+
+void InstructionRotateShift::SRL_A(CPU& cpu)
+{
+	u8* registry = cpu.getRegistries("A");
+	flags* flagRegistry = cpu.getFlagRegistry();
+	SRLr(*registry, *flagRegistry);
+}
+
+
+
 void InstructionRotateShift::RLCr(u8& registry, flags& flagRegistry)
 {
 	flagRegistry.flags.C = getBit(registry, 7);
@@ -388,6 +496,33 @@ void InstructionRotateShift::SRAr(u8& registry, flags& flagRegistry)
 {
 	flagRegistry.flags.C = getBit(registry, 0);
 	registry = (registry >> 1) | (registry & 0x80);
+
+	flagRegistry.flags.Z = registry == 0x00;
+	flagRegistry.flags.H = 0x00;
+	flagRegistry.flags.N = 0x00;
+}
+
+void InstructionRotateShift::SWAPr(u8& registry, flags& flagRegistry)
+{
+	// Exchange low and high nibble (4bits)
+	u8 lowNibble = registry & 0x0F;
+	u8 highNibble = registry & 0xF0;
+
+	registry = (lowNibble << 4) | (highNibble >> 4);
+
+	flagRegistry.flags.Z = registry == 0x00;
+	flagRegistry.flags.H = 0x00;
+	flagRegistry.flags.N = 0x00;
+	flagRegistry.flags.C = 0x00;
+}
+
+void InstructionRotateShift::SRLr(u8& registry, flags& flagRegistry)
+{
+	// Right shift logical (bit 7 = 0)
+	flagRegistry.flags.C = getBit(registry, 0);
+
+	registry = registry >> 1;
+	setBit(registry, 7, 0x00);
 
 	flagRegistry.flags.Z = registry == 0x00;
 	flagRegistry.flags.H = 0x00;

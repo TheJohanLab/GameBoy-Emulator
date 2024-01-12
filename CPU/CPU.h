@@ -31,6 +31,7 @@ class CPU
 		combinedRegistries* getCombinedRegistries(const std::string& registry);
 		flags* getFlagRegistry() { return mRegistries.getF(); }
 		u16* getPC() { return mRegistries.getPC(); }
+		u16* getSP() { return mRegistries.getSP(); }
 
 		void setRegistries(const std::string & registry, u8 value);
 		void setCombinedRegistries(const std::string& registries, u16 value);
@@ -40,6 +41,8 @@ class CPU
 		void writeMemory(const combinedRegistries& address, const u8 value);
 		u8 readMemory(const u16 & address) const;
 		u8 readMemory(const combinedRegistries& address) const;
+		u8* getMemoryDataPtr(const combinedRegistries& address);
+		u8* getMemoryDataPtr(const u16& address);
 
 		
 };

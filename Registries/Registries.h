@@ -18,7 +18,6 @@ struct combinedRegistries
 		*reg2 = value & 0xFF;
 	}
 
-
 	combinedRegistries& operator++(int)
 	{
 		combinedRegistries tmp = *this;

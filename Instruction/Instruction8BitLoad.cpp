@@ -60,7 +60,7 @@ void Instruction8BitLoad::LD_Ecd8(CPU& cpu)
 	LD_Rcd8(cpu, *registry);
 }
 
-void Instruction8BitLoad::LD_pHLaqcA(CPU& cpu)
+void Instruction8BitLoad::LDI_pHLqcA(CPU& cpu)
 {
 	u8* Aregistry = cpu.getRegistries("A");
 	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
@@ -74,7 +74,7 @@ void Instruction8BitLoad::LD_Hcd8(CPU& cpu)
 	LD_Rcd8(cpu, *registry);
 }
 
-void Instruction8BitLoad::LD_AcpHLaq(CPU& cpu)
+void Instruction8BitLoad::LDI_AcpHLq(CPU& cpu)
 {
 	u8* ARegistry = cpu.getRegistries("A");
 	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
@@ -88,7 +88,7 @@ void Instruction8BitLoad::LD_Lcd8(CPU& cpu)
 	LD_Rcd8(cpu, *registry);
 }
 
-void Instruction8BitLoad::LD_pHLmqcA(CPU& cpu)
+void Instruction8BitLoad::LDD_pHLqcA(CPU& cpu)
 {
 	u8* Aregistry = cpu.getRegistries("A");
 	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
@@ -102,7 +102,7 @@ void Instruction8BitLoad::LD_pHLqcd8(CPU& cpu)
 	LD_pRRqcd8(cpu, *HLRegistry);
 }
 
-void Instruction8BitLoad::LD_AcpHLmq(CPU& cpu)
+void Instruction8BitLoad::LDD_AcpHLq(CPU& cpu)
 {
 	u8* ARegistry = cpu.getRegistries("A");
 	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");

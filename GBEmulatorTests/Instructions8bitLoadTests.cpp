@@ -38,7 +38,7 @@ namespace Instructions_tests
 			*A = 0x0F;
 			cpu->setCombinedRegistries("BC", 0xC002);
 
-			cpu->executeOpcode(0x01);
+			cpu->executeOpcode(0x02);
 
 			u8 memoryValue = cpu->readMemory(*BC);
 			Assert::AreEqual(static_cast<u8>(0x0F), memoryValue);
@@ -51,7 +51,7 @@ namespace Instructions_tests
 			u16* PC = cpu->getPC();
 			*PC = 0xC000;
 			cpu->writeMemory(0xC001, 0x0F);
-			cpu->executeOpcode(0x02);
+			cpu->executeOpcode(0x06);
 
 			Assert::AreEqual(static_cast<u8>(0x0F), *B);
 		}
@@ -64,7 +64,7 @@ namespace Instructions_tests
 
 			cpu->setCombinedRegistries("BC", 0xC001);
 			cpu->writeMemory(0xC001, 0x0F);
-			cpu->executeOpcode(0x03);
+			cpu->executeOpcode(0x0A);
 
 			Assert::AreEqual(static_cast<u8>(0x0F), *A);
 		}
@@ -77,7 +77,7 @@ namespace Instructions_tests
 			*A = 0x0F;
 			cpu->setCombinedRegistries("HL", 0xC002);
 
-			cpu->executeOpcode(0x09);
+			cpu->executeOpcode(0x22);
 
 			u16 HLValue = HL->getValue();
 			u8 memoryValue = cpu->readMemory(HLValue - 1);
@@ -94,7 +94,8 @@ namespace Instructions_tests
 
 			cpu->setCombinedRegistries("HL", 0xC005);
 			cpu->writeMemory(0xC005, 0x0F);
-			cpu->executeOpcode(0x0B);
+
+			cpu->executeOpcode(0x2A);
 
 			u16 HLValue = HL->getValue();
 			Assert::AreEqual(static_cast<u8>(0x0F), *A);
@@ -109,7 +110,7 @@ namespace Instructions_tests
 			*A = 0x08;
 			cpu->setCombinedRegistries("HL", 0xC007);
 
-			cpu->executeOpcode(0x0D);
+			cpu->executeOpcode(0x32);
 
 			u16 HLValue = HL->getValue();
 			u8 memoryValue = cpu->readMemory(HLValue + 1);
@@ -128,7 +129,7 @@ namespace Instructions_tests
 			cpu->writeMemory(*PC+1, 0x0A);
 
 			HL->setValue(0xC009);
-			cpu->executeOpcode(0x0E);
+			cpu->executeOpcode(0x36);
 
 			u8 data = cpu->readMemory(*HL);
 			Assert::AreEqual(static_cast<u8>(0x0A), data);
@@ -141,7 +142,8 @@ namespace Instructions_tests
 
 			cpu->setCombinedRegistries("HL", 0xC00A);
 			cpu->writeMemory(*HL, 0x06);
-			cpu->executeOpcode(0x0F);
+
+			cpu->executeOpcode(0x3A);
 
 			u16 HLValue = HL->getValue();
 			Assert::AreEqual(static_cast<u8>(0x06), *A);

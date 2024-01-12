@@ -4,14 +4,12 @@
 #include <chrono>
 #include "CPU/CPU.h"
 
-
 #include <SDL.h>
 #include "GameLoop/GameLoop.h"
 
 int main(int argc, char** argv)
 {
 	
-
 	Bus bus;
 	CPU cpu(&bus);
 	GameLoop gameLoop(cpu);

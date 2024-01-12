@@ -17,5 +17,7 @@ class Memory
 
 		u8 read(u16 const& address) const;
 		void write(u16 const& address, u8 const& data);
+
+		u8* getDataPtr(u16 const& address);
 };
 

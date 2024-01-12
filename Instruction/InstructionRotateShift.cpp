@@ -8,6 +8,22 @@ InstructionRotateShift::InstructionRotateShift(std::string const & name, void (*
 
 }
 
+void InstructionRotateShift::RLCA(CPU& cpu)
+{
+}
+
+void InstructionRotateShift::RRCA(CPU& cpu)
+{
+}
+
+void InstructionRotateShift::RLA(CPU& cpu)
+{
+}
+
+void InstructionRotateShift::RRA(CPU& cpu)
+{
+}
+
 void InstructionRotateShift::RLC_B(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("B");

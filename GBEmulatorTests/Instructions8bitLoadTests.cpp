@@ -149,6 +149,98 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0x06), *A);
 			Assert::AreEqual(static_cast<u16>(0xC009), HLValue);
 		}
+
+		//TODO Verifier ce test avec un PC correct (Actuellement write dans HRAM)
+		TEST_METHOD(LDH_pn8qA)
+		{
+			u8* A = cpu->getRegistries("A");
+			u16* PC = cpu->getPC();
+
+			cpu->setRegistries("A", 0xA8);
+			*PC = 0x0082;
+
+			cpu->executeOpcode(0xE0);
+
+			u8 data = cpu->readMemory(0xFF83);
+
+			Assert::AreEqual(static_cast<u8>(0xA8), data);
+		}
+
+		//TODO Verifier ce test avec un PC correct (Actuellement write dans HRAM)
+		TEST_METHOD(LDH_pCqcA)
+		{
+			u8* A = cpu->getRegistries("A");
+			u8* C = cpu->getRegistries("C");
+
+			cpu->setRegistries("A", 0xA9);
+			cpu->setRegistries("C", 0x84);
+
+			cpu->executeOpcode(0xE2);
+
+			u8 data = cpu->readMemory(0xFF84);
+
+			Assert::AreEqual(static_cast<u8>(0xA9), data);
+		}
+
+		TEST_METHOD(LD_pa16qcA)
+		{
+			u8* A = cpu->getRegistries("A");
+			u16* PC = cpu->getPC();
+
+			cpu->setRegistries("A", 0xAB);
+			*PC = 0xC00A;
+
+			cpu->executeOpcode(0xEA);
+
+			u8 data = cpu->readMemory(0xC00B);
+
+			Assert::AreEqual(static_cast<u8>(0xAB), data);
+		}
+
+		//TODO Verifier ce test avec un PC correct (Actuellement write dans HRAM)
+		TEST_METHOD(LDH_Acpa8q)
+		{
+			u8* A = cpu->getRegistries("A");
+			u16* PC = cpu->getPC();
+
+			cpu->setRegistries("A", 0x00);
+			*PC = 0x0083;
+			cpu->writeMemory(0xFF84, 0xAB);
+
+			cpu->executeOpcode(0xF0);
+
+			Assert::AreEqual(static_cast<u8>(0xAB), *A);
+		}
+
+		//TODO Verifier ce test avec un PC correct (Actuellement write dans HRAM)
+		TEST_METHOD(LDH_AcpCq)
+		{
+			u8* A = cpu->getRegistries("A");
+			u8* C = cpu->getRegistries("C");
+
+			cpu->setRegistries("A", 0x00);
+			cpu->setRegistries("C", 0x85);
+			cpu->writeMemory(0xFF85, 0xAC);
+
+			cpu->executeOpcode(0xF2);
+
+
+			Assert::AreEqual(static_cast<u8>(0xAC), *A);
+		}
+
+		TEST_METHOD(LD_Acpa16q)
+		{
+			u8* A = cpu->getRegistries("A");
+			u16* PC = cpu->getPC();
+
+			cpu->setRegistries("A", 0x00);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0xAD);
+
+			cpu->executeOpcode(0xFA);
+
+			Assert::AreEqual(static_cast<u8>(0xAD), *A);
+		}
 	};
 
 	Bus* I8BitLoadTests::bus = nullptr;

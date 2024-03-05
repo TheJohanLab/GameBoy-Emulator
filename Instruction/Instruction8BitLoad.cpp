@@ -560,28 +560,57 @@ void Instruction8BitLoad::LD_AcA(CPU& cpu)
 
 void Instruction8BitLoad::LDH_pa8qcA(CPU& cpu)
 {
+	//TODO Verifier cette instruction
+	u16* PC = cpu.getPC();
+	*PC += 1;
+	u8* ARegistry = cpu.getRegistries("A");
+	cpu.writeMemory(0xFF00 + *PC, *ARegistry);
 }
 
 void Instruction8BitLoad::LD_pCqcA(CPU& cpu)
 {
+	//TODO Verifier cette instruction
+	u8* ARegistry = cpu.getRegistries("A");
+	u8* CRegistry = cpu.getRegistries("C");
+	cpu.writeMemory(0xFF00 + *CRegistry, *ARegistry);
 }
 
-void Instruction8BitLoad::LDH_pa16qcA(CPU& cpu)
+void Instruction8BitLoad::LD_pa16qcA(CPU& cpu)
 {
+	u16* PC = cpu.getPC();
+	*PC += 1;
+	u8* ARegistry = cpu.getRegistries("A");
+	cpu.writeMemory(*PC, *ARegistry);
 }
 
 void Instruction8BitLoad::LDH_Acpa8q(CPU& cpu)
 {
+	//TODO Verifier cette instruction
+	u16* PC = cpu.getPC();
+	*PC += 1;
+	u8 data = cpu.readMemory(0xFF00 + *PC);
+	cpu.setRegistries("A", data);
 }
 
 void Instruction8BitLoad::LD_AcpCq(CPU& cpu)
 {
+	//TODO Verifier cette instruction
+	u8* ARegistry = cpu.getRegistries("A");
+	u8* CRegistry = cpu.getRegistries("C");
+
+	*ARegistry = cpu.readMemory(0xFF00 + *CRegistry);
 }
 
-void Instruction8BitLoad::LDH_Acpa16q(CPU& cpu)
+void Instruction8BitLoad::LD_Acpa16q(CPU& cpu)
 {
+	u16* PC = cpu.getPC();
+	*PC += 1;
+	u8 data = cpu.readMemory(*PC);
+	cpu.setRegistries("A", data);
 }
 
+
+/// ///////////////////////
 
 void Instruction8BitLoad::LD_Rcd8(CPU& cpu, u8& registry)
 {

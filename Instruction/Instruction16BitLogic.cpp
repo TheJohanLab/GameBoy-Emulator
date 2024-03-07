@@ -13,7 +13,11 @@ void Instruction16BitLogic::DEC_RR(CPU& cpu, combinedRegistries* registries)
 void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, combinedRegistries* registries)
 {
 	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
-	//setNFlag(cpu,)
+	
+	//*HLRegistries += registries->getValue();
+
+	clearFlag(cpu, 'N');
+
 }
 
 void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, u16* registries)

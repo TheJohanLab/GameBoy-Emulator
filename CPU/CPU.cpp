@@ -663,7 +663,7 @@ void CPU::writeMemory(const u16 & address, const u8 value)
 void CPU::writeMemory(const combinedRegistries& registries, const u8 value)
 {
 	//TODO Verifier si on peut stocker une reference au lieu d'une copie
-	u16 address = (*registries.reg1 << 8) + *registries.reg2;
+	u16 address = (*registries.highRegistry << 8) + *registries.lowRegistry;
 	mBus->write(address, value);
 }
 
@@ -677,14 +677,14 @@ u8 CPU::readMemory(const u16& address) const
 u8 CPU::readMemory(const combinedRegistries& registries) const
 {
 	//TODO Verifier si on peut envoyer une reference au lieu d'une copie
-	u16 address = (*registries.reg1 << 8) + *registries.reg2;
+	u16 address = (*registries.highRegistry << 8) + *registries.lowRegistry;
 	u8 value = mBus->read(address);
 	return value;
 }
 
 u8* CPU::getMemoryDataPtr(const combinedRegistries& registries)
 {
-	u16 address = (*registries.reg1 << 8) + *registries.reg2;
+	u16 address = (*registries.highRegistry << 8) + *registries.lowRegistry;
 	u8* value = mBus->getDataPtr(address);
 	return value;
 }

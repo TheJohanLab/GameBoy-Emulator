@@ -23,6 +23,9 @@ protected:
 	static void setNFlag(CPU& cpu, u8 value);
 	static void setCFlag(CPU& cpu, u8 registry, u8 addValue, bool substract);
 	static void setCFlag(CPU& cpu, u8 value);
+	
+	static void clearFlag(CPU& cpu, const char& flag);
+	static void setFlags(CPU& cpu, const u8& flags);
 
 public:
 	Instruction();

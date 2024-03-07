@@ -113,3 +113,29 @@ void Instruction::setCFlag(CPU& cpu, u8 value)
 	flags* flagRegistry = cpu.getFlagRegistry();
 	flagRegistry->flags.C = (value == 0x01) ? 1 : 0;
 }
+
+void Instruction::clearFlag(CPU& cpu, const char& flag)
+{
+	flags* flagRegistry = cpu.getFlagRegistry();
+	switch (flag)
+	{
+	case 'Z':
+		flagRegistry->flags.Z = 0;
+		break;
+	case 'C':
+		flagRegistry->flags.C = 0;
+		break;
+	case 'H':
+		flagRegistry->flags.H = 0;
+		break;
+	case 'N':
+		flagRegistry->flags.N = 0;
+		break;
+	};
+}
+
+void Instruction::setFlags(CPU& cpu, const u8& binaryFlags)
+{
+	flags* flags = cpu.getFlagRegistry();
+	flags->F = binaryFlags;
+}

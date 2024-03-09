@@ -9,7 +9,7 @@ private:
 	static void INC_RR(CPU& cpu, combinedRegistries* registries);
 	static void DEC_RR(CPU& cpu, combinedRegistries* registries);
 	static void ADD_HLcRR(CPU& cpu, combinedRegistries* registries);
-	static void ADD_HLcRR(CPU& cpu, u16* registries);
+	static void ADD_HLcRR(CPU& cpu, u16 registriesValue);
 
 	public:
 		Instruction16BitLogic(std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles);

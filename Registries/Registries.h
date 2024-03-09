@@ -6,6 +6,7 @@ struct combinedRegistries
 {
 	u8* highRegistry;
 	u8* lowRegistry;
+	
 
 	u8* getLowRegistry() 
 	{
@@ -73,7 +74,9 @@ struct combinedRegistries
 
 		return *this;
 	}
+
 };
+
 
 class Registries
 {

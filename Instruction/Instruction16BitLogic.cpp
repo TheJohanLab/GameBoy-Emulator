@@ -12,16 +12,22 @@ void Instruction16BitLogic::DEC_RR(CPU& cpu, combinedRegistries* registries)
 
 void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, combinedRegistries* registries)
 {
-	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
-	
-	//*HLRegistries += registries->getValue();
-
-	clearFlag(cpu, 'N');
-
+	ADD_HLcRR(cpu, registries->getValue());
 }
 
-void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, u16* registries)
+void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, u16 registriesValue)
 {
+	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
+
+	u16 result = HLRegistries->getValue() + registriesValue;
+
+	flags* f = cpu.getFlagRegistry();
+
+	f->flags.H = isHalfOverflow(HLRegistries->getValue(), registriesValue) ? 1 : 0;
+	f->flags.C = isOverflow(HLRegistries->getValue(), registriesValue) ? 1 : 0;
+	clearFlag(cpu, 'N');
+
+	HLRegistries->setValue(result);
 }
 
 Instruction16BitLogic::Instruction16BitLogic(std::string const & name, void (*pInstruction)(CPU & cpu), u8 ClockCycle)
@@ -40,7 +46,8 @@ void Instruction16BitLogic::INC_BC(CPU& cpu)
 
 void Instruction16BitLogic::ADD_HLcBC(CPU& cpu)
 {
-
+	combinedRegistries* BC = cpu.getCombinedRegistries("BC");
+	ADD_HLcRR(cpu, BC);
 }
 
 void Instruction16BitLogic::DEC_BC(CPU& cpu)
@@ -57,6 +64,8 @@ void Instruction16BitLogic::INC_DE(CPU& cpu)
 
 void Instruction16BitLogic::ADD_HLcDE(CPU& cpu)
 {
+	combinedRegistries* DE = cpu.getCombinedRegistries("DE");
+	ADD_HLcRR(cpu, DE);
 }
 
 void Instruction16BitLogic::DEC_DE(CPU& cpu)
@@ -73,6 +82,8 @@ void Instruction16BitLogic::INC_HL(CPU& cpu)
 
 void Instruction16BitLogic::ADD_HLcHL(CPU& cpu)
 {
+	combinedRegistries* HL = cpu.getCombinedRegistries("HL");
+	ADD_HLcRR(cpu, HL);
 }
 
 void Instruction16BitLogic::DEC_HL(CPU& cpu)
@@ -89,6 +100,8 @@ void Instruction16BitLogic::INC_SP(CPU& cpu)
 
 void Instruction16BitLogic::ADD_HLcSP(CPU& cpu)
 {
+	u16* SP = cpu.getSP();
+	ADD_HLcRR(cpu, *SP);
 }
 
 void Instruction16BitLogic::DEC_SP(CPU& cpu)
@@ -99,4 +112,5 @@ void Instruction16BitLogic::DEC_SP(CPU& cpu)
 
 void Instruction16BitLogic::ADD_SPcr8(CPU& cpu)
 {
+
 }

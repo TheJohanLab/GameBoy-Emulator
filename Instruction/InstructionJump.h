@@ -33,6 +33,7 @@ class InstructionJump : public Instruction
 		static void RST_10H(CPU& cpu);		//0xD7 RST 10H
 		static void RET_C(CPU& cpu);		//0xD8 RET C
 		static void RETI(CPU& cpu);			//0xD9 RETI
+		//static void JP_Cca16(CPU& cpu, Instruction& instance);		//0xDA JP C,a16
 		static void JP_Cca16(CPU& cpu);		//0xDA JP C,a16
 		static void CALL_Cca16(CPU& cpu);	//0xDC CALL C,a16
 		static void RST_18H(CPU& cpu);		//0xDF RST 18H
@@ -44,5 +45,15 @@ class InstructionJump : public Instruction
 		static void RST_30H(CPU& cpu);		//0xF7 RST 30H
 		static void RST_38H(CPU& cpu);		//0xFF RST 38H
 
+
+private:
+	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
+	//static void JP_CCca16(CPU& cpu, Instruction& instance, const u8& flag);
+	static void JP_CCca16(CPU& cpu, const u8& flag);
+	static void JR_CCca16(CPU& cpu, const u8& flag);
+	static void RET_CC(CPU& cpu, const u8& flag);
+	static void CALL_CC(CPU& cpu, const u8& flag);
+
+	static void PUSH_PC(CPU& cpu);
 };
 

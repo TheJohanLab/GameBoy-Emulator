@@ -8,6 +8,8 @@ class Instruction
 {
 protected:
 	std::string mName;
+	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
+	//void (*pmInstruction)(CPU & cpu, Instruction& instance);
 	void (*pmInstruction)(CPU & cpu);
 	u8 mClockCycle;
 
@@ -30,6 +32,8 @@ protected:
 	static bool isHalfOverflow(const u16& baseValue, const u16& additionalValue, bool substract = false);
 	static bool isOverflow(const u8& baseValue, const u8& additionalValue, bool substract = false);
 	static bool isOverflow(const u16& baseValue, const u16& additionalValue, bool substract = false);
+
+	static void setClockCycle(Instruction& instance, const u8& clockCycle);
 
 public:
 	Instruction();

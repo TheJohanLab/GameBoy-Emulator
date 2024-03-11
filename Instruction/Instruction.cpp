@@ -164,3 +164,9 @@ bool Instruction::isOverflow(const u16& baseValue, const u16& additionalValue, b
 	}
 
 }
+
+//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
+void Instruction::setClockCycle(Instruction& instance, const u8& clockCycle)
+{
+	instance.mClockCycle = clockCycle;
+}

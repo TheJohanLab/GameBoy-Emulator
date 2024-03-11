@@ -573,6 +573,8 @@ u8 CPU::executeOpcode(u16 opcode)
 		return executeOpcodeCB(0x00);
 	}
 
+	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
+	//(mInstructionSet[opcode]->getFunctionPointer())(*this, *mInstructionSet[opcode]);
 	(mInstructionSet[opcode]->getFunctionPointer())(*this);
 	std::cout << mInstructionSet[opcode]->getName() << "\n";
 	
@@ -584,6 +586,7 @@ u8 CPU::executeOpcodeCB(u16 opcodeCB)
 {
 	// read opcode
 	//u16 opcodeCB = 0x00;
+	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	(mInstructionSet[0x100 + opcodeCB]->getFunctionPointer())(*this);
 	std::cout << mInstructionSet[0x100 + opcodeCB]->getName() << "\n";
 

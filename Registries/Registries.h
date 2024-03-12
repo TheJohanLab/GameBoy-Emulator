@@ -77,6 +77,7 @@ struct combinedRegistries
 
 };
 
+class CPU;
 
 class Registries
 {
@@ -86,9 +87,11 @@ class Registries
 		combinedRegistries AF, BC, DE, HL;
 		flags F;
 		u16 SP,PC;
+		u8 IME;
 
 	public:
 		Registries();
+		Registries(CPU& cpu);
 		virtual ~Registries() = default;
 
 		u8* getA() { return &A; }
@@ -128,6 +131,10 @@ class Registries
 
 		void setSP(u16 value) { this->SP = value; }
 		void setPC(u16 value) { this->PC = value; }
+
+		void setIME() { this->IME = 1; }
+		void clearIME() { this->IME = 0; }
+		u8 getIME() const { return this->IME; } 
 
 };
 

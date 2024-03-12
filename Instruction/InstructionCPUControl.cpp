@@ -26,8 +26,11 @@ void InstructionCPUControl::prefix_cb(CPU& cpu)
 
 void InstructionCPUControl::di(CPU& cpu)
 {
+	cpu.clearIMEFlag();
 }
 
+//TODO Verifier cette instruction
 void InstructionCPUControl::ei(CPU& cpu)
 {
+	cpu.setIMEFlag();
 }

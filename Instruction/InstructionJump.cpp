@@ -60,6 +60,14 @@ void InstructionJump::CALL_CC(CPU& cpu, const u8& flag)
 		//setClockCycle(instance, 12);
 }
 
+void InstructionJump::RST_VC(CPU& cpu, const u16& address)
+{
+	u16* PC = cpu.getPC();
+	PUSH_PC(cpu);
+
+	*PC = address;
+}
+
 void InstructionJump::PUSH_PC(CPU& cpu)
 {
 	u16* SP = cpu.getSP();
@@ -143,6 +151,7 @@ void InstructionJump::CALL_NZca16(CPU& cpu)
 
 void InstructionJump::RST_00H(CPU& cpu)
 {
+	RST_VC(cpu, 0x0000);
 }
 
 void InstructionJump::RET_Z(CPU& cpu)
@@ -188,6 +197,7 @@ void InstructionJump::CALL_a16(CPU& cpu)
 
 void InstructionJump::RST_08H(CPU& cpu)
 {
+	RST_VC(cpu, 0x0800);
 }
 
 void InstructionJump::RET_NC(CPU& cpu)
@@ -210,6 +220,7 @@ void InstructionJump::CALL_NCca16(CPU& cpu)
 
 void InstructionJump::RST_10H(CPU& cpu)
 {
+	RST_VC(cpu, 0x1000);
 }
 
 void InstructionJump::RET_C(CPU& cpu)
@@ -241,6 +252,7 @@ void InstructionJump::CALL_Cca16(CPU& cpu)
 
 void InstructionJump::RST_18H(CPU& cpu)
 {
+	RST_VC(cpu, 0x1800);
 }
 
 void InstructionJump::RST_20H(CPU& cpu)
@@ -259,14 +271,17 @@ void InstructionJump::JP_pHLq(CPU& cpu)
 
 void InstructionJump::RST_28H(CPU& cpu)
 {
+	RST_VC(cpu, 0x2800);
 }
 
 void InstructionJump::RST_30H(CPU& cpu)
 {
+	RST_VC(cpu, 0x3000);
 }
 
 void InstructionJump::RST_38H(CPU& cpu)
 {
+	RST_VC(cpu, 0x3800);
 }
 
 

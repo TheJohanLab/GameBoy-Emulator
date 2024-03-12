@@ -411,39 +411,205 @@ namespace Instructions_tests
 
 		}
 
-		//TODO
 		TEST_METHOD(CALL_a16)
 		{
-		
+			u16* SP = cpu->getSP();
+			u16* PC = cpu->getPC();
 
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78); 
+
+			cpu->executeOpcode(0xCD);
+
+			Assert::AreEqual(static_cast<u16>(0xC000), *SP);
+			Assert::AreEqual(static_cast<u16>(0x7856), *PC);
+			Assert::AreEqual(static_cast<u8>(0xC0), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x0C), cpu->readMemory(0xC000));
 		}
 
-		//TODO
 		TEST_METHOD(CALL_NZca16)
 		{
+			u16* SP = cpu->getSP();
+			u16* PC = cpu->getPC();
+			flags* f = cpu->getFlagRegistry();
+			f->flags.Z = 0;
 
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78);
+
+			cpu->executeOpcode(0xC4);
+
+			Assert::AreEqual(static_cast<u16>(0xC000), *SP);
+			Assert::AreEqual(static_cast<u16>(0x7856), *PC);
+			Assert::AreEqual(static_cast<u8>(0xC0), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x0C), cpu->readMemory(0xC000));
+
+
+			f->flags.Z = 1;
+
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78);
+
+			cpu->executeOpcode(0xC4);
+
+			Assert::AreEqual(static_cast<u16>(0xC002), *SP);
+			Assert::AreEqual(static_cast<u16>(0xC00C), *PC);
+			Assert::AreEqual(static_cast<u8>(0x12), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x34), cpu->readMemory(0xC000));
 
 		}
 
-		//TODO
 		TEST_METHOD(CALL_Zca16)
 		{
+			u16* SP = cpu->getSP();
+			u16* PC = cpu->getPC();
+			flags* f = cpu->getFlagRegistry();
+			f->flags.Z = 1;
 
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78);
+
+			cpu->executeOpcode(0xCC);
+
+			Assert::AreEqual(static_cast<u16>(0xC000), *SP);
+			Assert::AreEqual(static_cast<u16>(0x7856), *PC);
+			Assert::AreEqual(static_cast<u8>(0xC0), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x0C), cpu->readMemory(0xC000));
+
+
+			f->flags.Z = 0;
+
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78);
+
+			cpu->executeOpcode(0xCC);
+
+			Assert::AreEqual(static_cast<u16>(0xC002), *SP);
+			Assert::AreEqual(static_cast<u16>(0xC00C), *PC);
+			Assert::AreEqual(static_cast<u8>(0x12), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x34), cpu->readMemory(0xC000));
 
 		}
 
-		//TODO
 		TEST_METHOD(CALL_NCca16)
 		{
+			u16* SP = cpu->getSP();
+			u16* PC = cpu->getPC();
+			flags* f = cpu->getFlagRegistry();
+			f->flags.C = 0;
 
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78);
+
+			cpu->executeOpcode(0xD4);
+
+			Assert::AreEqual(static_cast<u16>(0xC000), *SP);
+			Assert::AreEqual(static_cast<u16>(0x7856), *PC);
+			Assert::AreEqual(static_cast<u8>(0xC0), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x0C), cpu->readMemory(0xC000));
+
+
+			f->flags.C = 1;
+
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78);
+
+			cpu->executeOpcode(0xD4);
+
+			Assert::AreEqual(static_cast<u16>(0xC002), *SP);
+			Assert::AreEqual(static_cast<u16>(0xC00C), *PC);
+			Assert::AreEqual(static_cast<u8>(0x12), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x34), cpu->readMemory(0xC000));
 
 		}
 
-		//TODO
 		TEST_METHOD(CALL_Cca16)
 		{
+			u16* SP = cpu->getSP();
+			u16* PC = cpu->getPC();
+			flags* f = cpu->getFlagRegistry();
+
+			f->flags.C = 1;
+
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78);
+
+			cpu->executeOpcode(0xDC);
+
+			Assert::AreEqual(static_cast<u16>(0xC000), *SP);
+			Assert::AreEqual(static_cast<u16>(0x7856), *PC);
+			Assert::AreEqual(static_cast<u8>(0xC0), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x0C), cpu->readMemory(0xC000));
 
 
+			f->flags.C = 0;
+
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78);
+
+			cpu->executeOpcode(0xDC);
+
+			Assert::AreEqual(static_cast<u16>(0xC002), *SP);
+			Assert::AreEqual(static_cast<u16>(0xC00C), *PC);
+			Assert::AreEqual(static_cast<u8>(0x12), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x34), cpu->readMemory(0xC000));
+
+		}
+
+		TEST_METHOD(RST_28H)
+		{
+			u16* SP = cpu->getSP();
+			u16* PC = cpu->getPC();
+
+			*SP = 0xC002;
+			cpu->writeMemory(0xC001, 0x12);
+			cpu->writeMemory(0xC000, 0x34);
+			*PC = 0xC00A;
+			cpu->writeMemory(0xC00B, 0x56);
+			cpu->writeMemory(0xC00C, 0x78);
+
+			cpu->executeOpcode(0xEF);
+
+			Assert::AreEqual(static_cast<u16>(0xC000), *SP);
+			Assert::AreEqual(static_cast<u16>(0x2800), *PC);
+			Assert::AreEqual(static_cast<u8>(0xC0), cpu->readMemory(0xC001));
+			Assert::AreEqual(static_cast<u8>(0x0A), cpu->readMemory(0xC000));
 		}
 
 	};

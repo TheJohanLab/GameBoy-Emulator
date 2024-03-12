@@ -53,6 +53,7 @@ private:
 	static void JR_CCca16(CPU& cpu, const u8& flag);
 	static void RET_CC(CPU& cpu, const u8& flag);
 	static void CALL_CC(CPU& cpu, const u8& flag);
+	static void RST_VC(CPU& cpu, const u16& address);
 
 	static void PUSH_PC(CPU& cpu);
 };

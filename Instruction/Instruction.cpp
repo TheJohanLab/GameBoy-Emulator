@@ -18,8 +18,8 @@ u8 Instruction::readNextOpcode(CPU& cpu)
 u16 Instruction::readNextTwoOpcodes(CPU& cpu)
 {
 	u16* PC = cpu.getPC();
-	u16 lsbValue = static_cast<u16>(cpu.readMemory(0xC001)) & 0x00FF;
-	u16 msbValue = (static_cast<u16>(cpu.readMemory(0xC002)) << 8) & 0xFF00;
+	u16 lsbValue = static_cast<u16>(cpu.readMemory((*PC) + 1)) & 0x00FF;
+	u16 msbValue = (static_cast<u16>(cpu.readMemory((*PC) + 2)) << 8) & 0xFF00;
 	u16 twoBytesValue = lsbValue | msbValue;
 	*PC += 2;
 
@@ -118,7 +118,8 @@ bool Instruction::isHalfOverflow(const u8& baseValue, const u8& additionalValue,
 	}
 	else
 	{
-		return (additionalValue & 0x0F) > (baseValue & 0x0F);
+		//return ((baseValue ^ (baseValue - additionalValue)) & (1 << 4));
+		return ((baseValue & 0xF) - ((baseValue - additionalValue) & 0xF)) & 0x10;
 	}
 }
 
@@ -131,7 +132,9 @@ bool Instruction::isHalfOverflow(const u16& baseValue, const u16& additionalValu
 	}
 	else
 	{
-		return (additionalValue & 0x0FFF) > (baseValue & 0x0FFF);
+		((baseValue & 0xFFF) - ((baseValue - additionalValue) & 0xFFF)) & 0x1000;
+		//return ((baseValue ^ (baseValue - additionalValue)) & (1 << 8));
+		//return (additionalValue & 0x0FFF) > (baseValue & 0x0FFF);
 	}
 }
 

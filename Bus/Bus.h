@@ -17,5 +17,9 @@ class Bus
 		void write(const u16 &address, const u8 &data);
 		u8* getDataPtr(const u16& address);
 
+		interrupt_flags* getInterruptFlags();
+		void setInterruptFlags(u8 flags);
+		void setInterruptFlags(interrupt_flags flags);
+
 };
 

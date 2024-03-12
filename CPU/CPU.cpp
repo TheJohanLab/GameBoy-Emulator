@@ -697,3 +697,34 @@ u8* CPU::getMemoryDataPtr(const u16& address)
 	u8* value = mBus->getDataPtr(address);
 	return value;
 }
+
+void CPU::setIMEFlag()
+{
+	mRegistries.setIME();
+}
+
+void CPU::clearIMEFlag()
+{
+	mRegistries.clearIME();
+}
+
+u8 CPU::getIMEFlagValue() const
+{
+	return mRegistries.getIME();
+}
+
+
+interrupt_flags* CPU::getInterruptFlag()
+{
+	return mBus->getInterruptFlags();
+}
+
+void CPU::setInterruptFlag(const u8 flags)
+{
+	mBus->setInterruptFlags(flags);
+}
+
+void CPU::setInterruptFlag(const interrupt_flags flags)
+{
+	mBus->setInterruptFlags(flags);
+}

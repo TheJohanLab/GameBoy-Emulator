@@ -32,10 +32,11 @@ namespace Instructions_tests
 		TEST_METHOD(INC_RR)
 		{
 			combinedRegistries* BC = cpu->getCombinedRegistries("BC");
+			
 			u8* B = cpu->getRegistries("B");
 			u8* C = cpu->getRegistries("C");
 
-			BC->setValue(0x1234);
+			cpu->setCombinedRegistries("BC", 0x1234);
 			cpu->executeOpcode(0x03);
 
 			Assert::AreEqual(static_cast<u8>(0x12), *B);

@@ -108,12 +108,12 @@ void Instruction8BitLogic::CP_R(CPU& cpu, u8 *cmpRegistry, u8 ARegistry)
 	setHFlag(cpu, ARegistry, *cmpRegistry, true);
 	setCFlag(cpu, ARegistry, *cmpRegistry, true);
 
-	ARegistry -= *cmpRegistry;
+	u8 result = ARegistry - *cmpRegistry;
+	//ARegistry -= *cmpRegistry;
 
-	setZFlag(cpu, ARegistry);
+	setZFlag(cpu, result);
 	setNFlag(cpu, 0x01);
 	
-
 }
 
 
@@ -189,7 +189,25 @@ void Instruction8BitLogic::DEC_H(CPU& cpu)
 
 void Instruction8BitLogic::DAA(CPU& cpu)
 {
-	//TODO
+	u8* A = cpu.getRegistries("A");
+	flags* F = cpu.getFlagRegistry();
+	u8 correction = 0x00;
+
+	if (F->flags.H || (!F->flags.N && (*A & 0x0F) > 9)) 
+		correction |= 0x06;
+	
+	if (F->flags.C || (!F->flags.N && *A > 99))
+	{
+		correction |= 0x60;
+		F->flags.C = 1;
+	}
+
+	*A += F->flags.N ? -correction : correction;
+
+	if (*A == 0x00)
+		F->flags.Z = 1;
+
+	clearFlag(cpu, 'H');
 }
 
 void Instruction8BitLogic::INC_L(CPU& cpu)

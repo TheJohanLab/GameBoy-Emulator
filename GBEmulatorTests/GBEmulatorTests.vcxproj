@@ -160,9 +160,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InstructionJumpTests.cpp" />
     <ClCompile Include="Instructions16bitLoadTests.cpp" />
+    <ClCompile Include="Instructions16bitLogicTests.cpp" />
     <ClCompile Include="Instructions8bitLoadTests.cpp" />
     <ClCompile Include="Instructions8bitLogicTests.cpp" />
+    <ClCompile Include="InstructionsCPUControlTests.cpp" />
     <ClCompile Include="InstructionsRotateShiftTests.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

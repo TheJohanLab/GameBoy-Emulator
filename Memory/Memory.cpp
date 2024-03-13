@@ -45,3 +45,18 @@ u8* Memory::getDataPtr(u16 const& address)
 		return nullptr;
 
 }
+
+interrupt_flags* Memory::getInterruptFlags()
+{
+	return &IR;
+}
+
+void Memory::setInterruptFlag(const u8 byte)
+{
+	IR.byte = byte;
+}
+
+void Memory::setInterruptFlag(const interrupt_flags interruptFlags)
+{
+	IR = interruptFlags;
+}

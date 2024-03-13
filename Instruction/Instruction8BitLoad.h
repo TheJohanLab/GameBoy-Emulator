@@ -106,11 +106,11 @@ public:
 
 		static void LDH_pa8qcA(CPU& cpu);	//0xE0 LDH (a8),A
 		static void LD_pCqcA(CPU& cpu);		//0xE2 LD (C),A
-		static void LDH_pa16qcA(CPU& cpu);	//0xEA LDH (a16),A
+		static void LD_pa16qcA(CPU& cpu);	//0xEA LDH (a16),A
 
 		static void LDH_Acpa8q(CPU& cpu);	//0xF0 LDH A,(a8)
 		static void LD_AcpCq(CPU& cpu);		//0xF2 LD A,(C)
-		static void LDH_Acpa16q(CPU& cpu);	//0xFA LDH A,(a16)
+		static void LD_Acpa16q(CPU& cpu);	//0xFA LDH A,(a16)
 
 
 

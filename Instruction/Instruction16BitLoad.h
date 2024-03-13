@@ -9,6 +9,8 @@ class Instruction16BitLoad : public Instruction
 private:
 	static void LD_RRcd16(CPU& cpu, combinedRegistries& registries);
 	static void LD_RRcd16(CPU& cpu, u16* registry);
+	static void PUSH_RR(CPU& cpu, combinedRegistries& registries);
+	static void POP_RR(CPU& cpu, combinedRegistries& registries);
 
 public:
 	Instruction16BitLoad(std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles);
@@ -32,7 +34,7 @@ public:
 	static void POP_AF(CPU& cpu);		//0xF1 POP AF
 	static void PUSH_AF(CPU& cpu);		//0xF5 PUSH AF
 	static void LDHL_SPcr8(CPU& cpu);	//0xF8 LDHL SP,r8
-	static void LD_SPcHL(CPU& cpu);		//LD SP,HL
+	static void LD_SPcHL(CPU& cpu);		//0xF9 LD SP,HL
 
 
 

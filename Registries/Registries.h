@@ -4,39 +4,50 @@
 
 struct combinedRegistries 
 {
-	u8* reg1;
-	u8* reg2;
+	u8* highRegistry;
+	u8* lowRegistry;
+	
+
+	u8* getLowRegistry() 
+	{
+		return lowRegistry;
+	}
+
+	u8* getHighRegistry() 
+	{
+		return highRegistry;
+	}
 
 	u16 getValue() const
 	{
-		return static_cast<u16>((*reg1 << 8) & 0xFF00 | (*reg2 & 0x00FF));
+		return static_cast<u16>((*highRegistry << 8) & 0xFF00 | (*lowRegistry & 0x00FF));
 	}
 
 	void setValue(u16 value)
 	{
-		*reg1 = (value >> 8) & 0xFF;
-		*reg2 = value & 0xFF;
+		*highRegistry = (value >> 8) & 0xFF;
+		*lowRegistry = value & 0xFF;
 	}
 
 	combinedRegistries& operator++(int)
 	{
 		combinedRegistries tmp = *this;
-		uint16_t u16Registries = static_cast<u16>(*(tmp.reg1)) << 8 | static_cast<u16>(*tmp.reg2);
+		uint16_t u16Registries = static_cast<u16>(*(tmp.highRegistry)) << 8 | static_cast<u16>(*tmp.lowRegistry);
 		u16Registries += 1;
 
-		*reg1 = static_cast<u8>((u16Registries >> 8) & 0xFF);
-		*reg2 = static_cast<u8>(u16Registries & 0xFF);
+		*highRegistry = static_cast<u8>((u16Registries >> 8) & 0xFF);
+		*lowRegistry = static_cast<u8>(u16Registries & 0xFF);
 
 		return *this;
 	}
 
 	combinedRegistries& operator++()
 	{
-		uint16_t u16Registries = static_cast<u16>(*reg1) << 8 | static_cast<u16>(*reg2);
+		uint16_t u16Registries = static_cast<u16>(*highRegistry) << 8 | static_cast<u16>(*lowRegistry);
 		u16Registries += 1;
 
-		*reg1 = static_cast<u8>((u16Registries >> 8) & 0xFF);
-		*reg2 = static_cast<u8>(u16Registries & 0xFF);
+		*highRegistry = static_cast<u8>((u16Registries >> 8) & 0xFF);
+		*lowRegistry = static_cast<u8>(u16Registries & 0xFF);
 
 		return *this;
 	}
@@ -44,26 +55,29 @@ struct combinedRegistries
 	combinedRegistries& operator--(int)
 	{
 		combinedRegistries tmp = *this;
-		uint16_t u16Registries = static_cast<u16>(*(tmp.reg1)) << 8 | static_cast<u16>(*tmp.reg2);
+		uint16_t u16Registries = static_cast<u16>(*(tmp.highRegistry)) << 8 | static_cast<u16>(*tmp.lowRegistry);
 		u16Registries -= 1;
 
-		*reg1 = static_cast<u8>((u16Registries >> 8) & 0xFF);
-		*reg2 = static_cast<u8>(u16Registries & 0xFF);
+		*highRegistry = static_cast<u8>((u16Registries >> 8) & 0xFF);
+		*lowRegistry = static_cast<u8>(u16Registries & 0xFF);
 
 		return *this;
 	}
 
 	combinedRegistries& operator--()
 	{
-		uint16_t u16Registries = static_cast<u16>(*reg1) << 8 | static_cast<u16>(*reg2);
+		uint16_t u16Registries = static_cast<u16>(*highRegistry) << 8 | static_cast<u16>(*lowRegistry);
 		u16Registries -= 1;
 
-		*reg1 = static_cast<u8>((u16Registries >> 8) & 0xFF);
-		*reg2 = static_cast<u8>(u16Registries & 0xFF);
+		*highRegistry = static_cast<u8>((u16Registries >> 8) & 0xFF);
+		*lowRegistry = static_cast<u8>(u16Registries & 0xFF);
 
 		return *this;
 	}
+
 };
+
+class CPU;
 
 class Registries
 {
@@ -73,9 +87,11 @@ class Registries
 		combinedRegistries AF, BC, DE, HL;
 		flags F;
 		u16 SP,PC;
+		u8 IME;
 
 	public:
 		Registries();
+		Registries(CPU& cpu);
 		virtual ~Registries() = default;
 
 		u8* getA() { return &A; }
@@ -115,6 +131,10 @@ class Registries
 
 		void setSP(u16 value) { this->SP = value; }
 		void setPC(u16 value) { this->PC = value; }
+
+		void setIME() { this->IME = 1; }
+		void clearIME() { this->IME = 0; }
+		u8 getIME() const { return this->IME; } 
 
 };
 

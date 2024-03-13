@@ -13,7 +13,7 @@ class CPU
 {
 	private:
 		Bus* mBus;
-		Registries mRegistries;
+		Registries mRegistries = Registries(*this);
 		std::array<Instruction*, instructionAmount> mInstructionSet;
 	
 		void initInstructionSet();
@@ -44,6 +44,12 @@ class CPU
 		u8* getMemoryDataPtr(const combinedRegistries& address);
 		u8* getMemoryDataPtr(const u16& address);
 
-		
+		void setIMEFlag();
+		void clearIMEFlag();
+		u8 getIMEFlagValue() const;
+
+		interrupt_flags* getInterruptFlag();
+		void setInterruptFlag(const u8 flags);
+		void setInterruptFlag(const interrupt_flags flags);
 };
 

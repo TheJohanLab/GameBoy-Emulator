@@ -1,6 +1,6 @@
 # GameBoy-Emulator
 
-This is a GameBoy emulator that simulates the behavior of a Nintendo GameBoy console.
+This is a GameBoy emulator that simulates the behavior of a GameBoy console.
 The code is written in C++ and is using SDL2 for graphic renderer.
 
 

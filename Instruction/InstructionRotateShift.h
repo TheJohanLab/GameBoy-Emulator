@@ -83,14 +83,14 @@ class InstructionRotateShift : public Instruction
 
 
 private:
-	static void RLCr(u8& registry, flags& flagRegistry);
-	static void RRCr(u8& registry, flags& flagRegistry);
-	static void RLr(u8& registry, flags& flagResistry);
-	static void RRr(u8& registry, flags& flagRegistry);
-	static void SLAr(u8& registry, flags& flagRegistry);
-	static void SRAr(u8& registry, flags& flagRegistry);
-	static void SWAPr(u8& registry, flags& flagRegistry);
-	static void SRLr(u8& registry, flags& flagRegistry);
+	static void RLCr(u8& registry, flags& flagRegistry, CPU& cpu);
+	static void RRCr(u8& registry, flags& flagRegistry, CPU& cpu);
+	static void RLr(u8& registry, flags& flagResistry, CPU& cpu);
+	static void RRr(u8& registry, flags& flagRegistry, CPU& cpu);
+	static void SLAr(u8& registry, flags& flagRegistry, CPU& cpu);
+	static void SRAr(u8& registry, flags& flagRegistry, CPU& cpu);
+	static void SWAPr(u8& registry, flags& flagRegistry, CPU& cpu);
+	static void SRLr(u8& registry, flags& flagRegistry, CPU& cpu);
 
 };
 

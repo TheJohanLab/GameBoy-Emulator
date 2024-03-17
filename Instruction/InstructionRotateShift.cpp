@@ -1,72 +1,85 @@
 #include "InstructionRotateShift.h"
 
-InstructionRotateShift::InstructionRotateShift(std::string const & name, void (*pInstruction)(CPU & cpu), u8 ClockCycle)
-{
-	mName = name;
-	pmInstruction = pInstruction;
-	mClockCycle = ClockCycle;
-
-}
-
-void InstructionRotateShift::RLCA(CPU& cpu)
+InstructionRotateShift::InstructionRotateShift(const char* name, u8(*pInstruction)(CPU& cpu), u8 ClockCycle)
+	:Instruction(name, pInstruction, ClockCycle)
 {
 }
 
-void InstructionRotateShift::RRCA(CPU& cpu)
+u8 InstructionRotateShift::RLCA(CPU& cpu)
 {
+	return 4;
 }
 
-void InstructionRotateShift::RLA(CPU& cpu)
+u8 InstructionRotateShift::RRCA(CPU& cpu)
 {
+	return 4;
 }
 
-void InstructionRotateShift::RRA(CPU& cpu)
+u8 InstructionRotateShift::RLA(CPU& cpu)
 {
+	return 4;
 }
 
-void InstructionRotateShift::RLC_B(CPU& cpu) 
+u8 InstructionRotateShift::RRA(CPU& cpu)
+{
+	return 4;
+}
+
+u8 InstructionRotateShift::RLC_B(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("B");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RLC_C(CPU& cpu) 
+u8 InstructionRotateShift::RLC_C(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("C");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RLC_D(CPU& cpu) 
+u8 InstructionRotateShift::RLC_D(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("D");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RLC_E(CPU& cpu) 
+u8 InstructionRotateShift::RLC_E(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("E");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RLC_H(CPU& cpu) 
+u8 InstructionRotateShift::RLC_H(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("H");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RLC_L(CPU& cpu) 
+u8 InstructionRotateShift::RLC_L(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("L");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RLC_pHLq(CPU& cpu) 
+u8 InstructionRotateShift::RLC_pHLq(CPU& cpu) 
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
@@ -78,58 +91,74 @@ void InstructionRotateShift::RLC_pHLq(CPU& cpu)
 	setZFlag(cpu, data);
 	setHFlag(cpu, 0);
 	setNFlag(cpu, 0);
+
+	return 16;
 }
 
-void InstructionRotateShift::RLC_A(CPU& cpu) 
+u8 InstructionRotateShift::RLC_A(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("A");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RRC_B(CPU& cpu) 
+u8 InstructionRotateShift::RRC_B(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("B");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RRC_C(CPU& cpu) 
+u8 InstructionRotateShift::RRC_C(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("C");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RRC_D(CPU& cpu) 
+u8 InstructionRotateShift::RRC_D(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("D");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RRC_E(CPU& cpu) 
+u8 InstructionRotateShift::RRC_E(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("E");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RRC_H(CPU& cpu) 
+u8 InstructionRotateShift::RRC_H(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("H");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RRC_L(CPU& cpu) 
+u8 InstructionRotateShift::RRC_L(CPU& cpu) 
 {
 	u8* registry = cpu.getRegistries("L");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RRC_pHLq(CPU& cpu) 
+u8 InstructionRotateShift::RRC_pHLq(CPU& cpu) 
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
@@ -141,58 +170,74 @@ void InstructionRotateShift::RRC_pHLq(CPU& cpu)
 	setZFlag(cpu, data);
 	setHFlag(cpu, 0);
 	setNFlag(cpu, 0);
+
+	return 16;
 }
 
-void InstructionRotateShift::RRC_A(CPU& cpu)
+u8 InstructionRotateShift::RRC_A(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("A");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRCr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RL_B(CPU& cpu)
+u8 InstructionRotateShift::RL_B(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("B");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RL_C(CPU& cpu)
+u8 InstructionRotateShift::RL_C(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("C");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RL_D(CPU& cpu)
+u8 InstructionRotateShift::RL_D(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("D");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RL_E(CPU& cpu)
+u8 InstructionRotateShift::RL_E(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("E");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RL_H(CPU& cpu)
+u8 InstructionRotateShift::RL_H(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("H");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RL_L(CPU& cpu)
+u8 InstructionRotateShift::RL_L(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("L");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RL_pHLq(CPU& cpu)
+u8 InstructionRotateShift::RL_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 carry = flagRegistry->flags.C;
@@ -205,59 +250,75 @@ void InstructionRotateShift::RL_pHLq(CPU& cpu)
 	setZFlag(cpu, data);
 	setHFlag(cpu, 0);
 	setNFlag(cpu, 0);
+
+	return 16;
 }
 
-void InstructionRotateShift::RL_A(CPU& cpu)
+u8 InstructionRotateShift::RL_A(CPU& cpu)
 {
 	cpu.setRegistries("A", 0x12);
 	u8* registry = cpu.getRegistries("A");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RR_B(CPU& cpu)
+u8 InstructionRotateShift::RR_B(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("B");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RR_C(CPU& cpu)
+u8 InstructionRotateShift::RR_C(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("C");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RR_D(CPU& cpu)
+u8 InstructionRotateShift::RR_D(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("D");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RR_E(CPU& cpu)
+u8 InstructionRotateShift::RR_E(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("E");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RR_H(CPU& cpu)
+u8 InstructionRotateShift::RR_H(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("H");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RR_L(CPU& cpu)
+u8 InstructionRotateShift::RR_L(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("L");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::RR_pHLq(CPU& cpu)
+u8 InstructionRotateShift::RR_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 carry = flagRegistry->flags.C;
@@ -270,58 +331,74 @@ void InstructionRotateShift::RR_pHLq(CPU& cpu)
 	setZFlag(cpu, data);
 	setHFlag(cpu, 0);
 	setNFlag(cpu, 0);
+
+	return 16;
 }
 
-void InstructionRotateShift::RR_A(CPU& cpu)
+u8 InstructionRotateShift::RR_A(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("A");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RRr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SLA_B(CPU& cpu)
+u8 InstructionRotateShift::SLA_B(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("B");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SLAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SLA_C(CPU& cpu)
+u8 InstructionRotateShift::SLA_C(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("C");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SLAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SLA_D(CPU& cpu)
+u8 InstructionRotateShift::SLA_D(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("D");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SLAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SLA_E(CPU& cpu)
+u8 InstructionRotateShift::SLA_E(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("E");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SLAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SLA_H(CPU& cpu)
+u8 InstructionRotateShift::SLA_H(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("H");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SLAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SLA_L(CPU& cpu)
+u8 InstructionRotateShift::SLA_L(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("L");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SLAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SLA_pHLq(CPU& cpu)
+u8 InstructionRotateShift::SLA_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
@@ -332,58 +409,74 @@ void InstructionRotateShift::SLA_pHLq(CPU& cpu)
 	setZFlag(cpu, data);
 	setHFlag(cpu, 0);
 	setNFlag(cpu, 0);
+
+	return 16;
 }
 
-void InstructionRotateShift::SLA_A(CPU& cpu)
+u8 InstructionRotateShift::SLA_A(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("A");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SLAr(*registry, *flagRegistry, cpu);
+	
+	return 8;
 }
 
-void InstructionRotateShift::SRA_B(CPU& cpu)
+u8 InstructionRotateShift::SRA_B(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("B");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRA_C(CPU& cpu)
+u8 InstructionRotateShift::SRA_C(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("C");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRA_D(CPU& cpu)
+u8 InstructionRotateShift::SRA_D(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("D");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRA_E(CPU& cpu)
+u8 InstructionRotateShift::SRA_E(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("E");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRA_H(CPU& cpu)
+u8 InstructionRotateShift::SRA_H(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("H");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRA_L(CPU& cpu)
+u8 InstructionRotateShift::SRA_L(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("L");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRA_pHLq(CPU& cpu)
+u8 InstructionRotateShift::SRA_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
@@ -394,58 +487,74 @@ void InstructionRotateShift::SRA_pHLq(CPU& cpu)
 	setZFlag(cpu, data);
 	setHFlag(cpu, 0);
 	setNFlag(cpu, 0);
+
+	return 16;
 }
 
-void InstructionRotateShift::SRA_A(CPU& cpu)
+u8 InstructionRotateShift::SRA_A(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("A");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRAr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SWAP_B(CPU& cpu)
+u8 InstructionRotateShift::SWAP_B(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("B");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SWAPr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SWAP_C(CPU& cpu)
+u8 InstructionRotateShift::SWAP_C(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("C");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SWAPr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SWAP_D(CPU& cpu)
+u8 InstructionRotateShift::SWAP_D(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("D");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SWAPr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SWAP_E(CPU& cpu)
+u8 InstructionRotateShift::SWAP_E(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("E");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SWAPr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SWAP_H(CPU& cpu)
+u8 InstructionRotateShift::SWAP_H(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("H");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SWAPr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SWAP_L(CPU& cpu)
+u8 InstructionRotateShift::SWAP_L(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("L");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SWAPr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SWAP_pHLq(CPU& cpu)
+u8 InstructionRotateShift::SWAP_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
@@ -462,58 +571,73 @@ void InstructionRotateShift::SWAP_pHLq(CPU& cpu)
 	setNFlag(cpu, 0);
 	setCFlag(cpu, 0);
 
+	return 16;
 }
 
-void InstructionRotateShift::SWAP_A(CPU& cpu)
+u8 InstructionRotateShift::SWAP_A(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("A");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SWAPr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRL_B(CPU& cpu)
+u8 InstructionRotateShift::SRL_B(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("B");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRL_C(CPU& cpu)
+u8 InstructionRotateShift::SRL_C(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("C");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRL_D(CPU& cpu)
+u8 InstructionRotateShift::SRL_D(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("D");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRL_E(CPU& cpu)
+u8 InstructionRotateShift::SRL_E(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("E");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRL_H(CPU& cpu)
+u8 InstructionRotateShift::SRL_H(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("H");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRL_L(CPU& cpu)
+u8 InstructionRotateShift::SRL_L(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("L");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
-void InstructionRotateShift::SRL_pHLq(CPU& cpu)
+u8 InstructionRotateShift::SRL_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
@@ -525,13 +649,17 @@ void InstructionRotateShift::SRL_pHLq(CPU& cpu)
 	setZFlag(cpu, data);
 	setHFlag(cpu, 0);
 	setNFlag(cpu, 0);
+
+	return 16;
 }
 
-void InstructionRotateShift::SRL_A(CPU& cpu)
+u8 InstructionRotateShift::SRL_A(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("A");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	SRLr(*registry, *flagRegistry, cpu);
+
+	return 8;
 }
 
 

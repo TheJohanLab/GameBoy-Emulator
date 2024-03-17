@@ -3,7 +3,7 @@
 /// Private methods
 //TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 //void InstructionJump::JP_CCca16(CPU& cpu, Instruction& instance, const u8& flagCondition)
-void InstructionJump::JP_CCca16(CPU& cpu, const u8& flag)
+u8 InstructionJump::JP_CCca16(CPU& cpu, const u8& flag)
 {
 	u16* PC = cpu.getPC();
 	u16 adress = readNextTwoOpcodes(cpu);
@@ -12,13 +12,13 @@ void InstructionJump::JP_CCca16(CPU& cpu, const u8& flag)
 	if (flag)
 	{
 		*PC = adress;;
-		//setClockCycle(instance, 16);
+		return 16;
 	}
-	//else
-		//setClockCycle(instance, 12);
+	
+	return 12;
 }
 
-void InstructionJump::JR_CCca16(CPU& cpu, const u8& flag)
+u8 InstructionJump::JR_CCca16(CPU& cpu, const u8& flag)
 {
 	u16* PC = cpu.getPC();
 	int8_t offset = static_cast<int8_t>(readNextOpcode(cpu));
@@ -26,25 +26,25 @@ void InstructionJump::JR_CCca16(CPU& cpu, const u8& flag)
 	if (flag)
 	{
 		*PC += offset;
-		//setClockCycle(instance, 12);
+		return 12;
 	}
-	//else
-		//setClockCycle(instance, 8);
+	
+	return 8;
 }
 
-void InstructionJump::RET_CC(CPU& cpu, const u8& flag)
+u8 InstructionJump::RET_CC(CPU& cpu, const u8& flag)
 {
 
 	if (flag)
 	{
 		RET(cpu);
-		//setClockCycle(instance, 20);
+		return 20;
 	}
-	//else
-		//setClockCycle(instance, 8);
+	
+	return 8;
 }
 
-void InstructionJump::CALL_CC(CPU& cpu, const u8& flag)
+u8 InstructionJump::CALL_CC(CPU& cpu, const u8& flag)
 {
 	
 	u16 address = readNextTwoOpcodes(cpu);
@@ -54,10 +54,10 @@ void InstructionJump::CALL_CC(CPU& cpu, const u8& flag)
 		u16* PC = cpu.getPC();
 		PUSH_PC(cpu);
 		*PC = address;
-		//setClockCycle(instance, 24);
+		return 24;
 	}
-	//else
-		//setClockCycle(instance, 12);
+	
+	return 12;
 }
 
 void InstructionJump::RST_VC(CPU& cpu, const u16& address)
@@ -83,84 +83,93 @@ void InstructionJump::PUSH_PC(CPU& cpu)
 
 
 // Public methods
-InstructionJump::InstructionJump(std::string const & name, void (*pInstruction)(CPU & cpu), u8 ClockCycle)
+InstructionJump::InstructionJump(const char* name, u8 (*pInstruction)(CPU & cpu), u8 ClockCycle)
+	:Instruction(name, pInstruction, ClockCycle)
 {
-	mName = name;
-	pmInstruction = pInstruction;
-	mClockCycle = ClockCycle;
 }
 
-void InstructionJump::JR_r8(CPU& cpu)
+u8 InstructionJump::JR_r8(CPU& cpu)
 {
 	u16* PC = cpu.getPC();
 	int8_t offset = static_cast<int8_t>(readNextOpcode(cpu));
 
 	*PC += offset;
+
+	return 12;
 }
 
-void InstructionJump::JR_NZcr8(CPU& cpu)
+u8 InstructionJump::JR_NZcr8(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	JR_CCca16(cpu, !f->flags.Z);
+
+	return JR_CCca16(cpu, !f->flags.Z);
 }
 
-void InstructionJump::JR_Zcr8(CPU& cpu)
+u8 InstructionJump::JR_Zcr8(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	JR_CCca16(cpu, f->flags.Z);
+	
+	return JR_CCca16(cpu, f->flags.Z);
 }
 
-void InstructionJump::JR_NCcr8(CPU& cpu)
+u8 InstructionJump::JR_NCcr8(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	JR_CCca16(cpu, !f->flags.C);
+	return JR_CCca16(cpu, !f->flags.C);
 }
 
-void InstructionJump::JR_Ccr8(CPU& cpu)
+u8 InstructionJump::JR_Ccr8(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	JR_CCca16(cpu, f->flags.C);
+	
+	return JR_CCca16(cpu, f->flags.C);
 }
 
-void InstructionJump::RET_NZ(CPU& cpu)
+u8 InstructionJump::RET_NZ(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	RET_CC(cpu, !f->flags.Z);
+	
+	return RET_CC(cpu, !f->flags.Z);
 }
 
-void InstructionJump::JP_NZca16(CPU& cpu)
+u8 InstructionJump::JP_NZca16(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	JP_CCca16(cpu, !f->flags.Z);
+
+	return JP_CCca16(cpu, !f->flags.Z);
 }
 
 //TODO Verifier cette instruction
-void InstructionJump::JP_a16(CPU& cpu)
+u8 InstructionJump::JP_a16(CPU& cpu)
 {
 	u16* PC = cpu.getPC();
 	u16 adress = readNextTwoOpcodes(cpu);
 
 	*PC = adress;
+
+	return 16;
 }
 
-void InstructionJump::CALL_NZca16(CPU& cpu)
+u8 InstructionJump::CALL_NZca16(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	CALL_CC(cpu, !f->flags.Z);
+	
+	return CALL_CC(cpu, !f->flags.Z);
 }
 
-void InstructionJump::RST_00H(CPU& cpu)
+u8 InstructionJump::RST_00H(CPU& cpu)
 {
 	RST_VC(cpu, 0x0000);
+	return 16;
 }
 
-void InstructionJump::RET_Z(CPU& cpu)
+u8 InstructionJump::RET_Z(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	RET_CC(cpu, f->flags.Z);
+	return RET_CC(cpu, f->flags.Z);
 }
 
-void InstructionJump::RET(CPU& cpu)
+u8 InstructionJump::RET(CPU& cpu)
 {
 	u16* SP = cpu.getSP();
 	u16* PC = cpu.getPC();
@@ -171,21 +180,25 @@ void InstructionJump::RET(CPU& cpu)
 	*SP += 1;
 
 	*PC = ((highPC << 8) & 0xFF00) | (lowPC & 0x00FF);
+
+	return 16;
 }
 
-void InstructionJump::JP_Zca16(CPU& cpu)
+u8 InstructionJump::JP_Zca16(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	JP_CCca16(cpu, f->flags.Z);
+	
+	return JP_CCca16(cpu, f->flags.Z);
 }
 
-void InstructionJump::CALL_Zca16(CPU& cpu)
+u8 InstructionJump::CALL_Zca16(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	CALL_CC(cpu, f->flags.Z);
+	
+	return CALL_CC(cpu, f->flags.Z);
 }
 
-void InstructionJump::CALL_a16(CPU& cpu)
+u8 InstructionJump::CALL_a16(CPU& cpu)
 {
 	u16* PC = cpu.getPC();
 	u16 address = readNextTwoOpcodes(cpu);
@@ -193,96 +206,117 @@ void InstructionJump::CALL_a16(CPU& cpu)
 	PUSH_PC(cpu);
 
 	*PC = address;
+
+	return 24;
 }
 
-void InstructionJump::RST_08H(CPU& cpu)
+u8 InstructionJump::RST_08H(CPU& cpu)
 {
 	RST_VC(cpu, 0x0800);
+
+	return 16;
 }
 
-void InstructionJump::RET_NC(CPU& cpu)
+u8 InstructionJump::RET_NC(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	RET_CC(cpu, !f->flags.C);
+
+	return RET_CC(cpu, !f->flags.C);
 }
 
-void InstructionJump::JP_NCca16(CPU& cpu)
+u8 InstructionJump::JP_NCca16(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	JP_CCca16(cpu, !f->flags.C);
+
+	return JP_CCca16(cpu, !f->flags.C);
 }
 
-void InstructionJump::CALL_NCca16(CPU& cpu)
+u8 InstructionJump::CALL_NCca16(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	CALL_CC(cpu, !f->flags.C);
+
+	return CALL_CC(cpu, !f->flags.C);
 }
 
-void InstructionJump::RST_10H(CPU& cpu)
+u8 InstructionJump::RST_10H(CPU& cpu)
 {
 	RST_VC(cpu, 0x1000);
+	return 16;
 }
 
-void InstructionJump::RET_C(CPU& cpu)
+u8 InstructionJump::RET_C(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	RET_CC(cpu, f->flags.C);
+
+	return RET_CC(cpu, f->flags.C);
 }
 
-void InstructionJump::RETI(CPU& cpu)
+u8 InstructionJump::RETI(CPU& cpu)
 {
 	cpu.setIMEFlag();
-	RET(cpu);
+	return RET(cpu);
 }
 
 //TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
-//void InstructionJump::JP_Cca16(CPU& cpu, Instruction& instance)
-void InstructionJump::JP_Cca16(CPU& cpu)
+//u8 InstructionJump::JP_Cca16(CPU& cpu, Instruction& instance)
+u8 InstructionJump::JP_Cca16(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
 	//JP_CCca16(cpu, instance, f->flags.C);
-	JP_CCca16(cpu, f->flags.C);
+	
+	return JP_CCca16(cpu, f->flags.C);
 	
 }
 
-void InstructionJump::CALL_Cca16(CPU& cpu)
+u8 InstructionJump::CALL_Cca16(CPU& cpu)
 {
 	flags* f = cpu.getFlagRegistry();
-	CALL_CC(cpu, f->flags.C);
+	
+	return CALL_CC(cpu, f->flags.C);
 }
 
-void InstructionJump::RST_18H(CPU& cpu)
+u8 InstructionJump::RST_18H(CPU& cpu)
 {
 	RST_VC(cpu, 0x1800);
+	return 16;
 }
 
-void InstructionJump::RST_20H(CPU& cpu)
+u8 InstructionJump::RST_20H(CPU& cpu)
 {
+	RST_VC(cpu, 0x2000);
+	return 16;
 }
 
 // TODO Verifier que c'est bien la valeur de HL qui est stockee, et non la valeur à l'adresse HL
-void InstructionJump::JP_pHLq(CPU& cpu)
+u8 InstructionJump::JP_pHLq(CPU& cpu)
 {
 	u16* PC = cpu.getPC();
 	combinedRegistries* HL = cpu.getCombinedRegistries("HL");
 
 	*PC = HL->getValue();
 
+	return 4;
 }
 
-void InstructionJump::RST_28H(CPU& cpu)
+u8 InstructionJump::RST_28H(CPU& cpu)
 {
 	RST_VC(cpu, 0x2800);
+
+	return 16;
 }
 
-void InstructionJump::RST_30H(CPU& cpu)
+u8 InstructionJump::RST_30H(CPU& cpu)
 {
 	RST_VC(cpu, 0x3000);
+
+	return 16;
 }
 
-void InstructionJump::RST_38H(CPU& cpu)
+u8 InstructionJump::RST_38H(CPU& cpu)
 {
 	RST_VC(cpu, 0x3800);
+
+	return 16;
 }
 
 

@@ -3,9 +3,15 @@
 
 
 Instruction::Instruction()
+	:mName("unnamed"), pmInstruction(nullptr), mClockCycle(0)
 {
-
 }
+
+Instruction::Instruction(const char* name, u8(*pInstruction)(CPU& cpu), u8 clockCycles)
+	:mName(name), pmInstruction(pInstruction), mClockCycle(clockCycles)
+{
+}
+
 
 
 u8 Instruction::readNextOpcode(CPU& cpu)

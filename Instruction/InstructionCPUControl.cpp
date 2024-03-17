@@ -1,34 +1,38 @@
 #include "InstructionCPUControl.h"
 
-InstructionCPUControl::InstructionCPUControl(std::string const & name, void (*pInstruction)(CPU & cpu), u8 ClockCycle)
-{
-	mName = name;
-	pmInstruction = pInstruction;
-	mClockCycle = ClockCycle;
-}
-
-void InstructionCPUControl::nop(CPU & cpu)
+InstructionCPUControl::InstructionCPUControl(const char* name, u8 (*pInstruction)(CPU & cpu), u8 ClockCycle)
+	:Instruction(name, pInstruction, ClockCycle)
 {
 }
 
-void InstructionCPUControl::stop_0(CPU& cpu)
+u8 InstructionCPUControl::nop(CPU & cpu)
 {
+	return 4;
 }
 
-void InstructionCPUControl::halt(CPU& cpu)
+u8 InstructionCPUControl::stop_0(CPU& cpu)
 {
+	return 4;
 }
 
-void InstructionCPUControl::prefix_cb(CPU& cpu)
+u8 InstructionCPUControl::halt(CPU& cpu)
 {
+	return 4;
 }
 
-void InstructionCPUControl::di(CPU& cpu)
+u8 InstructionCPUControl::prefix_cb(CPU& cpu)
+{
+	return 4;
+}
+
+u8 InstructionCPUControl::di(CPU& cpu)
 {
 	cpu.clearIMEFlag();
+	return 4;
 }
 
-void InstructionCPUControl::ei(CPU& cpu)
+u8 InstructionCPUControl::ei(CPU& cpu)
 {
 	cpu.setIMEFlag();
+	return 4;
 }

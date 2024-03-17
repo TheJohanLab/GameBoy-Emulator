@@ -14,7 +14,10 @@ u8 Memory::read(u16 const& address) const
 		return mERAM[address - 0xA000];
 	if (address >= 0xFF80 && address <= 0xFFFE)
 		return mHRAM[address - 0xFF80];
-
+	if (address == 0xFF0F)
+		return IR.byte;
+	if (address == 0xFFFF)
+		return IE.byte;
 	return -1;
 }	
 
@@ -29,6 +32,10 @@ void Memory::write(u16 const& address, u8 const& data)
 		mERAM[address - 0xA000] = data;
 	if (address >= 0xFF80 && address <= 0xFFFE)
 		mHRAM[address - 0xFF80] = data;
+	if (address == 0xFF0F)
+		IR.byte = data;
+	if (address == 0xFFFF)
+		IE.byte = data;
 }
 
 u8* Memory::getDataPtr(u16 const& address)
@@ -46,9 +53,9 @@ u8* Memory::getDataPtr(u16 const& address)
 
 }
 
-interrupt_flags* Memory::getInterruptFlags()
+interrupt_flag Memory::getInterruptFlag() const
 {
-	return &IR;
+	return IR;
 }
 
 void Memory::setInterruptFlag(const u8 byte)
@@ -56,7 +63,22 @@ void Memory::setInterruptFlag(const u8 byte)
 	IR.byte = byte;
 }
 
-void Memory::setInterruptFlag(const interrupt_flags interruptFlags)
+void Memory::setInterruptFlag(const interrupt_flag interruptFlags)
+{
+	IR = interruptFlags;
+}
+
+interrupt_flag Memory::getInterruptEnable() const
+{
+	return IR;
+}
+
+void Memory::setInterruptEnable(const u8 byte)
+{
+	IR.byte = byte;
+}
+
+void Memory::setInterruptEnable(const interrupt_flag interruptFlags)
 {
 	IR = interruptFlags;
 }

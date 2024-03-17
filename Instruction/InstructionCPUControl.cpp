@@ -5,7 +5,6 @@ InstructionCPUControl::InstructionCPUControl(std::string const & name, void (*pI
 	mName = name;
 	pmInstruction = pInstruction;
 	mClockCycle = ClockCycle;
-
 }
 
 void InstructionCPUControl::nop(CPU & cpu)
@@ -29,7 +28,6 @@ void InstructionCPUControl::di(CPU& cpu)
 	cpu.clearIMEFlag();
 }
 
-//TODO Verifier cette instruction
 void InstructionCPUControl::ei(CPU& cpu)
 {
 	cpu.setIMEFlag();

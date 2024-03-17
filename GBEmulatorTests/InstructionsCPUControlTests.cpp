@@ -34,11 +34,11 @@ namespace Instructions_tests
 		{
 			cpu->setIMEFlag();
 			cpu->executeOpcode(0xF3);
-			Assert::AreEqual(static_cast<u8>(0x00), cpu->getIMEFlagValue());
+			Assert::AreEqual(static_cast<u8>(0x00), cpu->getIMEFlag());
 
 			cpu->clearIMEFlag();
 			cpu->executeOpcode(0xF3);
-			Assert::AreEqual(static_cast<u8>(0x00), cpu->getIMEFlagValue());
+			Assert::AreEqual(static_cast<u8>(0x00), cpu->getIMEFlag());
 		}
 
 		
@@ -46,11 +46,11 @@ namespace Instructions_tests
 		{
 			cpu->setIMEFlag();
 			cpu->executeOpcode(0xFB);
-			Assert::AreEqual(static_cast<u8>(0x01), cpu->getIMEFlagValue());
+			Assert::AreEqual(static_cast<u8>(0x01), cpu->getIMEFlag());
 
 			cpu->clearIMEFlag();
 			cpu->executeOpcode(0xFB);
-			Assert::AreEqual(static_cast<u8>(0x01), cpu->getIMEFlagValue());
+			Assert::AreEqual(static_cast<u8>(0x01), cpu->getIMEFlag());
 		}
 
 		//TODO

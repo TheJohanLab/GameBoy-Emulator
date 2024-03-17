@@ -21,7 +21,9 @@ void GameLoop::startGame()
 	{
 		while (cycles < cyclesPerFrame)
 		{
+			//TODO Faire une methode qui gere tous les processus du CPU par frame
 			u8 currCycle = mCPU.executeOpcode(0x01);
+			mCPU.callInterruptHandler();
 			cycles += currCycle;
 		}
 		std::cout << "Nombre d'instructions : " << cycles / 4 << std::endl; 

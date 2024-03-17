@@ -231,7 +231,8 @@ void InstructionJump::RET_C(CPU& cpu)
 
 void InstructionJump::RETI(CPU& cpu)
 {
-	//TODO EI (CPU CONTROL) en premier
+	cpu.setIMEFlag();
+	RET(cpu);
 }
 
 //TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution

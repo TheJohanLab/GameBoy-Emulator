@@ -29,18 +29,32 @@ typedef union u_flags {
 	s_flags flags;
 }flags;
 
-typedef struct s_interrupt_flags {
-    u8 Vblank_IR : 1;
-    u8 LCD_STAT_IR : 1;
-    u8 Timer_IR : 1;
-    u8 SerialTransferCompletion_IR : 1;
-    u8 Joypad_IR : 1;
-    u8 others : 2;
-    u8 InterruptMasterEnableFlag : 1;
+typedef struct s_interrupt_flag {
+    u8 Vblank : 1;
+    u8 LCD_STAT : 1;
+    u8 Timer : 1;
+    u8 SerialTransferCompletion : 1;
+    u8 Joypad : 1;
+    u8 others : 3;
 
-} s_interrupt_flags;
+} s_interrupt_flag;
 
-typedef union u_interrup_flags {
+typedef union u_interrup_flag {
     u8 byte;
-    s_interrupt_flags flags;
-}interrupt_flags;
+    s_interrupt_flag flags;
+}interrupt_flag;
+
+typedef struct s_interrupt_enable {
+    u8 Vblank : 1;
+    u8 LCD_STAT : 1;
+    u8 Timer : 1;
+    u8 SerialTransferCompletion : 1;
+    u8 Joypad : 1;
+    u8 others : 3;
+
+} s_interrupt_enable;
+
+typedef union u_interrupt_enable {
+    u8 byte;
+    s_interrupt_enable flags;
+}interrupt_enable;

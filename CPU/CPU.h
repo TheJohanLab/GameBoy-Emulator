@@ -25,7 +25,7 @@ class CPU
 
 		u8 executeOpcode(u16 opcode);
 		u8 executeOpcodeCB(u16 opcodeCB);
-		void callInterruptHandler(u16 const &address);
+		void callInterruptHandler();
 
 		u8* getRegistries(const std::string& registry);
 		combinedRegistries* getCombinedRegistries(const std::string& registry);
@@ -46,10 +46,14 @@ class CPU
 
 		void setIMEFlag();
 		void clearIMEFlag();
-		u8 getIMEFlagValue() const;
+		inline u8 getIMEFlag() const;
 
-		interrupt_flags* getInterruptFlag();
-		void setInterruptFlag(const u8 flags);
-		void setInterruptFlag(const interrupt_flags flags);
+		interrupt_flag getInterruptFlag() const;
+		void setInterruptFlag(const u8& flags);
+		void setInterruptFlag(const interrupt_flag& flags);
+
+		interrupt_enable getInterruptEnable() const;
+		void setInterruptEnable(const u8& flags);
+		void setInterruptEnable(const interrupt_enable& flags);
 };
 

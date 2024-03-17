@@ -10,7 +10,8 @@ class Memory
 		std::array<u8, 8 * kiB> mVRAM = { 0x00 };
 		std::array<u8, 8 * kiB> mERAM = { 0x00 };
 		std::array<u8, HRAMSize> mHRAM = { 0x00 };
-		interrupt_flags IR;
+		interrupt_flag IR;
+		interrupt_enable IE;
 
 	public:
 		Memory();
@@ -21,9 +22,13 @@ class Memory
 
 		u8* getDataPtr(u16 const& address);
 
-		interrupt_flags* getInterruptFlags();
+		interrupt_flag getInterruptFlag() const;
 		void setInterruptFlag(u8 byte);
-		void setInterruptFlag(interrupt_flags byte);
+		void setInterruptFlag(interrupt_flag byte);
+
+		interrupt_flag getInterruptEnable() const;
+		void setInterruptEnable(u8 byte);
+		void setInterruptEnable(interrupt_flag byte);
 
 
 };

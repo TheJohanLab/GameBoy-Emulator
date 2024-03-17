@@ -593,6 +593,62 @@ u8 CPU::executeOpcodeCB(u16 opcodeCB)
 	return (4 + mInstructionSet[0x100 + opcodeCB]->getClockCycle());
 }
 
+void CPU::callInterruptHandler()
+{
+	if (!getIMEFlag())
+		return;
+
+	interrupt_flag IF = getInterruptFlag();
+	interrupt_enable IE = getInterruptEnable();
+
+	// TODO faire une struct commune pour les 2
+	interrupt_flag activeInterrupts;
+	activeInterrupts.byte = ((IE.byte & IF.byte) & 0x0F);
+
+	u16* PC = getPC();
+
+	if (activeInterrupts.byte > 0x00)
+	{
+		clearIMEFlag();
+		InstructionJump::PUSH_PC(*this);
+
+
+		if (activeInterrupts.flags.Vblank)
+		{
+			*PC = 0x40;
+			activeInterrupts.flags.Vblank = 0;
+		}
+
+		if (activeInterrupts.flags.LCD_STAT)
+		{
+			*PC = 0x48;
+			activeInterrupts.flags.LCD_STAT = 0;
+		}
+
+		if (activeInterrupts.flags.Timer)
+		{
+			*PC = 0x50;
+			activeInterrupts.flags.Timer = 0;
+		}
+
+		if (activeInterrupts.flags.SerialTransferCompletion)
+		{
+			*PC = 0x58;
+			activeInterrupts.flags.SerialTransferCompletion = 0;
+		}
+
+		if (activeInterrupts.flags.Joypad)
+		{
+			*PC = 0x60;
+			activeInterrupts.flags.Joypad = 0;
+		}
+
+		setInterruptFlag(activeInterrupts);
+
+	}
+
+}
+
 u8* CPU::getRegistries(const std::string& registry)
 {
 	using registryFuncPtr = u8*(Registries::*)();
@@ -708,23 +764,36 @@ void CPU::clearIMEFlag()
 	mRegistries.clearIME();
 }
 
-u8 CPU::getIMEFlagValue() const
+u8 CPU::getIMEFlag() const
 {
 	return mRegistries.getIME();
 }
 
 
-interrupt_flags* CPU::getInterruptFlag()
+interrupt_flag CPU::getInterruptFlag() const
 {
-	return mBus->getInterruptFlags();
+	u8 data = mBus->read(0xFF0F);
+	interrupt_flag IF;
+	IF.byte = data;
+
+	return IF;
 }
 
-void CPU::setInterruptFlag(const u8 flags)
+void CPU::setInterruptFlag(const u8& flags)
 {
 	mBus->setInterruptFlags(flags);
 }
 
-void CPU::setInterruptFlag(const interrupt_flags flags)
+void CPU::setInterruptFlag(const interrupt_flag& flags)
 {
 	mBus->setInterruptFlags(flags);
+}
+
+interrupt_enable CPU::getInterruptEnable() const
+{
+	u8 data = mBus->read(0xFFFF);
+	interrupt_enable IE;
+	IE.byte = data;
+
+	return IE;
 }

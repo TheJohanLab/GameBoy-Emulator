@@ -45,6 +45,8 @@ class InstructionJump : public Instruction
 		static void RST_30H(CPU& cpu);		//0xF7 RST 30H
 		static void RST_38H(CPU& cpu);		//0xFF RST 38H
 
+		//TODO mettre cette methode dans Instruction.h
+		static void PUSH_PC(CPU& cpu);
 
 private:
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
@@ -55,6 +57,5 @@ private:
 	static void CALL_CC(CPU& cpu, const u8& flag);
 	static void RST_VC(CPU& cpu, const u16& address);
 
-	static void PUSH_PC(CPU& cpu);
 };
 

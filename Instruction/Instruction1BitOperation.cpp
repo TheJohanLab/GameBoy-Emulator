@@ -505,7 +505,7 @@ void Instruction1BitOperation::RES_0cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	RES_bcHL(*registry, *flagRegistry, 0x00, cpu);
+	RES_bcpHLq(*registry, *flagRegistry, 0x00, cpu);
 }
 
 void Instruction1BitOperation::RES_0cA(CPU& cpu)
@@ -561,7 +561,7 @@ void Instruction1BitOperation::RES_1cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	RES_bcHL(*registry, *flagRegistry, 0x01, cpu);
+	RES_bcpHLq(*registry, *flagRegistry, 0x01, cpu);
 }
 
 void Instruction1BitOperation::RES_1cA(CPU& cpu)
@@ -617,7 +617,7 @@ void Instruction1BitOperation::RES_2cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	RES_bcHL(*registry, *flagRegistry, 0x02, cpu);
+	RES_bcpHLq(*registry, *flagRegistry, 0x02, cpu);
 }
 
 void Instruction1BitOperation::RES_2cA(CPU& cpu)
@@ -673,7 +673,7 @@ void Instruction1BitOperation::RES_3cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	RES_bcHL(*registry, *flagRegistry, 0x03, cpu);
+	RES_bcpHLq(*registry, *flagRegistry, 0x03, cpu);
 }
 
 void Instruction1BitOperation::RES_3cA(CPU& cpu)
@@ -729,7 +729,7 @@ void Instruction1BitOperation::RES_4cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	RES_bcHL(*registry, *flagRegistry, 0x04, cpu);
+	RES_bcpHLq(*registry, *flagRegistry, 0x04, cpu);
 
 }
 
@@ -786,7 +786,7 @@ void Instruction1BitOperation::RES_5cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	RES_bcHL(*registry, *flagRegistry, 0x05, cpu);
+	RES_bcpHLq(*registry, *flagRegistry, 0x05, cpu);
 }
 
 void Instruction1BitOperation::RES_5cA(CPU& cpu)
@@ -842,7 +842,7 @@ void Instruction1BitOperation::RES_6cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	RES_bcHL(*registry, *flagRegistry, 0x06, cpu);
+	RES_bcpHLq(*registry, *flagRegistry, 0x06, cpu);
 }
 
 void Instruction1BitOperation::RES_6cA(CPU& cpu)
@@ -898,7 +898,7 @@ void Instruction1BitOperation::RES_7cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	RES_bcHL(*registry, *flagRegistry, 0x07, cpu);
+	RES_bcpHLq(*registry, *flagRegistry, 0x07, cpu);
 }
 
 void Instruction1BitOperation::RES_7cA(CPU& cpu)
@@ -956,7 +956,7 @@ void Instruction1BitOperation::SET_0cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcHL(*registry, *flagRegistry, 0x00, cpu);
+	SET_bcpHLq(*registry, *flagRegistry, 0x00, cpu);
 }
 
 void Instruction1BitOperation::SET_0cA(CPU& cpu)
@@ -1012,7 +1012,7 @@ void Instruction1BitOperation::SET_1cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcHL(*registry, *flagRegistry, 0x01, cpu);
+	SET_bcpHLq(*registry, *flagRegistry, 0x01, cpu);
 }
 
 void Instruction1BitOperation::SET_1cA(CPU& cpu)
@@ -1068,7 +1068,7 @@ void Instruction1BitOperation::SET_2cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcHL(*registry, *flagRegistry, 0x02, cpu);
+	SET_bcpHLq(*registry, *flagRegistry, 0x02, cpu);
 }
 
 void Instruction1BitOperation::SET_2cA(CPU& cpu)
@@ -1124,7 +1124,7 @@ void Instruction1BitOperation::SET_3cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcHL(*registry, *flagRegistry, 0x03, cpu);
+	SET_bcpHLq(*registry, *flagRegistry, 0x03, cpu);
 }
 
 void Instruction1BitOperation::SET_3cA(CPU& cpu)
@@ -1180,7 +1180,7 @@ void Instruction1BitOperation::SET_4cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcHL(*registry, *flagRegistry, 0x04, cpu);
+	SET_bcpHLq(*registry, *flagRegistry, 0x04, cpu);
 }
 
 void Instruction1BitOperation::SET_4cA(CPU& cpu)
@@ -1236,7 +1236,7 @@ void Instruction1BitOperation::SET_5cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcHL(*registry, *flagRegistry, 0x05, cpu);
+	SET_bcpHLq(*registry, *flagRegistry, 0x05, cpu);
 }
 
 void Instruction1BitOperation::SET_5cA(CPU& cpu)
@@ -1292,7 +1292,7 @@ void Instruction1BitOperation::SET_6cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcHL(*registry, *flagRegistry, 0x06, cpu);
+	SET_bcpHLq(*registry, *flagRegistry, 0x06, cpu);
 }
 
 void Instruction1BitOperation::SET_6cA(CPU& cpu)
@@ -1348,7 +1348,7 @@ void Instruction1BitOperation::SET_7cpHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcHL(*registry, *flagRegistry, 0x07, cpu);
+	SET_bcpHLq(*registry, *flagRegistry, 0x07, cpu);
 }
 
 void Instruction1BitOperation::SET_7cA(CPU& cpu)
@@ -1370,7 +1370,7 @@ void Instruction1BitOperation::RES_bcr(u8& registry, flags& flagRegistry, u8 bit
 	setBit(registry, bit, 0x00);
 }
 
-void Instruction1BitOperation::RES_bcHL(u8& registry, flags& flagRegistry, u8 bit, CPU& cpu)
+void Instruction1BitOperation::RES_bcpHLq(u8& registry, flags& flagRegistry, u8 bit, CPU& cpu)
 {
 	setBit(registry, bit, 0x00);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), registry);
@@ -1381,7 +1381,7 @@ void Instruction1BitOperation::SET_bcr(u8& registry, flags& flagRegistry, u8 bit
 	setBit(registry, bit, 0x01);
 }
 
-void Instruction1BitOperation::SET_bcHL(u8& registry, flags& flagRegistry, u8 bit, CPU& cpu)
+void Instruction1BitOperation::SET_bcpHLq(u8& registry, flags& flagRegistry, u8 bit, CPU& cpu)
 {
 	setBit(registry, bit, 0x01);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), registry);

@@ -163,6 +163,7 @@
     <ClCompile Include="InstructionJumpTests.cpp" />
     <ClCompile Include="Instructions16bitLoadTests.cpp" />
     <ClCompile Include="Instructions16bitLogicTests.cpp" />
+    <ClCompile Include="Instructions1BitOperationTests.cpp" />
     <ClCompile Include="Instructions8bitLoadTests.cpp" />
     <ClCompile Include="Instructions8bitLogicTests.cpp" />
     <ClCompile Include="InstructionsCPUControlTests.cpp" />

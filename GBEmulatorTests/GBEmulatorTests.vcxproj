@@ -101,7 +101,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(MSBuildStartupDirectory)\Build\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(MSBuildProjectDirectory)\..\Build\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Bus.obj;CPU.obj;Instruction.obj;Instruction1BitOperation.obj;Instruction8BitLoad.obj;Instruction8BitLogic.obj;Instruction16BitLoad.obj;Instruction16BitLogic.obj;InstructionCPUControl.obj;InstructionFactory.obj;InstructionJump.obj;InstructionRotateShift.obj;Memory.obj;Registries.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

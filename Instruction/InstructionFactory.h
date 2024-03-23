@@ -12,6 +12,6 @@ class InstructionFactory
 	public :
 		InstructionFactory();
 		virtual ~InstructionFactory() = default;
-		Instruction* createInstruction(InstructionEnum instructionEnum, std::string const& name, void (*pInstruction)(CPU & cpu), u8 clockCycles) const;
+		Instruction* createInstruction(InstructionEnum instructionEnum, const char* name, u8 (*pInstruction)(CPU & cpu), u8 clockCycles) const;
 };
 

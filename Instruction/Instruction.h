@@ -7,10 +7,10 @@ class CPU;
 class Instruction
 {
 protected:
-	std::string mName;
+	const char* mName;
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	//void (*pmInstruction)(CPU & cpu, Instruction& instance);
-	void (*pmInstruction)(CPU & cpu);
+	u8 (*pmInstruction)(CPU & cpu);
 	u8 mClockCycle;
 
 	static u8 readNextOpcode(CPU& cpu);
@@ -37,6 +37,7 @@ protected:
 
 public:
 	Instruction();
+	Instruction(const char* name, u8(*pInstruction)(CPU& cpu), u8 clockCycles);
 	virtual ~Instruction() = default;
 
 	std::string getName() const { return mName; }

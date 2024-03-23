@@ -40,26 +40,22 @@ void Instruction16BitLoad::POP_RR(CPU& cpu, combinedRegistries& registries)
 
 }
 
-
-
 /// Public methods ////
-
-Instruction16BitLoad::Instruction16BitLoad(std::string const & name, void (*pInstruction)(CPU & cpu), u8 ClockCycle)
+Instruction16BitLoad::Instruction16BitLoad(const char* name, u8(*pInstruction)(CPU& cpu), u8 ClockCycle)
+	:Instruction(name, pInstruction, ClockCycle)
 {
-	mName = name;
-	pmInstruction = pInstruction;
-	mClockCycle = ClockCycle;
-
 }
 
 
-void Instruction16BitLoad::LD_BCcd16(CPU& cpu)
+u8 Instruction16BitLoad::LD_BCcd16(CPU& cpu)
 {
 	combinedRegistries* BCRegistries = cpu.getCombinedRegistries("BC");
 	LD_RRcd16(cpu, *BCRegistries);
+
+	return 12;
 }
 
-void Instruction16BitLoad::LD_pa16qcSP(CPU& cpu)
+u8 Instruction16BitLoad::LD_pa16qcSP(CPU& cpu)
 {
 	//TODO Verifier cette instruction
 	u16* PC = cpu.getPC();
@@ -68,72 +64,94 @@ void Instruction16BitLoad::LD_pa16qcSP(CPU& cpu)
 	
 	cpu.writeMemory(*PC, *SP & 0xFF);
 	cpu.writeMemory((*PC) + 1, (*SP) >> 8);
+
+	return 20;
 }
 
-void Instruction16BitLoad::LD_DEcd16(CPU& cpu)
+u8 Instruction16BitLoad::LD_DEcd16(CPU& cpu)
 {
 	combinedRegistries* DERegistries = cpu.getCombinedRegistries("DE");
 	LD_RRcd16(cpu, *DERegistries);
+
+	return 12;
 }
 
-void Instruction16BitLoad::LD_HLcd16(CPU& cpu)
+u8 Instruction16BitLoad::LD_HLcd16(CPU& cpu)
 {
 	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("DE");
 	LD_RRcd16(cpu, *HLRegistries);
+
+	return 12;
 }
 
-void Instruction16BitLoad::LD_SPcd16(CPU& cpu)
+u8 Instruction16BitLoad::LD_SPcd16(CPU& cpu)
 {
 	u16* SPRegistry = cpu.getSP();
 	LD_RRcd16(cpu, SPRegistry);
+
+	return 12;
 }
 
-void Instruction16BitLoad::POP_BC(CPU& cpu)
+u8 Instruction16BitLoad::POP_BC(CPU& cpu)
 {
 	combinedRegistries* BC = cpu.getCombinedRegistries("BC");
 	POP_RR(cpu, *BC);
+
+	return 12;
 }
 
-void Instruction16BitLoad::PUSH_BC(CPU& cpu)
+u8 Instruction16BitLoad::PUSH_BC(CPU& cpu)
 {
 	combinedRegistries* BC = cpu.getCombinedRegistries("BC");
 	PUSH_RR(cpu, *BC);
+
+	return 16;
 }
 
-void Instruction16BitLoad::POP_DE(CPU& cpu)
+u8 Instruction16BitLoad::POP_DE(CPU& cpu)
 {
 	combinedRegistries* DE = cpu.getCombinedRegistries("DE");
 	POP_RR(cpu, *DE);
+
+	return 12;
 }
 
-void Instruction16BitLoad::PUSH_DE(CPU& cpu)
+u8 Instruction16BitLoad::PUSH_DE(CPU& cpu)
 {
 	combinedRegistries* DE = cpu.getCombinedRegistries("DE");
 	PUSH_RR(cpu, *DE);
+
+	return 16;
 }
 
-void Instruction16BitLoad::POP_HL(CPU& cpu)
+u8 Instruction16BitLoad::POP_HL(CPU& cpu)
 {
 	combinedRegistries* HL = cpu.getCombinedRegistries("HL");
 	POP_RR(cpu, *HL);
+
+	return 12;
 }
 
-void Instruction16BitLoad::PUSH_HL(CPU& cpu)
+u8 Instruction16BitLoad::PUSH_HL(CPU& cpu)
 {
 	combinedRegistries* HL = cpu.getCombinedRegistries("HL");
 	PUSH_RR(cpu, *HL);
+
+	return 16;
 }
 
-void Instruction16BitLoad::POP_AF(CPU& cpu)
+u8 Instruction16BitLoad::POP_AF(CPU& cpu)
 {
 	u16* SP = cpu.getSP();
 	setFlags(cpu, cpu.readMemory(*SP));
 	*SP += 1;
 	cpu.setRegistries("A", cpu.readMemory(*SP));
 	*SP += 1;
+
+	return 12;
 }
 
-void Instruction16BitLoad::PUSH_AF(CPU& cpu)
+u8 Instruction16BitLoad::PUSH_AF(CPU& cpu)
 {
 	u16* SP = cpu.getSP();
 	*SP -= 1;
@@ -141,10 +159,11 @@ void Instruction16BitLoad::PUSH_AF(CPU& cpu)
 	*SP -= 1;
 	cpu.writeMemory(*SP, cpu.getFlagRegistry()->F);
 
+	return 16;
 }
 
 //TODO verifier cette instruction
-void Instruction16BitLoad::LDHL_SPcr8(CPU& cpu)
+u8 Instruction16BitLoad::LDHL_SPcr8(CPU& cpu)
 {
 	u16* PC = cpu.getPC();
 	u16* SP = cpu.getSP();
@@ -159,13 +178,15 @@ void Instruction16BitLoad::LDHL_SPcr8(CPU& cpu)
 	
 	cpu.setCombinedRegistries("HL", (*SP) + e);
 
+	return 12;
 }
 
-void Instruction16BitLoad::LD_SPcHL(CPU& cpu)
+u8 Instruction16BitLoad::LD_SPcHL(CPU& cpu)
 {
 	combinedRegistries* HL = cpu.getCombinedRegistries("HL");
 	u16* SP = cpu.getSP();
 
 	*SP = HL->getValue();
 
+	return 8;
 }

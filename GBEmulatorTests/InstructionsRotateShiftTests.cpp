@@ -111,7 +111,7 @@ namespace Instructions_tests
 
 
 			u8* B = cpu->getRegistries("B");
-			*A = 0b00000000;
+			*B = 0b00000000;
 			cpu->getFlagRegistry()->flags.C = 0x01;
 			cpu->executeOpcodeCB(0x10);
 			Assert::AreEqual(static_cast<u8>(0b00000001), *B);
@@ -122,7 +122,7 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 
 			u8* C = cpu->getRegistries("C");
-			*A = 0b00000000;
+			*C = 0b00000000;
 			cpu->getFlagRegistry()->flags.C = 0x00;
 			cpu->executeOpcodeCB(0x11);
 			Assert::AreEqual(static_cast<u8>(0b00000000), *C);
@@ -149,7 +149,7 @@ namespace Instructions_tests
 
 
 			u8* B = cpu->getRegistries("B");
-			*A = 0b00000000;
+			*B = 0b00000000;
 			cpu->getFlagRegistry()->flags.C = 0x01;
 			cpu->executeOpcodeCB(0x18);
 			Assert::AreEqual(static_cast<u8>(0b10000000), *B);
@@ -160,7 +160,7 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 
 			u8* C = cpu->getRegistries("C");
-			*A = 0b00000000;
+			*C = 0b00000000;
 			cpu->getFlagRegistry()->flags.C = 0x00;
 			cpu->executeOpcodeCB(0x19);
 			Assert::AreEqual(static_cast<u8>(0b00000000), *C);
@@ -186,18 +186,18 @@ namespace Instructions_tests
 
 
 			u8* B = cpu->getRegistries("B");
-			*A = 0b00000000;
+			*B = 0b00000000;
 			cpu->getFlagRegistry()->flags.C = 0x01;
 			cpu->executeOpcodeCB(0x20);
 			Assert::AreEqual(static_cast<u8>(0b00000000), *B);
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.C));
 
-			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.Z));
+			Assert::AreEqual(static_cast<u8>(0x01), static_cast<u8>(cpu->getFlagRegistry()->flags.Z));
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.H));
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 
 			u8* C = cpu->getRegistries("C");
-			*A = 0b00000000;
+			*C = 0b00000000;
 			cpu->getFlagRegistry()->flags.C = 0x00;
 			cpu->executeOpcodeCB(0x21);
 			Assert::AreEqual(static_cast<u8>(0b00000000), *C);
@@ -222,7 +222,7 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 
 			u8* D = cpu->getRegistries("D");
-			*A = 0b01111111;
+			*D = 0b01111111;
 			cpu->executeOpcodeCB(0x2A);
 			Assert::AreEqual(static_cast<u8>(0b00111111), *D);
 			Assert::AreEqual(static_cast<u8>(0x01), static_cast<u8>(cpu->getFlagRegistry()->flags.C));
@@ -232,7 +232,7 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 
 			u8* C = cpu->getRegistries("C");
-			*A = 0b00000000;
+			*C = 0b00000000;
 			cpu->getFlagRegistry()->flags.C = 0x00;
 			cpu->executeOpcodeCB(0x29);
 			Assert::AreEqual(static_cast<u8>(0b00000000), *C);
@@ -256,7 +256,7 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 
 			u8* B = cpu->getRegistries("B");
-			*A = 0b00000000;
+			*B = 0b00000000;
 			cpu->executeOpcodeCB(0x30);
 			Assert::AreEqual(static_cast<u8>(0b00000000), *B);
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.C));
@@ -279,7 +279,7 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 
 			u8* D = cpu->getRegistries("D");
-			*A = 0b01111111;
+			*D = 0b01111111;
 			cpu->executeOpcodeCB(0x3A);
 			Assert::AreEqual(static_cast<u8>(0b00111111), *D);
 			Assert::AreEqual(static_cast<u8>(0x01), static_cast<u8>(cpu->getFlagRegistry()->flags.C));
@@ -289,7 +289,7 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 
 			u8* C = cpu->getRegistries("C");
-			*A = 0b00000000;
+			*C = 0b00000000;
 			cpu->getFlagRegistry()->flags.C = 0x00;
 			cpu->executeOpcodeCB(0x39);
 			Assert::AreEqual(static_cast<u8>(0b00000000), *C);

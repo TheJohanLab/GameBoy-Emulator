@@ -209,7 +209,6 @@ void InstructionRotateShift::RL_pHLq(CPU& cpu)
 
 void InstructionRotateShift::RL_A(CPU& cpu)
 {
-	cpu.setRegistries("A", 0x12);
 	u8* registry = cpu.getRegistries("A");
 	flags* flagRegistry = cpu.getFlagRegistry();
 	RLr(*registry, *flagRegistry, cpu);

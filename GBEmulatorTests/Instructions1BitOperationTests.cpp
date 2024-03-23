@@ -6,7 +6,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-namespace Instructions_test
+namespace Instructions_tests
 {
 	TEST_CLASS(I1BitOperationTests)
 	{
@@ -33,12 +33,12 @@ namespace Instructions_test
 			u8* A = cpu->getRegistries("A");
 			*A = 0b00001000;
 			cpu->executeOpcodeCB(0x67);
-			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.Z));
+			Assert::AreEqual(static_cast<u8>(0x01), static_cast<u8>(cpu->getFlagRegistry()->flags.Z));
 			Assert::AreEqual(static_cast<u8>(0x01), static_cast<u8>(cpu->getFlagRegistry()->flags.H));
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 		
 			cpu->executeOpcodeCB(0x5F);
-			Assert::AreEqual(static_cast<u8>(0x01), static_cast<u8>(cpu->getFlagRegistry()->flags.Z));
+			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.Z));
 			Assert::AreEqual(static_cast<u8>(0x01), static_cast<u8>(cpu->getFlagRegistry()->flags.H));
 			Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.N));
 
@@ -83,7 +83,7 @@ namespace Instructions_test
 		{
 			combinedRegistries* HL = cpu->getCombinedRegistries("HL");
 			cpu->writeMemory(0xC002, 0x00);
-			cpu->setCombinedRegistries("HL", 0xC000);
+			cpu->setCombinedRegistries("HL", 0xC002);
 			cpu->executeOpcodeCB(0xE6);
 			Assert::AreEqual(static_cast<u8>(0b00010000), cpu->readMemory(0xC002));
 		}

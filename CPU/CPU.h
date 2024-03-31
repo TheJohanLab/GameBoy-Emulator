@@ -50,10 +50,8 @@ class CPU
 
 		interrupt_flag getInterruptFlag() const;
 		void setInterruptFlag(const u8& flags);
-		void setInterruptFlag(const interrupt_flag& flags);
 
 		interrupt_enable getInterruptEnable() const;
 		void setInterruptEnable(const u8& flags);
-		void setInterruptEnable(const interrupt_enable& flags);
 };
 

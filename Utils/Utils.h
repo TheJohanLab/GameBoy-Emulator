@@ -15,6 +15,9 @@ const u8 HRAMSize = 127;
 const int cyclesPerFrame = 70224;
 const double timePerFrame = 1.0 / 60.0;
 
+const u16 SCREENWIDTH = 160;
+const u16 SCREENHEIGHT = 144;
+
 
 typedef struct s_flags {
     u8 r : 4;

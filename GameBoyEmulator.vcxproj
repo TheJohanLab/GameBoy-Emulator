@@ -102,7 +102,9 @@
     <ClCompile Include="Instruction\Instruction.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
+    <ClCompile Include="PPU\PPU.cpp" />
     <ClCompile Include="Registries\Registries.cpp" />
+    <ClCompile Include="Screen\Screen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bus\Bus.h" />
@@ -200,8 +202,14 @@
     <ClInclude Include="Instruction\Instruction8BitLoad.h" />
     <ClInclude Include="Instruction\Instruction.h" />
     <ClInclude Include="Memory\Memory.h" />
+    <ClInclude Include="PPU\PPU.h" />
     <ClInclude Include="Registries\Registries.h" />
+    <ClInclude Include="Screen\Screen.h" />
+    <ClInclude Include="Utils\Addresses.h" />
     <ClInclude Include="Utils\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="NewFile.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

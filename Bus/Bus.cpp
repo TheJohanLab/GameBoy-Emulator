@@ -1,4 +1,5 @@
 #include "Bus.h"
+#include "../Utils/Addresses.h"
 
 Bus::Bus() 
 {
@@ -21,17 +22,26 @@ u8* Bus::getDataPtr(const u16& address)
 	return mMemory.getDataPtr(address);
 }
 
-interrupt_flag Bus::getInterruptFlag()
+interrupt_flag Bus::getInterruptEnable() const
 {
-	return mMemory.getInterruptFlag();
+	interrupt_flag IE;
+	IE.byte = mMemory.read(INTERRUPT_ENABLE);
+	return IE;
 }
 
-void Bus::setInterruptFlags(const u8 flags)
+interrupt_flag Bus::getInterruptFlag() const
 {
-	mMemory.setInterruptFlag(flags);
+	interrupt_flag IF;
+	IF.byte = mMemory.read(INTERRUPT_FLAG);
+	return IF;
 }
 
-void Bus::setInterruptFlags(const interrupt_flag flags)
+void Bus::setInterruptEnable(const u8 flags)
 {
-	mMemory.setInterruptFlag(flags);
+	mMemory.write(INTERRUPT_ENABLE,flags);
+}
+
+void Bus::setInterruptFlag(const u8 flags)
+{
+	mMemory.write(INTERRUPT_FLAG, flags);
 }

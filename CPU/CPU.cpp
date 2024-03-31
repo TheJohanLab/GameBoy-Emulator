@@ -2,7 +2,6 @@
 
 CPU::CPU()
 {
-
 }
 
 CPU::CPU(Bus* bus) : mBus(bus)
@@ -643,7 +642,7 @@ void CPU::callInterruptHandler()
 			activeInterrupts.flags.Joypad = 0;
 		}
 
-		setInterruptFlag(activeInterrupts);
+		setInterruptFlag(activeInterrupts.byte);
 
 	}
 
@@ -781,13 +780,9 @@ interrupt_flag CPU::getInterruptFlag() const
 
 void CPU::setInterruptFlag(const u8& flags)
 {
-	mBus->setInterruptFlags(flags);
+	mBus->setInterruptFlag(flags);
 }
 
-void CPU::setInterruptFlag(const interrupt_flag& flags)
-{
-	mBus->setInterruptFlags(flags);
-}
 
 interrupt_enable CPU::getInterruptEnable() const
 {

@@ -47,17 +47,3 @@ typedef union u_interrup_flag {
     s_interrupt_flag flags;
 }interrupt_flag;
 
-typedef struct s_interrupt_enable {
-    u8 Vblank : 1;
-    u8 LCD_STAT : 1;
-    u8 Timer : 1;
-    u8 SerialTransferCompletion : 1;
-    u8 Joypad : 1;
-    u8 others : 3;
-
-} s_interrupt_enable;
-
-typedef union u_interrupt_enable {
-    u8 byte;
-    s_interrupt_enable flags;
-}interrupt_enable;

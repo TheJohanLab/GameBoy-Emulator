@@ -22,6 +22,7 @@ u8* Bus::getDataPtr(const u16& address)
 	return mMemory.getDataPtr(address);
 }
 
+
 interrupt_flag Bus::getInterruptEnable() const
 {
 	interrupt_flag IE;

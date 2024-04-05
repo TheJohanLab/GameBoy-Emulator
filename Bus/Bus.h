@@ -3,9 +3,9 @@
 #include "../Memory/Memory.h"
 #include "../Utils/Utils.h"
 
+
 class Bus
 {
-
 	private:
 		Memory mMemory;
 

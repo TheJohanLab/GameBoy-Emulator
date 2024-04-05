@@ -597,12 +597,10 @@ void CPU::callInterruptHandler()
 	if (!getIMEFlag())
 		return;
 
-	interrupt_flag IF = getInterruptFlag();
-	interrupt_enable IE = getInterruptEnable();
+	std::pair< interrupt_flag, interrupt_flag> interruptFlags = this->getInterruptFlags();
 
-	// TODO faire une struct commune pour les 2
 	interrupt_flag activeInterrupts;
-	activeInterrupts.byte = ((IE.byte & IF.byte) & 0x0F);
+	activeInterrupts.byte = ((interruptFlags.first.byte & interruptFlags.second.byte) & 0x0F);
 
 	u16* PC = getPC();
 
@@ -769,13 +767,13 @@ u8 CPU::getIMEFlag() const
 }
 
 
-interrupt_flag CPU::getInterruptFlag() const
+std::pair<interrupt_flag, interrupt_flag> CPU::getInterruptFlags() const
 {
-	u8 data = mBus->read(0xFF0F);
-	interrupt_flag IF;
-	IF.byte = data;
+	interrupt_flag IE, IF;
+	IE = mBus->getInterruptEnable();
+	IF = mBus->getInterruptFlag();
 
-	return IF;
+	return std::make_pair(IE, IF);
 }
 
 void CPU::setInterruptFlag(const u8& flags)
@@ -783,12 +781,3 @@ void CPU::setInterruptFlag(const u8& flags)
 	mBus->setInterruptFlag(flags);
 }
 
-
-interrupt_enable CPU::getInterruptEnable() const
-{
-	u8 data = mBus->read(0xFFFF);
-	interrupt_enable IE;
-	IE.byte = data;
-
-	return IE;
-}

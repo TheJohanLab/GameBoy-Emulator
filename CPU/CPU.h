@@ -48,10 +48,10 @@ class CPU
 		void clearIMEFlag();
 		inline u8 getIMEFlag() const;
 
-		interrupt_flag getInterruptFlag() const;
+		
+		std::pair<interrupt_flag, interrupt_flag> getInterruptFlags() const;
 		void setInterruptFlag(const u8& flags);
 
-		interrupt_enable getInterruptEnable() const;
-		void setInterruptEnable(const u8& flags);
+
 };
 

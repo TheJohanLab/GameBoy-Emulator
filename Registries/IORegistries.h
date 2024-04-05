@@ -2,7 +2,7 @@
 
 #include "../Utils/Utils.h"
 
-// Interrupt Enable & Interrup Flag 
+// Interrupt Enable & Interrup Flag FFFF & FF0F
 typedef struct s_interrupt_flag {
     u8 Vblank : 1;
     u8 LCD_STAT : 1;
@@ -19,7 +19,7 @@ typedef union u_interrupt_flag {
 }interrupt_flag;
 
 
-//LCD Control
+//LCD Control FF40
 typedef struct s_LCD_control {
     u8 BG_WindowEnable : 1;
     u8 OBJEnable : 1;
@@ -37,7 +37,7 @@ typedef union u_LCD_control {
     s_LCD_control flags;
 }LCD_control;
 
-//LCD Status
+//LCD Status FF41
 typedef struct s_LCD_status {
     u8 PPUMode : 2;
     u8 LYC_LY : 1;
@@ -54,3 +54,16 @@ typedef union u_LCD_status {
     s_LCD_status flags;
 }LCD_status;
 
+//Palettes FF47
+typedef struct s_BG_palette_data {
+    u8 ID0 : 2;
+    u8 ID1 : 2;
+    u8 ID2 : 2;
+    u8 ID3 : 2;
+
+} s_BG_palette_data;
+
+typedef union u_BG_palette_data {
+    u8 byte;
+    s_BG_palette_data flags;
+}BG_palette_data;

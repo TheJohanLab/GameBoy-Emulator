@@ -23,10 +23,6 @@ class Bus
 		void setInterruptEnable(const u8 flags);
 		void setInterruptFlag(const u8 flags);
 
-		//LCD
-		LCD_control getLCDControl() const;
-		LCD_status getLCDStatus() const;
-		void setLCDControl(const u8 flags);
-		void setLCDStatus(const u8 flags);
+
 };
 

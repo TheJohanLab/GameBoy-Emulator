@@ -46,3 +46,27 @@ void Bus::setInterruptFlag(const u8 flags)
 {
 	mMemory.write(INTERRUPT_FLAG, flags);
 }
+
+LCD_control Bus::getLCDControl() const
+{
+	LCD_control flags;
+	flags.byte = mMemory.read(LCD_CONTROL);
+	return flags;
+}
+
+LCD_status Bus::getLCDStatus() const
+{
+	LCD_status flags;
+	flags.byte = mMemory.read(LCD_STATUS);
+	return flags;
+}
+
+void Bus::setLCDControl(const u8 flags)
+{
+	mMemory.write(LCD_CONTROL, flags);
+}
+
+void Bus::setLCDStatus(const u8 flags)
+{
+	mMemory.write(LCD_STATUS, flags);
+}

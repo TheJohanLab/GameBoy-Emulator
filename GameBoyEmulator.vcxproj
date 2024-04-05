@@ -203,6 +203,7 @@
     <ClInclude Include="Instruction\Instruction.h" />
     <ClInclude Include="Memory\Memory.h" />
     <ClInclude Include="PPU\PPU.h" />
+    <ClInclude Include="Registries\IORegistries.h" />
     <ClInclude Include="Registries\Registries.h" />
     <ClInclude Include="Screen\Screen.h" />
     <ClInclude Include="Utils\Addresses.h" />

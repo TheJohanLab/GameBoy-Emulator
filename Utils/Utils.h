@@ -32,18 +32,4 @@ typedef union u_flags {
 	s_flags flags;
 }flags;
 
-typedef struct s_interrupt_flag {
-    u8 Vblank : 1;
-    u8 LCD_STAT : 1;
-    u8 Timer : 1;
-    u8 SerialTransferCompletion : 1;
-    u8 Joypad : 1;
-    u8 others : 3;
-
-} s_interrupt_flag;
-
-typedef union u_interrup_flag {
-    u8 byte;
-    s_interrupt_flag flags;
-}interrupt_flag;
 

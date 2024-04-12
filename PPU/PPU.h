@@ -18,6 +18,9 @@ public:
 	void setLCDControl(const u8 flags);
 	void setLCDStatus(const u8 flags);
 
+	u8 getPPUMode() const; //FF41.0-1
+	void setPPUMode(const u8 mode); //FF41.0-1
+
 	u8 readSCY() const; //FF42
 	u8 readSCX() const; //FF43
 	u8 readLY() const; //FF44
@@ -34,5 +37,7 @@ public:
 	u8 readWX() const; //FF4B
 
 private:
+
+	void render();
 };
 

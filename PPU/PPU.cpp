@@ -38,6 +38,19 @@ void PPU::setLCDStatus(const u8 flags)
 	mBus->write(LCD_STATUS, flags);
 }
 
+u8 PPU::getPPUMode() const
+{
+	return getLCDStatus().flags.PPUMode;
+}
+
+void PPU::setPPUMode(u8 mode)
+{
+	LCD_status flags = getLCDStatus();
+	flags.flags.PPUMode = mode & (0x03);
+	setLCDStatus(flags.byte);
+
+}
+
 //FF42
 u8 PPU::readSCY() const
 {
@@ -99,4 +112,23 @@ u8 PPU::readWY() const
 u8 PPU::readWX() const
 {
 	return  mBus->read(WINDOW_X);
+}
+
+void PPU::render()
+{
+	switch (getPPUMode())
+	{
+
+	case 0x00 :
+		break;
+
+	case 0x01 :
+		break;
+
+	case 0x02 :
+		break;
+
+	case 0x03 :
+		break;
+	}
 }

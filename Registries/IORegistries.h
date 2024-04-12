@@ -40,6 +40,10 @@ typedef union u_LCD_control {
 //LCD Status FF41
 typedef struct s_LCD_status {
     u8 PPUMode : 2;
+        // 0x00 : HBlank
+        // 0x01 : VBlank
+        // 0x02 : OAM Scan
+        // 0x03 : Drawing Pixels
     u8 LYC_LY : 1;
     u8 mode0intSelect : 1;
     u8 mode1intSelect : 1;

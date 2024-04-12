@@ -1,6 +1,10 @@
 #pragma once
+
+#include <array>
 #include "SDL.h"
 #include "../Utils/Utils.h"
+
+class Pixel;
 
 class Screen
 {
@@ -18,6 +22,9 @@ class Screen
 		const SDL_Window* getWindow() const;
 		const SDL_Renderer* getRenderer() const;
 
+
+		//void render() const;
+		void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const;
 
 	private:
 

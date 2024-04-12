@@ -1,6 +1,8 @@
 #include "Screen.h"
 #include <iostream>
 
+#include "../PPU/PPU.h"
+
 Screen::Screen(u16 width, u16 height)
 	:mWidth(width), mHeight(height)
 {
@@ -63,4 +65,27 @@ const SDL_Window* Screen::getWindow() const
 const SDL_Renderer* Screen::getRenderer() const 
 {
 	return mRenderer;
+}
+
+
+//void Screen::render() const
+void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const
+{
+
+	SDL_RenderClear(mRenderer);
+	SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
+	u8* pPixels;
+	int pitch = 0;
+	SDL_Texture* texture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_BGRA8888, SDL_TEXTUREACCESS_STREAMING, 160, 144);
+
+	SDL_LockTexture(texture, nullptr, (void**)&pPixels, &pitch);
+
+	memcpy(pPixels, static_cast<void const*>(&pixelArray), 160 * 144 * 4);
+
+	SDL_UnlockTexture(texture);
+
+	SDL_RenderCopy(mRenderer, texture, nullptr, nullptr);
+
+	SDL_RenderPresent(mRenderer);
 }

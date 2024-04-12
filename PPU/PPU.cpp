@@ -116,6 +116,27 @@ u8 PPU::readWX() const
 
 void PPU::render()
 {
+	for (int i = 0; i < 160; i++)
+	{
+		for (int j = 0; j < 144; j++)
+		{
+			u8 red = 0;
+			u8 green = 0;
+			if (i % 8 >= 0 && i % 8 < 4)
+			{
+				red = 255;
+				green = 0;
+			}
+			else {
+				red = 0;
+				green = 255;
+			}
+			mPixelArray[j][i] = { 255, red, green, 0 };
+			// ARGB
+		}
+	}
+
+	mScreen->render(mPixelArray);
 	switch (getPPUMode())
 	{
 

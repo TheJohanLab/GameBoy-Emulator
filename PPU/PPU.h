@@ -1,13 +1,25 @@
 #pragma once
 
+#include <array>
 #include "../Bus/Bus.h"
 #include "../Screen/Screen.h"
+
+struct Pixel
+{
+	u8 alpha = 0x00;
+	u8 red = 0x00;
+	u8 green = 0x00;
+	u8 blue = 0x00;
+};
 
 class PPU
 {
 private:
+
 	Bus* mBus;
 	Screen* mScreen;
+	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray;
+
 
 public:
 	PPU(Bus* bus, Screen* screen);
@@ -36,8 +48,8 @@ public:
 	u8 readWY() const; //FF4A
 	u8 readWX() const; //FF4B
 
+	void render();
 private:
 
-	void render();
 };
 

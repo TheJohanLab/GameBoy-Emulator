@@ -114,7 +114,7 @@ u8 PPU::readWX() const
 	return  mBus->read(WINDOW_X);
 }
 
-void PPU::render()
+void PPU::render(u8 cycle)
 {
 	for (int i = 0; i < 160; i++)
 	{
@@ -146,44 +146,74 @@ void PPU::render()
 	*		0 : HBLANK	 : 87-204 dots (376 - DRAWING)
 	*		1 : VBLANK	 : 10 scanlines = 4560 dots
 	*/
+
+	mPPUModeDots += cycle;
+
 	switch (getPPUMode())
 	{
 
 	case PPU_HBLANK :
 		// fin de scanline
+		
+		if (mPPUModeDots >= PPU_HBLANK_DOTS) 
+		{
+			mPPUModeDots -= PPU_HBLANK_DOTS;
 
-		// On passe à la ligne suivante
+			// On passe à la ligne suivante
 
-		/* Si ligne suivante = 144 : 
-		*   On passe à VBLANK
-		*	On a fait toutes les lignes, on render l'image
-		*	Interrupt ?
-		*/
+			/* Si ligne suivante = 144 :
+			*   On passe à VBLANK
+			*	On a fait toutes les lignes, on render l'image
+			*	Interrupt ?
+			*/
 
-		/* Sinon :
-		*	On passe en OAM pour recommencer
-		*	Interrupt ?
-		*/
-		 
+			/* Sinon :
+			*	On passe en OAM pour recommencer
+			*	Interrupt ?
+			*/
+
+
+		}
+				 
 		break;
 
 	case PPU_VBLANK :
-		// 10 scanlines
 
-		// On incrémente
+		if (mPPUModeDots >= PPU_VBLANK_DOTS) 
+		{
 
-		// Si ligne suivante = 154 : on revient en haut et passe en OAM
-		// Interrupt ?
+			mPPUModeDots -= PPU_VBLANK_DOTS;
+			// 10 scanlines
+
+			// On incrémente la ligne
+
+			// Si ligne suivante = 154 : on revient en haut et passe en OAM
+			// Interrupt ?
+			setPPUMode(PPU_OAM_SCAN);
+		}
+
 
 		break;
 
 	case PPU_OAM_SCAN :
 		// On décrémente les cycles et on passe en DRAWING
 
+		if (mPPUModeDots >= PPU_OAM_SCAN_DOTS)
+		{
+			mPPUModeDots -= cycle;
+			setPPUMode(PPU_DRAWING);
+		}
 		break;
 
 	case PPU_DRAWING :
 		// Render Scanline
+
+		if (mPPUModeDots >= PPU_DRAWING_DOTS) 
+		{
+			mPPUModeDots -= PPU_DRAWING_DOTS;
+
+			setPPUMode(PPU_HBLANK);
+		}
 
 		// On passe en HBLANK
 		// Interrupt ?

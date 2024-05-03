@@ -4,6 +4,7 @@
 
 using u8 = uint8_t;
 using u16 = uint16_t;
+using u32 = uint32_t;
 
 const u16 instructionAmount = 512;
 
@@ -24,6 +25,11 @@ const u8 PPU_VBLANK = 0x01;
 const u8 PPU_OAM_SCAN = 0x02;
 const u8 PPU_DRAWING = 0x03;
 
+// PPU cycles modes durations (in dots - 1 dot = 1 cycle) 456 dots per line
+#define PPU_HBLANK_DOTS 204
+#define PPU_VBLANK_DOTS 456
+#define PPU_OAM_SCAN_DOTS 80
+#define PPU_DRAWING_DOTS 172
 
 typedef struct s_flags {
     u8 r : 4;

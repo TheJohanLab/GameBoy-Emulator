@@ -20,6 +20,8 @@ private:
 	Screen* mScreen;
 	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray;
 
+	u16 mPPUModeDots = 0;
+
 
 public:
 	PPU(Bus* bus, Screen* screen);
@@ -48,11 +50,12 @@ public:
 	u8 readWY() const; //FF4A
 	u8 readWX() const; //FF4B
 
-	void render();
+	void render(u8 cycles);
 	void renderScanline();
 	void renderBGScanline();
 	void renderWindowScanline();
 	void renderOBJScanline();
+
 private:
 
 };

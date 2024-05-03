@@ -13,13 +13,13 @@
 
 int main(int argc, char** argv)
 {
-	std::unique_ptr<Screen> pScreen = std::make_unique<Screen>(SCREEN_WIDTH, SCREEN_HEIGHT);
+	//std::unique_ptr<Screen> pScreen = std::make_unique<Screen>(SCREEN_WIDTH, SCREEN_HEIGHT);
 	Screen screen(SCREEN_WIDTH, SCREEN_HEIGHT);
 	Bus bus;
 	CPU cpu(&bus);
-	GameLoop gameLoop(cpu);
 	PPU ppu(&bus, &screen);
-	ppu.render();
+	GameLoop gameLoop(cpu, &ppu);
+	//ppu.render();
 	gameLoop.startGame();
 
 	return 0;

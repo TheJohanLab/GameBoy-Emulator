@@ -49,6 +49,10 @@ public:
 	u8 readWX() const; //FF4B
 
 	void render();
+	void renderScanline();
+	void renderBGScanline();
+	void renderWindowScanline();
+	void renderOBJScanline();
 private:
 
 };

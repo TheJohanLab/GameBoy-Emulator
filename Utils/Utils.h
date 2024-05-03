@@ -18,6 +18,12 @@ const double timePerFrame = 1.0 / 60.0;
 const u16 SCREEN_WIDTH = 160;
 const u16 SCREEN_HEIGHT = 144;
 
+// PPU cycle modes
+const u8 PPU_HBLANK = 0x00;
+const u8 PPU_VBLANK = 0x01;
+const u8 PPU_OAM_SCAN = 0x02;
+const u8 PPU_DRAWING = 0x03;
+
 
 typedef struct s_flags {
     u8 r : 4;

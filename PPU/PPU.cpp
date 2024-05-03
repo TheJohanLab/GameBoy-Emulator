@@ -137,19 +137,87 @@ void PPU::render()
 	}
 
 	mScreen->render(mPixelArray);
+
+	/* En fonction du cycle
+	*	1 frame = 70224 dots
+	*	1 scanline = 456 dots
+	*		2 : OAM SCAN : 80 dots	
+	*		3 : DRAWING  : 172-289 dots
+	*		0 : HBLANK	 : 87-204 dots (376 - DRAWING)
+	*		1 : VBLANK	 : 10 scanlines = 4560 dots
+	*/
 	switch (getPPUMode())
 	{
 
-	case 0x00 :
+	case PPU_HBLANK :
+		// fin de scanline
+
+		// On passe à la ligne suivante
+
+		/* Si ligne suivante = 144 : 
+		*   On passe à VBLANK
+		*	On a fait toutes les lignes, on render l'image
+		*	Interrupt ?
+		*/
+
+		/* Sinon :
+		*	On passe en OAM pour recommencer
+		*	Interrupt ?
+		*/
+		 
 		break;
 
-	case 0x01 :
+	case PPU_VBLANK :
+		// 10 scanlines
+
+		// On incrémente
+
+		// Si ligne suivante = 154 : on revient en haut et passe en OAM
+		// Interrupt ?
+
 		break;
 
-	case 0x02 :
+	case PPU_OAM_SCAN :
+		// On décrémente les cycles et on passe en DRAWING
+
 		break;
 
-	case 0x03 :
+	case PPU_DRAWING :
+		// Render Scanline
+
+		// On passe en HBLANK
+		// Interrupt ?
+
 		break;
 	}
+}
+
+void PPU::renderScanline()
+{
+	// Render Background Scanline
+	// Si Window activée : render Window ScanLine
+
+	// On copie les pixels de BG+W dans le tableau à afficher
+
+	// Si OBJ activé : render OBJ Scanline
+}
+
+void PPU::renderBGScanline()
+{
+	/* LCDC.0=0
+	*   BG désactivé : tout s'affiche en blanc
+	*/
+
+	// On charge la palette
+	// Adressage TileData
+}
+
+void PPU::renderWindowScanline()
+{
+
+}
+
+void PPU::renderOBJScanline()
+{
+
 }

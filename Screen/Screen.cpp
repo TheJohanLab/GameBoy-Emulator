@@ -77,6 +77,8 @@ void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&
 
 	u8* pPixels;
 	int pitch = 0;
+
+	//ARGB format
 	SDL_Texture* texture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_BGRA8888, SDL_TEXTUREACCESS_STREAMING, 160, 144);
 
 	SDL_LockTexture(texture, nullptr, (void**)&pPixels, &pitch);

@@ -44,4 +44,10 @@ typedef union u_flags {
 	s_flags flags;
 }flags;
 
+typedef struct RGB{
+    u8 R;
+    u8 G;
+    u8 B;
+}gb_palette;
+
 

@@ -4,7 +4,7 @@
 PPU::PPU(Bus* bus, Screen* screen)
 	:mBus(bus), mScreen(screen)
 {
-
+	initializePPU();
 }
 
 PPU::~PPU()
@@ -116,25 +116,34 @@ u8 PPU::readWX() const
 
 void PPU::render(u8 cycle)
 {
-	for (int i = 0; i < 160; i++)
+	/*for (int i = 0; i < 160; i++)
 	{
 		for (int j = 0; j < 144; j++)
 		{
-			u8 red = 0;
-			u8 green = 0;
-			if (i % 8 >= 0 && i % 8 < 4)
-			{
-				red = 255;
-				green = 0;
-			}
-			else {
-				red = 0;
-				green = 255;
-			}
-			mPixelArray[j][i] = { 255, red, green, 0 };
+			renderPixel(0x00, i, j);
 			// ARGB
 		}
+	}*/
+
+	std::array<u8, 16> tileTest = {
+	0b00101111,0b11111000,
+	0b00110000,0b00001100,
+	0b00110000,0b00001100,
+	0b00110000,0b00001100,
+	0b00110111,0b11111100,
+	0b00010101,0b11011100,
+	0b00110111,0b01111000,
+	0b00101111,0b11100000
+	};
+
+	for (int j = 0; j < 16; j++)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			renderPixel(tileTest[j] >> (2*(4 - (i+1))) & 0x03, 50+i+(4*(j%2)), 50+(j/2));
+		}
 	}
+
 
 	mScreen->render(mPixelArray);
 
@@ -250,4 +259,27 @@ void PPU::renderWindowScanline()
 void PPU::renderOBJScanline()
 {
 
+}
+
+// ------------------------------------//
+//			PRIVATE METHODS
+// ------------------------------------//
+void PPU::initializePPU()
+{
+	mScreenColors[0] = { 0xFF, 0xE0, 0xF8, 0xD0 }; // WHITE
+	mScreenColors[1] = { 0xFF, 0x88, 0xC0, 0x70 }; // LIGHT GREEN
+	mScreenColors[2] = { 0xFF, 0x34, 0x68, 0x56 }; // DARK GREEN
+	mScreenColors[3] = { 0xFF, 0x08, 0x18, 0x20 }; // BLACK
+
+	setBGP(0b00011011);
+}
+
+
+void PPU::renderPixel(u8 pixelID, int i, int j)
+{
+	auto bgp = getBGP();
+	// 11 10 01 00
+
+	Pixel pixelColor = mScreenColors[bgp.byte >> (2 * pixelID) & 0x03];
+	mPixelArray[j][i] = pixelColor;
 }

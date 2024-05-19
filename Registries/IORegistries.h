@@ -71,3 +71,7 @@ typedef union u_BG_palette_data {
     u8 byte;
     s_BG_palette_data flags;
 }BG_palette_data;
+
+
+
+

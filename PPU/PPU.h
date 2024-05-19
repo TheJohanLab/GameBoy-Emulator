@@ -21,7 +21,7 @@ private:
 	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray;
 
 	u16 mPPUModeDots = 0;
-
+	std::array<Pixel, 4> mScreenColors;
 
 public:
 	PPU(Bus* bus, Screen* screen);
@@ -58,5 +58,7 @@ public:
 
 private:
 
+	void initializePPU();
+	void renderPixel(u8 pixelColor, int i, int j);
 };
 

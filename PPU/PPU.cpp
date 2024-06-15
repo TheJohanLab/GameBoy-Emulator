@@ -79,6 +79,7 @@ void PPU::incLY()
 {
 	u8 ly = mBus->read(LY);
 	mBus->write(LY, (ly + 1) % 144);
+
 }
 
 //FF47
@@ -301,6 +302,7 @@ void PPU::renderBGScanline()
 		u8 pixelColorIdLSB = (lineLSB >> (7 - pixelXInTile)) & 0x01;
 		u8 pixelColorIdMSB = (lineMSB >> (7 - pixelXInTile)) & 0x01;
 		u8 pixelColorID = pixelColorIdLSB + (pixelColorIdMSB << 1);
+
 		renderPixel(pixelColorID, x, readLY());
 	}
 

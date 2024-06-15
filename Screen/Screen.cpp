@@ -13,6 +13,7 @@ Screen::~Screen()
 {
 	std::cout << "Screen destructor\n";
 	SDL_DestroyRenderer(mRenderer);
+	SDL_DestroyTexture(mTexture);
 	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
 }
@@ -51,6 +52,15 @@ int Screen::initScreen()
 				SDL_RendererInfo rendererInfo;
 				SDL_GetRendererInfo(mRenderer, &rendererInfo);
 				std::cout << "Renderer = " << rendererInfo.name << std::endl;
+			
+				//ARGB format
+			}
+
+			mTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_BGRA8888, SDL_TEXTUREACCESS_STREAMING, 160, 144);
+			if (mTexture == nullptr) {
+				// Handle error
+				SDL_Log("Failed to create texture: %s", SDL_GetError());
+				return 1;
 			}
 		}
 	}
@@ -73,21 +83,20 @@ void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&
 {
 
 	SDL_RenderClear(mRenderer);
-	SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	//SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
 	u8* pPixels;
 	int pitch = 0;
 
-	//ARGB format
-	SDL_Texture* texture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_BGRA8888, SDL_TEXTUREACCESS_STREAMING, 160, 144);
 
-	SDL_LockTexture(texture, nullptr, (void**)&pPixels, &pitch);
+
+	SDL_LockTexture(mTexture, nullptr, (void**)&pPixels, &pitch);
 
 	memcpy(pPixels, static_cast<void const*>(&pixelArray), 160 * 144 * 4);
 
-	SDL_UnlockTexture(texture);
+	SDL_UnlockTexture(mTexture);
 
-	SDL_RenderCopy(mRenderer, texture, nullptr, nullptr);
+	SDL_RenderCopy(mRenderer, mTexture, nullptr, nullptr);
 
 	SDL_RenderPresent(mRenderer);
 }

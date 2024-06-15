@@ -14,6 +14,7 @@ class Screen
 
 		SDL_Renderer* mRenderer;
 		SDL_Window* mWindow;
+		SDL_Texture* mTexture;
 
 	public:
 		Screen(u16 width, u16 height);

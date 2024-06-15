@@ -13,8 +13,14 @@ void GameLoop::startGame()
 	//int cnt = 0;
 	u32 cycles = 0;
 
+	SDL_Event e;
 	while (mIsRunning)
 	{
+		while (SDL_PollEvent(&e) != 0) {
+			if (e.type == SDL_QUIT) {
+				mIsRunning = false;
+			}
+		}
 		handleFrame(cycles);
 	}
 }

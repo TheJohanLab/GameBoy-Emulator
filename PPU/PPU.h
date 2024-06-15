@@ -40,6 +40,8 @@ public:
 	u8 readLY() const; //FF44
 	u8 readLYC() const; //FF45
 
+	void incLY();
+
 
 	BG_palette_data getBGP() const; //FF47
 	void setBGP(const u8 flags);
@@ -60,5 +62,6 @@ private:
 
 	void initializePPU();
 	void renderPixel(u8 pixelColor, int i, int j);
+	u8 readIndexInTileMap(u8 xIndex, u8 yIndex) const;
 };
 

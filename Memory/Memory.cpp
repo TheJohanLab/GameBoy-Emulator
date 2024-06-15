@@ -3,7 +3,35 @@
 
 #include "../Utils/Addresses.h"
 
-Memory::Memory(){}
+
+/*0b00101111, 0b11111000,
+0b00110000, 0b00001100,
+0b00110000, 0b00001100,
+0b00110000, 0b00001100,
+0b00110111, 0b11111100,
+0b00010101, 0b11011100,
+0b00110111, 0b01111000,
+0b00101111, 0b11100000*/
+
+
+Memory::Memory()
+{
+	// Tile 
+	mVRAM[0] = 0b00111100;	mVRAM[1] = 0b01111110;
+	mVRAM[2] = 0b01000010;	mVRAM[3] = 0b01000010;
+	mVRAM[4] = 0b01000010;	mVRAM[5] = 0b01000010;
+	mVRAM[6] = 0b01000010;	mVRAM[7] = 0b01000010;
+	mVRAM[8] = 0b01111110;	mVRAM[9] = 0b01011110;
+	mVRAM[10] = 0b01111110;	mVRAM[11] = 0b00001010;
+	mVRAM[12] = 0b01111100;	mVRAM[13] = 0b01010110;
+	mVRAM[14] = 0b00111000;	mVRAM[15] = 0b01111100;
+
+	//Tile map
+	for (int i = 0; i < 1024; i++)
+	{
+		write(0x9800 + i, 0);
+	}
+}
 
 u8 Memory::read(u16 const& address) const
 {

@@ -27,7 +27,6 @@ class Screen
 		void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const;
 
 	private:
-
 		int initScreen();
 
 };

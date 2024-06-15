@@ -75,6 +75,12 @@ u8 PPU::readLYC() const
 	return mBus->read(LY_COMPARE);
 }
 
+void PPU::incLY()
+{
+	u8 ly = mBus->read(LY);
+	mBus->write(LY, (ly + 1) % 144);
+}
+
 //FF47
 BG_palette_data PPU::getBGP() const
 {
@@ -125,6 +131,7 @@ void PPU::render(u8 cycle)
 		}
 	}*/
 
+	/*
 	std::array<u8, 16> tileTest = {
 	0b00101111,0b11111000,
 	0b00110000,0b00001100,
@@ -140,12 +147,13 @@ void PPU::render(u8 cycle)
 	{
 		for (int i = 0; i < 4; i++)
 		{
+			//								PIXEL ID		    X coord		   Y coord	
 			renderPixel(tileTest[j] >> (2*(4 - (i+1))) & 0x03, 50+i+(4*(j%2)), 50+(j/2));
 		}
-	}
+	}*/
 
 
-	mScreen->render(mPixelArray);
+	
 
 	/* En fonction du cycle
 	*	1 frame = 70224 dots
@@ -155,6 +163,8 @@ void PPU::render(u8 cycle)
 	*		0 : HBLANK	 : 87-204 dots (376 - DRAWING)
 	*		1 : VBLANK	 : 10 scanlines = 4560 dots
 	*/
+
+	setPPUMode(PPU_DRAWING);
 
 	mPPUModeDots += cycle;
 
@@ -216,24 +226,31 @@ void PPU::render(u8 cycle)
 
 	case PPU_DRAWING :
 		// Render Scanline
+		renderScanline();
 
-		if (mPPUModeDots >= PPU_DRAWING_DOTS) 
+		incLY();
+		/*if (mPPUModeDots >= PPU_DRAWING_DOTS) 
 		{
 			mPPUModeDots -= PPU_DRAWING_DOTS;
 
 			setPPUMode(PPU_HBLANK);
-		}
+		}*/
 
 		// On passe en HBLANK
 		// Interrupt ?
 
 		break;
 	}
+
+	mScreen->render(mPixelArray);
 }
 
 void PPU::renderScanline()
 {
 	// Render Background Scanline
+
+	renderBGScanline();
+
 	// Si Window activée : render Window ScanLine
 
 	// On copie les pixels de BG+W dans le tableau à afficher
@@ -248,6 +265,46 @@ void PPU::renderBGScanline()
 	*/
 
 	// On charge la palette
+	auto backgroundPalette = getBGP();
+
+	//A changer en fonction de LCD control
+	u8 tileAddressingOffset = 0;
+
+	// On récpuère l'index Y (vertical) de la tile dans la tilemap en cours
+	// /8 car une tile est composée de 8 x 8 pixels
+	// %32 pour gérer le wrapping sur la tilemap
+	u8 tileY = ((readSCY() + readLY()) / 8) % 32;
+
+	// On récupère l'index Y (vertical) du pixel dans la tile en cours
+	u8 pixelYInTile = (readSCY() + readLY()) % 8;
+
+	for (int x = 0; x < 160; x++)
+	{
+		// On récupère l'index X (horizontal) de la tile dans la tilemap en cours
+		u8 tileX = ((readSCX() + x) / 8) % 32;
+
+		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
+		u8 tileIndex = readIndexInTileMap(tileX, tileY);
+
+		// TODO : gérer le cas index négatif
+		// 16 car une tile fait 16 bytes de long dans la VRAM
+		u8 tileIndexInVRAM = (tileIndex + tileAddressingOffset) * 16;
+
+		// * 2 car une ligne d'une tile est composée de 2 bytes
+		u8 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
+
+		// On récupère les 2 lignes de bits
+		u8 lineLSB = mBus->read(VRAM_BEG_ADDRESS + lineIndexInVRAM);
+		u8 lineMSB = mBus->read(VRAM_BEG_ADDRESS + lineIndexInVRAM + 1);
+
+		u8 pixelXInTile = (readSCX() + x) % 8;
+		u8 pixelColorIdLSB = (lineLSB >> (7 - pixelXInTile)) & 0x01;
+		u8 pixelColorIdMSB = (lineMSB >> (7 - pixelXInTile)) & 0x01;
+		u8 pixelColorID = pixelColorIdLSB + (pixelColorIdMSB << 1);
+		renderPixel(pixelColorID, x, readLY());
+	}
+
+
 	// Adressage TileData
 }
 
@@ -282,4 +339,11 @@ void PPU::renderPixel(u8 pixelID, int i, int j)
 
 	Pixel pixelColor = mScreenColors[bgp.byte >> (2 * pixelID) & 0x03];
 	mPixelArray[j][i] = pixelColor;
+}
+
+
+u8 PPU::readIndexInTileMap(u8 xIndex, u8 yIndex) const
+{
+	u16 BGModeAddressingOffset = 0x1800; // 0 ou 0x1000 selon flag (nb de la tilemap)
+	return mBus->read(VRAM_BEG_ADDRESS + BGModeAddressingOffset + (yIndex*32) + xIndex);
 }

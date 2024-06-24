@@ -254,6 +254,8 @@ void PPU::renderScanline()
 
 	// Si Window activée : render Window ScanLine
 
+	renderWindowScanline();
+	
 	// On copie les pixels de BG+W dans le tableau à afficher
 
 	// Si OBJ activé : render OBJ Scanline
@@ -269,7 +271,7 @@ void PPU::renderBGScanline()
 	auto backgroundPalette = getBGP();
 
 	//A changer en fonction de LCD control
-	u8 tileAddressingOffset = 0;
+	u16 tileAddressingOffset = 0;
 
 	// On récpuère l'index Y (vertical) de la tile dans la tilemap en cours
 	// /8 car une tile est composée de 8 x 8 pixels
@@ -285,14 +287,14 @@ void PPU::renderBGScanline()
 		u8 tileX = ((readSCX() + x) / 8) % 32;
 
 		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
-		u8 tileIndex = readIndexInTileMap(tileX, tileY);
+		u16 tileIndex = readIndexInTileMap(tileX, tileY);
 
 		// TODO : gérer le cas index négatif
 		// 16 car une tile fait 16 bytes de long dans la VRAM
-		u8 tileIndexInVRAM = (tileIndex + tileAddressingOffset) * 16;
+		u16 tileIndexInVRAM = (tileIndex + tileAddressingOffset) * 16;
 
 		// * 2 car une ligne d'une tile est composée de 2 bytes
-		u8 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
+		u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
 
 		// On récupère les 2 lignes de bits
 		u8 lineLSB = mBus->read(VRAM_BEG_ADDRESS + lineIndexInVRAM);
@@ -312,6 +314,56 @@ void PPU::renderBGScanline()
 
 void PPU::renderWindowScanline()
 {
+	/* LCDC.5=0
+	*   Window désactivée
+	*/
+
+	// On récupère le numéro de ligne dans la Window à afficher
+	int16_t lineYInWindow = readLY() - readWY();
+	if (lineYInWindow < 0)
+		return;
+
+	// On charge la palette
+	auto backgroundPalette = getBGP();
+
+	//A changer en fonction de LCD control
+	u16 tileAddressingOffset = 0x0400;
+
+	u8 tileYInWindow = lineYInWindow / 8;
+	u8 pixelYInTile = lineYInWindow % 8;
+
+	int16_t xPosOnScreen = readWX() - 7;
+	for (int x = 0; x < 160; x++)
+	{
+		// On récupère l'index X (horizontal) de la tile dans la tilemap en cours
+		if (x < xPosOnScreen)
+			continue;
+
+		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
+		u8 tileXInWindow = (x - xPosOnScreen) / 8;
+
+		// TODO : gérer le cas index négatif
+		// 16 car une tile fait 16 bytes de long dans la VRAM	
+		u16 tileIndex = readIndexInTileMap(tileXInWindow, tileYInWindow);
+
+		// * 2 car une ligne d'une tile est composée de 2 bytes
+		u16 tileIndexInVRAM = (tileIndex + tileAddressingOffset) * 16;
+
+		// * 2 car une ligne d'une tile est composée de 2 bytes
+		u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
+
+		// On récupère les 2 lignes de bits
+		u8 lineLSB = mBus->read(VRAM_BEG_ADDRESS + lineIndexInVRAM);
+		u8 lineMSB = mBus->read(VRAM_BEG_ADDRESS + lineIndexInVRAM + 1);
+
+		u8 pixelXInTile = (x - xPosOnScreen) % 8;
+		u8 pixelColorIdLSB = (lineLSB >> (7 - pixelXInTile)) & 0x01;
+		u8 pixelColorIdMSB = (lineMSB >> (7 - pixelXInTile)) & 0x01;
+		u8 pixelColorID = pixelColorIdLSB + (pixelColorIdMSB << 1);
+
+		renderPixel(pixelColorID, x, readLY());
+
+	}
 
 }
 
@@ -331,6 +383,9 @@ void PPU::initializePPU()
 	mScreenColors[3] = { 0xFF, 0x08, 0x18, 0x20 }; // BLACK
 
 	setBGP(0b00011011);
+
+	setWX(50);
+	setWY(50);
 }
 
 
@@ -348,4 +403,15 @@ u8 PPU::readIndexInTileMap(u8 xIndex, u8 yIndex) const
 {
 	u16 BGModeAddressingOffset = 0x1800; // 0 ou 0x1000 selon flag (nb de la tilemap)
 	return mBus->read(VRAM_BEG_ADDRESS + BGModeAddressingOffset + (yIndex*32) + xIndex);
+}
+
+
+void PPU::setWX(u8 value)
+{
+	mBus->write(WINDOW_X, value);
+}
+
+void PPU::setWY(u8 value)
+{
+	mBus->write(WINDOW_Y, value);
 }

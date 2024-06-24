@@ -26,10 +26,26 @@ Memory::Memory()
 	mVRAM[12] = 0b01111100;	mVRAM[13] = 0b01010110;
 	mVRAM[14] = 0b00111000;	mVRAM[15] = 0b01111100;
 
-	//Tile map
+
+	mVRAM[16] = 0b11111111;	mVRAM[17] = 0b11111111;
+	mVRAM[18] = 0b11111111;	mVRAM[19] = 0b11111111;
+	mVRAM[20] = 0b11111111;	mVRAM[21] = 0b11111111;
+	mVRAM[22] = 0b11111111;	mVRAM[23] = 0b11111111;
+	mVRAM[24] = 0b11111111;	mVRAM[25] = 0b11111111;
+	mVRAM[26] = 0b11111111;	mVRAM[27] = 0b11111111;
+	mVRAM[28] = 0b11111111;	mVRAM[29] = 0b11111111;
+	mVRAM[30] = 0b11111111;	mVRAM[31] = 0b11111111;
+
+	//Tile map 1
 	for (int i = 0; i < 1024; i++)
 	{
 		write(0x9800 + i, 0);
+	}
+
+	//Tile map 2
+	for (int i = 0; i < 1024; i++)
+	{
+		write(0x9C00 + i, 1);
 	}
 }
 

@@ -8,7 +8,7 @@ namespace gbe {
 
 	Log::Log()
 	{
-
+		spdlog::trace("trace");
 	}
 
 	Log::~Log()

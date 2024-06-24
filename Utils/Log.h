@@ -9,6 +9,7 @@ namespace gbe {
 	{
 	private:
 		static std::shared_ptr<spdlog::logger> sLogger;
+
 	public:
 		Log();
 		~Log();
@@ -20,6 +21,8 @@ namespace gbe {
 	};
 
 }
+
+
 
 //log macros
 #define GBE_LOG_TRACE(...) ::gbe::Log::getLogger()->trace(__VA_ARGS__)

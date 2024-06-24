@@ -51,6 +51,9 @@ public:
 
 	u8 readWY() const; //FF4A
 	u8 readWX() const; //FF4B
+	void setWX(u8 value);
+	void setWY(u8 value);
+
 
 	void render(u8 cycles);
 	void renderScanline();

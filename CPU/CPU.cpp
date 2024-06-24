@@ -575,7 +575,7 @@ u8 CPU::executeOpcode(u16 opcode)
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	//(mInstructionSet[opcode]->getFunctionPointer())(*this, *mInstructionSet[opcode]);
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
-	std::cout << mInstructionSet[opcode]->getName() << "\n";
+	//std::cout << mInstructionSet[opcode]->getName() << "\n";
 	
 
 	return cycles;

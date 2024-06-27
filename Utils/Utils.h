@@ -9,8 +9,9 @@ using u32 = uint32_t;
 const u16 instructionAmount = 512;
 
 const u16 kiB = 1024;
-const u8 HRAMSize = 127;
+const u8 HRAM_SIZE = 127;
 
+const u8 OAM_SIZE = 160;
 
 // Screen refresh
 const int cyclesPerFrame = 70224;

@@ -1,8 +1,11 @@
 #pragma once
 
 #include <array>
+#include <memory>
+
 #include "../Bus/Bus.h"
 #include "../Screen/Screen.h"
+#include "OAM.h"
 
 struct Pixel
 {
@@ -18,6 +21,7 @@ private:
 
 	Bus* mBus;
 	Screen* mScreen;
+	std::shared_ptr<OAM> mOAM;
 	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray;
 
 	u16 mPPUModeDots = 0;
@@ -34,6 +38,19 @@ public:
 
 	u8 getPPUMode() const; //FF41.0-1
 	void setPPUMode(const u8 mode); //FF41.0-1
+
+	void writeOAM(u8 index, const u8& YPos, const u8& XPos, const u8& tileIndex, const u8& attrs);
+	void writeOAM_YPos(u8 index, const u8& data);
+	void writeOAM_XPos(u8 index, const u8& data);
+	void writeOAM_TileIndex(u8 index, const u8& data);
+	void writeOAM_Attrs(u8 index, const u8& data);
+
+	OAM::Object readOAM(u8 index) const;
+	u8 readOAM_YPos(u8 index) const;
+	u8 readOAM_XPos(u8 index) const;
+	u8 readOAM_TileIndex(u8 index) const;
+	u8 readOAM_Attrs(u8 index) const;
+
 
 	u8 readSCY() const; //FF42
 	u8 readSCX() const; //FF43
@@ -62,6 +79,8 @@ public:
 	void renderOBJScanline();
 
 private:
+
+
 
 	void initializePPU();
 	void renderPixel(u8 pixelColor, int i, int j);

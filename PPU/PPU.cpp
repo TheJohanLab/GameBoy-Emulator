@@ -51,6 +51,80 @@ void PPU::setPPUMode(u8 mode)
 
 }
 
+
+/// -------------------------- ///
+/// ---------- OAM ----------- ///
+/// -------------------------- ///
+/// 
+void PPU::writeOAM(u8 index, const u8& YPos, const u8& XPos, const u8& tileIndex, const u8& attrs)
+{
+	mOAM->write(index, YPos, XPos, tileIndex, attrs);
+
+	u16 objectAddr = OAM_BEG_ADDRESS + 4 * index;
+	mBus->write(objectAddr, YPos);
+	mBus->write(objectAddr + 1, XPos);
+	mBus->write(objectAddr + 2, tileIndex);
+	mBus->write(objectAddr + 3, attrs);
+
+}
+
+void PPU::writeOAM_YPos(u8 index, const u8& data)
+{
+	mOAM->writeYPos(index, data);
+	u16 objectAddr = OAM_BEG_ADDRESS + 4 * index;
+	mBus->write(objectAddr, data);
+}
+
+void PPU::writeOAM_XPos(u8 index, const u8& data)
+{
+	mOAM->writeXPos(index, data);
+	u16 objectAddr = OAM_BEG_ADDRESS + 4 * index;
+	mBus->write(objectAddr + 1, data);
+}
+
+void PPU::writeOAM_TileIndex(u8 index, const u8& data)
+{
+	mOAM->writeTileIndex(index, data);
+
+	u16 objectAddr = OAM_BEG_ADDRESS + 4 * index;
+	mBus->write(objectAddr + 2, data);
+}
+
+void PPU::writeOAM_Attrs(u8 index, const u8& data)
+{
+	mOAM->writeAttrs(index, data);
+
+	u16 objectAddr = OAM_BEG_ADDRESS + 4 * index;
+	mBus->write(objectAddr + 3, data);
+}
+
+OAM::Object PPU::readOAM(u8 index) const
+{
+	return mOAM->read(index);
+}
+
+u8 PPU::readOAM_YPos(u8 index) const
+{
+	return mOAM->readYPos(index);
+}
+
+u8 PPU::readOAM_XPos(u8 index) const
+{
+	return mOAM->readXPos(index);
+}
+
+u8 PPU::readOAM_TileIndex(u8 index) const
+{
+	return mOAM->readTileIndex(index);
+
+}
+
+u8 PPU::readOAM_Attrs(u8 index) const
+{
+	return mOAM->readAttrs(index);
+
+}
+
 //FF42
 u8 PPU::readSCY() const
 {
@@ -386,6 +460,8 @@ void PPU::initializePPU()
 
 	setWX(50);
 	setWY(50);
+
+	mOAM = std::make_shared<OAM>();
 }
 
 

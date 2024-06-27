@@ -77,6 +77,8 @@ void Memory::write(u16 const& address, u8 const& data)
 		mVRAM[address - 0x8000] = data;
 	else if (address >= 0xA000 && address <= 0xBFFF)
 		mERAM[address - 0xA000] = data;
+	else if (address >= 0xFE00 && address <= 0xFE9F) // OAM
+		mOAM[address - 0xFE00] = data;
 	else if (address >= LCD_CONTROL && address <= WINDOW_X)
 		writeLCD(address, data);
 	else if (address >= 0xFF80 && address <= 0xFFFE)

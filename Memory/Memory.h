@@ -3,13 +3,15 @@
 #include <array>
 #include "../Utils/Utils.h"
 
+
 class Memory
 {
 	private:
 		std::array<u8, 8 * kiB> mWRAM = { 0x00 };
 		std::array<u8, 8 * kiB> mVRAM = { 0x00 };
 		std::array<u8, 8 * kiB> mERAM = { 0x00 };
-		std::array<u8, HRAMSize> mHRAM = { 0x00 };
+		std::array<u8, HRAM_SIZE> mHRAM = { 0x00 };
+		std::array<u8, OAM_SIZE> mOAM = { 0x00 };
 		std::array<u8, 2> mInterruptRegistries = { 0x00 };
 		std::array<u8, 12> mLCDRegistries = { 0x00 };
 

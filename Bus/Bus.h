@@ -23,6 +23,8 @@ class Bus
 		void setInterruptEnable(const u8 flags);
 		void setInterruptFlag(const u8 flags);
 
+		void setDMATransfertCallback(std::function<void(const u8)> callback) { mMemory.setDMACallback(callback); }
+
 
 };
 

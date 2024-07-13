@@ -79,7 +79,7 @@ void Memory::write(u16 const& address, u8 const& data)
 		mERAM[address - 0xA000] = data;
 	else if (address >= 0xFE00 && address <= 0xFE9F) // OAM
 		mOAM[address - 0xFE00] = data;
-	else if (address >= LCD_CONTROL && address <= WINDOW_X)
+	else if (address != DMA && address >= LCD_CONTROL && address <= WINDOW_X)
 		writeLCD(address, data);
 	else if (address >= 0xFF80 && address <= 0xFFFE)
 		mHRAM[address - 0xFF80] = data;
@@ -87,6 +87,12 @@ void Memory::write(u16 const& address, u8 const& data)
 		mInterruptRegistries[0] = data;
 	else if (address == INTERRUPT_ENABLE) // IE Register
 		mInterruptRegistries[1] = data;
+	else if (address == DMA)
+	{
+		mDmaRegistry = data;
+		mDMACallback(data);
+	}
+
 }
 
 u8* Memory::getDataPtr(u16 const& address)

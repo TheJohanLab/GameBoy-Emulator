@@ -78,6 +78,8 @@ public:
 	void renderWindowScanline();
 	void renderOBJScanline();
 
+	void startDMATransfer(const u8& address);
+
 private:
 
 

@@ -52,3 +52,4 @@ typedef struct RGB{
 }gb_palette;
 
 
+#define BIND_FUNC(obj, fn) std::bind(&fn, obj, std::placeholders::_1)

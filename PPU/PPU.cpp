@@ -1,5 +1,6 @@
 #include "PPU.h"
 #include "../Utils/Addresses.h"
+#include "../Utils/Log.h"
 
 PPU::PPU(Bus* bus, Screen* screen)
 	:mBus(bus), mScreen(screen)
@@ -490,4 +491,22 @@ void PPU::setWX(u8 value)
 void PPU::setWY(u8 value)
 {
 	mBus->write(WINDOW_Y, value);
+}
+
+void PPU::startDMATransfer(const u8& address)
+{
+	GBE_LOG_INFO("Start DMA Transfer");
+
+	// address : 8 bits de poids fort de l'adresse : *0x100 pour décaler à gauche
+	u16 sourceAddress = (static_cast<u16>(address) * 0x100);
+	for (u8 objectIndex = 0x00; objectIndex < 40; objectIndex++ )
+	{
+		writeOAM(objectIndex, 
+		sourceAddress | (objectIndex * 4),
+		sourceAddress | (objectIndex * 4 + 1), 
+		sourceAddress | (objectIndex * 4 + 2), 
+		sourceAddress | (objectIndex * 4 + 3));
+	}
+
+	//TODO Attendre 160 mcycles ou 640 dots
 }

@@ -8,7 +8,7 @@
 #define SCX 0xFF43
 #define LY 0xFF44
 #define LY_COMPARE 0xFF45
-//0xFF46
+#define DMA 0xFF46
 #define BG_PALETTE 0xFF47
 #define OBP0 0xFF48
 #define OBP1 0xFF49

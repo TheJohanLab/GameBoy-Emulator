@@ -51,6 +51,11 @@ u8 OAM::readYPos(u8 index) const
 	return mObjects[index].YPos;
 }
 
+std::array<OAM::Object, MAX_OBJECTS>& OAM::getObjects()
+{
+	 return mObjects;
+}
+
 u8 OAM::readXPos(u8 index) const
 {
 	return mObjects[index].XPos;

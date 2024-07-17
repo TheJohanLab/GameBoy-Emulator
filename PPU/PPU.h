@@ -7,6 +7,9 @@
 #include "../Screen/Screen.h"
 #include "OAM.h"
 
+#define LINE_OBJ_LIMIT 10
+
+
 struct Pixel
 {
 	u8 alpha = 0x00;
@@ -85,7 +88,7 @@ private:
 
 
 	void initializePPU();
-	void renderPixel(u8 pixelColor, int i, int j);
+	void renderPixel(u8 pixelColor, int x, int y);
 	u8 readIndexInTileMap(u8 xIndex, u8 yIndex) const;
 };
 

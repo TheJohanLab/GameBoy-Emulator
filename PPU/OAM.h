@@ -28,7 +28,7 @@ public:
 
 
 private:
-	std::array<Object, 40> mObjects;
+	std::array<Object, MAX_OBJECTS> mObjects;
 
 public:
 	OAM();
@@ -46,4 +46,6 @@ public:
 	u8 readXPos(u8 index) const;
 	u8 readTileIndex(u8 index) const;
 	u8 readAttrs(u8 index) const;
+
+	std::array<Object, MAX_OBJECTS>& getObjects();
 };

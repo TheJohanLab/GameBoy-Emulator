@@ -83,7 +83,7 @@ u8 InstructionRotateShift::RLC_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
-	setCFlag(cpu, getBit(data, 7));
+	setCFlag(cpu, BIT(data, 7));
 	data = data << 1;
 	setBit(data, 0, flagRegistry->flags.C);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), data);
@@ -162,7 +162,7 @@ u8 InstructionRotateShift::RRC_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
-	setCFlag(cpu, getBit(data, 0));
+	setCFlag(cpu, BIT(data, 0));
 	data = data >> 1;
 	setBit(data, 7, flagRegistry->flags.C);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), data);
@@ -242,7 +242,7 @@ u8 InstructionRotateShift::RL_pHLq(CPU& cpu)
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 carry = flagRegistry->flags.C;
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
-	setCFlag(cpu, getBit(data, 7));
+	setCFlag(cpu, BIT(data, 7));
 	data = data << 1;
 	setBit(data, 0, carry);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), data);
@@ -322,7 +322,7 @@ u8 InstructionRotateShift::RR_pHLq(CPU& cpu)
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 carry = flagRegistry->flags.C;
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
-	setCFlag(cpu, getBit(data, 0));
+	setCFlag(cpu, BIT(data, 0));
 	data = data >> 1;
 	setBit(data, 7, carry);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), data);
@@ -401,7 +401,7 @@ u8 InstructionRotateShift::SLA_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
-	setCFlag(cpu, getBit(data, 7));
+	setCFlag(cpu, BIT(data, 7));
 	data = data << 1;
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), data);
 
@@ -479,7 +479,7 @@ u8 InstructionRotateShift::SRA_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
-	setCFlag(cpu, getBit(data, 0));
+	setCFlag(cpu, BIT(data, 0));
 	data = (data >> 1) | (data & 0x80);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), data);
 
@@ -640,7 +640,7 @@ u8 InstructionRotateShift::SRL_pHLq(CPU& cpu)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
 	u8 data = cpu.readMemory(*cpu.getCombinedRegistries("HL"));
-	setCFlag(cpu, getBit(data, 0));
+	setCFlag(cpu, BIT(data, 0));
 	data = data >> 1;
 	setBit(data, 7, 0x00);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), data);
@@ -665,7 +665,7 @@ u8 InstructionRotateShift::SRL_A(CPU& cpu)
 
 void InstructionRotateShift::RLCr(u8& registry, flags& flagRegistry, CPU& cpu)
 {
-	setCFlag(cpu, getBit(registry, 7));
+	setCFlag(cpu, BIT(registry, 7));
 	registry = registry << 1;
 	setBit(registry, 0, flagRegistry.flags.C);
 
@@ -676,7 +676,7 @@ void InstructionRotateShift::RLCr(u8& registry, flags& flagRegistry, CPU& cpu)
 
 void InstructionRotateShift::RRCr(u8& registry, flags& flagRegistry, CPU& cpu)
 {
-	setCFlag(cpu, getBit(registry, 0));
+	setCFlag(cpu, BIT(registry, 0));
 	registry = registry >> 1;
 	setBit(registry, 7, flagRegistry.flags.C);
 
@@ -688,7 +688,7 @@ void InstructionRotateShift::RRCr(u8& registry, flags& flagRegistry, CPU& cpu)
 void InstructionRotateShift::RLr(u8& registry, flags& flagRegistry, CPU& cpu)
 {
 	u8 carry = flagRegistry.flags.C;
-	setCFlag(cpu, getBit(registry, 7));
+	setCFlag(cpu, BIT(registry, 7));
 	registry = registry << 1;
 	setBit(registry, 0, carry);
 
@@ -700,7 +700,7 @@ void InstructionRotateShift::RLr(u8& registry, flags& flagRegistry, CPU& cpu)
 void InstructionRotateShift::RRr(u8& registry, flags& flagRegistry, CPU& cpu)
 {
 	u8 carry = flagRegistry.flags.C;
-	setCFlag(cpu, getBit(registry, 0));
+	setCFlag(cpu, BIT(registry, 0));
 	registry = registry >> 1;
 	setBit(registry, 7, carry);
 
@@ -711,7 +711,7 @@ void InstructionRotateShift::RRr(u8& registry, flags& flagRegistry, CPU& cpu)
 
 void InstructionRotateShift::SLAr(u8& registry, flags& flagRegistry, CPU& cpu)
 {
-	setCFlag(cpu, getBit(registry, 7));
+	setCFlag(cpu, BIT(registry, 7));
 	registry = registry << 1;
 
 	setZFlag(cpu, registry);
@@ -721,7 +721,7 @@ void InstructionRotateShift::SLAr(u8& registry, flags& flagRegistry, CPU& cpu)
 
 void InstructionRotateShift::SRAr(u8& registry, flags& flagRegistry, CPU& cpu)
 {
-	setCFlag(cpu, getBit(registry, 0));
+	setCFlag(cpu, BIT(registry, 0));
 	registry = (registry >> 1) | (registry & 0x80);
 
 	setZFlag(cpu, registry);
@@ -746,7 +746,7 @@ void InstructionRotateShift::SWAPr(u8& registry, flags& flagRegistry, CPU& cpu)
 void InstructionRotateShift::SRLr(u8& registry, flags& flagRegistry, CPU& cpu)
 {
 	// Right shift logical (bit 7 = 0)
-	setCFlag(cpu, getBit(registry, 0));
+	setCFlag(cpu, BIT(registry, 0));
 
 	registry = registry >> 1;
 	setBit(registry, 7, 0x00);

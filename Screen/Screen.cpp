@@ -100,3 +100,17 @@ void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&
 
 	SDL_RenderPresent(mRenderer);
 }
+
+void Screen::setOnCloseEvent(closeEventFn callback)
+{
+	closeEventCallback = callback;
+}
+
+void Screen::handleEvents()
+{
+	while (SDL_PollEvent(&mEvent) != 0) {
+		if (mEvent.type == SDL_QUIT) {
+			closeEventCallback();
+		}
+	}
+}

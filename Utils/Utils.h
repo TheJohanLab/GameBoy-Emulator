@@ -33,6 +33,7 @@ const u8 PPU_DRAWING = 0x03;
 #define PPU_OAM_SCAN_DOTS 80
 #define PPU_DRAWING_DOTS 172
 
+
 typedef struct s_flags {
     u8 r : 4;
     u8 C : 1;
@@ -53,4 +54,7 @@ typedef struct RGB{
 }gb_palette;
 
 
-#define BIND_FUNC(obj, fn) std::bind(&fn, obj, std::placeholders::_1)
+#define BIND_FUNC_1_ARG(obj, fn) std::bind(&fn, obj, std::placeholders::_1)
+#define BIND_FUNC_NO_ARGS(obj, fn) std::bind(&fn, obj)
+#define BIT(x, n) ((x >> n) & 1)
+#define JOIN_BYTES(msb, lsb) ((MSB << 8) + LSB)

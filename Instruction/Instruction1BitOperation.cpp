@@ -1742,7 +1742,7 @@ u8 Instruction1BitOperation::SET_7cA(CPU& cpu)
 
 void Instruction1BitOperation::BIT_bcr(u8& registry, flags& flagRegistry, u8 bit, CPU& cpu)
 {
-	setZFlag(cpu, getBit(registry, bit));
+	setZFlag(cpu, BIT(registry, bit));
 	setHFlag(cpu, 1);
 	setNFlag(cpu, 0);
 }

@@ -16,6 +16,10 @@ private:
 	Uint64 mFrameStart;
 	Uint64 mFrameEnd;
 
+	u8 m_XPos = 0;
+
+	u16 mCycles = 0;
+
 public:
 	GameLoop(CPU & cpu, PPU * ppu);
 	virtual ~GameLoop() = default;
@@ -25,9 +29,11 @@ public:
 	void pauseGame() { mIsPaused = true; }
 	void resumeGame() { mIsPaused = false; }
 
+
+
 private:
-	void handleFrame(u32 & cycle);
-	u8 step();
-	void synchroniseFrame();
+	inline void handleFrame();
+	inline u8 step();
+	inline void synchroniseFrame();
 };
 

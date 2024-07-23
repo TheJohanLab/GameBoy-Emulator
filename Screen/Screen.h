@@ -3,8 +3,16 @@
 #include <array>
 #include "SDL.h"
 #include "../Utils/Utils.h"
+#include <functional>
 
 class Pixel;
+
+enum class WindowEvent
+{
+	CLOSE_EVENT
+};
+
+using closeEventFn = std::function<void()>;
 
 class Screen
 {
@@ -15,6 +23,9 @@ class Screen
 		SDL_Renderer* mRenderer;
 		SDL_Window* mWindow;
 		SDL_Texture* mTexture;
+		SDL_Event mEvent;
+
+		closeEventFn closeEventCallback;
 
 	public:
 		Screen(u16 width, u16 height);
@@ -26,6 +37,9 @@ class Screen
 
 		//void render() const;
 		void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const;
+
+		void setOnCloseEvent(closeEventFn callback);
+		void handleEvents();
 
 	private:
 		int initScreen();

@@ -34,6 +34,8 @@ public:
 	PPU(Bus* bus, Screen* screen);
 	~PPU();
 
+	Screen* getScreen() { return mScreen; }
+
 	LCD_control getLCDControl() const; //FF40
 	LCD_status getLCDStatus() const; //FF41
 	void setLCDControl(const u8 flags);
@@ -83,12 +85,15 @@ public:
 
 	void startDMATransfer(const u8& address);
 
+	void setCloseEventCallback(std::function<void()> callback);
+	void handleWindowEvents();
+
 private:
 
 
 
 	void initializePPU();
-	void renderPixel(u8 pixelColor, int x, int y);
+	void renderPixel(u8 pixelColor, int x, int y, bool object = false);
 	u8 readIndexInTileMap(u8 xIndex, u8 yIndex) const;
 };
 

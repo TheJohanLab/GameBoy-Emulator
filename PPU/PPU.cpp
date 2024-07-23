@@ -306,9 +306,13 @@ void PPU::render(u8 cycle)
 		//Mode 3
 	case PPU_DRAWING :
 		// Render Scanline
-		renderScanline();
 
-		incLY();
+		for (u8 i = 0; i < SCREEN_HEIGHT; i++)
+		{
+			renderScanline();
+			incLY();
+		}
+
 		/*if (mPPUModeDots >= PPU_DRAWING_DOTS) 
 		{
 			mPPUModeDots -= PPU_DRAWING_DOTS;
@@ -452,7 +456,9 @@ void PPU::renderOBJScanline()
 {
 
 	// On récupère les 10 premiers objects de la line dans l'OAM
-	std::array<u8, LINE_OBJ_LIMIT> objectsOAMIndex;
+	std::vector<u8> objectsOAMIndex;
+	objectsOAMIndex.reserve(LINE_OBJ_LIMIT);
+
 	u8 spriteHeightMode = getLCDControl().flags.OBJSize ? 16 : 8;
 	u8 ly = readLY();
 	u8 objCnt = 0;
@@ -463,7 +469,7 @@ void PPU::renderOBJScanline()
 		u8 objectYOnScreen = objectY - 16;
 
 		if (ly >= (objectYOnScreen) && ly < objectYOnScreen + spriteHeightMode)
-			objectsOAMIndex[objCnt++] = i;
+			objectsOAMIndex.emplace_back(i);
 
 		if (objCnt >= MAX_OBJECTS)
 			break;
@@ -473,8 +479,8 @@ void PPU::renderOBJScanline()
 	{
 		OAM::Object object = mOAM->getObjects()[objOamIndex];
 
-		u8 objectYOnScreen = object.YPos - 16;
-		u8 objectXOnScreen = object.XPos - 8;
+		int16_t objectYOnScreen = object.YPos - 16;
+		int16_t objectXOnScreen = object.XPos - 8;
 		u8 objectTileIndex = spriteHeightMode == 16 ? object.tileIndex & 0xFE : object.tileIndex;
 		OAM::Attributes_Flags objectFlags = object.AttributeFlags;
 
@@ -489,20 +495,20 @@ void PPU::renderOBJScanline()
 		{
 			u8 LSB = mBus->read(tileAddress + 2*(spriteHeightMode - lineYInTile - 1));
 			u8 MSB = mBus->read(tileAddress + 2*(spriteHeightMode - lineYInTile - 1) + 1);
-			lineData = MSB << 8 + LSB;
+			lineData = JOIN_BYTES(MSB, LSB);
 
 		} else
 		{
 			u8 LSB = mBus->read(tileAddress + (2 * lineYInTile));
 			u8 MSB = mBus->read(tileAddress + (2 * lineYInTile) + 1);
-			lineData =  MSB << 8 + LSB;
+			lineData = JOIN_BYTES(MSB, LSB);
 		}
 
 
 		for (u8 pixelIndex = 0; pixelIndex < 8; pixelIndex++)
 		{
-			u8 pixelXPos = objectXOnScreen + pixelIndex;
-			u8 pixelColorID;
+			int16_t pixelXPos = objectXOnScreen + pixelIndex;
+			u8 pixelColorID = 0;
 
 			if (pixelXPos >= 0 && pixelXPos < SCREEN_WIDTH)
 			{
@@ -521,7 +527,7 @@ void PPU::renderOBJScanline()
 			}
 
 			// TODO : appeler render avec la bonne palette
-			renderPixel(pixelColorID, pixelXPos, ly);
+			renderPixel(pixelColorID, pixelXPos, ly, true);
 		}
 
 		
@@ -549,10 +555,16 @@ void PPU::initializePPU()
 }
 
 
-void PPU::renderPixel(u8 pixelID, int x, int y)
+void PPU::renderPixel(u8 pixelID, int x, int y, bool object)
 {
+	if (x < 0 || y < 0)
+		return;
+
 	auto bgp = getBGP();
 	// 11 10 01 00
+
+	if (object && pixelID == 0x00)
+		return;
 
 	Pixel pixelColor = mScreenColors[bgp.byte >> (2 * pixelID) & 0x03];
 	mPixelArray[y][x] = pixelColor;
@@ -592,4 +604,14 @@ void PPU::startDMATransfer(const u8& address)
 	}
 
 	//TODO Attendre 160 mcycles ou 640 dots
+}
+
+void PPU::setCloseEventCallback(std::function<void()> callback)
+{
+	mScreen->setOnCloseEvent(callback);
+}
+
+void PPU::handleWindowEvents()
+{
+	mScreen->handleEvents();
 }

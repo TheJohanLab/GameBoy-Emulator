@@ -59,18 +59,18 @@ typedef union u_LCD_status {
 }LCD_status;
 
 //Palettes FF47
-typedef struct s_BG_palette_data {
+typedef struct s_Palette_data {
     u8 ID0 : 2;
     u8 ID1 : 2;
     u8 ID2 : 2;
     u8 ID3 : 2;
 
-} s_BG_palette_data;
+} s_Palette_data;
 
-typedef union u_BG_palette_data {
+typedef union u_Palette_data {
     u8 byte;
-    s_BG_palette_data flags;
-}BG_palette_data;
+    s_Palette_data flags;
+}Palette_data;
 
 
 

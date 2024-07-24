@@ -47,16 +47,18 @@ void GameLoop::handleFrame()
 
 u8 GameLoop::step()
 {
-	u8 currCycle = mCPU.executeOpcode(0x01);
+	//u8 currCycle = mCPU.executeOpcode(0x01);
 
-	mPPU->writeOAM(0, 20, m_XPos, 1, 0);
-	m_XPos++;
+	//mPPU->writeOAM(0, 20, 20, 1, 0);
+	//m_XPos++;
 
-	mPPU->render(currCycle);
+	//mPPU->render(currCycle);
+	mPPU->render(12);
 
 	//mCPU.callInterruptHandler();
 
-	return currCycle;
+	return 12;
+	//return currCycle;
 }
 
 void GameLoop::synchroniseFrame()

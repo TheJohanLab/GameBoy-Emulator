@@ -158,9 +158,9 @@ void PPU::incLY()
 }
 
 //FF47
-BG_palette_data PPU::getBGP() const
+Palette_data PPU::getBGP() const
 {
-	BG_palette_data flags;
+	Palette_data flags;
 	flags.byte = mBus->read(BG_PALETTE);
 	return flags;
 }
@@ -176,10 +176,20 @@ u8 PPU::readOBP0() const
 	return mBus->read(OBP0);
 }
 
+void PPU::setOBP0(const u8 flags)
+{
+	mBus->write(OBP0, flags);
+}
+
 //FF49
-u8 PPU::readOBP1() const
+ u8 PPU::readOBP1() const
 {
 	return mBus->read(OBP1);
+}
+
+void PPU::setOBP1(const u8 flags)
+{
+	mBus->write(OBP1, flags);
 }
 
 
@@ -372,7 +382,7 @@ void PPU::renderBGScanline()
 		u8 tileX = ((readSCX() + x) / 8) % 32;
 
 		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
-		u16 tileIndex = readIndexInTileMap(tileX, tileY);
+		u16 tileIndex = readIndexInTileMap(tileX, tileY, 0);
 
 		// TODO : gérer le cas index négatif
 		// 16 car une tile fait 16 bytes de long dans la VRAM
@@ -390,7 +400,7 @@ void PPU::renderBGScanline()
 		u8 pixelColorIdMSB = (lineMSB >> (7 - pixelXInTile)) & 0x01;
 		u8 pixelColorID = pixelColorIdLSB + (pixelColorIdMSB << 1);
 
-		renderPixel(pixelColorID, x, readLY());
+		renderPixel(pixelColorID, x, readLY(), getBGP().byte, false);
 	}
 
 
@@ -411,8 +421,8 @@ void PPU::renderWindowScanline()
 	// On charge la palette
 	auto backgroundPalette = getBGP();
 
-	//A changer en fonction de LCD control
-	u16 tileAddressingOffset = 0x0400;
+	//A changer en fonction de LCD control (BLOCK)
+	u16 tileAddressingOffset = 0x0000;
 
 	u8 tileYInWindow = lineYInWindow / 8;
 	u8 pixelYInTile = lineYInWindow % 8;
@@ -429,10 +439,10 @@ void PPU::renderWindowScanline()
 
 		// TODO : gérer le cas index négatif
 		// 16 car une tile fait 16 bytes de long dans la VRAM	
-		u16 tileIndex = readIndexInTileMap(tileXInWindow, tileYInWindow);
+		u16 tileIndex = readIndexInTileMap(tileXInWindow, tileYInWindow, 1);
 
 		// * 2 car une ligne d'une tile est composée de 2 bytes
-		u16 tileIndexInVRAM = (tileIndex + tileAddressingOffset) * 16;
+		u16 tileIndexInVRAM = (tileIndex+ tileAddressingOffset) * 16;
 
 		// * 2 car une ligne d'une tile est composée de 2 bytes
 		u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
@@ -446,7 +456,7 @@ void PPU::renderWindowScanline()
 		u8 pixelColorIdMSB = (lineMSB >> (7 - pixelXInTile)) & 0x01;
 		u8 pixelColorID = pixelColorIdLSB + (pixelColorIdMSB << 1);
 
-		renderPixel(pixelColorID, x, readLY());
+		renderPixel(pixelColorID, x, readLY(), getBGP().byte, false);
 
 	}
 
@@ -491,16 +501,15 @@ void PPU::renderOBJScanline()
 		u8 lineYInTile = ly - objectYOnScreen;
 
 
-		if (objectFlags.attr.YFlip)
-		{
-			u8 LSB = mBus->read(tileAddress + 2*(spriteHeightMode - lineYInTile - 1));
-			u8 MSB = mBus->read(tileAddress + 2*(spriteHeightMode - lineYInTile - 1) + 1);
-			lineData = JOIN_BYTES(MSB, LSB);
-
-		} else
+		if (!objectFlags.attr.YFlip)
 		{
 			u8 LSB = mBus->read(tileAddress + (2 * lineYInTile));
 			u8 MSB = mBus->read(tileAddress + (2 * lineYInTile) + 1);
+			lineData = JOIN_BYTES(MSB, LSB);
+		} else
+		{
+			u8 LSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1));
+			u8 MSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1) + 1);
 			lineData = JOIN_BYTES(MSB, LSB);
 		}
 
@@ -512,7 +521,7 @@ void PPU::renderOBJScanline()
 
 			if (pixelXPos >= 0 && pixelXPos < SCREEN_WIDTH)
 			{
-				if (objectFlags.attr.XFlip) 
+				if (!objectFlags.attr.XFlip) 
 				{
 					u8 pixelColorIDMSB = (lineData >> (8 + (7 - pixelIndex))) & 0x01;
 					u8 pixelColorIDLSB = (lineData >> (7 - pixelIndex)) & 0x01;
@@ -526,8 +535,9 @@ void PPU::renderOBJScanline()
 
 			}
 
+			u8 palette = objectFlags.attr.DMGPalette ? readOBP1() : readOBP0();
 			// TODO : appeler render avec la bonne palette
-			renderPixel(pixelColorID, pixelXPos, ly, true);
+			renderPixel(pixelColorID, pixelXPos, ly, palette, true);
 		}
 
 		
@@ -555,26 +565,22 @@ void PPU::initializePPU()
 }
 
 
-void PPU::renderPixel(u8 pixelID, int x, int y, bool object)
+void PPU::renderPixel(u8 pixelID, int x, int y, u8 palette, bool object)
 {
 	if (x < 0 || y < 0)
 		return;
 
-	auto bgp = getBGP();
-	// 11 10 01 00
-
 	if (object && pixelID == 0x00)
 		return;
 
-	Pixel pixelColor = mScreenColors[bgp.byte >> (2 * pixelID) & 0x03];
+	Pixel pixelColor = mScreenColors[palette >> (2 * pixelID) & 0x03];
 	mPixelArray[y][x] = pixelColor;
 }
 
 
-u8 PPU::readIndexInTileMap(u8 xIndex, u8 yIndex) const
+u8 PPU::readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const
 {
-	u16 BGModeAddressingOffset = 0x1800; // 0 ou 0x1000 selon flag (nb de la tilemap)
-	return mBus->read(VRAM_BEG_ADDRESS + BGModeAddressingOffset + (yIndex*32) + xIndex);
+	return mBus->read(VRAM_BEG_ADDRESS + 0x1800 + (tileMapId * 0x0400) + (yIndex*32) + xIndex);
 }
 
 
@@ -597,10 +603,10 @@ void PPU::startDMATransfer(const u8& address)
 	for (u8 objectIndex = 0x00; objectIndex < 40; objectIndex++ )
 	{
 		writeOAM(objectIndex, 
-		sourceAddress | (objectIndex * 4),
-		sourceAddress | (objectIndex * 4 + 1), 
-		sourceAddress | (objectIndex * 4 + 2), 
-		sourceAddress | (objectIndex * 4 + 3));
+		mBus->read(sourceAddress | (objectIndex * 4)),
+		mBus->read(sourceAddress | (objectIndex * 4 + 1)),
+		mBus->read(sourceAddress | (objectIndex * 4 + 2)),
+		mBus->read(sourceAddress | (objectIndex * 4 + 3)));
 	}
 
 	//TODO Attendre 160 mcycles ou 640 dots

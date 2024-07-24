@@ -5,6 +5,7 @@
 
 class OAM {
 
+
 public:
 	typedef struct s_Attributes_Flags {
 		u8 CGBAttr : 4; // Not used in DMG

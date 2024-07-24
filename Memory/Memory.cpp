@@ -54,7 +54,7 @@ Memory::Memory()
 	//Tile map 2
 	for (int i = 0; i < 1024; i++)
 	{
-		write(0x9C00 + i, 1);
+		write(0x9C00 + i, 0);
 	}
 }
 

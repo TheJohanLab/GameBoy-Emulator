@@ -13,6 +13,7 @@
 
 #include "Utils/Log.h"
 #include "Utils/Utils.h"
+#include "Utils/Addresses.h"
 
 int main(int argc, char** argv)
 {
@@ -36,10 +37,13 @@ int main(int argc, char** argv)
 	//bus.write(0xFE00, 0x0A);
 	//ppu.render();
 
-	//ppu.writeOAM(0, 28, 20, 2, 0);
-	ppu.writeOAM(1, 40, 20, 1, 0);
-	ppu.writeOAM(2, 98, 20, 0, 0);
-	ppu.writeOAM(3, 128, 20, 1, 0);
+	bus->write(0xC000, 0x14);
+	bus->write(0xC001, 0x1C);
+	bus->write(0xC002, 2);
+	bus->write(0xC003, 0);
+
+	bus->write(DMA, 0xC0);
+
 	gameLoop.startGame();
 
 

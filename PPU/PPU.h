@@ -65,11 +65,13 @@ public:
 	void incLY();
 
 
-	BG_palette_data getBGP() const; //FF47
+	Palette_data getBGP() const; //FF47
 	void setBGP(const u8 flags);
 
 	u8 readOBP0() const; // FF48
+	void setOBP0(const u8 flags);
 	u8 readOBP1() const; // FF49
+	void setOBP1(const u8 flags);
 
 	u8 readWY() const; //FF4A
 	u8 readWX() const; //FF4B
@@ -90,10 +92,8 @@ public:
 
 private:
 
-
-
 	void initializePPU();
-	void renderPixel(u8 pixelColor, int x, int y, bool object = false);
-	u8 readIndexInTileMap(u8 xIndex, u8 yIndex) const;
+	void renderPixel(u8 pixelColor, int x, int y, u8 palette, bool object = false);
+	u8 readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const;
 };
 

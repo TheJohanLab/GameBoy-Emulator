@@ -1,6 +1,8 @@
 #include "GameLoop.h"
 
-GameLoop::GameLoop(CPU & cpu, PPU* ppu)
+#include "../Utils/Log.h"
+
+GameLoop::GameLoop(CPU* cpu, PPU* ppu)
 	:mCPU(cpu), mPPU(ppu)
 {
 	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
@@ -24,17 +26,24 @@ void GameLoop::startGame()
 void GameLoop::handleFrame()
 {
 	if (mCycles < cyclesPerFrame)
+	//if (mCycles < 20)
 	{
 		mCycles += step();
+		//GBE_LOG_INFO("mCycles {0}", mCycles);
 		return;
 	}
 
-	std::cout << "Nombre d'instructions : " << mCycles / 4 << std::endl;
-	std::cout << "Nombre de cycles : " << mCycles << std::endl;
+
+	//std::cout << "Nombre d'instructions : " << mCycles / 4 << std::endl;
+	//std::cout << "Nombre de cycles : " << mCycles << std::endl;
+	
+
+	//mPPU->draw();
+	mPPU->incSCY();
 
 	mCycles -= cyclesPerFrame;
 
-	std::cout << "Nombre de cycles après reset : " << mCycles << std::endl;
+	//std::cout << "Nombre de cycles après reset : " << mCycles << std::endl;
 	//TODO Faire une methode qui gere tous les processus du CPU par frame
 	//u8 currCycle = mCPU.executeOpcode(0x01);
 	//mCPU.callInterruptHandler();
@@ -72,7 +81,7 @@ void GameLoop::synchroniseFrame()
 
 		if (frameElapsedInSec >= timePerFrame)
 		{
-			std::cout << "frameElapsedInSec" << frameElapsedInSec << "\n";
+			//GBE_LOG_INFO("frameElapsedInSec : {0}", frameElapsedInSec);
 			break;
 		}
 	}

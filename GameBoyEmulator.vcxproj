@@ -65,6 +65,10 @@
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\SDL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -84,11 +88,16 @@
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\SDL2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bus\Bus.cpp" />
     <ClCompile Include="Clock\Clock.cpp" />
     <ClCompile Include="CPU\CPU.cpp" />
+    <ClCompile Include="Emulator\Emulator.cpp" />
     <ClCompile Include="GameLoop\GameLoop.cpp" />
     <ClCompile Include="Instruction\InstructionFactory.cpp" />
     <ClCompile Include="Instruction\InstructionJump.cpp" />
@@ -190,6 +199,7 @@
     <ClInclude Include="Dependencies\SDL2\include\SDL_version.h" />
     <ClInclude Include="Dependencies\SDL2\include\SDL_video.h" />
     <ClInclude Include="Dependencies\SDL2\include\SDL_vulkan.h" />
+    <ClInclude Include="Emulator\Emulator.h" />
     <ClInclude Include="GameLoop\GameLoop.h" />
     <ClInclude Include="Instruction\InstructionEnum.h" />
     <ClInclude Include="Instruction\InstructionFactory.h" />

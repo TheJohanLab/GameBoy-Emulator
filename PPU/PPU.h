@@ -63,6 +63,7 @@ public:
 	u8 readLYC() const; //FF45
 
 	void incLY();
+	void incSCY();
 
 
 	Palette_data getBGP() const; //FF47
@@ -89,6 +90,8 @@ public:
 
 	void setCloseEventCallback(std::function<void()> callback);
 	void handleWindowEvents();
+
+	void draw();
 
 private:
 

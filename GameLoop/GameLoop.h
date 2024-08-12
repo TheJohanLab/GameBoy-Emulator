@@ -8,7 +8,7 @@
 class GameLoop
 {
 private:
-	CPU mCPU;
+	CPU* mCPU;
 	PPU* mPPU;
 	bool mIsRunning;
 	bool mIsPaused;
@@ -18,10 +18,10 @@ private:
 
 	u8 m_XPos = 0;
 
-	u16 mCycles = 0;
+	u32 mCycles = 0;
 
 public:
-	GameLoop(CPU & cpu, PPU * ppu);
+	GameLoop(CPU* cpu, PPU* ppu);
 	virtual ~GameLoop() = default;
 
 	void startGame();

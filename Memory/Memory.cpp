@@ -56,6 +56,10 @@ Memory::Memory()
 	{
 		write(0x9C00 + i, 0);
 	}
+
+	mLCDRegistries[2] = 22;
+	mLCDRegistries[3] = 17;
+
 }
 
 u8 Memory::read(u16 const& address) const

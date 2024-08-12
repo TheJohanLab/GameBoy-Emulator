@@ -154,7 +154,12 @@ void PPU::incLY()
 {
 	u8 ly = mBus->read(LY);
 	mBus->write(LY, (ly + 1) % 144);
+}
 
+void PPU::incSCY()
+{
+	u8 scy = mBus->read(SCY);
+	mBus->write(SCY, (scy + 1) % 256);
 }
 
 //FF47
@@ -250,7 +255,7 @@ void PPU::render(u8 cycle)
 	*		1 : VBLANK	 : 10 scanlines = 4560 dots
 	*/
 
-	setPPUMode(PPU_DRAWING);
+	//setPPUMode(PPU_DRAWING);
 
 	mPPUModeDots += cycle;
 
@@ -263,7 +268,9 @@ void PPU::render(u8 cycle)
 		if (mPPUModeDots >= PPU_HBLANK_DOTS) 
 		{
 			mPPUModeDots -= PPU_HBLANK_DOTS;
-
+			draw();
+			incLY();
+			setPPUMode(PPU_OAM_SCAN);
 			// On passe à la ligne suivante
 
 			/* Si ligne suivante = 144 :
@@ -279,7 +286,7 @@ void PPU::render(u8 cycle)
 
 
 		}
-				 
+		
 		break;
 
 		 // Mode 1
@@ -292,6 +299,7 @@ void PPU::render(u8 cycle)
 			// 10 scanlines
 
 			// On incrémente la ligne
+			incLY();
 
 			// Si ligne suivante = 154 : on revient en haut et passe en OAM
 			// Interrupt ?
@@ -317,26 +325,31 @@ void PPU::render(u8 cycle)
 	case PPU_DRAWING :
 		// Render Scanline
 
-		for (u8 i = 0; i < SCREEN_HEIGHT; i++)
+		renderScanline();
+		/*for (u8 i = 0; i < SCREEN_HEIGHT; i++)
 		{
-			renderScanline();
-			incLY();
-		}
-
-		/*if (mPPUModeDots >= PPU_DRAWING_DOTS) 
-		{
-			mPPUModeDots -= PPU_DRAWING_DOTS;
-
-			setPPUMode(PPU_HBLANK);
+			
 		}*/
 
+		if (mPPUModeDots >= PPU_DRAWING_DOTS)
+		{
+			mPPUModeDots -= PPU_DRAWING_DOTS;
+			auto ly = readLY();
+			
+			if (ly >= SCREEN_HEIGHT - 1)
+				setPPUMode(PPU_HBLANK);
+			else
+				setPPUMode(PPU_VBLANK);
+			
+		}
 		// On passe en HBLANK
 		// Interrupt ?
 
 		break;
 	}
 
-	mScreen->render(mPixelArray);
+	//mScreen->render(mPixelArray);
+	
 }
 
 void PPU::renderScanline()
@@ -620,4 +633,9 @@ void PPU::setCloseEventCallback(std::function<void()> callback)
 void PPU::handleWindowEvents()
 {
 	mScreen->handleEvents();
+}
+
+void PPU::draw()
+{
+	mScreen->render(mPixelArray);
 }

@@ -270,6 +270,7 @@ void PPU::render(u8 cycle)
 			mPPUModeDots -= PPU_HBLANK_DOTS;
 			draw();
 			incLY();
+			incSCY();
 			setPPUMode(PPU_OAM_SCAN);
 			// On passe à la ligne suivante
 

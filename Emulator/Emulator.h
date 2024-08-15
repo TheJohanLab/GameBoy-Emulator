@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include "../Bus/Bus.h"
-#include "../Clock/Clock.h"
+#include "Bus/Bus.h"
+#include "Clock/Clock.h"
 #include <chrono>
 #include "../CPU/CPU.h"
 

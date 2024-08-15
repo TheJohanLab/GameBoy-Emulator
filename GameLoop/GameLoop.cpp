@@ -39,7 +39,7 @@ void GameLoop::handleFrame()
 	
 
 	//mPPU->draw();
-	mPPU->incSCY();
+	//mPPU->incSCY();
 
 	mCycles -= cyclesPerFrame;
 
@@ -56,18 +56,18 @@ void GameLoop::handleFrame()
 
 u8 GameLoop::step()
 {
-	//u8 currCycle = mCPU.executeOpcode(0x01);
+	u8 currCycle = mCPU->executeOpcode(0x01);
 
 	//mPPU->writeOAM(0, 20, 20, 1, 0);
 	//m_XPos++;
 
-	//mPPU->render(currCycle);
-	mPPU->render(12);
+	mPPU->render(currCycle);
+	//mPPU->render(12);
 
 	//mCPU.callInterruptHandler();
 
-	return 12;
-	//return currCycle;
+	//return 12;
+	return currCycle;
 }
 
 void GameLoop::synchroniseFrame()

@@ -2,6 +2,7 @@
 #include "../Utils/Addresses.h"
 #include "../Utils/Log.h"
 
+
 PPU::PPU(Bus* bus, Screen* screen)
 	:mBus(bus), mScreen(screen)
 {
@@ -379,8 +380,11 @@ void PPU::renderBGScanline()
 	// On charge la palette
 	auto backgroundPalette = getBGP();
 
-	//A changer en fonction de LCD control
-	u16 tileAddressingOffset = 0;
+	//Numéro de la TileMap utilisée (LCDC.3)
+	u8 tileMapNumber = getLCDControl().flags.BGtileMap;
+
+	//Type d'adressage de la TileData (LCDC.4)
+	u8 tileDataAddressingType = getLCDControl().flags.BG_WindowTiles;
 
 	// On récpuère l'index Y (vertical) de la tile dans la tilemap en cours
 	// /8 car une tile est composée de 8 x 8 pixels
@@ -396,11 +400,21 @@ void PPU::renderBGScanline()
 		u8 tileX = ((readSCX() + x) / 8) % 32;
 
 		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
-		u16 tileIndex = readIndexInTileMap(tileX, tileY, 0);
+		//u8 tileIndex = tileDataAddressingType == 1 ? readIndexInTileMap(tileX, tileY, tileMapNumber) : (int8_t)readIndexInTileMap(tileX, tileY, tileMapNumber);
 
-		// TODO : gérer le cas index négatif
-		// 16 car une tile fait 16 bytes de long dans la VRAM
-		u16 tileIndexInVRAM = (tileIndex + tileAddressingOffset) * 16;
+		u16 tileIndexInVRAM;
+		if (tileDataAddressingType == 1)
+		{
+			u8 tileIndex = readIndexInTileMap(tileX, tileY, tileMapNumber);
+			tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		}
+		else
+		{
+			int8_t tileIndex = (int8_t)readIndexInTileMap(tileX, tileY, tileMapNumber);
+			tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		}
+
+		//u16 tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
 
 		// * 2 car une ligne d'une tile est composée de 2 bytes
 		u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
@@ -435,8 +449,11 @@ void PPU::renderWindowScanline()
 	// On charge la palette
 	auto backgroundPalette = getBGP();
 
-	//A changer en fonction de LCD control (BLOCK)
-	u16 tileAddressingOffset = 0x0000;
+	//Numéro de la TileMap utilisée (LCDC.6)
+	u8 tileMapNumber = getLCDControl().flags.windowTileMap;
+
+	//Type d'adressage de la TileData (LCDC.4)
+	u8 tileDataAddressingType = getLCDControl().flags.BG_WindowTiles;
 
 	u8 tileYInWindow = lineYInWindow / 8;
 	u8 pixelYInTile = lineYInWindow % 8;
@@ -451,12 +468,24 @@ void PPU::renderWindowScanline()
 		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
 		u8 tileXInWindow = (x - xPosOnScreen) / 8;
 
-		// TODO : gérer le cas index négatif
-		// 16 car une tile fait 16 bytes de long dans la VRAM	
-		u16 tileIndex = readIndexInTileMap(tileXInWindow, tileYInWindow, 1);
+		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
+		//auto a = (int8_t)readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber);
+		//u8 tileIndex = tileDataAddressingType == 1 ? readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber) : (int8_t)readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber);
 
-		// * 2 car une ligne d'une tile est composée de 2 bytes
-		u16 tileIndexInVRAM = (tileIndex+ tileAddressingOffset) * 16;
+		//TODO utiliser std::variant pour remplacer le if/else
+		u16 tileIndexInVRAM;
+		if (tileDataAddressingType == 1)
+		{
+			u8 tileIndex = readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber);
+			tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		}
+		else
+		{
+			int8_t tileIndex = (int8_t)readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber);
+			tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		}
+
+		//u16 tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
 
 		// * 2 car une ligne d'une tile est composée de 2 bytes
 		u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
@@ -594,7 +623,26 @@ void PPU::renderPixel(u8 pixelID, int x, int y, u8 palette, bool object)
 
 u8 PPU::readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const
 {
-	return mBus->read(VRAM_BEG_ADDRESS + 0x1800 + (tileMapId * 0x0400) + (yIndex*32) + xIndex);
+	//400 est la taille d'une tilemap
+	return mBus->read(VRAM_BEG_ADDRESS + TILEMAPS_OFFSET + (tileMapId * 0x0400) + (yIndex*32) + xIndex);
+}
+
+inline u16 PPU::getTileIndexInVRAM(u8 tileIndex, u8 tileDataAddressingType) const
+{
+	//0 ou 1000 pour correspondre à l'adresse de depart de le bonne tilemap (8000 ou 9000)
+	u16 tileAddressingOffset = tileDataAddressingType == 1 ? 0x0000 : 0x1000;
+
+	// 16 car une tile fait 16 bytes de long dans la VRAM
+	return tileAddressingOffset + (tileIndex * 16);
+}
+
+inline u16 PPU::getTileIndexInVRAM(int8_t tileIndex, u8 tileDataAddressingType) const
+{
+	//0 ou 1000 pour correspondre à l'adresse de depart de le bonne tilemap (8000 ou 9000)
+	u16 tileAddressingOffset = tileDataAddressingType == 1 ? 0x0000 : 0x1000;
+
+	// 16 car une tile fait 16 bytes de long dans la VRAM
+	return tileAddressingOffset + (tileIndex * 16);
 }
 
 

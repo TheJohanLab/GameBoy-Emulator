@@ -2,6 +2,8 @@
 #include "../Utils/Addresses.h"
 #include "../Utils/Log.h"
 
+template<class... Ts> struct overload : Ts... { using Ts::operator()...; };
+template<class... Ts> overload(Ts...) -> overload<Ts...>;
 
 PPU::PPU(Bus* bus, Screen* screen)
 	:mBus(bus), mScreen(screen)
@@ -402,17 +404,31 @@ void PPU::renderBGScanline()
 		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
 		//u8 tileIndex = tileDataAddressingType == 1 ? readIndexInTileMap(tileX, tileY, tileMapNumber) : (int8_t)readIndexInTileMap(tileX, tileY, tileMapNumber);
 
+		std::variant<u8, int8_t> tileIndex;
 		u16 tileIndexInVRAM;
-		if (tileDataAddressingType == 1)
-		{
-			u8 tileIndex = readIndexInTileMap(tileX, tileY, tileMapNumber);
-			tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
-		}
-		else
-		{
-			int8_t tileIndex = (int8_t)readIndexInTileMap(tileX, tileY, tileMapNumber);
-			tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
-		}
+
+		//if (tileDataAddressingType == 1)
+		//{
+		//	tileIndex = readIndexInTileMap(tileX, tileY, tileMapNumber);
+		//	//tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		//}
+		//else
+		//{
+		//	tileIndex = static_cast<int8_t>(readIndexInTileMap(tileX, tileY, tileMapNumber));
+		//	//tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		//}
+
+		tileIndex = tileDataAddressingType == 1
+			? std::variant<u8, int8_t>(readIndexInTileMap(tileX, tileY, tileMapNumber))
+			: std::variant<u8, int8_t>(static_cast<int8_t>(readIndexInTileMap(tileX, tileY, tileMapNumber)));
+
+
+
+		//tileIndexInVRAM = std::visit(overload{
+		//[&](u8 index) { return getTileIndexInVRAM(index, tileDataAddressingType); },
+		//[&](int8_t index) { return getTileIndexInVRAM(index, tileDataAddressingType); }
+		//	}, tileIndex);
+		tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
 
 		//u16 tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
 
@@ -473,17 +489,25 @@ void PPU::renderWindowScanline()
 		//u8 tileIndex = tileDataAddressingType == 1 ? readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber) : (int8_t)readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber);
 
 		//TODO utiliser std::variant pour remplacer le if/else
+		std::variant<u8, int8_t> tileIndex;
 		u16 tileIndexInVRAM;
-		if (tileDataAddressingType == 1)
-		{
-			u8 tileIndex = readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber);
-			tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
-		}
-		else
-		{
-			int8_t tileIndex = (int8_t)readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber);
-			tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
-		}
+
+		tileIndex = tileDataAddressingType == 1
+			? std::variant<u8, int8_t>(readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber))
+			: std::variant<u8, int8_t>(static_cast<int8_t>(readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber)));
+
+		tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+
+		//if (tileDataAddressingType == 1)
+		//{
+		//	u8 tileIndex = readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber);
+		//	tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		//}
+		//else
+		//{
+		//	int8_t tileIndex = (int8_t)readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber);
+		//	//tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		//}
 
 		//u16 tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
 
@@ -627,22 +651,32 @@ u8 PPU::readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const
 	return mBus->read(VRAM_BEG_ADDRESS + TILEMAPS_OFFSET + (tileMapId * 0x0400) + (yIndex*32) + xIndex);
 }
 
-inline u16 PPU::getTileIndexInVRAM(u8 tileIndex, u8 tileDataAddressingType) const
+//inline u16 PPU::getTileIndexInVRAM(u8 tileIndex, u8 tileDataAddressingType) const
+//{
+//	//0 ou 1000 pour correspondre à l'adresse de depart de le bonne tilemap (8000 ou 9000)
+//	u16 tileAddressingOffset = tileDataAddressingType == 1 ? 0x0000 : 0x1000;
+//
+//	// 16 car une tile fait 16 bytes de long dans la VRAM
+//	return tileAddressingOffset + (tileIndex * 16);
+//}
+//
+//inline u16 PPU::getTileIndexInVRAM(int8_t tileIndex, u8 tileDataAddressingType) const
+//{
+//	//0 ou 1000 pour correspondre à l'adresse de depart de le bonne tilemap (8000 ou 9000)
+//	u16 tileAddressingOffset = tileDataAddressingType == 1 ? 0x0000 : 0x1000;
+//
+//	// 16 car une tile fait 16 bytes de long dans la VRAM
+//	return tileAddressingOffset + (tileIndex * 16);
+//}
+
+inline u16 PPU::getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const
 {
 	//0 ou 1000 pour correspondre à l'adresse de depart de le bonne tilemap (8000 ou 9000)
 	u16 tileAddressingOffset = tileDataAddressingType == 1 ? 0x0000 : 0x1000;
 
-	// 16 car une tile fait 16 bytes de long dans la VRAM
-	return tileAddressingOffset + (tileIndex * 16);
-}
-
-inline u16 PPU::getTileIndexInVRAM(int8_t tileIndex, u8 tileDataAddressingType) const
-{
-	//0 ou 1000 pour correspondre à l'adresse de depart de le bonne tilemap (8000 ou 9000)
-	u16 tileAddressingOffset = tileDataAddressingType == 1 ? 0x0000 : 0x1000;
-
-	// 16 car une tile fait 16 bytes de long dans la VRAM
-	return tileAddressingOffset + (tileIndex * 16);
+	return std::visit([&](auto&& index) -> u16 {
+		return static_cast<u16>(tileAddressingOffset + (index * 16));
+		}, tileIndex);
 }
 
 

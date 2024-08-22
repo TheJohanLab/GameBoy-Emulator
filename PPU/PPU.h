@@ -2,6 +2,8 @@
 
 #include <array>
 #include <memory>
+#include <variant>
+#include <cstdint>
 
 #include "../Bus/Bus.h"
 #include "../Screen/Screen.h"
@@ -98,7 +100,9 @@ private:
 	void initializePPU();
 	void renderPixel(u8 pixelColor, int x, int y, u8 palette, bool object = false);
 	u8 readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const;
-	inline u16 getTileIndexInVRAM(u8 tileIndex, u8 tileDataAddressingType) const;
-	inline u16 getTileIndexInVRAM(int8_t tileIndex, u8 tileDataAddressingType) const;
+
+	//inline u16 getTileIndexInVRAM(u8 tileIndex, u8 tileDataAddressingType) const;
+	//inline u16 getTileIndexInVRAM(int8_t tileIndex, u8 tileDataAddressingType) const;
+	inline u16 getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const;
 };
 

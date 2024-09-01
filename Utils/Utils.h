@@ -33,6 +33,8 @@ const u8 PPU_DRAWING = 0x03;
 #define PPU_OAM_SCAN_DOTS 80
 #define PPU_DRAWING_DOTS 172
 
+#define TILE_WIDTH 8
+
 
 typedef struct s_flags {
     u8 r : 4;

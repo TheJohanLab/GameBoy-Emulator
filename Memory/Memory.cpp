@@ -45,6 +45,15 @@ Memory::Memory()
 	mVRAM[44] = 0b11010111;	mVRAM[45] = 0b11000110;
 	mVRAM[46] = 0b11110001;	mVRAM[47] = 0b11111011;
 
+	mVRAM[48] = 0b00111100;	mVRAM[49] = 0b01111110;
+	mVRAM[50] = 0b01000010;	mVRAM[51] = 0b01000010;
+	mVRAM[52] = 0b01000010;	mVRAM[53] = 0b01000010;
+	mVRAM[54] = 0b01000010;	mVRAM[55] = 0b01000010;
+	mVRAM[56] = 0b01111110;	mVRAM[57] = 0b01011110;
+	mVRAM[58] = 0b01111110;	mVRAM[59] = 0b00001010;
+	mVRAM[60] = 0b01111100;	mVRAM[61] = 0b01010110;
+	mVRAM[62] = 0b00111000;	mVRAM[63] = 0b01111100;
+
 	u16 offset = 0x1000 - 16;
 
 	mVRAM[offset + 0] = 0b00111100;		mVRAM[offset + 1] = 0b01111110;
@@ -59,13 +68,13 @@ Memory::Memory()
 	//Tile map 1
 	for (int i = 0; i < 1024; i++)
 	{
-		write(0x9800 + i, 255);
+		write(0x9800 + i, 1);
 	}
 
 	//Tile map 2
 	for (int i = 0; i < 1024; i++)
 	{
-		write(0x9C00 + i, 255);
+		write(0x9C00 + i, 1);
 	}
 
 	mLCDRegistries[2] = 22;

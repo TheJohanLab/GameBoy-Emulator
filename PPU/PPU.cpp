@@ -613,26 +613,59 @@ inline void PPU::storePixelsInfos(u8 spriteHeightMode)
 void PPU::handleObjectsOverlap(int16_t objectXOnScreen, u8 objOamIndex, u8 currentTilePixel, u8 spriteHeightMode)
 {
 	//TODO recuperer les pixelsID pour pouvoir gerer la transparence en cas d'overlap	
-	u8 pixelID = getCurrentObjectPixelId(objOamIndex, currentTilePixel, spriteHeightMode);
 
-	
 	if (mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] != objectXOnScreen)
 	{
 		if (objectXOnScreen < mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD])
 		{
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
+			u8 pixelID = getCurrentObjectPixelId(
+				objOamIndex,
+				currentTilePixel,
+				spriteHeightMode);
+
+			if (pixelID != 0)
+			{
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
+			}
+		}
+		else
+		{
+			u8 pixelID = getCurrentObjectPixelId(
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX],
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX],
+				spriteHeightMode);
+
+			if (pixelID == 0)
+			{
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
+			}
 		}
 	}
 	else
 	{
-		if (objOamIndex < mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX])
-		{
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
-		}
+	
+		
+			u8 pixelID = getCurrentObjectPixelId(
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX],
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX],
+				spriteHeightMode);
+
+			if (pixelID == 0)
+			{
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
+				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
+			}
+
+			//mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
+			//mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
+			//mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
+		
+		
 	}
 }
 

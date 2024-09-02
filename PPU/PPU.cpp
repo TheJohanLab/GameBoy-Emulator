@@ -142,7 +142,8 @@ u8 PPU::readSCX() const
 //FF44
 u8 PPU::readLY() const
 {
-	return mBus->read(LY);
+	return mLY;
+	//return mBus->read(LY);
 }
 
 //FF45
@@ -153,8 +154,9 @@ u8 PPU::readLYC() const
 
 void PPU::incLY()
 {
-	u8 ly = mBus->read(LY);
-	mBus->write(LY, (ly + 1) % 144);
+	mLY = (mLY + 1) % 144;
+	//u8 ly = mBus->read(LY);
+	mBus->write(LY, mLY);
 }
 
 void PPU::incSCY()
@@ -491,6 +493,10 @@ void PPU::renderWindowScanline()
 
 }
 
+#define X_COORD 0
+#define INDEX 1
+#define PIXEL_INDEX 2
+
 void PPU::renderOBJScanline()
 {
 
@@ -498,142 +504,15 @@ void PPU::renderOBJScanline()
 	std::vector<u8> objectsOAMIndex;
 	objectsOAMIndex.reserve(LINE_OBJ_LIMIT);
 
+	mObjectsOAMIndex.clear();
+	mCurrentLinePixelsInfos.assign(SCREEN_WIDTH, { -1, -1, -1 });
+
 	u8 spriteHeightMode = getLCDControl().flags.OBJSize ? 16 : 8;
-	u8 ly = readLY();
-	u8 objCnt = 0;
-
-	for (int i = 0; i < MAX_OBJECTS; i ++)
-	{
-		auto objectY = mOAM->getObjects()[i].YPos;
-		u8 objectYOnScreen = objectY - 16;
-
-		if (ly >= (objectYOnScreen) && ly < objectYOnScreen + spriteHeightMode)
-		{
-			objectsOAMIndex.emplace_back(i);
-			objCnt++;
-		}
-
-		if (objCnt >= LINE_OBJ_LIMIT)
-			break;
-	}
-
-	std::vector < std::array<int16_t, 3>> pixelXCoordAndIndex(SCREEN_WIDTH, { -1, -1, -1 });
-
-	// 1 - X bas = priorité haute
-	// 2 - index bas = priorité haute
-
-#define X_COORD 0
-#define INDEX 1
-#define PIXEL_INDEX 2
-
-	for (const auto& objOamIndex : objectsOAMIndex)
-	{
-		OAM::Object object = mOAM->getObjects()[objOamIndex];
-
-		int16_t objectXOnScreen = object.XPos - 8;
-
-		for (int i = 0; i < TILE_WIDTH; i++)
-		{
-			if (pixelXCoordAndIndex[objectXOnScreen + i][X_COORD] == -1)
-			{
-				pixelXCoordAndIndex[objectXOnScreen + i][X_COORD] = objectXOnScreen;
-				pixelXCoordAndIndex[objectXOnScreen + i][INDEX] = objOamIndex;
-				pixelXCoordAndIndex[objectXOnScreen + i][PIXEL_INDEX] = i;
-			} 
-			else 
-			{
-				//TODO recuperer les pixelsID pour pouvoir gerer la transparence en cas d'overlap	
-
-				if (pixelXCoordAndIndex[objectXOnScreen + i][X_COORD] != objectXOnScreen)
-				{
-					if (objectXOnScreen < pixelXCoordAndIndex[objectXOnScreen + i][X_COORD]) 
-					{
-						pixelXCoordAndIndex[objectXOnScreen + i][X_COORD] = objectXOnScreen;
-						pixelXCoordAndIndex[objectXOnScreen + i][INDEX] = objOamIndex;
-						pixelXCoordAndIndex[objectXOnScreen + i][PIXEL_INDEX] = i;
-					}
-				}
-				else 
-				{
-					if (objOamIndex < pixelXCoordAndIndex[objectXOnScreen + i][INDEX])
-					{
-						pixelXCoordAndIndex[objectXOnScreen + i][X_COORD] = objectXOnScreen;
-						pixelXCoordAndIndex[objectXOnScreen + i][INDEX] = objOamIndex;
-						pixelXCoordAndIndex[objectXOnScreen + i][PIXEL_INDEX] = i;
-					}
-				}
-			}
-		}
-	}
-
-	int a = 0;
-	//for (const auto objOamIndex : objectsOAMIndex)
-	//{
-	for (int pixel = 0; pixel < SCREEN_WIDTH; pixel++)
-	{
-		const auto& pixelInfo = pixelXCoordAndIndex[pixel];
-
-		if (pixelInfo[INDEX] == -1)
-			continue;
-
-		OAM::Object object = mOAM->getObjects()[pixelInfo[INDEX]];
-
-		int16_t objectYOnScreen = object.YPos - 16;
-		int16_t objectXOnScreen = object.XPos - 8;
-
-
-
-		u8 objectTileIndex = spriteHeightMode == 16 ? object.tileIndex & 0xFE : object.tileIndex;
-		OAM::Attributes_Flags objectFlags = object.AttributeFlags;
-
-		u16 lineData;
-		
-		u16 tileAddress = VRAM_BEG_ADDRESS + objectTileIndex * 16;
-
-		u8 lineYInTile = ly - objectYOnScreen;
-
-
-		if (!objectFlags.attr.YFlip)
-		{
-			u8 LSB = mBus->read(tileAddress + (2 * lineYInTile));
-			u8 MSB = mBus->read(tileAddress + (2 * lineYInTile) + 1);
-			lineData = JOIN_BYTES(MSB, LSB);
-		} else
-		{
-			u8 LSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1));
-			u8 MSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1) + 1);
-			lineData = JOIN_BYTES(MSB, LSB);
-		}
-
-		//for (u8 pixelIndex = 0; pixelIndex < 8; pixelIndex++)
-		//{
-			//int16_t pixelXPos = objectXOnScreen + pixelIndex;
-		u8 pixelColorID = 0;
-
-			//if (pixelXPos >= 0 && pixelXPos < SCREEN_WIDTH)
-			//{
-		if (!objectFlags.attr.XFlip) 
-		{
-			u8 pixelColorIDMSB = (lineData >> (8 + (7 - pixelInfo[PIXEL_INDEX]))) & 0x01;
-			u8 pixelColorIDLSB = (lineData >> (7 - pixelInfo[PIXEL_INDEX])) & 0x01;
-			pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
-		} else 
-		{
-			u8 pixelColorIDMSB = (lineData >> (8 + pixelInfo[PIXEL_INDEX])) & 0x01;
-			u8 pixelColorIDLSB = (lineData >> pixelInfo[PIXEL_INDEX]) & 0x01;
-			pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
-		}
-
-			//}
-
-		u8 palette = objectFlags.attr.DMGPalette ? readOBP1() : readOBP0();
-		// TODO : appeler render avec la bonne palette
-		renderPixel(pixelColorID, pixel, ly, palette, true);
-		//}
-
-		
-	}
-
+	//u8 ly = readLY();
+	
+	storeObjectsInCurrentLine(spriteHeightMode);
+	storePixelsInfos(spriteHeightMode);
+	renderCurrentLineObjectsPixels(spriteHeightMode);
 
 }
 
@@ -655,6 +534,10 @@ void PPU::initializePPU()
 	setWY(50);
 
 	mOAM = std::make_shared<OAM>();
+	mObjectsOAMIndex.reserve(LINE_OBJ_LIMIT);
+	mCurrentLinePixelsInfos.reserve(SCREEN_WIDTH);
+	mCurrentLinePixelsInfos.assign(SCREEN_WIDTH, { -1, -1, -1 });
+
 }
 
 
@@ -663,8 +546,8 @@ void PPU::renderPixel(u8 pixelID, int x, int y, u8 palette, bool object)
 	if (x < 0 || y < 0)
 		return;
 
-	if (object && pixelID == 0x00)
-		return;
+	//if (object && pixelID == 0x00)
+	//	return;
 
 	Pixel pixelColor = mScreenColors[palette >> (2 * pixelID) & 0x03];
 	mPixelArray[y][x] = pixelColor;
@@ -678,6 +561,204 @@ u8 PPU::readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const
 }
 
 
+inline void PPU::storeObjectsInCurrentLine(u8 spriteHeightMode) 
+{
+	u8 objCnt = 0;
+	for (int i = 0; i < MAX_OBJECTS; i++)
+	{
+		auto objectY = mOAM->getObjects()[i].YPos;
+		u8 objectYOnScreen = objectY - 16;
+
+		if (mLY >= (objectYOnScreen) && mLY < objectYOnScreen + spriteHeightMode)
+		{
+			mObjectsOAMIndex.emplace_back(i);
+			objCnt++;
+		}
+
+		if (objCnt >= LINE_OBJ_LIMIT)
+			break;
+	}
+}
+
+inline void PPU::storePixelsInfos(u8 spriteHeightMode)
+{
+	// 1 - X bas = priorité haute
+	// 2 - index bas = priorité haute
+
+	for (const auto& objOamIndex : mObjectsOAMIndex)
+	{
+		OAM::Object object = mOAM->getObjects()[objOamIndex];
+
+		int16_t objectXOnScreen = object.XPos - 8;
+
+		for (int i = 0; i < TILE_WIDTH; i++)
+		{
+			// Current object doesn't overlap with any other object
+			if (mCurrentLinePixelsInfos[objectXOnScreen + i][X_COORD] == -1)
+			{
+				mCurrentLinePixelsInfos[objectXOnScreen + i][X_COORD] = objectXOnScreen;
+				mCurrentLinePixelsInfos[objectXOnScreen + i][INDEX] = objOamIndex;
+				mCurrentLinePixelsInfos[objectXOnScreen + i][PIXEL_INDEX] = i;
+			}
+
+			//Current object overlaps
+			else
+			{
+				handleObjectsOverlap(objectXOnScreen, objOamIndex, i, spriteHeightMode);
+			}
+		}
+	}
+}
+
+void PPU::handleObjectsOverlap(int16_t objectXOnScreen, u8 objOamIndex, u8 currentTilePixel, u8 spriteHeightMode)
+{
+	//TODO recuperer les pixelsID pour pouvoir gerer la transparence en cas d'overlap	
+	u8 pixelID = getCurrentObjectPixelId(objOamIndex, currentTilePixel, spriteHeightMode);
+
+	
+	if (mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] != objectXOnScreen)
+	{
+		if (objectXOnScreen < mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD])
+		{
+			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
+			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
+			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
+		}
+	}
+	else
+	{
+		if (objOamIndex < mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX])
+		{
+			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
+			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
+			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
+		}
+	}
+}
+
+inline u8 PPU::getCurrentObjectPixelId(u8 objOamIndex, u8 currentXTilePixel, u8 spriteHeightMode) const
+{
+	OAM::Object object = mOAM->getObjects()[objOamIndex];
+	OAM::Attributes_Flags objectFlags = object.AttributeFlags;
+
+	int16_t objectYOnScreen = object.YPos - 16;
+
+	u16 lineData;
+
+	u8 objectTileIndex = spriteHeightMode == 16 ? object.tileIndex & 0xFE : object.tileIndex;
+	u16 tileAddress = VRAM_BEG_ADDRESS + objectTileIndex * 16;
+
+	u8 lineYInTile = mLY - objectYOnScreen;
+
+
+	if (!objectFlags.attr.YFlip)
+	{
+		u8 LSB = mBus->read(tileAddress + (2 * lineYInTile));
+		u8 MSB = mBus->read(tileAddress + (2 * lineYInTile) + 1);
+		lineData = JOIN_BYTES(MSB, LSB);
+	}
+	else
+	{
+		u8 LSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1));
+		u8 MSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1) + 1);
+		lineData = JOIN_BYTES(MSB, LSB);
+	}
+
+	u8 pixelColorID = 0;
+
+
+	if (!objectFlags.attr.XFlip)
+	{
+		u8 pixelColorIDMSB = (lineData >> (8 + (7 - currentXTilePixel))) & 0x01;
+		u8 pixelColorIDLSB = (lineData >> (7 - currentXTilePixel)) & 0x01;
+		pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
+	}
+	else
+	{
+		u8 pixelColorIDMSB = (lineData >> (8 + currentXTilePixel)) & 0x01;
+		u8 pixelColorIDLSB = (lineData >> currentXTilePixel) & 0x01;
+		pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
+	}
+
+	return pixelColorID;
+
+}
+
+inline void PPU::renderCurrentLineObjectsPixels(u8 spriteHeightMode)
+{
+	//for (const auto objOamIndex : objectsOAMIndex)
+	//{
+	for (int pixel = 0; pixel < SCREEN_WIDTH; pixel++)
+	{
+		const auto& pixelInfo = mCurrentLinePixelsInfos[pixel];
+
+		if (pixelInfo[INDEX] == -1)
+			continue;
+
+		OAM::Object object = mOAM->getObjects()[pixelInfo[INDEX]];
+
+		//int16_t objectYOnScreen = object.YPos - 16;
+		//int16_t objectXOnScreen = object.XPos - 8;
+
+		OAM::Attributes_Flags objectFlags = object.AttributeFlags;
+		u8 pixelColorID = getCurrentObjectPixelId(
+			pixelInfo[INDEX], pixelInfo[PIXEL_INDEX], spriteHeightMode
+		);
+
+
+		//u8 objectTileIndex = spriteHeightMode == 16 ? object.tileIndex & 0xFE : object.tileIndex;
+
+		//u16 lineData;
+
+		//u16 tileAddress = VRAM_BEG_ADDRESS + objectTileIndex * 16;
+
+		//u8 lineYInTile = mLY - objectYOnScreen;
+
+
+		//if (!objectFlags.attr.YFlip)
+		//{
+		//	u8 LSB = mBus->read(tileAddress + (2 * lineYInTile));
+		//	u8 MSB = mBus->read(tileAddress + (2 * lineYInTile) + 1);
+		//	lineData = JOIN_BYTES(MSB, LSB);
+		//}
+		//else
+		//{
+		//	u8 LSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1));
+		//	u8 MSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1) + 1);
+		//	lineData = JOIN_BYTES(MSB, LSB);
+		//}
+
+		////for (u8 pixelIndex = 0; pixelIndex < 8; pixelIndex++)
+		////{
+		//	//int16_t pixelXPos = objectXOnScreen + pixelIndex;
+		//u8 pixelColorID = 0;
+
+		////if (pixelXPos >= 0 && pixelXPos < SCREEN_WIDTH)
+		////{
+		//if (!objectFlags.attr.XFlip)
+		//{
+		//	u8 pixelColorIDMSB = (lineData >> (8 + (7 - pixelInfo[PIXEL_INDEX]))) & 0x01;
+		//	u8 pixelColorIDLSB = (lineData >> (7 - pixelInfo[PIXEL_INDEX])) & 0x01;
+		//	pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
+		//}
+		//else
+		//{
+		//	u8 pixelColorIDMSB = (lineData >> (8 + pixelInfo[PIXEL_INDEX])) & 0x01;
+		//	u8 pixelColorIDLSB = (lineData >> pixelInfo[PIXEL_INDEX]) & 0x01;
+		//	pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
+		//}
+
+		//}
+
+		u8 palette = objectFlags.attr.DMGPalette ? readOBP1() : readOBP0();
+		// TODO : appeler render avec la bonne palette
+		renderPixel(pixelColorID, pixel, mLY, palette, true);
+		//}
+
+
+	}
+}
+
 inline u16 PPU::getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const
 {
 	//0 ou 1000 pour correspondre à l'adresse de depart de le bonne tilemap (8000 ou 9000)
@@ -687,6 +768,8 @@ inline u16 PPU::getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDa
 		return static_cast<u16>(tileAddressingOffset + (index * 16));
 		}, tileIndex);
 }
+
+
 
 
 void PPU::setWX(u8 value)

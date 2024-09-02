@@ -9,6 +9,7 @@
 #include "../Screen/Screen.h"
 #include "OAM.h"
 
+
 #define LINE_OBJ_LIMIT 10
 
 
@@ -28,6 +29,10 @@ private:
 	Screen* mScreen;
 	std::shared_ptr<OAM> mOAM;
 	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray;
+
+	u8 mLY = 0;
+	std::vector<u8> mObjectsOAMIndex;
+	std::vector<std::array<int16_t, 3>> mCurrentLinePixelsInfos;
 
 	u16 mPPUModeDots = 0;
 	std::array<Pixel, 4> mScreenColors;
@@ -101,7 +106,13 @@ private:
 	void renderPixel(u8 pixelColor, int x, int y, u8 palette, bool object = false);
 	u8 readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const;
 
+	inline void storeObjectsInCurrentLine(u8 spriteHeightMode);
+	inline void storePixelsInfos(u8 spriteHeightMode);
+	void handleObjectsOverlap(int16_t objectXOnScreen, u8 objOamIndex, u8 currentTilePixel, u8 spriteHeightMode);
+	inline u8 getCurrentObjectPixelId(u8 objOamIndex, u8 currentXTilePixel, u8 spriteHeightMode) const;
+	inline void renderCurrentLineObjectsPixels(u8 spriteHeightMode);
 	inline u16 getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const;
+
 
 };
 

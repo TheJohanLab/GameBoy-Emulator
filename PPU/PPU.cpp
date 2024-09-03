@@ -1,7 +1,7 @@
 #include "PPU.h"
 #include "../Utils/Addresses.h"
 #include "../Utils/Log.h"
-
+#include "Utils/ScreenColors.h"
 
 PPU::PPU(Bus* bus, Screen* screen)
 	:mBus(bus), mScreen(screen)
@@ -521,12 +521,13 @@ void PPU::renderOBJScanline()
 // ------------------------------------//
 void PPU::initializePPU()
 {
-	mScreenColors[0] = { 0xFF, 0xE0, 0xF8, 0xD0 }; // WHITE
-	mScreenColors[1] = { 0xFF, 0x88, 0xC0, 0x70 }; // LIGHT GREEN
-	mScreenColors[2] = { 0xFF, 0x34, 0x68, 0x56 }; // DARK GREEN
-	mScreenColors[3] = { 0xFF, 0x08, 0x18, 0x20 }; // BLACK
+	mScreenColors[0] = gbe::COLOR_WHITE;		// WHITE
+	mScreenColors[1] = gbe::COLOR_LIGHT_GREEN;	// LIGHT GREEN
+	mScreenColors[2] = gbe::COLOR_DARK_GREEN;	// DARK GREEN
+	mScreenColors[3] = gbe::COLOR_BLACK;		// BLACK
 
-	setBGP(0b00011011);
+	//setBGP(0b00011011);
+	setBGP(0b10011010);
 	setOBP0(0b00011011);
 	setOBP1(0b00011011);
 
@@ -669,6 +670,7 @@ void PPU::handleObjectsOverlap(int16_t objectXOnScreen, u8 objOamIndex, u8 curre
 	}
 }
 
+
 inline u8 PPU::getCurrentObjectPixelId(u8 objOamIndex, u8 currentXTilePixel, u8 spriteHeightMode) const
 {
 	OAM::Object object = mOAM->getObjects()[objOamIndex];
@@ -785,7 +787,10 @@ inline void PPU::renderCurrentLineObjectsPixels(u8 spriteHeightMode)
 
 		u8 palette = objectFlags.attr.DMGPalette ? readOBP1() : readOBP0();
 		// TODO : appeler render avec la bonne palette
-		renderPixel(pixelColorID, pixel, mLY, palette, true);
+		if (pixelColorID != 0x00 && objectFlags.attr.priority == 0x00)
+		{
+			renderPixel(pixelColorID, pixel, mLY, palette, true);
+		}
 		//}
 
 

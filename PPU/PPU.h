@@ -30,11 +30,11 @@ private:
 	std::shared_ptr<OAM> mOAM;
 	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray;
 
-	u8 mLY = 0;
+	u8 mLY { 0 };
 	std::vector<u8> mObjectsOAMIndex;
 	std::vector<std::array<int16_t, 3>> mCurrentLinePixelsInfos;
 
-	u16 mPPUModeDots = 0;
+	u16 mPPUModeDots{ 0 };
 	std::array<Pixel, 4> mScreenColors;
 
 public:

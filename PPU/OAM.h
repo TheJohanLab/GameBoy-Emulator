@@ -12,7 +12,7 @@ public:
 		u8 DMGPalette : 1;
 		u8 XFlip : 1;
 		u8 YFlip : 1;
-		u8 priority : 1;
+		u8 priority : 1; // 1 : BG Over OBJ
 	};
 
 	typedef union u_Attributes_Flags {

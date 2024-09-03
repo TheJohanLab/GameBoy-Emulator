@@ -395,6 +395,9 @@
     <ClInclude Include="Emulator\Emulator.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\ScreenColors.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="NewFile.txt" />

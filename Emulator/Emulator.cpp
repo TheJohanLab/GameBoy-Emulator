@@ -38,14 +38,16 @@ namespace gbe {
 		mBus->write(0xC003, 0);
 
 
-		mPPU->writeOAM(1, 20, 50, 0, 0);
+		mPPU->writeOAM(1, 20, 50, 0, 128);
 		mPPU->writeOAM(2, 22, 52, 0, 0);
 		mPPU->writeOAM(3, 50, 52, 0, 0);
 		mPPU->writeOAM(4, 48, 50, 0, 0);
 		mPPU->writeOAM(5, 100, 50, 0, 0);
 		mPPU->writeOAM(6, 105, 50, 0, 0);
 		mPPU->writeOAM(7, 106, 100, 0, 0);
-		mPPU->writeOAM(8, 100, 100, 0, 0);
+		mPPU->writeOAM(8, 100, 100, 0, 128);
+		mPPU->writeOAM(9, 115, 115, 0, 128);
+
 
 		//mBus->write(DMA, 0xC0);
 	}

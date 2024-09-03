@@ -54,7 +54,7 @@ Memory::Memory()
 	mVRAM[60] = 0b01111100;	mVRAM[61] = 0b01010110;
 	mVRAM[62] = 0b00111000;	mVRAM[63] = 0b01111100;
 
-	u16 offset = 0x1000 - 16;
+	const u16 offset = 0x1000 - 16;
 
 	mVRAM[offset + 0] = 0b00111100;		mVRAM[offset + 1] = 0b01111110;
 	mVRAM[offset + 2] = 0b01000010;		mVRAM[offset + 3] = 0b01000010;
@@ -68,7 +68,7 @@ Memory::Memory()
 	//Tile map 1
 	for (int i = 0; i < 1024; i++)
 	{
-		write(0x9800 + i, 1);
+		write(0x9800 + i, 0);
 	}
 
 	//Tile map 2
@@ -79,7 +79,7 @@ Memory::Memory()
 
 	mLCDRegistries[2] = 22;
 	mLCDRegistries[3] = 17;
-	mLCDRegistries[0] = 0b00000000;
+	mLCDRegistries[0] = 0b01010000;
 
 }
 

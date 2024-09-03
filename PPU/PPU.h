@@ -86,8 +86,10 @@ public:
 	void setWX(u8 value);
 	void setWY(u8 value);
 
+	u8 readFromMemory(u16 address) const;
 
 	void render(u8 cycles);
+	template<typename T>
 	void renderScanline();
 	void renderBGScanline();
 	void renderWindowScanline();
@@ -98,20 +100,21 @@ public:
 	void setCloseEventCallback(std::function<void()> callback);
 	void handleWindowEvents();
 
+	inline u8 readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const;
+	inline u16 getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const;
+	void renderPixel(u8 pixelColor, int x, int y, u8 palette, bool object = false);
+
 	void draw();
 
 private:
 
 	void initializePPU();
-	void renderPixel(u8 pixelColor, int x, int y, u8 palette, bool object = false);
-	u8 readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const;
 
 	inline void storeObjectsInCurrentLine(u8 spriteHeightMode);
 	inline void storePixelsInfos(u8 spriteHeightMode);
 	void handleObjectsOverlap(int16_t objectXOnScreen, u8 objOamIndex, u8 currentTilePixel, u8 spriteHeightMode);
 	inline u8 getCurrentObjectPixelId(u8 objOamIndex, u8 currentXTilePixel, u8 spriteHeightMode) const;
 	inline void renderCurrentLineObjectsPixels(u8 spriteHeightMode);
-	inline u16 getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const;
 
 
 };

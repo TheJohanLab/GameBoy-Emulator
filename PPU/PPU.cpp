@@ -3,6 +3,8 @@
 #include "../Utils/Log.h"
 #include "Utils/ScreenColors.h"
 
+#include "Renderer/BackgroundRenderer.h"
+
 PPU::PPU(Bus* bus, Screen* screen)
 	:mBus(bus), mScreen(screen)
 {
@@ -329,7 +331,7 @@ void PPU::render(u8 cycle)
 	case PPU_DRAWING :
 		// Render Scanline
 
-		renderScanline();
+		renderScanline<BackgroundRenderer>();
 		/*for (u8 i = 0; i < SCREEN_HEIGHT; i++)
 		{
 			
@@ -356,11 +358,14 @@ void PPU::render(u8 cycle)
 	
 }
 
+template<typename T>
 void PPU::renderScanline()
 {
+	T renderer(this);
+	renderer.renderScanline();
 	// Render Background Scanline
 
-	renderBGScanline();
+	//renderBGScanline();
 
 	// Si Window activée : render Window ScanLine
 
@@ -526,8 +531,8 @@ void PPU::initializePPU()
 	mScreenColors[2] = gbe::COLOR_DARK_GREEN;	// DARK GREEN
 	mScreenColors[3] = gbe::COLOR_BLACK;		// BLACK
 
-	//setBGP(0b00011011);
-	setBGP(0b10011010);
+	setBGP(0b00011011);
+	//setBGP(0b10011010);
 	setOBP0(0b00011011);
 	setOBP1(0b00011011);
 
@@ -818,6 +823,11 @@ void PPU::setWX(u8 value)
 void PPU::setWY(u8 value)
 {
 	mBus->write(WINDOW_Y, value);
+}
+
+u8 PPU::readFromMemory(u16 address) const
+{
+	return mBus->read(address);
 }
 
 void PPU::startDMATransfer(const u8& address)

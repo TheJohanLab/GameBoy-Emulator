@@ -5,6 +5,8 @@
 #include "../Utils/Utils.h"
 #include <SDL.h>
 
+#include <functional>
+
 class GameLoop
 {
 private:
@@ -16,9 +18,9 @@ private:
 	Uint64 mFrameStart;
 	Uint64 mFrameEnd;
 
-	u8 m_XPos = 0;
-
 	u32 mCycles = 0;
+
+	std::vector<std::function<void()>> mSequence;
 
 public:
 	GameLoop(CPU* cpu, PPU* ppu);
@@ -29,10 +31,14 @@ public:
 	void pauseGame() { mIsPaused = true; }
 	void resumeGame() { mIsPaused = false; }
 
+	void addToSequence(std::function<void()> task);
+	void endSequence();
 
+	void waitForNextFrame();
 
 private:
 	inline void handleFrame();
+	inline void handleScreenFrame();
 	inline u8 step();
 	inline void synchroniseFrame();
 };

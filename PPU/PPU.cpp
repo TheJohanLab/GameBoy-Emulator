@@ -4,6 +4,8 @@
 #include "Utils/ScreenColors.h"
 
 #include "Renderer/BackgroundRenderer.h"
+#include "Renderer/WindowRenderer.h"
+#include "Renderer/ObjectRenderer.h"
 
 PPU::PPU(Bus* bus, Screen* screen)
 	:mBus(bus), mScreen(screen)
@@ -142,29 +144,35 @@ u8 PPU::readSCX() const
 }
 
 //FF44
-u8 PPU::readLY() const
+inline u8 PPU::readLY() const
 {
 	return mLY;
 	//return mBus->read(LY);
 }
 
 //FF45
-u8 PPU::readLYC() const
+inline u8 PPU::readLYC() const
 {
 	return mBus->read(LY_COMPARE);
 }
 
-void PPU::incLY()
+inline void PPU::incLY()
 {
 	mLY = (mLY + 1) % 144;
 	//u8 ly = mBus->read(LY);
 	mBus->write(LY, mLY);
 }
 
-void PPU::incSCY()
+inline void PPU::incSCY()
 {
 	u8 scy = mBus->read(SCY);
 	mBus->write(SCY, (scy + 1) % 256);
+}
+
+inline void PPU::incSCX()
+{
+	u8 scx = mBus->read(SCX);
+	mBus->write(SCX, (scx + 1) % 256);
 }
 
 //FF47
@@ -218,38 +226,6 @@ u8 PPU::readWX() const
 
 void PPU::render(u8 cycle)
 {
-	/*for (int i = 0; i < 160; i++)
-	{
-		for (int j = 0; j < 144; j++)
-		{
-			renderPixel(0x00, i, j);
-			// ARGB
-		}
-	}*/
-
-	/*
-	std::array<u8, 16> tileTest = {
-	0b00101111,0b11111000,
-	0b00110000,0b00001100,
-	0b00110000,0b00001100,
-	0b00110000,0b00001100,
-	0b00110111,0b11111100,
-	0b00010101,0b11011100,
-	0b00110111,0b01111000,
-	0b00101111,0b11100000
-	};
-
-	for (int j = 0; j < 16; j++)
-	{
-		for (int i = 0; i < 4; i++)
-		{
-			//								PIXEL ID		    X coord		   Y coord	
-			renderPixel(tileTest[j] >> (2*(4 - (i+1))) & 0x03, 50+i+(4*(j%2)), 50+(j/2));
-		}
-	}*/
-
-
-	
 
 	/* En fonction du cycle
 	*	1 frame = 70224 dots
@@ -275,7 +251,9 @@ void PPU::render(u8 cycle)
 			mPPUModeDots -= PPU_HBLANK_DOTS;
 			draw();
 			incLY();
-			//incSCY();
+			incSCY();
+			incSCX();
+			//mOAM->getObjects()[2].XPos = (mOAM->getObjects()[2].XPos + 1) % 256;
 			setPPUMode(PPU_OAM_SCAN);
 			// On passe à la ligne suivante
 
@@ -331,7 +309,7 @@ void PPU::render(u8 cycle)
 	case PPU_DRAWING :
 		// Render Scanline
 
-		renderScanline<BackgroundRenderer>();
+		renderPixelsScanline();
 		/*for (u8 i = 0; i < SCREEN_HEIGHT; i++)
 		{
 			
@@ -358,167 +336,11 @@ void PPU::render(u8 cycle)
 	
 }
 
-template<typename T>
-void PPU::renderScanline()
+void PPU::renderPixelsScanline()
 {
-	T renderer(this);
-	renderer.renderScanline();
-	// Render Background Scanline
-
-	//renderBGScanline();
-
-	// Si Window activée : render Window ScanLine
-
-	renderWindowScanline();
-	
-	// On copie les pixels de BG+W dans le tableau à afficher
-
-	// Si OBJ activé : render OBJ Scanline
-
-	renderOBJScanline();
-}
-
-void PPU::renderBGScanline()
-{
-	/* LCDC.0=0
-	*   BG désactivé : tout s'affiche en blanc
-	*/
-
-	// On charge la palette
-	auto backgroundPalette = getBGP();
-
-	//Numéro de la TileMap utilisée (LCDC.3)
-	u8 tileMapNumber = getLCDControl().flags.BGtileMap;
-
-	//Type d'adressage de la TileData (LCDC.4)
-	u8 tileDataAddressingType = getLCDControl().flags.BG_WindowTiles;
-
-	// On récpuère l'index Y (vertical) de la tile dans la tilemap en cours
-	// /8 car une tile est composée de 8 x 8 pixels
-	// %32 pour gérer le wrapping sur la tilemap
-	u8 tileY = ((readSCY() + readLY()) / 8) % 32;
-
-	// On récupère l'index Y (vertical) du pixel dans la tile en cours
-	u8 pixelYInTile = (readSCY() + readLY()) % 8;
-
-	for (int x = 0; x < 160; x++)
-	{
-		// On récupère l'index X (horizontal) de la tile dans la tilemap en cours
-		u8 tileX = ((readSCX() + x) / 8) % 32;
-
-		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
-		std::variant<u8, int8_t> tileIndex;
-		u16 tileIndexInVRAM;
-
-
-		tileIndex = tileDataAddressingType == 1
-			? std::variant<u8, int8_t>(readIndexInTileMap(tileX, tileY, tileMapNumber))
-			: std::variant<u8, int8_t>(static_cast<int8_t>(readIndexInTileMap(tileX, tileY, tileMapNumber)));
-
-
-		tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
-
-		// * 2 car une ligne d'une tile est composée de 2 bytes
-		u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
-
-		// On récupère les 2 lignes de bits
-		u8 lineLSB = mBus->read(VRAM_BEG_ADDRESS + lineIndexInVRAM);
-		u8 lineMSB = mBus->read(VRAM_BEG_ADDRESS + lineIndexInVRAM + 1);
-
-		u8 pixelXInTile = (readSCX() + x) % 8;
-		u8 pixelColorIdLSB = (lineLSB >> (7 - pixelXInTile)) & 0x01;
-		u8 pixelColorIdMSB = (lineMSB >> (7 - pixelXInTile)) & 0x01;
-		u8 pixelColorID = pixelColorIdLSB + (pixelColorIdMSB << 1);
-
-		renderPixel(pixelColorID, x, readLY(), getBGP().byte, false);
-	}
-
-
-	// Adressage TileData
-}
-
-void PPU::renderWindowScanline()
-{
-	/* LCDC.5=0
-	*   Window désactivée
-	*/
-
-	// On récupère le numéro de ligne dans la Window à afficher
-	int16_t lineYInWindow = readLY() - readWY();
-	if (lineYInWindow < 0)
-		return;
-
-	// On charge la palette
-	auto backgroundPalette = getBGP();
-
-	//Numéro de la TileMap utilisée (LCDC.6)
-	u8 tileMapNumber = getLCDControl().flags.windowTileMap;
-
-	//Type d'adressage de la TileData (LCDC.4)
-	u8 tileDataAddressingType = getLCDControl().flags.BG_WindowTiles;
-
-	u8 tileYInWindow = lineYInWindow / 8;
-	u8 pixelYInTile = lineYInWindow % 8;
-
-	int16_t xPosOnScreen = readWX() - 7;
-	for (int x = 0; x < 160; x++)
-	{
-		// On récupère l'index X (horizontal) de la tile dans la tilemap en cours
-		if (x < xPosOnScreen)
-			continue;
-
-		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
-		u8 tileXInWindow = (x - xPosOnScreen) / 8;
-
-		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
-		std::variant<u8, int8_t> tileIndex;
-		u16 tileIndexInVRAM;
-
-		tileIndex = tileDataAddressingType == 1
-			? std::variant<u8, int8_t>(readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber))
-			: std::variant<u8, int8_t>(static_cast<int8_t>(readIndexInTileMap(tileXInWindow, tileYInWindow, tileMapNumber)));
-
-		tileIndexInVRAM = getTileIndexInVRAM(tileIndex, tileDataAddressingType);
-
-		// * 2 car une ligne d'une tile est composée de 2 bytes
-		u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
-
-		// On récupère les 2 lignes de bits
-		u8 lineLSB = mBus->read(VRAM_BEG_ADDRESS + lineIndexInVRAM);
-		u8 lineMSB = mBus->read(VRAM_BEG_ADDRESS + lineIndexInVRAM + 1);
-
-		u8 pixelXInTile = (x - xPosOnScreen) % 8;
-		u8 pixelColorIdLSB = (lineLSB >> (7 - pixelXInTile)) & 0x01;
-		u8 pixelColorIdMSB = (lineMSB >> (7 - pixelXInTile)) & 0x01;
-		u8 pixelColorID = pixelColorIdLSB + (pixelColorIdMSB << 1);
-
-		renderPixel(pixelColorID, x, readLY(), getBGP().byte, false);
-
-	}
-
-}
-
-#define X_COORD 0
-#define INDEX 1
-#define PIXEL_INDEX 2
-
-void PPU::renderOBJScanline()
-{
-
-	// On récupère les 10 premiers objects de la line dans l'OAM
-	std::vector<u8> objectsOAMIndex;
-	objectsOAMIndex.reserve(LINE_OBJ_LIMIT);
-
-	mObjectsOAMIndex.clear();
-	mCurrentLinePixelsInfos.assign(SCREEN_WIDTH, { -1, -1, -1 });
-
-	u8 spriteHeightMode = getLCDControl().flags.OBJSize ? 16 : 8;
-	//u8 ly = readLY();
-	
-	storeObjectsInCurrentLine(spriteHeightMode);
-	storePixelsInfos(spriteHeightMode);
-	renderCurrentLineObjectsPixels(spriteHeightMode);
-
+	renderScanline<BackgroundRenderer>();
+	renderScanline<WindowRenderer>();
+	renderScanline<ObjectRenderer>();
 }
 
 // ------------------------------------//
@@ -552,8 +374,6 @@ void PPU::renderPixel(u8 pixelID, int x, int y, u8 palette, bool object)
 	if (x < 0 || y < 0)
 		return;
 
-	//if (object && pixelID == 0x00)
-	//	return;
 
 	Pixel pixelColor = mScreenColors[palette >> (2 * pixelID) & 0x03];
 	mPixelArray[y][x] = pixelColor;
@@ -567,242 +387,7 @@ u8 PPU::readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const
 }
 
 
-inline void PPU::storeObjectsInCurrentLine(u8 spriteHeightMode) 
-{
-	u8 objCnt = 0;
-	for (int i = 0; i < MAX_OBJECTS; i++)
-	{
-		auto objectY = mOAM->getObjects()[i].YPos;
-		u8 objectYOnScreen = objectY - 16;
-
-		if (mLY >= (objectYOnScreen) && mLY < objectYOnScreen + spriteHeightMode)
-		{
-			mObjectsOAMIndex.emplace_back(i);
-			objCnt++;
-		}
-
-		if (objCnt >= LINE_OBJ_LIMIT)
-			break;
-	}
-}
-
-inline void PPU::storePixelsInfos(u8 spriteHeightMode)
-{
-	// 1 - X bas = priorité haute
-	// 2 - index bas = priorité haute
-
-	for (const auto& objOamIndex : mObjectsOAMIndex)
-	{
-		OAM::Object object = mOAM->getObjects()[objOamIndex];
-
-		int16_t objectXOnScreen = object.XPos - 8;
-
-		for (int i = 0; i < TILE_WIDTH; i++)
-		{
-			// Current object doesn't overlap with any other object
-			if (mCurrentLinePixelsInfos[objectXOnScreen + i][X_COORD] == -1)
-			{
-				mCurrentLinePixelsInfos[objectXOnScreen + i][X_COORD] = objectXOnScreen;
-				mCurrentLinePixelsInfos[objectXOnScreen + i][INDEX] = objOamIndex;
-				mCurrentLinePixelsInfos[objectXOnScreen + i][PIXEL_INDEX] = i;
-			}
-
-			//Current object overlaps
-			else
-			{
-				handleObjectsOverlap(objectXOnScreen, objOamIndex, i, spriteHeightMode);
-			}
-		}
-	}
-}
-
-void PPU::handleObjectsOverlap(int16_t objectXOnScreen, u8 objOamIndex, u8 currentTilePixel, u8 spriteHeightMode)
-{
-	//TODO recuperer les pixelsID pour pouvoir gerer la transparence en cas d'overlap	
-
-	if (mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] != objectXOnScreen)
-	{
-		if (objectXOnScreen < mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD])
-		{
-			u8 pixelID = getCurrentObjectPixelId(
-				objOamIndex,
-				currentTilePixel,
-				spriteHeightMode);
-
-			if (pixelID != 0)
-			{
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
-			}
-		}
-		else
-		{
-			u8 pixelID = getCurrentObjectPixelId(
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX],
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX],
-				spriteHeightMode);
-
-			if (pixelID == 0)
-			{
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
-			}
-		}
-	}
-	else
-	{
-	
-		
-			u8 pixelID = getCurrentObjectPixelId(
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX],
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX],
-				spriteHeightMode);
-
-			if (pixelID == 0)
-			{
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
-			}
-
-			//mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
-			//mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
-			//mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
-		
-		
-	}
-}
-
-
-inline u8 PPU::getCurrentObjectPixelId(u8 objOamIndex, u8 currentXTilePixel, u8 spriteHeightMode) const
-{
-	OAM::Object object = mOAM->getObjects()[objOamIndex];
-	OAM::Attributes_Flags objectFlags = object.AttributeFlags;
-
-	int16_t objectYOnScreen = object.YPos - 16;
-
-	u16 lineData;
-
-	u8 objectTileIndex = spriteHeightMode == 16 ? object.tileIndex & 0xFE : object.tileIndex;
-	u16 tileAddress = VRAM_BEG_ADDRESS + objectTileIndex * 16;
-
-	u8 lineYInTile = mLY - objectYOnScreen;
-
-
-	if (!objectFlags.attr.YFlip)
-	{
-		u8 LSB = mBus->read(tileAddress + (2 * lineYInTile));
-		u8 MSB = mBus->read(tileAddress + (2 * lineYInTile) + 1);
-		lineData = JOIN_BYTES(MSB, LSB);
-	}
-	else
-	{
-		u8 LSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1));
-		u8 MSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1) + 1);
-		lineData = JOIN_BYTES(MSB, LSB);
-	}
-
-	u8 pixelColorID = 0;
-
-
-	if (!objectFlags.attr.XFlip)
-	{
-		u8 pixelColorIDMSB = (lineData >> (8 + (7 - currentXTilePixel))) & 0x01;
-		u8 pixelColorIDLSB = (lineData >> (7 - currentXTilePixel)) & 0x01;
-		pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
-	}
-	else
-	{
-		u8 pixelColorIDMSB = (lineData >> (8 + currentXTilePixel)) & 0x01;
-		u8 pixelColorIDLSB = (lineData >> currentXTilePixel) & 0x01;
-		pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
-	}
-
-	return pixelColorID;
-
-}
-
-inline void PPU::renderCurrentLineObjectsPixels(u8 spriteHeightMode)
-{
-	//for (const auto objOamIndex : objectsOAMIndex)
-	//{
-	for (int pixel = 0; pixel < SCREEN_WIDTH; pixel++)
-	{
-		const auto& pixelInfo = mCurrentLinePixelsInfos[pixel];
-
-		if (pixelInfo[INDEX] == -1)
-			continue;
-
-		OAM::Object object = mOAM->getObjects()[pixelInfo[INDEX]];
-
-		//int16_t objectYOnScreen = object.YPos - 16;
-		//int16_t objectXOnScreen = object.XPos - 8;
-
-		OAM::Attributes_Flags objectFlags = object.AttributeFlags;
-		u8 pixelColorID = getCurrentObjectPixelId(
-			pixelInfo[INDEX], pixelInfo[PIXEL_INDEX], spriteHeightMode
-		);
-
-
-		//u8 objectTileIndex = spriteHeightMode == 16 ? object.tileIndex & 0xFE : object.tileIndex;
-
-		//u16 lineData;
-
-		//u16 tileAddress = VRAM_BEG_ADDRESS + objectTileIndex * 16;
-
-		//u8 lineYInTile = mLY - objectYOnScreen;
-
-
-		//if (!objectFlags.attr.YFlip)
-		//{
-		//	u8 LSB = mBus->read(tileAddress + (2 * lineYInTile));
-		//	u8 MSB = mBus->read(tileAddress + (2 * lineYInTile) + 1);
-		//	lineData = JOIN_BYTES(MSB, LSB);
-		//}
-		//else
-		//{
-		//	u8 LSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1));
-		//	u8 MSB = mBus->read(tileAddress + 2 * (spriteHeightMode - lineYInTile - 1) + 1);
-		//	lineData = JOIN_BYTES(MSB, LSB);
-		//}
-
-		////for (u8 pixelIndex = 0; pixelIndex < 8; pixelIndex++)
-		////{
-		//	//int16_t pixelXPos = objectXOnScreen + pixelIndex;
-		//u8 pixelColorID = 0;
-
-		////if (pixelXPos >= 0 && pixelXPos < SCREEN_WIDTH)
-		////{
-		//if (!objectFlags.attr.XFlip)
-		//{
-		//	u8 pixelColorIDMSB = (lineData >> (8 + (7 - pixelInfo[PIXEL_INDEX]))) & 0x01;
-		//	u8 pixelColorIDLSB = (lineData >> (7 - pixelInfo[PIXEL_INDEX])) & 0x01;
-		//	pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
-		//}
-		//else
-		//{
-		//	u8 pixelColorIDMSB = (lineData >> (8 + pixelInfo[PIXEL_INDEX])) & 0x01;
-		//	u8 pixelColorIDLSB = (lineData >> pixelInfo[PIXEL_INDEX]) & 0x01;
-		//	pixelColorID = (pixelColorIDMSB << 1) + pixelColorIDLSB;
-		//}
-
-		//}
-
-		u8 palette = objectFlags.attr.DMGPalette ? readOBP1() : readOBP0();
-		// TODO : appeler render avec la bonne palette
-		if (pixelColorID != 0x00 && objectFlags.attr.priority == 0x00)
-		{
-			renderPixel(pixelColorID, pixel, mLY, palette, true);
-		}
-		//}
-
-
-	}
-}
-
-inline u16 PPU::getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const
+u16 PPU::getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const
 {
 	//0 ou 1000 pour correspondre à l'adresse de depart de le bonne tilemap (8000 ou 9000)
 	u16 tileAddressingOffset = tileDataAddressingType == 1 ? 0x0000 : 0x1000;
@@ -811,7 +396,6 @@ inline u16 PPU::getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDa
 		return static_cast<u16>(tileAddressingOffset + (index * 16));
 		}, tileIndex);
 }
-
 
 
 
@@ -848,6 +432,15 @@ void PPU::startDMATransfer(const u8& address)
 	//TODO Attendre 160 mcycles ou 640 dots
 }
 
+template<typename T>
+inline void PPU::renderScanline()
+{
+	T renderer(this);
+	renderer.renderScanline(); // Faire retourner le temps d'attente CPU
+
+	//TODO gerer les attentes cpu ici
+}
+
 void PPU::setCloseEventCallback(std::function<void()> callback)
 {
 	mScreen->setOnCloseEvent(callback);
@@ -856,6 +449,17 @@ void PPU::setCloseEventCallback(std::function<void()> callback)
 void PPU::handleWindowEvents()
 {
 	mScreen->handleEvents();
+}
+
+void PPU::executeFullFrameRender()
+{
+	mLY = 0;
+	for (int line = 0; line < SCREEN_HEIGHT; line++)
+	{
+		renderPixelsScanline();
+		incLY();
+	}
+		draw();
 }
 
 void PPU::draw()

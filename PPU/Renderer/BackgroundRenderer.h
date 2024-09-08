@@ -11,7 +11,7 @@ public:
 	BackgroundRenderer(PPU* ppu);
 	void renderScanline() override;
 private:
-	void getCurrentPixelColorID() override;
+	inline u8 getCurrentPixelColorID(u8 tileIndex, u8 currXIndex, u8 pixelYInTile);
 
 };
 

@@ -15,12 +15,35 @@ void GameLoop::startGame()
 	mIsRunning = true;
 
 	
-	while (mIsRunning)
+	if (mSequence.empty())
 	{
-		mPPU->handleWindowEvents();
-		handleFrame();
+		while (mIsRunning)
+		{
+			mPPU->handleWindowEvents();
+			handleFrame();
+		}
+	}
+	else
+	{
+		std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
+
+		for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
+		{
+			waitForNextFrame();
+			mPPU->handleWindowEvents();
+			(*sequenceIterator)();
+			handleScreenFrame();
+		}
+
+		while (mIsRunning)
+		{
+			mPPU->handleWindowEvents();
+			handleFrame();
+		}
+
 	}
 }
+
 
 
 void GameLoop::handleFrame()
@@ -28,6 +51,7 @@ void GameLoop::handleFrame()
 	if (mCycles < cyclesPerFrame)
 	//if (mCycles < 20)
 	{
+
 		mCycles += step();
 		//GBE_LOG_INFO("mCycles {0}", mCycles);
 		return;
@@ -37,10 +61,6 @@ void GameLoop::handleFrame()
 	//std::cout << "Nombre d'instructions : " << mCycles / 4 << std::endl;
 	//std::cout << "Nombre de cycles : " << mCycles << std::endl;
 	
-
-	//mPPU->draw();
-	//mPPU->incSCY();
-
 	mCycles -= cyclesPerFrame;
 
 	//std::cout << "Nombre de cycles après reset : " << mCycles << std::endl;
@@ -53,6 +73,15 @@ void GameLoop::handleFrame()
 	
 }
 
+void GameLoop::handleScreenFrame()
+{
+	mPPU->executeFullFrameRender();
+	//mCPU.callInterruptHandler();
+
+	synchroniseFrame();
+
+
+}
 
 u8 GameLoop::step()
 {
@@ -88,4 +117,20 @@ void GameLoop::synchroniseFrame()
 
 	mFrameStart = mFrameEnd;
 
+}
+
+
+void GameLoop::addToSequence(std::function<void()> task)
+{
+	mSequence.push_back(task);
+}
+
+void GameLoop::endSequence()
+{
+	mIsRunning = true;
+}
+
+void GameLoop::waitForNextFrame()
+{
+	mCycles = cyclesPerFrame;
 }

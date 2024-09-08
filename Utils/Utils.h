@@ -16,9 +16,10 @@ const u8 MAX_OBJECTS = 40;
 
 // Screen refresh
 const int cyclesPerFrame = 70224;
-const double timePerFrame = 1.0 / 60.0;
+const float FPS{ 10.0 };
+const double timePerFrame = 1.0 / FPS;
 
-const u16 SCREEN_WIDTH = 160;
+constexpr u16 SCREEN_WIDTH = 160;
 const u16 SCREEN_HEIGHT = 144;
 
 // PPU cycle modes

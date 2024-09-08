@@ -2,7 +2,6 @@
 
 #include "Utils/Utils.h"
 #include "PPU/PPU.h"
-#include "Bus/Bus.h"
 #include "Utils/Addresses.h"
 
 BackgroundRenderer::BackgroundRenderer(PPU* ppu)
@@ -13,19 +12,19 @@ BackgroundRenderer::BackgroundRenderer(PPU* ppu)
 void BackgroundRenderer::renderScanline()
 {
 	/* LCDC.0=0
-*   BG désactivé : tout s'affiche en blanc
+*   BG désactive : tout s'affiche en blanc
 */
 
 // On charge la palette
 	auto backgroundPalette = mPPU->getBGP();
 
-	//Numéro de la TileMap utilisée (LCDC.3)
+	//Numero de la TileMap utilisée (LCDC.3)
 	u8 tileMapNumber = mPPU->getLCDControl().flags.BGtileMap;
 
 	//Type d'adressage de la TileData (LCDC.4)
 	u8 tileDataAddressingType = mPPU->getLCDControl().flags.BG_WindowTiles;
 
-	// On récpuère l'index Y (vertical) de la tile dans la tilemap en cours
+	// On recpere l'index Y (vertical) de la tile dans la tilemap en cours
 	// /8 car une tile est composée de 8 x 8 pixels
 	// %32 pour gérer le wrapping sur la tilemap
 	u8 tileY = ((mPPU->readSCY() + mPPU->readLY()) / 8) % 32;
@@ -40,34 +39,32 @@ void BackgroundRenderer::renderScanline()
 
 		// On récupère - dans la tilemap - l'index de la tile dans la tiledata
 		std::variant<u8, int8_t> tileIndex;
-		u16 tileIndexInVRAM;
-
 
 		tileIndex = tileDataAddressingType == 1
 			? std::variant<u8, int8_t>(mPPU->readIndexInTileMap(tileX, tileY, tileMapNumber))
 			: std::variant<u8, int8_t>(static_cast<int8_t>(mPPU->readIndexInTileMap(tileX, tileY, tileMapNumber)));
 
 
-		tileIndexInVRAM = mPPU->getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		u16 tileIndexInVRAM = mPPU->getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		u8 pixelColorID = getCurrentPixelColorID(tileIndexInVRAM, x, pixelYInTile);
 
-		// * 2 car une ligne d'une tile est composée de 2 bytes
-		u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
-
-		// On récupère les 2 lignes de bits
-		u8 lineLSB = mPPU->readFromMemory(VRAM_BEG_ADDRESS + lineIndexInVRAM);
-		u8 lineMSB = mPPU->readFromMemory(VRAM_BEG_ADDRESS + lineIndexInVRAM + 1);
-
-		u8 pixelXInTile = (mPPU->readSCX() + x) % 8;
-		u8 pixelColorIdLSB = (lineLSB >> (7 - pixelXInTile)) & 0x01;
-		u8 pixelColorIdMSB = (lineMSB >> (7 - pixelXInTile)) & 0x01;
-		u8 pixelColorID = pixelColorIdLSB + (pixelColorIdMSB << 1);
 
 		mPPU->renderPixel(pixelColorID, x, mPPU->readLY(), mPPU->getBGP().byte, false);
 	}
-
-	
 }
 
-void BackgroundRenderer::getCurrentPixelColorID()
+u8 BackgroundRenderer::getCurrentPixelColorID(u8 tileIndex, u8 currXIndex, u8 pixelYInTile)
 {
+	// * 2 car une ligne d'une tile est composée de 2 bytes
+	u16 lineIndexInVRAM = tileIndex + (pixelYInTile * 2);
+
+	// On récupère les 2 lignes de bits
+	u8 lineLSB = mPPU->readFromMemory(VRAM_BEG_ADDRESS + lineIndexInVRAM);
+	u8 lineMSB = mPPU->readFromMemory(VRAM_BEG_ADDRESS + lineIndexInVRAM + 1);
+
+	u8 pixelXInTile = (mPPU->readSCX() + currXIndex) % 8;
+	u8 pixelColorIdLSB = (lineLSB >> (7 - pixelXInTile)) & 0x01;
+	u8 pixelColorIdMSB = (lineMSB >> (7 - pixelXInTile)) & 0x01;
+	 
+	return pixelColorIdLSB + (pixelColorIdMSB << 1);
 }

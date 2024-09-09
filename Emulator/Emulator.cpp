@@ -22,33 +22,18 @@ namespace gbe {
 
 	void Emulator::initEmulator()
 	{
-		mScreen = std::make_unique<Screen>(SCREEN_WIDTH, SCREEN_HEIGHT);
-		mBus = std::make_unique<Bus>();
+		mScreen = std::make_shared<Screen>(SCREEN_WIDTH, SCREEN_HEIGHT);
+		mBus = std::make_shared<Bus>();
 
-		mCPU = std::make_unique<CPU>(mBus.get());
-		mPPU = std::make_unique<PPU>(mBus.get(), mScreen.get());
+		mCPU = std::make_shared<CPU>(mBus);
+		mPPU = std::make_shared<PPU>(mBus, mScreen);
 
-		mGameLoop = std::make_unique<GameLoop>(mCPU.get(), mPPU.get());
+		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU);
 
 		setCallbacks();
 
-		mBus->write(0xC000, 0x14);
-		mBus->write(0xC001, 0x1C);
-		mBus->write(0xC002, 2);
-		mBus->write(0xC003, 0);
-
-
-		mPPU->writeOAM(1, 20, 50, 0, 128);
-		mPPU->writeOAM(2, 22, 52, 0, 0);
-		mPPU->writeOAM(3, 50, 52, 0, 0);
-		mPPU->writeOAM(4, 48, 50, 0, 0);
-		mPPU->writeOAM(5, 100, 50, 0, 0);
-		mPPU->writeOAM(6, 105, 50, 0, 0);
-		mPPU->writeOAM(7, 106, 100, 0, 0);
-		mPPU->writeOAM(8, 100, 100, 0, 128);
-		mPPU->writeOAM(9, 115, 115, 0, 128);
-
-
+		//mPPU->writeOAM(1, 20, 50, 2, 0);
+		//mPPU->writeOAM(2, 22, 52, 2, 0);
 		//mBus->write(DMA, 0xC0);
 	}
 

@@ -21,18 +21,19 @@ namespace gbe {
 
 	class Emulator 
 	{
-	private:
-		std::unique_ptr<Screen> mScreen;
-		std::unique_ptr<Bus> mBus;
-		std::unique_ptr<CPU> mCPU;
-		std::unique_ptr<PPU> mPPU;
-		std::unique_ptr<GameLoop> mGameLoop;
+	protected:
+		std::shared_ptr<Screen> mScreen;
+		std::shared_ptr<Bus> mBus;
+		std::shared_ptr<CPU> mCPU;
+		std::shared_ptr<PPU> mPPU;
+		std::shared_ptr<GameLoop> mGameLoop;
 
 	public:
 		Emulator();
 		~Emulator();
 
 		void startEmulator();
+
 
 	private:
 

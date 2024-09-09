@@ -10,8 +10,8 @@
 class GameLoop
 {
 private:
-	CPU* mCPU;
-	PPU* mPPU;
+	std::shared_ptr<CPU> mCPU;
+	std::shared_ptr<PPU> mPPU;
 	bool mIsRunning;
 	bool mIsPaused;
 
@@ -23,7 +23,7 @@ private:
 	std::vector<std::function<void()>> mSequence;
 
 public:
-	GameLoop(CPU* cpu, PPU* ppu);
+	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu);
 	virtual ~GameLoop() = default;
 
 	void startGame();

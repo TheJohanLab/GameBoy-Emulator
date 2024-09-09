@@ -8,11 +8,12 @@
 #include <array>
 #include <map>
 #include <functional>
+#include <memory>
 
 class CPU
 {
 	private:
-		Bus* mBus;
+		std::shared_ptr<Bus> mBus;
 		Registries mRegistries = Registries(*this);
 		std::array<Instruction*, instructionAmount> mInstructionSet;
 	
@@ -20,7 +21,7 @@ class CPU
 
 	public:
 		CPU();
-		CPU(Bus* bus);
+		CPU(std::shared_ptr<Bus> bus);
 		virtual ~CPU() = default;
 
 		u8 executeOpcode(u16 opcode);

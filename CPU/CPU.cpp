@@ -4,7 +4,7 @@ CPU::CPU()
 {
 }
 
-CPU::CPU(Bus* bus) : mBus(bus)
+CPU::CPU(std::shared_ptr<Bus> bus) : mBus(bus)
 {
 	initInstructionSet();
 }

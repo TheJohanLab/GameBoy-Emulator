@@ -7,7 +7,7 @@
 #include "Renderer/WindowRenderer.h"
 #include "Renderer/ObjectRenderer.h"
 
-PPU::PPU(Bus* bus, Screen* screen)
+PPU::PPU(std::shared_ptr<Bus> bus, std::shared_ptr<Screen> screen)
 	:mBus(bus), mScreen(screen)
 {
 	initializePPU();

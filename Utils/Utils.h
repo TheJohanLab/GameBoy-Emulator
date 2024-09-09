@@ -16,7 +16,7 @@ const u8 MAX_OBJECTS = 40;
 
 // Screen refresh
 const int cyclesPerFrame = 70224;
-const float FPS{ 10.0 };
+const float FPS{ 3.0 };
 const double timePerFrame = 1.0 / FPS;
 
 constexpr u16 SCREEN_WIDTH = 160;

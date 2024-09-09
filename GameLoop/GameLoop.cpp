@@ -2,7 +2,7 @@
 
 #include "../Utils/Log.h"
 
-GameLoop::GameLoop(CPU* cpu, PPU* ppu)
+GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu)
 	:mCPU(cpu), mPPU(ppu)
 {
 	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
@@ -25,21 +25,20 @@ void GameLoop::startGame()
 	}
 	else
 	{
-		std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
-
-		for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
-		{
-			waitForNextFrame();
-			mPPU->handleWindowEvents();
-			(*sequenceIterator)();
-			handleScreenFrame();
-		}
-
 		while (mIsRunning)
 		{
-			mPPU->handleWindowEvents();
-			handleFrame();
+			std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
+
+			for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
+			{
+				waitForNextFrame();
+				mPPU->handleWindowEvents();
+				(*sequenceIterator)();
+				handleScreenFrame();
+			}
+
 		}
+		
 
 	}
 }

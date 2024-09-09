@@ -25,8 +25,8 @@ class PPU
 {
 private:
 
-	Bus* mBus;
-	Screen* mScreen;
+	std::shared_ptr<Bus> mBus;
+	std::shared_ptr<Screen> mScreen;
 	std::shared_ptr<OAM> mOAM;
 	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray;
 
@@ -40,10 +40,10 @@ private:
 	
 
 public:
-	PPU(Bus* bus, Screen* screen);
+	PPU(std::shared_ptr<Bus> bus, std::shared_ptr<Screen> screen);
 	~PPU();
 
-	Screen* getScreen() { return mScreen; }
+	Screen* getScreen() { return mScreen.get(); }
 
 	LCD_control getLCDControl() const; //FF40
 	LCD_status getLCDStatus() const; //FF41

@@ -106,6 +106,9 @@ public:
 	void executeFullFrameRender();
 	void draw();
 
+	void setTile(u8 tileIndex, const std::vector<u8>& tileData);
+	void setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData);
+
 private:
 
 	void initializePPU();

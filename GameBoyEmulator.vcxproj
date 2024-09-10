@@ -112,7 +112,7 @@
     <ClCompile Include="Instruction\Instruction16BitLoad.cpp" />
     <ClCompile Include="Instruction\Instruction8BitLoad.cpp" />
     <ClCompile Include="Instruction\Instruction.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="main2.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
     <ClCompile Include="PPU\Renderer\ObjectRenderer.cpp" />
     <ClCompile Include="PPU\OAM.cpp" />

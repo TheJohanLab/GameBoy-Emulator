@@ -1,12 +1,40 @@
 
 #include <iostream>
 #include "Emulator/Emulator.h"
+#include "res.h"
+#include "Registries/IORegistries.h"
 
 #define TASK(action) [this]() -> void { action }
+
 
 class EmulatorSandbox : public gbe::Emulator
 {
 public:
+
+	void initTiles()
+	{
+		mPPU->setTile(0, gameboyTile);
+		mPPU->setTile(1, tile1);
+		mPPU->setTile(2, tile2);
+
+	}
+
+	void initTileMaps()
+	{
+		//std::vector<u8>tileMap2(1024, 1);
+
+		mPPU->setTileMap(0, tileMap1);
+		mPPU->setTileMap(1, tileMap2);
+	}
+
+	void initRegistries()
+	{
+		u_LCD_control LCDControl{};
+		LCDControl.flags.windowTileMap = 1;
+		LCDControl.flags.BGtileMap = 0;
+		mBus->write(LCD_CONTROL, LCDControl.byte);
+	}
+
 	void addTestSequence()
 	{
 		if (mPPU && mGameLoop)

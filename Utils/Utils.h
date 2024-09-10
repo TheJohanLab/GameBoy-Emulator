@@ -35,6 +35,11 @@ const u8 PPU_DRAWING = 0x03;
 #define PPU_DRAWING_DOTS 172
 
 #define TILE_WIDTH 8
+#define TILE_BYTE_SIZE 16
+#define TILEMAP_BYTE_SIZE 1024
+
+#define TILE_MAP_1_BEG_ADDRESS 0x9800
+#define TILE_MAP_2_BEG_ADDRESS 0x9C00
 
 
 typedef struct s_flags {

@@ -466,3 +466,20 @@ void PPU::draw()
 {
 	mScreen->render(mPixelArray);
 }
+
+void PPU::setTile(u8 tileIndex, const std::vector<u8>& tileData)
+{
+	for (int i = 0; i < TILE_BYTE_SIZE; i++)
+	{
+		mBus->write(VRAM_BEG_ADDRESS + (tileIndex * TILE_BYTE_SIZE) + i, tileData[i]);
+	}
+}
+
+void PPU::setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData)
+{
+	u16 tileMapAddressOffset = tileMapIndex == 0 ? TILE_MAP_1_BEG_ADDRESS : TILE_MAP_2_BEG_ADDRESS;
+	for (int i = 0; i < TILEMAP_BYTE_SIZE; i++)
+	{
+		mBus->write(tileMapAddressOffset + i, tileMapData[i]);
+	}
+}

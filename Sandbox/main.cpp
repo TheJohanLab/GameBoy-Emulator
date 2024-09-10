@@ -1,10 +1,15 @@
 #include <iostream>
 
-#include "Sandbox.h"
+#include "SandboxEmulator.h"
+#include "SandboxBoot.h"
 
 int main(int argc, char** argv)
 {
-	EmulatorSandbox emulator{};
+	//EmulatorSandbox emulator{};
+	SandboxBoot emulator{};
+	emulator.initTiles();
+	emulator.initTileMaps();
+	emulator.initRegistries();
 	emulator.addTestSequence();
 
 	emulator.startEmulator();

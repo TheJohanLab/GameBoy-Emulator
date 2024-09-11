@@ -46,6 +46,8 @@ void BackgroundRenderer::renderScanline()
 
 
 		u16 tileIndexInVRAM = mPPU->getTileIndexInVRAM(tileIndex, tileDataAddressingType);
+		if (pixelYInTile == 2)
+			int a{ 1 };
 		u8 pixelColorID = getCurrentPixelColorID(tileIndexInVRAM, x, pixelYInTile);
 
 
@@ -53,10 +55,10 @@ void BackgroundRenderer::renderScanline()
 	}
 }
 
-u8 BackgroundRenderer::getCurrentPixelColorID(u8 tileIndex, u8 currXIndex, u8 pixelYInTile)
+u8 BackgroundRenderer::getCurrentPixelColorID(u16 tileIndexInVRAM, u8 currXIndex, u8 pixelYInTile)
 {
 	// * 2 car une ligne d'une tile est composée de 2 bytes
-	u16 lineIndexInVRAM = tileIndex + (pixelYInTile * 2);
+	u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
 
 	// On récupère les 2 lignes de bits
 	u8 lineLSB = mPPU->readFromMemory(VRAM_BEG_ADDRESS + lineIndexInVRAM);

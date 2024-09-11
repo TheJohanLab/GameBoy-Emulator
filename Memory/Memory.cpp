@@ -16,21 +16,20 @@
 
 Memory::Memory()
 {
-	const u16 offset = 0x1000 - 16;
+	//const u16 offset = 0x1000 - 16;
 
-	mVRAM[offset + 0] = 0b00111100;		mVRAM[offset + 1] = 0b01111110;
-	mVRAM[offset + 2] = 0b01000010;		mVRAM[offset + 3] = 0b01000010;
-	mVRAM[offset + 4] = 0b01000010;		mVRAM[offset + 5] = 0b01000010;
-	mVRAM[offset + 6] = 0b01000010;		mVRAM[offset + 7] = 0b01000010;
-	mVRAM[offset + 8] = 0b01111110;		mVRAM[offset + 9] = 0b01011110;
-	mVRAM[offset + 10] = 0b01111110;	mVRAM[offset + 11] = 0b00001010;
-	mVRAM[offset + 12] = 0b01111100;	mVRAM[offset + 13] = 0b01010110;
-	mVRAM[offset + 14] = 0b00111000;	mVRAM[offset + 15] = 0b01111100;
+	//mVRAM[offset + 0] = 0b00111100;		mVRAM[offset + 1] = 0b01111110;
+	//mVRAM[offset + 2] = 0b01000010;		mVRAM[offset + 3] = 0b01000010;
+	//mVRAM[offset + 4] = 0b01000010;		mVRAM[offset + 5] = 0b01000010;
+	//mVRAM[offset + 6] = 0b01000010;		mVRAM[offset + 7] = 0b01000010;
+	//mVRAM[offset + 8] = 0b01111110;		mVRAM[offset + 9] = 0b01011110;
+	//mVRAM[offset + 10] = 0b01111110;	mVRAM[offset + 11] = 0b00001010;
+	//mVRAM[offset + 12] = 0b01111100;	mVRAM[offset + 13] = 0b01010110;
+	//mVRAM[offset + 14] = 0b00111000;	mVRAM[offset + 15] = 0b01111100;
 
 
-	mLCDRegistries[2] = 22;
-	mLCDRegistries[3] = 17;
-	int a{ 0 };
+	//mLCDRegistries[2] = 22;
+	//mLCDRegistries[3] = 17;
 
 }
 

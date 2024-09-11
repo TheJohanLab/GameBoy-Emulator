@@ -56,10 +56,10 @@ void WindowRenderer::renderScanline()
 	}
 }
 
-u8 WindowRenderer::getCurrentPixelColorID(u8 tileIndex, u8 currXIndex, u8 xPosOnScreen, u8 pixelYInTile)
+u8 WindowRenderer::getCurrentPixelColorID(u16 tileIndexInVRAM, u8 currXIndex, u8 xPosOnScreen, u8 pixelYInTile)
 {
 	// * 2 car une ligne d'une tile est composée de 2 bytes
-	u16 lineIndexInVRAM = tileIndex + (pixelYInTile * 2);
+	u16 lineIndexInVRAM = tileIndexInVRAM + (pixelYInTile * 2);
 
 	// On récupère les 2 lignes de bits
 	u8 lineLSB = mPPU->readFromMemory(VRAM_BEG_ADDRESS + lineIndexInVRAM);

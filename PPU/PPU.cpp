@@ -469,6 +469,10 @@ void PPU::draw()
 
 void PPU::setTile(u8 tileIndex, const std::vector<u8>& tileData)
 {
+	if (tileIndex >= 16)
+	{
+		int a{ 0 };
+	}
 	for (int i = 0; i < TILE_BYTE_SIZE; i++)
 	{
 		mBus->write(VRAM_BEG_ADDRESS + (tileIndex * TILE_BYTE_SIZE) + i, tileData[i]);

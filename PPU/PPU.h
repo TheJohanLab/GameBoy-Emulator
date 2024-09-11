@@ -73,6 +73,7 @@ public:
 
 	void incLY();
 	void incSCY();
+	void decSCY();
 	void incSCX();
 
 

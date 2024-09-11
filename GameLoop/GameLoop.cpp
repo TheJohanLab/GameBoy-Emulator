@@ -37,6 +37,12 @@ void GameLoop::startGame()
 				handleScreenFrame();
 			}
 
+			while (mIsRunning)
+			{
+				mPPU->handleWindowEvents();
+				handleFrame();
+			}
+
 		}
 		
 

@@ -13,41 +13,14 @@ public:
 
 	void initTiles()
 	{
+
+		for (int i = 1; i < 26; i++)
+		{
+			u16 offset = ((i-1) * 16);
+			std::vector<u8> currTile(nintendoLogo.begin() + offset, nintendoLogo.begin() + offset + 16);
+			mPPU->setTile(i, currTile);
+		}
 		mPPU->setTile(0, EmptyTile);
-		//N
-		mPPU->setTile(1, N1Tile);
-		mPPU->setTile(2, N2Tile);
-		mPPU->setTile(3, N3Tile);
-		mPPU->setTile(4, N4Tile);
-		//I
-		mPPU->setTile(5, I1Tile);
-		mPPU->setTile(6, I2Tile);
-		//n
-		mPPU->setTile(7, n1Tile);
-		mPPU->setTile(8, n2Tile);
-		mPPU->setTile(9, n3Tile);
-		mPPU->setTile(10, n4Tile);
-		//t
-		mPPU->setTile(11, t1Tile);
-		mPPU->setTile(12, t2Tile);
-		//e
-		mPPU->setTile(13, e1Tile);
-		mPPU->setTile(14, e2Tile);
-		//n
-		mPPU->setTile(15, n21Tile);
-		mPPU->setTile(16, n22Tile);
-		mPPU->setTile(17, n23Tile);
-		mPPU->setTile(18, n24Tile);
-		//d
-		mPPU->setTile(19, d1Tile);
-		mPPU->setTile(20, d2Tile);
-		mPPU->setTile(21, d3Tile);
-		mPPU->setTile(22, d4Tile);
-		//o
-		mPPU->setTile(23, o21Tile);
-		mPPU->setTile(24, o22Tile);
-		mPPU->setTile(25, o23Tile);
-		mPPU->setTile(26, o24Tile);
 	}
 
 	void initTileMaps()
@@ -75,12 +48,14 @@ public:
 	{
 		if (mPPU && mGameLoop)
 		{
-			mGameLoop->addToSequence(
-				TASK({
-					mPPU->incSCY();
-					mPPU->incSCX();
-					})
-			);
+			for (int i = 0; i < 60; i++)
+			{
+				mGameLoop->addToSequence(
+					TASK({
+						mPPU->decSCY();
+						})
+				);
+			}
 
 		}
 	}

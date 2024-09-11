@@ -169,6 +169,12 @@ inline void PPU::incSCY()
 	mBus->write(SCY, (scy + 1) % 256);
 }
 
+void PPU::decSCY()
+{
+	u8 scy = mBus->read(SCY);
+	mBus->write(SCY, (scy - 1));
+}
+
 inline void PPU::incSCX()
 {
 	u8 scx = mBus->read(SCX);
@@ -251,8 +257,6 @@ void PPU::render(u8 cycle)
 			mPPUModeDots -= PPU_HBLANK_DOTS;
 			draw();
 			incLY();
-			incSCY();
-			incSCX();
 			//mOAM->getObjects()[2].XPos = (mOAM->getObjects()[2].XPos + 1) % 256;
 			setPPUMode(PPU_OAM_SCAN);
 			// On passe à la ligne suivante

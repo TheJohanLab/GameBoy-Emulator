@@ -491,3 +491,8 @@ void PPU::setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData)
 		mBus->write(tileMapAddressOffset + i, tileMapData[i]);
 	}
 }
+
+void PPU::waitForNextFrame()
+{
+	executeFullFrameRender();
+}

@@ -110,6 +110,8 @@ public:
 	void setTile(u8 tileIndex, const std::vector<u8>& tileData);
 	void setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData);
 
+	void waitForNextFrame();
+
 private:
 
 	void initializePPU();

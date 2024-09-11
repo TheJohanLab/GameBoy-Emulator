@@ -57,6 +57,21 @@ public:
 				);
 			}
 
+			for (int i = 0; i < 100; i++)
+			{
+				mGameLoop->addToSequence(
+					TASK({
+						mPPU->waitForNextFrame();
+						})
+				);
+			}
+
+			mGameLoop->addToSequence(
+				TASK({
+					mBus->write(SCY, 0);
+					})
+			);
+
 		}
 	}
 

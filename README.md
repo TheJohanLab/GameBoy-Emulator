@@ -3,6 +3,7 @@
 This is a GameBoy emulator that simulates the behavior of a GameBoy console.
 The code is written in C++ and is using SDL2 for graphic rendering.
 
+![Console boot](Resources/BootSequence.gif)
 
 Here is the current schema that represents the structure of the console :
 ![Schema](https://github.com/YoiseauDesIles/GameBoy-Emulator/assets/122680880/8a078533-ac4b-40d9-8abd-e4e5001269aa)

@@ -43,6 +43,7 @@ class Screen
 
 	private:
 		int initScreen();
+		void initImGui(SDL_Window* window, SDL_Renderer* renderer);
 
 };
 

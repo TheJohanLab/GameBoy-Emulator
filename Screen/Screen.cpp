@@ -1,7 +1,12 @@
 #include "Screen.h"
 #include <iostream>
 
+#include "imgui.h"
+#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_sdlrenderer2.h"
+
 #include "../PPU/PPU.h"
+
 
 Screen::Screen(u16 width, u16 height)
 	:mWidth(width), mHeight(height)
@@ -12,6 +17,12 @@ Screen::Screen(u16 width, u16 height)
 Screen::~Screen()
 {
 	std::cout << "Screen destructor\n";
+
+	// Nettoyage d'ImGui
+	ImGui_ImplSDLRenderer2_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
 	SDL_DestroyRenderer(mRenderer);
 	SDL_DestroyTexture(mTexture);
 	SDL_DestroyWindow(mWindow);
@@ -64,6 +75,24 @@ int Screen::initScreen()
 			}
 		}
 	}
+	initImGui(mWindow, mRenderer);
+	return 0;
+}
+
+void Screen::initImGui(SDL_Window* window, SDL_Renderer* renderer)
+{
+	// Initialiser ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+
+	// Initialiser le backend SDL2 pour la gestion des événements (souris/clavier)
+	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+
+	// Initialiser le backend SDL_Renderer2 pour le rendu
+	ImGui_ImplSDLRenderer2_Init(renderer);
+
+	// Configuration du style ImGui (facultatif)
+	ImGui::StyleColorsDark();
 }
 
 
@@ -97,6 +126,20 @@ void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&
 	SDL_UnlockTexture(mTexture);
 
 	SDL_RenderCopy(mRenderer, mTexture, nullptr, nullptr);
+
+	// Commencer un nouveau frame ImGui
+	ImGui_ImplSDLRenderer2_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+
+	// Créer une simple fenêtre ImGui
+	ImGui::Begin("Test Window");
+	ImGui::Text("Hello from ImGui!");
+	ImGui::End();
+
+	// Finir et rendre le frame ImGui
+	ImGui::Render();
+	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), mRenderer);
 
 	SDL_RenderPresent(mRenderer);
 }

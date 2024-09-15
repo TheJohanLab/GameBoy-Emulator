@@ -2,6 +2,16 @@
 
 #include "../Utils/Log.h"
 
+u16 GameLoop::waitingDots = 0;
+void GameLoop::addVirtualWaitingDots(u16 dots)
+{
+	GameLoop::waitingDots = dots;
+}
+void GameLoop::decVirtualWaitingDots(u16 dots)
+{
+	GameLoop::waitingDots -= dots;
+}
+
 GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu)
 	:mCPU(cpu), mPPU(ppu)
 {
@@ -34,8 +44,10 @@ void GameLoop::startGame()
 				waitForNextFrame();
 				mPPU->handleWindowEvents();
 				(*sequenceIterator)();
-				handleScreenFrame();
-			}
+				//handleScreenFrame();
+				handleFrame();
+
+			}	
 
 			
 
@@ -52,8 +64,18 @@ void GameLoop::handleFrame()
 	if (mCycles < cyclesPerFrame)
 	//if (mCycles < 20)
 	{
+		if (GameLoop::waitingDots != 0)
+		{
+			mCycles += GameLoop::waitingDots;
+			GBE_LOG_INFO("waiting {0} dots", GameLoop::waitingDots);
+			GameLoop::waitingDots = 0;
+		}
+		else
+		{
+			mCycles += step();
+			//GBE_LOG_INFO("step");
+		}
 
-		mCycles += step();
 		//GBE_LOG_INFO("mCycles {0}", mCycles);
 		return;
 	}

@@ -21,6 +21,8 @@ public:
 			mPPU->setTile(i, currTile);
 		}
 		mPPU->setTile(0, EmptyTile);
+		mPPU->setTile(26, tile1);
+		mPPU->setTile(27, tile2);
 	}
 
 	void initTileMaps()

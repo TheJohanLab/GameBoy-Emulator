@@ -5,6 +5,7 @@
 using u8 = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
+using u64 = uint64_t;
 
 const u16 instructionAmount = 512;
 
@@ -29,10 +30,10 @@ const u8 PPU_OAM_SCAN = 0x02;
 const u8 PPU_DRAWING = 0x03;
 
 // PPU cycles modes durations (in dots - 1 dot = 1 cycle) 456 dots per line
-#define PPU_HBLANK_DOTS 204
+#define PPU_HBLANK_DOTS 87
 #define PPU_VBLANK_DOTS 456
 #define PPU_OAM_SCAN_DOTS 80
-#define PPU_DRAWING_DOTS 172
+#define PPU_DRAWING_DOTS 289
 
 #define TILE_WIDTH 8
 #define TILE_BYTE_SIZE 16
@@ -66,3 +67,5 @@ typedef struct RGB{
 #define BIND_FUNC_NO_ARGS(obj, fn) std::bind(&fn, obj)
 #define BIT(x, n) ((x >> n) & 1)
 #define JOIN_BYTES(msb, lsb) ((MSB << 8) + LSB)
+
+#define CONVERT_SEC_TO_DOT(sec) sec * 4194304

@@ -18,9 +18,10 @@ private:
 	Uint64 mFrameStart;
 	Uint64 mFrameEnd;
 
-	u32 mCycles = 0;
+	u32 mCycles{ 0 };
 
 	std::vector<std::function<void()>> mSequence;
+	static u16 waitingDots;
 
 public:
 	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu);
@@ -35,6 +36,9 @@ public:
 	void endSequence();
 
 	void waitForNextFrame();
+
+	static void addVirtualWaitingDots(u16 dots);
+	static void decVirtualWaitingDots(u16 dots);
 
 private:
 	inline void handleFrame();

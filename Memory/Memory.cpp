@@ -28,8 +28,8 @@ Memory::Memory()
 	//mVRAM[offset + 14] = 0b00111000;	mVRAM[offset + 15] = 0b01111100;
 
 
-	//mLCDRegistries[2] = 22;
-	//mLCDRegistries[3] = 17;
+	/*mLCDRegistries[2] = 22;
+	mLCDRegistries[3] = 17;*/
 
 }
 

@@ -13,6 +13,9 @@ void WindowRenderer::renderScanline()
 	/* LCDC.5=0
 	*   Window désactivée
 	*/
+	if (!mPPU->getLCDControl().flags.BG_WindowEnable || !mPPU->getLCDControl().flags.windowEnable)
+		return;
+
 
 	// On récupère le numéro de ligne dans la Window à afficher
 	int16_t lineYInWindow = mPPU->readLY() - mPPU->readWY();

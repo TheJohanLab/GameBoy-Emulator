@@ -7,6 +7,8 @@
 #include "Renderer/WindowRenderer.h"
 #include "Renderer/ObjectRenderer.h"
 
+#include "GameLoop/GameLoop.h"
+
 PPU::PPU(std::shared_ptr<Bus> bus, std::shared_ptr<Screen> screen)
 	:mBus(bus), mScreen(screen)
 {
@@ -255,7 +257,7 @@ void PPU::render(u8 cycle)
 		if (mPPUModeDots >= PPU_HBLANK_DOTS) 
 		{
 			mPPUModeDots -= PPU_HBLANK_DOTS;
-			draw();
+			
 			incLY();
 			//mOAM->getObjects()[2].XPos = (mOAM->getObjects()[2].XPos + 1) % 256;
 			setPPUMode(PPU_OAM_SCAN);
@@ -286,8 +288,10 @@ void PPU::render(u8 cycle)
 			mPPUModeDots -= PPU_VBLANK_DOTS;
 			// 10 scanlines
 
+			draw();
 			// On incrémente la ligne
 			incLY();
+			incSCY();
 
 			// Si ligne suivante = 154 : on revient en haut et passe en OAM
 			// Interrupt ?
@@ -311,23 +315,22 @@ void PPU::render(u8 cycle)
 
 		//Mode 3
 	case PPU_DRAWING :
-		// Render Scanline
 
-		renderPixelsScanline();
-		/*for (u8 i = 0; i < SCREEN_HEIGHT; i++)
+		if (!mIsScanlineDrawn)
 		{
-			
-		}*/
+			mDotsElapsed = renderPixelsScanline();
+			mIsScanlineDrawn = true;
+		}
 
-		if (mPPUModeDots >= PPU_DRAWING_DOTS)
+		if ((mPPUModeDots + mDotsElapsed) >= PPU_DRAWING_DOTS)
 		{
+			mIsScanlineDrawn = false;
 			mPPUModeDots -= PPU_DRAWING_DOTS;
-			auto ly = readLY();
 			
-			if (ly >= SCREEN_HEIGHT - 1)
-				setPPUMode(PPU_HBLANK);
-			else
+			if (readLY() >= SCREEN_HEIGHT - 1)
 				setPPUMode(PPU_VBLANK);
+			else
+				setPPUMode(PPU_HBLANK);
 			
 		}
 		// On passe en HBLANK
@@ -340,11 +343,16 @@ void PPU::render(u8 cycle)
 	
 }
 
-void PPU::renderPixelsScanline()
+ u8 PPU::renderPixelsScanline()
 {
+	u64 scanlineBegin = SDL_GetPerformanceCounter();
 	renderScanline<BackgroundRenderer>();
 	renderScanline<WindowRenderer>();
 	renderScanline<ObjectRenderer>();
+
+	double scanlineElapsedInSec = (double)(SDL_GetPerformanceCounter() - scanlineBegin) / SDL_GetPerformanceFrequency();
+
+	return (scanlineElapsedInSec * 4194304);
 }
 
 // ------------------------------------//
@@ -433,6 +441,7 @@ void PPU::startDMATransfer(const u8& address)
 		mBus->read(sourceAddress | (objectIndex * 4 + 3)));
 	}
 
+	GameLoop::addVirtualWaitingDots(640);
 	//TODO Attendre 160 mcycles ou 640 dots
 }
 

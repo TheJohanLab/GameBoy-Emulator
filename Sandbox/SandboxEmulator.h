@@ -21,10 +21,10 @@ public:
 
 	void initTileMaps()
 	{
-		//std::vector<u8>tileMap2(1024, 1);
+		std::vector<u8>tileMap22(1024, 1);
 
 		mPPU->setTileMap(0, tileMap1);
-		mPPU->setTileMap(1, tileMap2);
+		mPPU->setTileMap(1, tileMap22);
 	}
 
 	void initRegistries()
@@ -32,7 +32,15 @@ public:
 		u_LCD_control LCDControl{};
 		LCDControl.flags.windowTileMap = 1;
 		LCDControl.flags.BGtileMap = 0;
+		LCDControl.flags.BG_WindowTiles = 1;
+		LCDControl.flags.windowEnable = 1;
+		LCDControl.flags.BG_WindowEnable = 1;
 		mBus->write(LCD_CONTROL, LCDControl.byte);
+
+		u8 wxValue = 50;
+		u8 wyValue = 50;
+		mBus->write(WINDOW_X, wxValue);
+		mBus->write(WINDOW_Y, wyValue);
 	}
 
 	void addTestSequence()
@@ -42,6 +50,8 @@ public:
 			
 			mPPU->writeOAM(1, 20, 50, 2, 0);
 			mPPU->writeOAM(2, 22, 52, 0, 0);
+
+			mPPU->startDMATransfer(0xC0);
 
 			mGameLoop->addToSequence(
 				TASK({ 
@@ -152,6 +162,11 @@ public:
 					})
 			); 
 		}
+	}
+
+	void startDMATransfer()
+	{
+		mPPU->startDMATransfer(0xC0);
 	}
 
 };

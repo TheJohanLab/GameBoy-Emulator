@@ -37,6 +37,9 @@ private:
 	u16 mPPUModeDots{ 0 };
 	std::array<Pixel, 4> mScreenColors;
 
+	bool mIsScanlineDrawn = false;
+	u8 mDotsElapsed = 0;
+
 	
 
 public:
@@ -93,7 +96,7 @@ public:
 	u8 readFromMemory(u16 address) const;
 
 	void render(u8 cycles);
-	void renderPixelsScanline();
+	u8 renderPixelsScanline();
 
 	void startDMATransfer(const u8& address);
 

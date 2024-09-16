@@ -291,7 +291,6 @@ void PPU::render(u8 cycle)
 			draw();
 			// On incrémente la ligne
 			incLY();
-			incSCY();
 
 			// Si ligne suivante = 154 : on revient en haut et passe en OAM
 			// Interrupt ?

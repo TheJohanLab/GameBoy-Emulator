@@ -38,12 +38,14 @@ public:
 		LCDControl.flags.windowTileMap = 1;
 		LCDControl.flags.BGtileMap = 0;
 		LCDControl.flags.BG_WindowTiles = 1;
+		LCDControl.flags.BG_WindowEnable = 1;
+		LCDControl.flags.windowEnable = 0;
 		mBus->write(LCD_CONTROL, LCDControl.byte);
 
-		u8 wxValue = 150;
-		u8 wyValue = 150;
-		mBus->write(WINDOW_X, wxValue);
-		mBus->write(WINDOW_Y, wyValue);
+		//u8 wxValue = 150;
+		//u8 wyValue = 150;
+		//mBus->write(WINDOW_X, wxValue);
+		//mBus->write(WINDOW_Y, wyValue);
 	}
 
 	void addTestSequence()

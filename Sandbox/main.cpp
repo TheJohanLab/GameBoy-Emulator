@@ -5,13 +5,13 @@
 
 int main(int argc, char** argv)
 {
-	EmulatorSandbox emulator{};
-	//SandboxBoot emulator{};
+	//EmulatorSandbox emulator{};
+	SandboxBoot emulator{};
 	emulator.initTiles();
 	emulator.initTileMaps();
 	emulator.initRegistries();
-	//emulator.addTestSequence();
-	emulator.startDMATransfer();
+	emulator.addTestSequence();
+	//emulator.startDMATransfer();
 	
 	emulator.startEmulator();
 	return 0;

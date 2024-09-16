@@ -44,8 +44,7 @@ void GameLoop::startGame()
 				waitForNextFrame();
 				mPPU->handleWindowEvents();
 				(*sequenceIterator)();
-				//handleScreenFrame();
-				handleFrame();
+				handleScreenFrame();
 
 			}	
 

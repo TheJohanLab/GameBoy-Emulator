@@ -37,6 +37,7 @@ class Screen
 
 		//void render() const;
 		void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const;
+		void onImGuiRender() const;
 
 		void setOnCloseEvent(closeEventFn callback);
 		void handleEvents();

@@ -92,6 +92,7 @@ u8 GameLoop::step()
 	//m_XPos++;
 
 	mPPU->render(currCycle);
+
 	//mPPU->render(12);
 
 	//mCPU.callInterruptHandler();

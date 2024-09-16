@@ -199,13 +199,10 @@ inline void ObjectRenderer::renderCurrentLineObjectsPixels(u8 spriteHeightMode)
 
 		u8 palette = objectFlags.attr.DMGPalette ? mPPU->readOBP1() : mPPU->readOBP0();
 
-		// TODO : appeler render avec la bonne palette
 		if (pixelColorID != 0x00 && objectFlags.attr.priority == 0x00)
 		{
 			mPPU->renderPixel(pixelColorID, pixel, mPPU->readLY(), palette, true);
 		}
-		
-
 
 	}
 }

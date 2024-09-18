@@ -342,6 +342,11 @@ void PPU::render(u8 cycle)
 	
 }
 
+void PPU::renderImGui() const
+{
+	mScreen->renderImGui();
+}
+
  u8 PPU::renderPixelsScanline()
 {
 	u64 scanlineBegin = SDL_GetPerformanceCounter();

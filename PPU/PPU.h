@@ -5,8 +5,9 @@
 #include <variant>
 #include <cstdint>
 
-#include "../Bus/Bus.h"
-#include "../Screen/Screen.h"
+#include "Bus/Bus.h"
+#include "Screen/Screen.h"
+#include "Screen/ImGuiRenderer.h"
 #include "OAM.h"
 
 
@@ -96,6 +97,8 @@ public:
 	u8 readFromMemory(u16 address) const;
 
 	void render(u8 cycles);
+	void renderImGui() const;
+
 	u8 renderPixelsScanline();
 
 	void startDMATransfer(const u8& address);

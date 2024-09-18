@@ -45,17 +45,10 @@ void GameLoop::startGame()
 				mPPU->handleWindowEvents();
 				(*sequenceIterator)();
 				handleScreenFrame();
-
 			}	
-
-			
-
 		}
-		
-
 	}
 }
-
 
 
 void GameLoop::handleFrame()
@@ -72,10 +65,8 @@ void GameLoop::handleFrame()
 		else
 		{
 			mCycles += step();
-			//GBE_LOG_INFO("step");
 		}
 
-		//GBE_LOG_INFO("mCycles {0}", mCycles);
 		return;
 	}
 
@@ -113,6 +104,8 @@ u8 GameLoop::step()
 	//m_XPos++;
 
 	mPPU->render(currCycle);
+	mPPU->renderImGui();
+
 
 	//mPPU->render(12);
 

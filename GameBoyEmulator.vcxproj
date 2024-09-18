@@ -120,6 +120,7 @@
     <ClCompile Include="PPU\OAM.cpp" />
     <ClCompile Include="PPU\PPU.cpp" />
     <ClCompile Include="Registries\Registries.cpp" />
+    <ClCompile Include="Screen\ImGuiRenderer.cpp" />
     <ClCompile Include="Screen\Screen.cpp" />
     <ClCompile Include="Utils\Log.cpp" />
     <ClCompile Include="PPU\Renderer\WindowRenderer.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="PPU\PPU.h" />
     <ClInclude Include="Registries\IORegistries.h" />
     <ClInclude Include="Registries\Registries.h" />
+    <ClInclude Include="Screen\ImGuiRenderer.h" />
     <ClInclude Include="Screen\Screen.h" />
     <ClInclude Include="Utils\Addresses.h" />
     <ClInclude Include="Utils\Log.h" />

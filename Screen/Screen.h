@@ -2,7 +2,8 @@
 
 #include <array>
 #include "SDL.h"
-#include "../Utils/Utils.h"
+#include "Utils/Utils.h"
+#include "ImGuiRenderer.h"
 #include <functional>
 
 class Pixel;
@@ -27,6 +28,8 @@ class Screen
 
 		closeEventFn closeEventCallback;
 
+		std::shared_ptr<ImGuiRenderer> mImGuiRenderer { nullptr };
+
 	public:
 		Screen(u16 width, u16 height);
 		~Screen();
@@ -37,7 +40,7 @@ class Screen
 
 		//void render() const;
 		void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const;
-		void onImGuiRender() const;
+		void renderImGui() const;
 
 		void setOnCloseEvent(closeEventFn callback);
 		void handleEvents();

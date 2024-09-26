@@ -94,14 +94,9 @@ void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&
 	u8* pPixels;
 	int pitch = 0;
 
-
-
 	SDL_LockTexture(mTexture, nullptr, (void**)&pPixels, &pitch);
-
 	memcpy(pPixels, static_cast<void const*>(&pixelArray), 160 * 144 * 4);
-
 	SDL_UnlockTexture(mTexture);
-
 	SDL_RenderCopy(mRenderer, mTexture, nullptr, nullptr);
 
 	renderImGui();
@@ -109,7 +104,7 @@ void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&
 	SDL_RenderPresent(mRenderer);
 }
 
-void Screen::renderImGui() const
+inline void Screen::renderImGui() const
 {
 	mImGuiRenderer->render();
 }

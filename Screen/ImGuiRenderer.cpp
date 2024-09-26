@@ -35,14 +35,14 @@ void ImGuiRenderer::initImGui()const
 	ImGui::StyleColorsDark();
 }
 
-void ImGuiRenderer::render() const
+void ImGuiRenderer::render()
 {
 	// Commencer un nouveau frame ImGui
 	ImGui_ImplSDLRenderer2_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
-	bool show_demo_window = false;
+	
 	std::string loadedFilePath = "";
 
 	// Créer une barre de menu en haut
@@ -60,29 +60,26 @@ void ImGuiRenderer::render() const
 				}
 			}
 			if (ImGui::MenuItem("Quit", "Ctrl+Q")) {
-				//done = true;
+				
 			}
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Edit"))
-		{
-			ImGui::MenuItem("Cut", "Ctrl+X");
-			ImGui::MenuItem("Copy", "Ctrl+C");
-			ImGui::MenuItem("Paste", "Ctrl+V");
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Help"))
+		//if (ImGui::BeginMenu("Edit"))
+		//{
+		//	ImGui::EndMenu();
+		//}
+		if (ImGui::BeginMenu("About"))
 		{
 			if (ImGui::MenuItem("Show Demo Window")) {
-				//show_demo_window = !show_demo_window;
+				mShow_demo_window = !mShow_demo_window;
 			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
 	}
 
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
+	if (mShow_demo_window)
+		ImGui::ShowDemoWindow(&mShow_demo_window);
 
 	// Finir et rendre le frame ImGui
 	ImGui::Render();

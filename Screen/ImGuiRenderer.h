@@ -16,7 +16,7 @@ public:
 	ImGuiRenderer(SDL_Window* window, SDL_Renderer* renderer);
 	~ImGuiRenderer();
 
-	void render() const ;
+	void render() ;
 	void processEvent(SDL_Event* event) const;
 		
 
@@ -26,4 +26,5 @@ private:
 	std::wstring openFileDialog() const;
 	void loadFile(const std::wstring& filePath) const;
 	std::string wstringToString(const std::wstring& wstr) const;
+	bool mShow_demo_window = false;
 };

@@ -104,8 +104,6 @@ u8 GameLoop::step()
 	//m_XPos++;
 
 	mPPU->render(currCycle);
-	mPPU->renderImGui();
-
 
 	//mPPU->render(12);
 

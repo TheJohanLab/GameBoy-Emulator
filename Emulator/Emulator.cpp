@@ -32,6 +32,9 @@ namespace gbe {
 
 		setCallbacks();
 
+		BootRom bootRom(mPPU);
+		bootRom.initializeBootRom();
+
 		//mPPU->writeOAM(1, 20, 50, 2, 0);
 		//mPPU->writeOAM(2, 22, 52, 2, 0);
 		//mBus->write(DMA, 0xC0);

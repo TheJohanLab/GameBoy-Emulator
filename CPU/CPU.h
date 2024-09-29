@@ -5,6 +5,7 @@
 #include "../Bus/Bus.h"
 #include "../Clock/Clock.h"
 #include "../Registries/Registries.h"
+#include "BootRom/BootRom.h"
 #include <array>
 #include <map>
 #include <functional>
@@ -16,7 +17,7 @@ class CPU
 		std::shared_ptr<Bus> mBus;
 		Registries mRegistries = Registries(*this);
 		std::array<Instruction*, instructionAmount> mInstructionSet;
-	
+		
 		void initInstructionSet();
 
 	public:

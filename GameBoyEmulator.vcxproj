@@ -98,6 +98,7 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BootRom\BootRom.cpp" />
     <ClCompile Include="PPU\Renderer\BackgroundRenderer.cpp" />
     <ClCompile Include="Bus\Bus.cpp" />
     <ClCompile Include="Clock\Clock.cpp" />
@@ -126,6 +127,8 @@
     <ClCompile Include="PPU\Renderer\WindowRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BootRom\BootRom.h" />
+    <ClInclude Include="Cartridge\CartridgeReader.h" />
     <ClInclude Include="PPU\Renderer\BackgroundRenderer.h" />
     <ClInclude Include="Bus\Bus.h" />
     <ClInclude Include="Clock\Clock.h" />

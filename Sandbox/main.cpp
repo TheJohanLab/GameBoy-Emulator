@@ -7,8 +7,8 @@ int main(int argc, char** argv)
 {
 	//EmulatorSandbox emulator{};
 	SandboxBoot emulator{};
-	emulator.initTiles();
-	emulator.initTileMaps();
+	//emulator.initTiles();
+	//emulator.initTileMaps();
 	emulator.initRegistries();
 	emulator.addTestSequence();
 	//emulator.startDMATransfer();

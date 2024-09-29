@@ -1,13 +1,16 @@
 #pragma once
 
-#include "../Memory/Memory.h"
-#include "../Registries/IORegistries.h"
+#include "Memory/Memory.h"
+#include "Cartridge/Cartridge.h"
+
+#include "Registries/IORegistries.h"
 
 
 class Bus
 {
 	private:
 		Memory mMemory;
+		Cartridge mCartridge;
 
 	public:
 		Bus();
@@ -24,7 +27,9 @@ class Bus
 		void setInterruptFlag(const u8 flags);
 
 		void setDMATransfertCallback(std::function<void(const u8)> callback) { mMemory.setDMACallback(callback); }
+		void setLoadCartridgeCallback(std::function<void()> callback) { mCartridge.setLoadCallback(callback); }
 
+		Cartridge* getCartrige() { return &mCartridge; }
 
 };
 

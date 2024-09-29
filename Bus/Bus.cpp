@@ -1,15 +1,20 @@
 #include "Bus.h"
-#include "../Utils/Addresses.h"
+#include "Utils/Addresses.h"
+#include <memory>
 
 Bus::Bus() 
 {
 	mMemory = Memory();
+	mCartridge = Cartridge();
 }
 
 u8 Bus::read(const u16 &address) const
 {
-	u8 data = mMemory.read(address);
-	return data;
+	if (address >= 0x100 || address < 8000)
+		return mCartridge.read(address);
+	else
+		return mMemory.read(address);
+
 }
 
 void Bus::write(const u16 &address, const u8 &data)

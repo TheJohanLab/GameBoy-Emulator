@@ -5,12 +5,14 @@
 #include "backends/imgui_impl_sdl2.h"
 #include "backends/imgui_impl_sdlrenderer2.h"
 
-#include "Cartridge/CartridgeReader.h"
+#include "Cartridge/CartridgeManager.h"
+#include "Cartridge/Cartridge.h"
 
 #include <string>
+#include "Emulator/Emulator.h"
 
-ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_Renderer* renderer)
-	:mWindow(window), mRenderer(renderer)
+ImGuiRenderer::ImGuiRenderer(Cartridge* cartridge, SDL_Window* window, SDL_Renderer* renderer)
+	:mCartridge(cartridge), mWindow(window), mRenderer(renderer)
 {
 	initImGui();
 }
@@ -125,7 +127,9 @@ std::wstring ImGuiRenderer::openFileDialog() const
 
 void ImGuiRenderer::loadFile(const std::wstring& filePath) const
 {
-	printRomInHex(filePath);
+	mCartridge->loadCartridge(filePath);
+	//printRomInHex(filePath);
+	
 	//std::wifstream file(filePath); // Utiliser wifstream pour les fichiers en Unicode
 	//if (file.is_open()) {
 	//	std::wstring line;

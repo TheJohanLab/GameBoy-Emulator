@@ -12,14 +12,21 @@ void GameLoop::decVirtualWaitingDots(u16 dots)
 	GameLoop::waitingDots -= dots;
 }
 
-GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu)
-	:mCPU(cpu), mPPU(ppu)
+GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<BootRom> bootRom)
+	:mCPU(cpu), mPPU(ppu), mBootRom(bootRom)
 {
 	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
 }
 
 void GameLoop::startGame()
 {
+	while (!mIsCartridgeLoaded)
+	{
+		mPPU->handleWindowEvents();
+		mPPU->render(12);
+	}
+
+	mBootRom->initializeBootRom();
 
 	mFrameStart = SDL_GetPerformanceCounter();
 	mIsRunning = true;
@@ -133,6 +140,11 @@ void GameLoop::synchroniseFrame()
 
 }
 
+
+void GameLoop::setCartridgeLoaded()
+{
+	mIsCartridgeLoaded = true;
+}
 
 void GameLoop::addToSequence(std::function<void()> task)
 {

@@ -1,15 +1,13 @@
 #include "Screen.h"
 #include <iostream>
 
-#include <imgui.h>
+#include "PPU/PPU.h"
 
-#include "../PPU/PPU.h"
-
-Screen::Screen(u16 width, u16 height)
+Screen::Screen(Cartridge* cartridge, u16 width, u16 height)
 	:mWidth(width), mHeight(height)
 {
 	initScreen();
-	mImGuiRenderer = std::make_shared<ImGuiRenderer>(mWindow, mRenderer);
+	mImGuiRenderer = std::make_shared<ImGuiRenderer>(cartridge, mWindow, mRenderer);
 }
 
 Screen::~Screen()

@@ -1,21 +1,23 @@
 #pragma once
 
 #include <iostream>
-#include "Bus/Bus.h"
-#include "Clock/Clock.h"
 #include <chrono>
-#include "../CPU/CPU.h"
-
-#include <SDL.h>
-#include "../GameLoop/GameLoop.h"
-#include "../Screen/Screen.h"
-#include "../PPU/PPU.h"
 #include <memory>
 #include <functional>
+#include <SDL.h>
 
-#include "../Utils/Log.h"
-#include "../Utils/Utils.h"
-#include "../Utils/Addresses.h"
+#include "Clock/Clock.h"
+#include "Bus/Bus.h"
+#include "CPU/CPU.h"
+#include "GameLoop/GameLoop.h"
+#include "Screen/Screen.h"
+#include "PPU/PPU.h"
+#include "BootRom/BootRom.h"
+
+
+#include "Utils/Log.h"
+#include "Utils/Utils.h"
+#include "Utils/Addresses.h"
 
 namespace gbe {
 
@@ -26,6 +28,7 @@ namespace gbe {
 		std::shared_ptr<Bus> mBus;
 		std::shared_ptr<CPU> mCPU;
 		std::shared_ptr<PPU> mPPU;
+		std::shared_ptr<BootRom> mBootRom;
 		std::shared_ptr<GameLoop> mGameLoop;
 
 	public:
@@ -33,7 +36,6 @@ namespace gbe {
 		~Emulator();
 
 		void startEmulator();
-
 
 	private:
 

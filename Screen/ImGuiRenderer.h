@@ -5,6 +5,9 @@
 #include <windows.h> 
 #include <commdlg.h>
 #include <cstring> 
+#include <memory>
+
+#include "Cartridge/Cartridge.h"
 
 class ImGuiRenderer
 {
@@ -12,8 +15,10 @@ private:
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;
 
+	Cartridge* mCartridge;
+
 public:
-	ImGuiRenderer(SDL_Window* window, SDL_Renderer* renderer);
+	ImGuiRenderer(Cartridge* mCartridge, SDL_Window* window, SDL_Renderer* renderer);
 	~ImGuiRenderer();
 
 	void render() ;

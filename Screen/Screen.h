@@ -5,6 +5,7 @@
 #include "Utils/Utils.h"
 #include "ImGuiRenderer.h"
 #include <functional>
+#include "Cartridge/Cartridge.h"
 
 class Pixel;
 
@@ -31,7 +32,7 @@ class Screen
 		std::shared_ptr<ImGuiRenderer> mImGuiRenderer { nullptr };
 
 	public:
-		Screen(u16 width, u16 height);
+		Screen(Cartridge* cartridge, u16 width, u16 height);
 		~Screen();
 
 		const SDL_Window* getWindow() const;

@@ -3,15 +3,16 @@
 #include <memory>
 
 Bus::Bus() 
+	:mCartridge(std::make_shared<Cartridge>())
 {
 	mMemory = Memory();
-	mCartridge = Cartridge();
+	//mCartridge = Cartridge();
 }
 
 u8 Bus::read(const u16 &address) const
 {
-	if (address >= 0x100 || address < 8000)
-		return mCartridge.read(address);
+	if (address >= 0x100 && address < 8000)
+		return mCartridge->read(address);
 	else
 		return mMemory.read(address);
 

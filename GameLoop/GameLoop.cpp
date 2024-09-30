@@ -20,13 +20,8 @@ GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shar
 
 void GameLoop::startGame()
 {
-	while (!mIsCartridgeLoaded)
-	{
-		mPPU->handleWindowEvents();
-		mPPU->render(12);
-	}
 
-	mBootRom->initializeBootRom();
+	
 
 	mFrameStart = SDL_GetPerformanceCounter();
 	mIsRunning = true;
@@ -36,8 +31,18 @@ void GameLoop::startGame()
 	{
 		while (mIsRunning)
 		{
-			mPPU->handleWindowEvents();
-			handleFrame();
+			if (!mIsCartridgeLoaded)
+			{
+				mPPU->handleWindowEvents();
+				mPPU->draw();
+			}
+			else
+			{
+				mPPU->handleWindowEvents();
+				handleFrame();
+				//handleScreenFrame();
+			}
+
 		}
 	}
 	else
@@ -70,10 +75,11 @@ void GameLoop::handleFrame()
 			GameLoop::waitingDots = 0;
 		}
 		else
-		{
+		{	
 			mCycles += step();
 		}
 
+		//GBE_LOG_INFO("cycles : {0}", mCycles);
 		return;
 	}
 
@@ -88,6 +94,7 @@ void GameLoop::handleFrame()
 	//u8 currCycle = mCPU.executeOpcode(0x01);
 	//mCPU.callInterruptHandler();
 
+	//GBE_LOG_INFO("synchronise frame");
 	synchroniseFrame();
 	
 	
@@ -144,6 +151,7 @@ void GameLoop::synchroniseFrame()
 void GameLoop::setCartridgeLoaded()
 {
 	mIsCartridgeLoaded = true;
+	mBootRom->initializeBootRom();
 }
 
 void GameLoop::addToSequence(std::function<void()> task)

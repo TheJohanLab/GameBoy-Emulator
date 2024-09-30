@@ -8,7 +8,7 @@ namespace gbe {
 		GBE_LOG_INFO("Game boy Emulator initialization");
 	
 		initEmulator();
-		boot();
+		//boot();
 	}
 
 	Emulator::~Emulator()
@@ -43,12 +43,12 @@ namespace gbe {
 	{
 		mBus->setDMATransfertCallback(BIND_FUNC_1_ARG(*mPPU, PPU::startDMATransfer));
 		//mBus->setLoadCartridgeCallback(std::bind(&Emulator::startEmulator, this));
-		mBus->setLoadCartridgeCallback(BIND_FUNC_NO_ARGS(*mGameLoop, GameLoop::setCartridgeLoaded));
+		mBus->setLoadCartridgeCallback(BIND_FUNC_NO_ARGS(this, Emulator::boot));
 	}
 
 	void Emulator::boot()
 	{
-
+		mGameLoop->setCartridgeLoaded();
 	}
 
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Memory/Memory.h"
 #include "Cartridge/Cartridge.h"
 
@@ -10,7 +12,7 @@ class Bus
 {
 	private:
 		Memory mMemory;
-		Cartridge mCartridge;
+		std::shared_ptr<Cartridge> mCartridge;
 
 	public:
 		Bus();
@@ -27,9 +29,9 @@ class Bus
 		void setInterruptFlag(const u8 flags);
 
 		void setDMATransfertCallback(std::function<void(const u8)> callback) { mMemory.setDMACallback(callback); }
-		void setLoadCartridgeCallback(std::function<void()> callback) { mCartridge.setLoadCallback(callback); }
+		void setLoadCartridgeCallback(std::function<void()> callback) { mCartridge->setLoadCallback(callback); }
 
-		Cartridge* getCartrige() { return &mCartridge; }
+		Cartridge* getCartrige() { return mCartridge.get(); }
 
 };
 

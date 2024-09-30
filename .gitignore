@@ -399,3 +399,7 @@ FodyWeavers.xsd
 
 #Build
 Build/
+
+Dependencies/ImGui/
+Doc/
+Resources/gb-test-roms

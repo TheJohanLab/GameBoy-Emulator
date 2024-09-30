@@ -29,7 +29,7 @@ private:
 	std::shared_ptr<Bus> mBus;
 	std::shared_ptr<Screen> mScreen;
 	std::shared_ptr<OAM> mOAM;
-	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray;
+	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray{ 0 };
 
 	u8 mLY { 0 };
 	std::vector<u8> mObjectsOAMIndex;
@@ -97,7 +97,6 @@ public:
 	u8 readFromMemory(u16 address) const;
 
 	void render(u8 cycles);
-	void renderImGui() const;
 
 	u8 renderPixelsScanline();
 

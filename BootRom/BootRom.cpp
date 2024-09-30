@@ -12,17 +12,12 @@ void BootRom::initializeBootRom()
 
 void BootRom::extractBootLogo()
 {
-	std::vector<u8> logo = { 
-0xCE, 0xED , 0x66 , 0x66 , 0xCC , 0x0D , 0x00 , 0x0B , 0x03 , 0x73 , 0x00 , 0x83 , 0x00 , 0x0C , 0x00 , 0x0D,
-0x00, 0x08 , 0x11 , 0x1F , 0x88 , 0x89 , 0x00 , 0x0E , 0xDC , 0xCC , 0x6E , 0xE6 , 0xDD , 0xDD , 0xD9 , 0x99,
-0xBB, 0xBB , 0x67 , 0x63 , 0x6E , 0x0E , 0xEC , 0xCC , 0xDD , 0xDC , 0x99 , 0x9F , 0xBB , 0xB9 , 0x33 , 0x3E };
-
-	u8 headerLogoAddrOffset = 0x103;
+	u16 headerLogoAddrOffset = 0x104;
 
 	for (int i = 1; i < 25; i++)
 	{
-		u8 halfUpperTile{ mBus->read(headerLogoAddrOffset + i) };
-		u8 halfLowerTile{ mBus->read(headerLogoAddrOffset + i + 1) };
+		u8 halfUpperTile{ mBus->read(headerLogoAddrOffset + 2*(i-1)) };
+		u8 halfLowerTile{ mBus->read(headerLogoAddrOffset + 2*(i - 1) + 1) };
 
 		convertToTile((halfUpperTile << 8) | halfLowerTile);
 		u16 offset = ((i - 1) * 16);
@@ -72,17 +67,8 @@ void BootRom::extractBootLogo()
 
 void BootRom::convertToTile(const u16 tileRawBytes)
 {
-	//CE ED -> F0 F0 F0 F0 / FC FC FC FC / FC FC FC FC / F3 F3 F3 F3
-
-	//CE ED - > F0 FC FC F3
-	//1100 1110 1110 1101 -> 1111 0000 / 1111 1100
-
-
-	// CE ED
 	for (int nibble = 0; nibble < 4; nibble++)
 	{
-		//1111 0000 -> 240 -> F0
-		
 		auto b3 = (BIT(tileRawBytes, 4 * (4 - nibble) - 1 ));
 		auto b2 = (BIT(tileRawBytes, 4 * (4 - nibble) - 2 ));
 		auto b1 = (BIT(tileRawBytes, 4 * (4 - nibble) - 3 ));

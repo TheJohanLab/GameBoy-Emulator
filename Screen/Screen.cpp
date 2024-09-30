@@ -82,6 +82,13 @@ const SDL_Renderer* Screen::getRenderer() const
 }
 
 
+void Screen::render() const
+{
+	SDL_RenderClear(mRenderer);
+	renderImGui();
+	SDL_RenderPresent(mRenderer);
+}
+
 //void Screen::render() const
 void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const
 {

@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 	//emulator.initTiles();
 	//emulator.initTileMaps();
 	emulator.initRegistries();
-	emulator.addTestSequence();
+	//emulator.addTestSequence();
 	//emulator.startDMATransfer();
 	
 	emulator.startEmulator();

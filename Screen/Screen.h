@@ -39,7 +39,7 @@ class Screen
 		const SDL_Renderer* getRenderer() const;
 
 
-		//void render() const;
+		void render() const;
 		void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const;
 		inline void renderImGui() const;
 

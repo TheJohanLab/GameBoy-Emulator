@@ -1,12 +1,15 @@
 #pragma once
 
+#include <functional>
+#include <SDL.h>
+
 #include "CPU/CPU.h"
 #include "PPU/PPU.h"
 #include "BootRom/BootRom.h"
-#include "Utils/Utils.h"
-#include <SDL.h>
+#include "Emulator/States/EmulatorStateFactory.h"
 
-#include <functional>
+#include "Utils/Utils.h"
+
 
 class GameLoop
 {
@@ -14,6 +17,10 @@ private:
 	std::shared_ptr<CPU> mCPU;
 	std::shared_ptr<PPU> mPPU;
 	std::shared_ptr<BootRom> mBootRom;
+
+	std::unique_ptr<EmulatorStateFactory> mStateFactory;
+	std::shared_ptr<IEmulatorState> mCurrentEmulatorState{ nullptr };
+
 	bool mIsRunning;
 	bool mIsPaused;
 
@@ -30,6 +37,8 @@ private:
 public:
 	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<BootRom> bootRom);
 	virtual ~GameLoop() = default;
+
+	void setEmulatorState(EmulatorState state);
 
 	void startGame();
 	void stopGame() { mIsRunning = false; }

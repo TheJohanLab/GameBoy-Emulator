@@ -13,19 +13,31 @@ void GameLoop::decVirtualWaitingDots(u16 dots)
 }
 
 GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<BootRom> bootRom)
-	:mCPU(cpu), mPPU(ppu), mBootRom(bootRom)
+	:mCPU(cpu), mPPU(ppu), mBootRom(bootRom), 
+	mStateFactory(std::make_unique<EmulatorStateFactory>(bootRom))
 {
 	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
+	setEmulatorState(EmulatorState::INIT);
+
+}
+
+void GameLoop::setEmulatorState(EmulatorState state)
+{
+	mCurrentEmulatorState = mStateFactory->createState(state);
 }
 
 void GameLoop::startGame()
 {
-
 	
-
 	mFrameStart = SDL_GetPerformanceCounter();
 	mIsRunning = true;
 
+	//while (mIsRunning)
+	//{
+	//	mCurrentEmulatorState->execute();
+	//	mPPU->handleWindowEvents();
+	//	//handleFrame();
+	//}
 	
 	if (mSequence.empty())
 	{
@@ -151,6 +163,7 @@ void GameLoop::synchroniseFrame()
 
 void GameLoop::setCartridgeLoaded()
 {
+	setEmulatorState(EmulatorState::BOOT);
 	mIsCartridgeLoaded = true;
 	mBootRom->initializeBootRom();
 }

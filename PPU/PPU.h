@@ -4,6 +4,7 @@
 #include <memory>
 #include <variant>
 #include <cstdint>
+#include <functional>
 
 #include "Bus/Bus.h"
 #include "Screen/Screen.h"
@@ -41,7 +42,9 @@ private:
 	bool mIsScanlineDrawn = false;
 	u8 mDotsElapsed = 0;
 
-	
+	//TO REMOVE LATER
+	using onVBlankEvent = std::function<void()>;
+	onVBlankEvent mOnVBlank{ nullptr };
 
 public:
 	PPU(std::shared_ptr<Bus> bus, std::shared_ptr<Screen> screen);
@@ -115,7 +118,10 @@ public:
 	void setTile(u8 tileIndex, const std::vector<u8>& tileData);
 	void setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData);
 
+
+	//TO REMOVE LATER
 	void waitForNextFrame();
+	void setOnVBlankListener(std::function<void()> onVBlank) { mOnVBlank = onVBlank; }
 
 private:
 

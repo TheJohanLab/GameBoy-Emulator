@@ -327,7 +327,10 @@ void PPU::render(u8 cycle)
 			mPPUModeDots -= PPU_DRAWING_DOTS;
 			
 			if (readLY() >= SCREEN_HEIGHT - 1)
+			{
 				setPPUMode(PPU_VBLANK);
+				mOnVBlank();
+			}
 			else
 				setPPUMode(PPU_HBLANK);
 			

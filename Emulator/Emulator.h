@@ -42,6 +42,7 @@ namespace gbe {
 		void initEmulator();
 		void setCallbacks();
 		void boot();
+		void quit();
 
 	};
 }

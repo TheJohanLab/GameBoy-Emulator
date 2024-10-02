@@ -41,14 +41,18 @@ namespace gbe {
 
 	void Emulator::setCallbacks()
 	{
-		mBus->setDMATransfertCallback(BIND_FUNC_1_ARG(*mPPU, PPU::startDMATransfer));
+		mBus->setDMATransfertCallback(BIND_FUNC_1_ARG(mPPU, PPU::startDMATransfer));
 		//mBus->setLoadCartridgeCallback(std::bind(&Emulator::startEmulator, this));
-		mBus->setLoadCartridgeCallback(BIND_FUNC_NO_ARGS(this, Emulator::boot));
+		mBus->setLoadCartridgeCallback(BIND_FUNC_NO_ARGS(mGameLoop, GameLoop::setCartridgeLoaded));
+		mPPU->setOnVBlankListener(BIND_FUNC_NO_ARGS(mBootRom, BootRom::scrollLogo));
 	}
 
 	void Emulator::boot()
 	{
-		mGameLoop->setCartridgeLoaded();
 	}
 
+	void Emulator::quit()
+	{
+		mGameLoop->stopGame();
+	}
 }

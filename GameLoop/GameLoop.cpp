@@ -33,6 +33,7 @@ void GameLoop::startGame()
 		{
 			if (!mIsCartridgeLoaded)
 			{
+				mBootRom->execute();
 				mPPU->handleWindowEvents();
 				mPPU->draw();
 			}

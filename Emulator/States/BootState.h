@@ -2,10 +2,10 @@
 
 #include <memory>
 
-#include "IEmulatorState.h"
+#include "EmulatorBaseState.h"
 #include "BootRom/BootRom.h"
 
-class EmulatorBootState : public IEmulatorState
+class EmulatorBootState : public EmulatorBaseState
 {
 private:
 	std::shared_ptr<BootRom> mBootRom;
@@ -17,6 +17,7 @@ public:
 
 	void execute() override
 	{
-		mBootRom->execute();
+		//mBootRom->execute();
+		mHandleFrameCallback();
 	}
 };

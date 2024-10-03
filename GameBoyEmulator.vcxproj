@@ -134,7 +134,7 @@
     <ClInclude Include="Emulator\States\BootState.h" />
     <ClInclude Include="Emulator\States\EmulatorStateFactory.h" />
     <ClInclude Include="Emulator\States\InitState.h" />
-    <ClInclude Include="Emulator\States\IEmulatorState.h" />
+    <ClInclude Include="Emulator\States\EmulatorBaseState.h" />
     <ClInclude Include="PPU\Renderer\BackgroundRenderer.h" />
     <ClInclude Include="Bus\Bus.h" />
     <ClInclude Include="Clock\Clock.h" />

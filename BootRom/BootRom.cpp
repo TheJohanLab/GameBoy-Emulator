@@ -21,8 +21,7 @@ void BootRom::execute()
 	{
 		scrollLogo();
 	}
-	else
-		GBE_LOG_INFO("PLAY SOUND");
+
 }
 
 void BootRom::scrollLogo()

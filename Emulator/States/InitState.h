@@ -1,11 +1,11 @@
 #pragma once
 
-#include "IEmulatorState.h"
+#include "EmulatorBaseState.h"
 #include "Utils/Log.h"
 
 #include "BootRom/BootRom.h"
 
-class EmulatorInitState : public IEmulatorState
+class EmulatorInitState : public EmulatorBaseState
 {
 private:
 	bool mIsEmulatorInitialized{ false };
@@ -17,6 +17,8 @@ public:
 			GBE_LOG_INFO("Select 'file/load' to load a rom file");
 			mIsEmulatorInitialized = true;
 		}
+
+		mDrawCallback();
 	}
 };
 

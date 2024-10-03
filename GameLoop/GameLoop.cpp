@@ -17,6 +17,8 @@ GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shar
 	mStateFactory(std::make_unique<EmulatorStateFactory>(bootRom))
 {
 	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
+	mStateFactory->setHandleFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleFrame));
+	mStateFactory->setDrawCallback(BIND_FUNC_NO_ARGS(mPPU, PPU::draw));
 	setEmulatorState(EmulatorState::INIT);
 
 }
@@ -32,12 +34,11 @@ void GameLoop::startGame()
 	mFrameStart = SDL_GetPerformanceCounter();
 	mIsRunning = true;
 
-	//while (mIsRunning)
-	//{
-	//	mCurrentEmulatorState->execute();
-	//	mPPU->handleWindowEvents();
-	//	//handleFrame();
-	//}
+	while (mIsRunning)
+	{
+		mPPU->handleWindowEvents();
+		mCurrentEmulatorState->execute();
+	}
 	
 	if (mSequence.empty())
 	{
@@ -45,7 +46,7 @@ void GameLoop::startGame()
 		{
 			if (!mIsCartridgeLoaded)
 			{
-				mBootRom->execute();
+				//mBootRom->execute();
 				mPPU->handleWindowEvents();
 				mPPU->draw();
 			}
@@ -63,7 +64,7 @@ void GameLoop::startGame()
 		while (mIsRunning)
 		{
 			std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
-
+	
 			for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
 			{
 				waitForNextFrame();

@@ -440,7 +440,7 @@
     <ClInclude Include="Cartridge\Cartridge.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Emulator\States\IEmulatorState.h">
+    <ClInclude Include="Emulator\States\EmulatorBaseState.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Emulator\States\InitState.h">

@@ -19,7 +19,7 @@ private:
 	std::shared_ptr<BootRom> mBootRom;
 
 	std::unique_ptr<EmulatorStateFactory> mStateFactory;
-	std::shared_ptr<IEmulatorState> mCurrentEmulatorState{ nullptr };
+	std::shared_ptr<EmulatorBaseState> mCurrentEmulatorState{ nullptr };
 
 	bool mIsRunning;
 	bool mIsPaused;

@@ -165,8 +165,8 @@ void GameLoop::synchroniseFrame()
 void GameLoop::setCartridgeLoaded()
 {
 	setEmulatorState(EmulatorState::BOOT);
-	mIsCartridgeLoaded = true;
-	mBootRom->initializeBootRom();
+	//mIsCartridgeLoaded = true;
+	/*mBootRom->initializeBootRom();*/
 }
 
 void GameLoop::addToSequence(std::function<void()> task)

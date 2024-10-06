@@ -13,7 +13,9 @@ private:
 public:
 	EmulatorBootState(std::shared_ptr<BootRom> bootRom)
 		:mBootRom(bootRom)
-	{}
+	{
+		bootRom->initializeBootRom();
+	}
 
 	void execute() override
 	{

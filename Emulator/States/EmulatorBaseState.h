@@ -4,7 +4,7 @@
 
 enum class EmulatorState
 {
-	INIT, BOOT, START, PAUSE, STOP
+	INIT, BOOT, RUN, PAUSE, STOP
 };
 
 class EmulatorBaseState

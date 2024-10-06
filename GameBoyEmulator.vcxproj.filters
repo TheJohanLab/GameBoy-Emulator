@@ -443,13 +443,16 @@
     <ClInclude Include="Emulator\States\EmulatorBaseState.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Emulator\States\InitState.h">
+    <ClInclude Include="Emulator\States\StateInit.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Emulator\States\BootState.h">
+    <ClInclude Include="Emulator\States\StateBoot.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Emulator\States\EmulatorStateFactory.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Emulator\States\StateRun.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

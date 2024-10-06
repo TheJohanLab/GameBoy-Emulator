@@ -37,7 +37,7 @@ class CPU
 
 		void setRegistries(const std::string & registry, u8 value);
 		void setCombinedRegistries(const std::string& registries, u16 value);
-		//void setFlagRegistry(u8 value) { mRegistries.setF(value); }
+		void setFlagRegistry(u8 value) { mRegistries.setF(value); }
 
 		void writeMemory(const u16 & address, const u8 value);
 		void writeMemory(const combinedRegistries& address, const u8 value);

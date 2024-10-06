@@ -4,8 +4,9 @@
 #include <functional>
 
 #include "EmulatorBaseState.h"
-#include "InitState.h"
-#include "BootState.h"
+#include "StateInit.h"
+#include "StateBoot.h"
+#include "StateRun.h"
 #include "BootRom/BootRom.h"
 
 class EmulatorStateFactory
@@ -35,10 +36,17 @@ public:
 			case EmulatorState::BOOT:
 				state = std::make_unique<EmulatorBootState>(mBootRom);
 				break;
+			case EmulatorState::RUN:
+				state = std::make_unique<EmulatorRunState>();
+				break;
+			default:
+				GBE_LOG_ERROR("The state is undefined");
+				break;
 		}
 
 		state->setHandleFrameCallback(mHandleFrameCallback);
 		state->setDrawCallback(mDrawCallback);
+
 		return state;
 	}
 };

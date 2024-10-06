@@ -26,6 +26,7 @@ GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shar
 void GameLoop::setEmulatorState(EmulatorState state)
 {
 	mCurrentEmulatorState = mStateFactory->createState(state);
+
 }
 
 void GameLoop::startGame()
@@ -40,40 +41,40 @@ void GameLoop::startGame()
 		mCurrentEmulatorState->execute();
 	}
 	
-	if (mSequence.empty())
-	{
-		while (mIsRunning)
-		{
-			if (!mIsCartridgeLoaded)
-			{
-				//mBootRom->execute();
-				mPPU->handleWindowEvents();
-				mPPU->draw();
-			}
-			else
-			{
-				mPPU->handleWindowEvents();
-				handleFrame();
-				//handleScreenFrame();
-			}
+	//if (mSequence.empty())
+	//{
+	//	while (mIsRunning)
+	//	{
+	//		if (!mIsCartridgeLoaded)
+	//		{
+	//			//mBootRom->execute();
+	//			mPPU->handleWindowEvents();
+	//			mPPU->draw();
+	//		}
+	//		else
+	//		{
+	//			mPPU->handleWindowEvents();
+	//			handleFrame();
+	//			//handleScreenFrame();
+	//		}
 
-		}
-	}
-	else
-	{
-		while (mIsRunning)
-		{
-			std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
-	
-			for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
-			{
-				waitForNextFrame();
-				mPPU->handleWindowEvents();
-				(*sequenceIterator)();
-				handleScreenFrame();
-			}	
-		}
-	}
+	//	}
+	//}
+	//else
+	//{
+	//	while (mIsRunning)
+	//	{
+	//		std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
+	//
+	//		for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
+	//		{
+	//			waitForNextFrame();
+	//			mPPU->handleWindowEvents();
+	//			(*sequenceIterator)();
+	//			handleScreenFrame();
+	//		}	
+	//	}
+	//}
 }
 
 
@@ -121,12 +122,11 @@ void GameLoop::handleScreenFrame()
 
 	synchroniseFrame();
 
-
 }
 
 u8 GameLoop::step()
 {
-	u8 currCycle = mCPU->executeOpcode(0x01);
+	u8 currCycle = mCPU->executeOpcode(*mCPU->getPC());
 
 	//mPPU->writeOAM(0, 20, 20, 1, 0);
 	//m_XPos++;

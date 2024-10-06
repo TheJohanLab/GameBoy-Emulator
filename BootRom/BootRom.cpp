@@ -3,8 +3,8 @@
 #include "Utils/Addresses.h"
 #include "Utils/Log.h"
 
-BootRom::BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu)
-	:mBus(bus), mPPU(ppu)
+BootRom::BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, std::shared_ptr<CPU> cpu)
+	:mBus(bus), mPPU(ppu), mCPU(cpu)
 {
 }
 
@@ -17,9 +17,12 @@ void BootRom::initializeBootRom()
 
 void BootRom::execute()
 {
-	if (!mIsBootFinished)
+	if (mIsBootFinished)
 	{
-		scrollLogo();
+		//PlaySound
+		initRegistries();
+		mOnStateChange(EmulatorState::RUN);
+		//Change state to RUN
 	}
 
 }
@@ -119,3 +122,67 @@ void BootRom::convertToTile(const u16 tileRawBytes)
 	}
 }
 
+void BootRom::initRegistries()
+{
+	// On utilise DMG
+	// CPU Registries
+	mCPU->setRegistries("A", 0x01);
+	mCPU->setRegistries("B", 0x00);
+	mCPU->setRegistries("C", 0x13);
+	mCPU->setRegistries("D", 0x00);
+	mCPU->setRegistries("E", 0xD8);
+	mCPU->setRegistries("H", 0x01);
+	mCPU->setRegistries("L", 0x4D);
+	mCPU->setFlagRegistry(0x80);
+
+	auto PC = mCPU->getPC();
+	auto SP = mCPU->getSP();
+	*PC = 0x100;
+	*SP = 0xFFFE;
+
+	// Hardware registries
+	mBus->write(0xFF00, 0xCF);
+	mBus->write(0xFF01, 0x00);
+	mBus->write(0xFF02, 0x7E);
+	mBus->write(0xFF04, 0xAB);
+	mBus->write(0xFF05, 0x00);
+	mBus->write(0xFF06, 0x00);
+	mBus->write(0xFF07, 0xF8);
+	mBus->write(0xFF0F, 0xE1);
+	mBus->write(0xFF10, 0x80);
+	mBus->write(0xFF11, 0xBF);
+	mBus->write(0xFF12, 0xF3);
+	mBus->write(0xFF13, 0xFF);
+	mBus->write(0xFF14, 0xBF);
+	mBus->write(0xFF16, 0x3F);
+	mBus->write(0xFF17, 0x00);
+	mBus->write(0xFF18, 0xFF);
+	mBus->write(0xFF19, 0xBF);
+	mBus->write(0xFF1A, 0x7F);
+	mBus->write(0xFF1B, 0xFF);
+	mBus->write(0xFF1C, 0x9F);
+	mBus->write(0xFF1D, 0xFF);
+	mBus->write(0xFF1E, 0xBF);
+	mBus->write(0xFF20, 0xFF);
+	mBus->write(0xFF21, 0x00);
+	mBus->write(0xFF22, 0x00);
+	mBus->write(0xFF23, 0xBF);
+	mBus->write(0xFF24, 0x77);
+	mBus->write(0xFF25, 0xF3);
+	mBus->write(0xFF26, 0xF1);
+	mBus->write(0xFF40, 0x91);
+	mBus->write(0xFF41, 0x85);
+	mBus->write(0xFF42, 0x00);
+	mBus->write(0xFF43, 0x00);
+	mBus->write(0xFF44, 0x00);
+	mBus->write(0xFF45, 0x00);
+	mBus->write(0xFF46, 0xFF);
+	mBus->write(0xFF47, 0xFC);
+	mBus->write(0xFF4A, 0x00);
+	mBus->write(0xFF4B, 0x00);
+	mBus->write(0xFFFF, 0x00);
+	//Palettes Objets
+	mBus->write(0xFF48, 0x00);
+	mBus->write(0xFF49, 0x00);
+
+}

@@ -2,34 +2,45 @@
 
 #include <vector>
 #include <memory>
+#include <functional>
 
 #include "PPU/PPU.h"
 #include "Bus/Bus.h"
+#include "CPU/CPU.h"
 
+#include "Emulator/States/EmulatorBaseState.h"
 
 class BootRom
 {
+	using onStateChange = std::function<void(EmulatorState)>;
+
 private:
 	std::shared_ptr<Bus> mBus;
 	std::shared_ptr<PPU> mPPU;
+	std::shared_ptr<CPU> mCPU;
 	std::vector<u8> mExtractedBootLogo;
 
 	bool mIsBootFinished{ false };
 	u8 mScrollingIter{ 0 };
 	u8 mVBLankCnt{ 0 };
 	const u16 mTotalScrollingIter{ 0x64 };
+
+	onStateChange mOnStateChange{ nullptr };
 	
 public:
-	BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu);
+	BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, std::shared_ptr<CPU> cpu);
 
 	void initializeBootRom();
 	void execute();
 	void scrollLogo();
 
+	void setStateCallback(onStateChange callback) { mOnStateChange = callback; }
+
 private:
 
 	void extractBootLogo();
 	void convertToTile(const u16 tileRawBytes);
+	void initRegistries();
 
 
 };

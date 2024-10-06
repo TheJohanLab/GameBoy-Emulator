@@ -28,7 +28,7 @@ namespace gbe {
 		mScreen = std::make_shared<Screen>(mBus->getCartrige(), SCREEN_WIDTH, SCREEN_HEIGHT);
 		mCPU = std::make_shared<CPU>(mBus);
 		mPPU = std::make_shared<PPU>(mBus, mScreen);
-		mBootRom = std::make_shared<BootRom>(mBus, mPPU);
+		mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
 
 		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU, mBootRom);
 
@@ -45,6 +45,7 @@ namespace gbe {
 		//mBus->setLoadCartridgeCallback(std::bind(&Emulator::startEmulator, this));
 		mBus->setLoadCartridgeCallback(BIND_FUNC_NO_ARGS(mGameLoop, GameLoop::setCartridgeLoaded));
 		mPPU->setOnVBlankListener(BIND_FUNC_NO_ARGS(mBootRom, BootRom::scrollLogo));
+		mBootRom->setStateCallback(BIND_FUNC_1_ARG(mGameLoop, GameLoop::setEmulatorState));
 	}
 
 	void Emulator::boot()

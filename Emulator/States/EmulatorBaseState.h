@@ -14,10 +14,12 @@ using Callback = std::function<void()>;
 public:
 	virtual void execute() = 0;
 	void setHandleFrameCallback(Callback callback) { mHandleFrameCallback = callback; }
+	void setHandleBootFrameCallback(Callback callback) { mHandleBootFrameCallback = callback; }
 	void setDrawCallback(Callback callback) { mDrawCallback = callback; }
 
 protected:
 	Callback mHandleFrameCallback;
+	Callback mHandleBootFrameCallback;
 	Callback mDrawCallback;
 
 };

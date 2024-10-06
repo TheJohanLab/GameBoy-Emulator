@@ -58,8 +58,10 @@ public:
 
 private:
 	inline void handleFrame();
+	inline void handleBootFrame();
 	inline void handleScreenFrame();
 	inline u8 step();
+	inline u8 bootStep();
 	inline void synchroniseFrame();
 };
 

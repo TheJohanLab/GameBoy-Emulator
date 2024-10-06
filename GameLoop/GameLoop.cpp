@@ -18,6 +18,7 @@ GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shar
 {
 	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
 	mStateFactory->setHandleFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleFrame));
+	mStateFactory->setHandleBootFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleBootFrame));
 	mStateFactory->setDrawCallback(BIND_FUNC_NO_ARGS(mPPU, PPU::draw));
 	setEmulatorState(EmulatorState::INIT);
 
@@ -78,6 +79,35 @@ void GameLoop::startGame()
 }
 
 
+void GameLoop::handleBootFrame()
+{
+	if (mCycles < cyclesPerFrame)
+	//if (mCycles < 20)
+	{
+
+		mCycles += bootStep();
+	
+		//GBE_LOG_INFO("cycles : {0}", mCycles);
+		return;
+	}
+
+
+	//std::cout << "Nombre d'instructions : " << mCycles / 4 << std::endl;
+	//std::cout << "Nombre de cycles : " << mCycles << std::endl;
+	
+	mCycles -= cyclesPerFrame;
+
+	//std::cout << "Nombre de cycles après reset : " << mCycles << std::endl;
+	//TODO Faire une methode qui gere tous les processus du CPU par frame
+	//u8 currCycle = mCPU.executeOpcode(0x01);
+	//mCPU.callInterruptHandler();
+
+	//GBE_LOG_INFO("synchronise frame");
+	synchroniseFrame();
+	
+	
+}
+
 void GameLoop::handleFrame()
 {
 	if (mCycles < cyclesPerFrame)
@@ -122,6 +152,15 @@ void GameLoop::handleScreenFrame()
 
 	synchroniseFrame();
 
+}
+
+u8 GameLoop::bootStep()
+{
+
+	u8 currentCycle{ 12 };
+	mPPU->render(currentCycle);
+
+	return currentCycle;
 }
 
 u8 GameLoop::step()

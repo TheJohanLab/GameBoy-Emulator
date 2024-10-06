@@ -20,6 +20,6 @@ public:
 	void execute() override
 	{
 		mBootRom->execute();
-		mHandleFrameCallback();
+		mHandleBootFrameCallback();
 	}
 };

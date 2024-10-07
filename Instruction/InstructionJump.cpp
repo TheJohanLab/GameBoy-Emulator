@@ -11,7 +11,7 @@ u8 InstructionJump::JP_CCca16(CPU& cpu, const u8& flag)
 	
 	if (flag)
 	{
-		*PC = adress;;
+		*PC = adress - 1;
 		return 16;
 	}
 	
@@ -26,6 +26,7 @@ u8 InstructionJump::JR_CCca16(CPU& cpu, const u8& flag)
 	if (flag)
 	{
 		*PC += offset;
+		*PC -= 1;
 		return 12;
 	}
 	
@@ -53,7 +54,7 @@ u8 InstructionJump::CALL_CC(CPU& cpu, const u8& flag)
 	{
 		u16* PC = cpu.getPC();
 		PUSH_PC(cpu);
-		*PC = address;
+		*PC = address - 1;
 		return 24;
 	}
 	
@@ -145,7 +146,7 @@ u8 InstructionJump::JP_a16(CPU& cpu)
 	u16* PC = cpu.getPC();
 	u16 adress = readNextTwoOpcodes(cpu);
 
-	*PC = adress;
+	*PC = adress-1;
 
 	return 16;
 }
@@ -179,7 +180,7 @@ u8 InstructionJump::RET(CPU& cpu)
 	u8 highPC = cpu.readMemory(*SP);
 	*SP += 1;
 
-	*PC = ((highPC << 8) & 0xFF00) | (lowPC & 0x00FF);
+	*PC = ((highPC << 8) & 0xFF00) | (lowPC & 0x00FF) - 1;
 
 	return 16;
 }
@@ -205,7 +206,7 @@ u8 InstructionJump::CALL_a16(CPU& cpu)
 
 	PUSH_PC(cpu);
 
-	*PC = address;
+	*PC = address - 1;
 
 	return 24;
 }
@@ -293,7 +294,7 @@ u8 InstructionJump::JP_pHLq(CPU& cpu)
 	u16* PC = cpu.getPC();
 	combinedRegistries* HL = cpu.getCombinedRegistries("HL");
 
-	*PC = HL->getValue();
+	*PC = HL->getValue() - 1;
 
 	return 4;
 }

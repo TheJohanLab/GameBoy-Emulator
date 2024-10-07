@@ -563,7 +563,7 @@ void CPU::initInstructionSet()
 	};
 }
 
-u8 CPU::executeOpcode(u16 opcode) 
+u8 CPU::executeOpcode(const u16 opcode) 
 {
 
 	if (opcode == 0xCB) 
@@ -577,17 +577,20 @@ u8 CPU::executeOpcode(u16 opcode)
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
 	//std::cout << mInstructionSet[opcode]->getName() << "\n";
 	
+	incPC();
 
 	return cycles;
 }
 
-u8 CPU::executeOpcodeCB(u16 opcodeCB) 
+u8 CPU::executeOpcodeCB(const u16 opcodeCB) 
 {
 	// read opcode
 	//u16 opcodeCB = 0x00;
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	(mInstructionSet[0x100 + opcodeCB]->getFunctionPointer())(*this);
 	std::cout << mInstructionSet[0x100 + opcodeCB]->getName() << "\n";
+
+	incPC();
 
 	return (4 + mInstructionSet[0x100 + opcodeCB]->getClockCycle());
 }
@@ -721,6 +724,11 @@ void CPU::writeMemory(const combinedRegistries& registries, const u8 value)
 	//TODO Verifier si on peut stocker une reference au lieu d'une copie
 	u16 address = (*registries.highRegistry << 8) + *registries.lowRegistry;
 	mBus->write(address, value);
+}
+
+u8 CPU::getOpcode() const
+{
+	return mBus->read(readPC());
 }
 
 u8 CPU::readMemory(const u16& address) const

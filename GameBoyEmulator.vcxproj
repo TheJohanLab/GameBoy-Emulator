@@ -100,6 +100,7 @@
   <ItemGroup>
     <ClCompile Include="BootRom\BootRom.cpp" />
     <ClCompile Include="Cartridge\Cartridge.cpp" />
+    <ClCompile Include="ImGuiMenu\ImGuiMenu.cpp" />
     <ClCompile Include="PPU\Renderer\BackgroundRenderer.cpp" />
     <ClCompile Include="Bus\Bus.cpp" />
     <ClCompile Include="Clock\Clock.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="Emulator\States\EmulatorStateFactory.h" />
     <ClInclude Include="Emulator\States\StateInit.h" />
     <ClInclude Include="Emulator\States\EmulatorBaseState.h" />
+    <ClInclude Include="ImGuiMenu\ImGuiMenu.h" />
     <ClInclude Include="PPU\Renderer\BackgroundRenderer.h" />
     <ClInclude Include="Bus\Bus.h" />
     <ClInclude Include="Clock\Clock.h" />

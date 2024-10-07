@@ -17,7 +17,9 @@ void BootRom::initializeBootRom()
 
 void BootRom::execute()
 {
-	if (mIsBootFinished)
+
+	//if (mIsBootFinished)
+	if (!mIsBootFinished)
 	{
 		//PlaySound
 		initRegistries();
@@ -29,7 +31,10 @@ void BootRom::execute()
 
 void BootRom::scrollLogo()
 {
-	if (mScrollingIter < mTotalScrollingIter)
+	auto PC = mCPU->getPC();
+	*PC = 0x0040;
+
+	/*if (mScrollingIter < mTotalScrollingIter)
 	{
 		if (mVBLankCnt == 0)
 			mVBLankCnt++;
@@ -43,7 +48,7 @@ void BootRom::scrollLogo()
 	else
 	{
 		mIsBootFinished = true;
-	}
+	}*/
 }
 
 

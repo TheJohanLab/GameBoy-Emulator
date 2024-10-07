@@ -11,11 +11,12 @@
 
 class EmulatorStateFactory
 {
+	using frameCallback = std::function<void()>;
 private:
 	std::shared_ptr<BootRom> mBootRom;
-	std::function<void()> mHandleFrameCallback{ nullptr };
-	std::function<void()> mHandleBootFrameCallback{ nullptr };
-	std::function<void()> mDrawCallback{ nullptr };
+	frameCallback mHandleFrameCallback{ nullptr };
+	frameCallback mHandleBootFrameCallback{ nullptr };
+	frameCallback mDrawCallback{ nullptr };
 
 public:
 	EmulatorStateFactory(std::shared_ptr<BootRom> bootRom)
@@ -24,6 +25,7 @@ public:
 
 	void setHandleFrameCallback(std::function<void()> callback) { mHandleFrameCallback = callback; }
 	void setHandleBootFrameCallback(std::function<void()> callback) { mHandleBootFrameCallback = callback; }
+	
 	void setDrawCallback(std::function<void()> callback) { mDrawCallback = callback; }
 
 	std::unique_ptr<class EmulatorBaseState> createState(EmulatorState stateType)

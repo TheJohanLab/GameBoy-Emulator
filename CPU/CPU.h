@@ -25,15 +25,19 @@ class CPU
 		CPU(std::shared_ptr<Bus> bus);
 		virtual ~CPU() = default;
 
-		u8 executeOpcode(u16 opcode);
-		u8 executeOpcodeCB(u16 opcodeCB);
+		u8 executeOpcode(const u16 opcode);
+		u8 executeOpcodeCB(const u16 opcodeCB);
 		void callInterruptHandler();
 
 		u8* getRegistries(const std::string& registry);
 		combinedRegistries* getCombinedRegistries(const std::string& registry);
 		flags* getFlagRegistry() { return mRegistries.getF(); }
+		u16  readPC() const { return mRegistries.getPC(); }
 		u16* getPC() { return mRegistries.getPC(); }
 		u16* getSP() { return mRegistries.getSP(); }
+
+		void incPC() { *(mRegistries.getPC())+=1; }
+
 
 		void setRegistries(const std::string & registry, u8 value);
 		void setCombinedRegistries(const std::string& registries, u16 value);
@@ -41,6 +45,8 @@ class CPU
 
 		void writeMemory(const u16 & address, const u8 value);
 		void writeMemory(const combinedRegistries& address, const u8 value);
+
+		u8 getOpcode() const;
 		u8 readMemory(const u16 & address) const;
 		u8 readMemory(const combinedRegistries& address) const;
 		u8* getMemoryDataPtr(const combinedRegistries& address);

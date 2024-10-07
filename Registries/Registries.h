@@ -115,6 +115,7 @@ class Registries
 
 		u16* getSP() { return &SP; }
 		u16* getPC() { return &PC; }
+		u16  getPC() const { return PC; }
 
 		void setA(u8 value) { this->A = value; }
 		void setB(u8 value) { this->B = value; }

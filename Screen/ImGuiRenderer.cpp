@@ -127,8 +127,8 @@ std::wstring ImGuiRenderer::openFileDialog() const
 
 void ImGuiRenderer::loadFile(const std::wstring& filePath) const
 {
+	printRomInHex(filePath);
 	mCartridge->loadCartridge(filePath);
-	//printRomInHex(filePath);
 	
 	//std::wifstream file(filePath); // Utiliser wifstream pour les fichiers en Unicode
 	//if (file.is_open()) {

@@ -23,7 +23,7 @@ void ObjectRenderer::renderScanline()
 	objectsOAMIndex.reserve(LINE_OBJ_LIMIT);
 
 	mObjectsOAMIndex.clear();
-	mCurrentLinePixelsInfos.assign(SCREEN_WIDTH, { -1, -1, -1 });
+	mCurrentLinePixelsInfos.assign(500, { -1, -1, -1 });
 
 	u8 spriteHeightMode = mPPU->getLCDControl().flags.OBJSize ? 16 : 8;
 		
@@ -60,7 +60,8 @@ inline void ObjectRenderer::storePixelsInfos(u8 spriteHeightMode)
 	{
 		OAM::Object object = mPPU->readOAM(objOamIndex);
 
-		int16_t objectXOnScreen = object.XPos - 8;
+		int16_t objectXOnScreen = object.XPos;
+		//int16_t objectXOnScreen = object.XPos - 8;
 
 		for (int i = 0; i < TILE_WIDTH; i++)
 		{

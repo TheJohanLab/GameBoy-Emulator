@@ -3,6 +3,7 @@
 #include "../Utils/Log.h"
 
 u16 GameLoop::waitingDots = 0;
+
 void GameLoop::addVirtualWaitingDots(u16 dots)
 {
 	GameLoop::waitingDots = dots;
@@ -42,40 +43,40 @@ void GameLoop::startGame()
 		mCurrentEmulatorState->execute();
 	}
 	
-	//if (mSequence.empty())
-	//{
-	//	while (mIsRunning)
-	//	{
-	//		if (!mIsCartridgeLoaded)
-	//		{
-	//			//mBootRom->execute();
-	//			mPPU->handleWindowEvents();
-	//			mPPU->draw();
-	//		}
-	//		else
-	//		{
-	//			mPPU->handleWindowEvents();
-	//			handleFrame();
-	//			//handleScreenFrame();
-	//		}
+	if (mSequence.empty())
+	{
+		while (mIsRunning)
+		{
+			if (!mIsCartridgeLoaded)
+			{
+				//mBootRom->execute();
+				mPPU->handleWindowEvents();
+				mPPU->draw();
+			}
+			else
+			{
+				mPPU->handleWindowEvents();
+				handleFrame();
+				//handleScreenFrame();
+			}
 
-	//	}
-	//}
-	//else
-	//{
-	//	while (mIsRunning)
-	//	{
-	//		std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
-	//
-	//		for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
-	//		{
-	//			waitForNextFrame();
-	//			mPPU->handleWindowEvents();
-	//			(*sequenceIterator)();
-	//			handleScreenFrame();
-	//		}	
-	//	}
-	//}
+		}
+	}
+	else
+	{
+		while (mIsRunning)
+		{
+			std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
+	
+			for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
+			{
+				waitForNextFrame();
+				mPPU->handleWindowEvents();
+				(*sequenceIterator)();
+				handleScreenFrame();
+			}	
+		}
+	}
 }
 
 
@@ -165,7 +166,7 @@ u8 GameLoop::bootStep()
 
 u8 GameLoop::step()
 {
-	u8 currCycle = mCPU->executeOpcode(*mCPU->getPC());
+	u8 currCycle = mCPU->executeOpcode(mCPU->getOpcode());
 
 	//mPPU->writeOAM(0, 20, 20, 1, 0);
 	//m_XPos++;

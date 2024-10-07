@@ -445,16 +445,14 @@ void PPU::startDMATransfer(const u8& address)
 	}
 
 	GameLoop::addVirtualWaitingDots(640);
-	//TODO Attendre 160 mcycles ou 640 dots
 }
 
 template<typename T>
 inline void PPU::renderScanline()
 {
 	T renderer(this);
-	renderer.renderScanline(); // Faire retourner le temps d'attente CPU
+	renderer.renderScanline(); 
 
-	//TODO gerer les attentes cpu ici
 }
 
 void PPU::setCloseEventCallback(std::function<void()> callback)

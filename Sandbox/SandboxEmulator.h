@@ -161,12 +161,45 @@ public:
 					mPPU->writeOAM_YPos(1, 52);
 					})
 			); 
+
+			for (int i = 0; i < 100; i++)
+			{
+				mGameLoop->addToSequence(
+					TASK({
+						mPPU->waitForNextFrame();
+						})
+				);
+			}
+
+			mGameLoop->addToSequence(
+				TASK({
+					mBus->write(0xFF46, 0xC0);
+					mPPU->writeOAM(1, 22, 52, 1, 1);
+					})
+			);
+
+			for (int i = 0; i < 100; i++)
+			{
+				mGameLoop->addToSequence(
+					TASK({
+						mPPU->waitForNextFrame();
+						})
+				);
+			}
+
+			mGameLoop->addToSequence(
+				TASK({
+					mBus->write(0xFF46, 0xC0);
+					mPPU->writeOAM(1, 22, 52, 2, 2);
+					})
+			);
 		}
 	}
 
 	void startDMATransfer()
 	{
-		mPPU->startDMATransfer(0xC0);
+		mBus->write(0xFF46, 0xC0);
+		//mPPU->startDMATransfer(0xC0);
 	}
 
 };

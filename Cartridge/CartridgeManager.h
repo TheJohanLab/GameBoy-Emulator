@@ -29,7 +29,7 @@ static void printRomInHex(const std::wstring& filePath) {
     }
 
     //printFromTxtFile(file);
-    printFromGbFile(file);
+    //printFromGbFile(file);
 
     file.close();
 }

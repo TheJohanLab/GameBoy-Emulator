@@ -35,7 +35,7 @@ private:
 	bool mIsCartridgeLoaded{ false };
 
 public:
-	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<BootRom> bootRom);
+	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu);
 	virtual ~GameLoop() = default;
 
 	void setEmulatorState(EmulatorState state);

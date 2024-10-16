@@ -3,9 +3,18 @@
 #include "Utils/Addresses.h"
 #include "Utils/Log.h"
 
-BootRom::BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, std::shared_ptr<CPU> cpu)
+#include "PPU/PPU.h"
+#include "Bus/Bus.h"
+#include "CPU/CPU.h"
+
+BootRom::BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, CPU* cpu)
 	:mBus(bus), mPPU(ppu), mCPU(cpu)
 {
+}
+
+BootRom::~BootRom()
+{
+	delete mCPU;
 }
 
 void BootRom::initializeBootRom()
@@ -18,23 +27,21 @@ void BootRom::initializeBootRom()
 void BootRom::execute()
 {
 
-	//if (mIsBootFinished)
-	if (!mIsBootFinished)
+	if (mIsBootFinished)
 	{
 		//PlaySound
 		initRegistries();
 		mOnStateChange(EmulatorState::RUN);
-		//Change state to RUN
+		mCPU->getInterruptsManager()->setActiveVBlankInterrupt();
 	}
 
 }
 
 void BootRom::scrollLogo()
 {
-	auto PC = mCPU->getPC();
-	*PC = 0x0040;
-
-	/*if (mScrollingIter < mTotalScrollingIter)
+	//auto PC = mCPU->getPC();
+	//*PC = 0x0040;
+	if (mScrollingIter < mTotalScrollingIter)
 	{
 		if (mVBLankCnt == 0)
 			mVBLankCnt++;
@@ -48,7 +55,7 @@ void BootRom::scrollLogo()
 	else
 	{
 		mIsBootFinished = true;
-	}*/
+	}
 }
 
 

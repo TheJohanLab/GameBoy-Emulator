@@ -41,6 +41,9 @@ public:
 		LCDControl.flags.BG_WindowEnable = 1;
 		LCDControl.flags.windowEnable = 0;
 		mBus->write(LCD_CONTROL, LCDControl.byte);
+		//mPPU->setBGP(0b10011010);
+		//mPPU->setOBP0(0b00011011);
+		//mPPU->setOBP1(0b00011011);
 
 		//u8 wxValue = 150;
 		//u8 wyValue = 150;

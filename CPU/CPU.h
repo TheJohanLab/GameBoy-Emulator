@@ -1,28 +1,34 @@
  #pragma once
 
-#include "../Instruction/InstructionInclude.h"
-#include "../Utils/Utils.h"
-#include "../Bus/Bus.h"
-#include "../Clock/Clock.h"
-#include "../Registries/Registries.h"
-#include "BootRom/BootRom.h"
+#include "Instruction/InstructionInclude.h"
+#include "Utils/Utils.h"
+#include "Bus/Bus.h"
+#include "Clock/Clock.h"
+#include "Registries/Registries.h"
 #include <array>
 #include <map>
 #include <functional>
 #include <memory>
 
-class CPU
+class PPU;
+class BootRom;
+class InterruptsManager;
+
+class CPU 
 {
 	private:
 		std::shared_ptr<Bus> mBus;
 		Registries mRegistries = Registries(*this);
 		std::array<Instruction*, instructionAmount> mInstructionSet;
+
+		std::shared_ptr<BootRom> mBootRom;
+		std::shared_ptr<InterruptsManager> mInterruptsManager;
 		
 		void initInstructionSet();
 
 	public:
 		CPU();
-		CPU(std::shared_ptr<Bus> bus);
+		CPU(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu);
 		virtual ~CPU() = default;
 
 		u8 executeOpcode(const u16 opcode);
@@ -60,6 +66,8 @@ class CPU
 		std::pair<interrupt_flag, interrupt_flag> getInterruptFlags() const;
 		void setInterruptFlag(const u8& flags);
 
+		std::shared_ptr<BootRom> getBootRom();
+		std::shared_ptr<InterruptsManager> getInterruptsManager();
 
 };
 

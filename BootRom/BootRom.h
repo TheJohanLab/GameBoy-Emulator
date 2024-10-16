@@ -4,11 +4,12 @@
 #include <memory>
 #include <functional>
 
-#include "PPU/PPU.h"
-#include "Bus/Bus.h"
-#include "CPU/CPU.h"
-
+#include "Utils/Utils.h"
 #include "Emulator/States/EmulatorBaseState.h"
+
+class PPU;
+class Bus;
+class CPU;
 
 class BootRom
 {
@@ -17,7 +18,7 @@ class BootRom
 private:
 	std::shared_ptr<Bus> mBus;
 	std::shared_ptr<PPU> mPPU;
-	std::shared_ptr<CPU> mCPU;
+	CPU* mCPU;
 	std::vector<u8> mExtractedBootLogo;
 
 	bool mIsBootFinished{ false };
@@ -28,7 +29,8 @@ private:
 	onStateChange mOnStateChange{ nullptr };
 	
 public:
-	BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, std::shared_ptr<CPU> cpu);
+	BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, CPU* cpu);
+	~BootRom();
 
 	void initializeBootRom();
 	void execute();

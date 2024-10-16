@@ -8,6 +8,7 @@
 #include "Renderer/ObjectRenderer.h"
 
 #include "GameLoop/GameLoop.h"
+#include "Interrupts/InterruptsManager.h"
 
 PPU::PPU(std::shared_ptr<Bus> bus, std::shared_ptr<Screen> screen)
 	:mBus(bus), mScreen(screen)
@@ -329,7 +330,7 @@ void PPU::render(u8 cycle)
 			if (readLY() >= SCREEN_HEIGHT - 1)
 			{
 				setPPUMode(PPU_VBLANK);
-				mOnVBlank();
+				mOnVBlank(InterruptsTypes::VBLANK);
 			}
 			else
 				setPPUMode(PPU_HBLANK);
@@ -369,12 +370,14 @@ void PPU::initializePPU()
 	mScreenColors[3] = gbe::COLOR_BLACK;		// BLACK
 
 	setBGP(0b00011011);
+	
 	//setBGP(0b10011010);
+	 
 	setOBP0(0b00011011);
 	setOBP1(0b00011011);
 
-	setWX(50);
-	setWY(50);
+	//setWX(50);
+	//setWY(50);
 
 	mOAM = std::make_shared<OAM>();
 	mObjectsOAMIndex.reserve(LINE_OBJ_LIMIT);
@@ -444,7 +447,7 @@ void PPU::startDMATransfer(const u8& address)
 		mBus->read(sourceAddress | (objectIndex * 4 + 3)));
 	}
 
-	GameLoop::addVirtualWaitingDots(640);
+	//GameLoop::addVirtualWaitingDots(640);
 }
 
 template<typename T>

@@ -1,4 +1,5 @@
 #include "Emulator.h"
+#include "Interrupts/InterruptsManager.h"
 
 namespace gbe {
 
@@ -26,11 +27,11 @@ namespace gbe {
 
 
 		mScreen = std::make_shared<Screen>(mBus->getCartrige(), SCREEN_WIDTH, SCREEN_HEIGHT);
-		mCPU = std::make_shared<CPU>(mBus);
 		mPPU = std::make_shared<PPU>(mBus, mScreen);
-		mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
+		mCPU = std::make_shared<CPU>(mBus, mPPU);
+		//mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
 
-		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU, mBootRom);
+		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU);
 
 		setCallbacks();
 
@@ -44,8 +45,8 @@ namespace gbe {
 		mBus->setDMATransfertCallback(BIND_FUNC_1_ARG(mPPU, PPU::startDMATransfer));
 		//mBus->setLoadCartridgeCallback(std::bind(&Emulator::startEmulator, this));
 		mBus->setLoadCartridgeCallback(BIND_FUNC_NO_ARGS(mGameLoop, GameLoop::setCartridgeLoaded));
-		mPPU->setOnVBlankListener(BIND_FUNC_NO_ARGS(mBootRom, BootRom::scrollLogo));
-		mBootRom->setStateCallback(BIND_FUNC_1_ARG(mGameLoop, GameLoop::setEmulatorState));
+		mPPU->setOnVBlankListener(BIND_FUNC_1_ARG(mCPU->getInterruptsManager(), InterruptsManager::callInterrupt));
+		mCPU->getBootRom()->setStateCallback(BIND_FUNC_1_ARG(mGameLoop, GameLoop::setEmulatorState));
 	}
 
 	void Emulator::boot()

@@ -12,8 +12,7 @@
 #include "GameLoop/GameLoop.h"
 #include "Screen/Screen.h"
 #include "PPU/PPU.h"
-#include "BootRom/BootRom.h"
-
+#include "Interrupts/InterruptsManager.h"
 
 #include "Utils/Log.h"
 #include "Utils/Utils.h"
@@ -30,6 +29,7 @@ namespace gbe {
 		std::shared_ptr<PPU> mPPU;
 		std::shared_ptr<BootRom> mBootRom;
 		std::shared_ptr<GameLoop> mGameLoop;
+		std::shared_ptr<InterruptsManager> mInterruptsManager;
 
 	public:
 		Emulator();

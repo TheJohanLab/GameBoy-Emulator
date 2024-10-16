@@ -1,6 +1,6 @@
 #include "GameLoop.h"
 
-#include "../Utils/Log.h"
+#include "Utils/Log.h"
 
 u16 GameLoop::waitingDots = 0;
 
@@ -13,9 +13,10 @@ void GameLoop::decVirtualWaitingDots(u16 dots)
 	GameLoop::waitingDots -= dots;
 }
 
-GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<BootRom> bootRom)
-	:mCPU(cpu), mPPU(ppu), mBootRom(bootRom), 
-	mStateFactory(std::make_unique<EmulatorStateFactory>(bootRom))
+GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu)
+	:	mCPU(cpu), 
+		mPPU(ppu), 
+		mStateFactory(std::make_unique<EmulatorStateFactory>(cpu->getBootRom()))
 {
 	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
 	mStateFactory->setHandleFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleFrame));
@@ -43,40 +44,40 @@ void GameLoop::startGame()
 		mCurrentEmulatorState->execute();
 	}
 	
-	if (mSequence.empty())
-	{
-		while (mIsRunning)
-		{
-			if (!mIsCartridgeLoaded)
-			{
-				//mBootRom->execute();
-				mPPU->handleWindowEvents();
-				mPPU->draw();
-			}
-			else
-			{
-				mPPU->handleWindowEvents();
-				handleFrame();
-				//handleScreenFrame();
-			}
+	//if (mSequence.empty())
+	//{
+	//	while (mIsRunning)
+	//	{
+	//		if (!mIsCartridgeLoaded)
+	//		{
+	//			//mBootRom->execute();
+	//			mPPU->handleWindowEvents();
+	//			mPPU->draw();
+	//		}
+	//		else
+	//		{
+	//			mPPU->handleWindowEvents();
+	//			handleFrame();
+	//			//handleScreenFrame();
+	//		}
 
-		}
-	}
-	else
-	{
-		while (mIsRunning)
-		{
-			std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
-	
-			for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
-			{
-				waitForNextFrame();
-				mPPU->handleWindowEvents();
-				(*sequenceIterator)();
-				handleScreenFrame();
-			}	
-		}
-	}
+	//	}
+	//}
+	//else
+	//{
+	//	while (mIsRunning)
+	//	{
+	//		std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
+	//
+	//		for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
+	//		{
+	//			waitForNextFrame();
+	//			mPPU->handleWindowEvents();
+	//			(*sequenceIterator)();
+	//			handleScreenFrame();
+	//		}	
+	//	}
+	//}
 }
 
 

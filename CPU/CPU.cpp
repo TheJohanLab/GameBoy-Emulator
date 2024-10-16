@@ -1,10 +1,16 @@
 #include "CPU.h"
+#include "BootRom/BootRom.h"
+#include "Interrupts/InterruptsManager.h"
+#include "Utils/Log.h"
 
 CPU::CPU()
 {
 }
 
-CPU::CPU(std::shared_ptr<Bus> bus) : mBus(bus)
+CPU::CPU(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu)
+	:	mBus(bus), 
+		mBootRom(std::make_shared<BootRom>(bus, ppu, this)),
+		mInterruptsManager(std::make_shared<InterruptsManager>(this))
 {
 	initInstructionSet();
 }
@@ -575,7 +581,7 @@ u8 CPU::executeOpcode(const u16 opcode)
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	//(mInstructionSet[opcode]->getFunctionPointer())(*this, *mInstructionSet[opcode]);
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
-	//std::cout << mInstructionSet[opcode]->getName() << "\n";
+	GBE_LOG_INFO("{0}", mInstructionSet[opcode]->getName());
 	
 	incPC();
 
@@ -588,7 +594,7 @@ u8 CPU::executeOpcodeCB(const u16 opcodeCB)
 	//u16 opcodeCB = 0x00;
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	(mInstructionSet[0x100 + opcodeCB]->getFunctionPointer())(*this);
-	std::cout << mInstructionSet[0x100 + opcodeCB]->getName() << "\n";
+	GBE_LOG_INFO("{0}", mInstructionSet[0x100 + opcodeCB]->getName());
 
 	incPC();
 
@@ -787,5 +793,15 @@ std::pair<interrupt_flag, interrupt_flag> CPU::getInterruptFlags() const
 void CPU::setInterruptFlag(const u8& flags)
 {
 	mBus->setInterruptFlag(flags);
+}
+
+std::shared_ptr<BootRom> CPU::getBootRom()
+{
+	return mBootRom;
+}
+
+std::shared_ptr<InterruptsManager> CPU::getInterruptsManager()
+{
+	return mInterruptsManager;
 }
 

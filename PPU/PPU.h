@@ -11,6 +11,7 @@
 #include "Screen/ImGuiRenderer.h"
 #include "OAM.h"
 
+#include "Interrupts/InterruptsManager.h"
 
 #define LINE_OBJ_LIMIT 10
 
@@ -43,7 +44,7 @@ private:
 	u8 mDotsElapsed = 0;
 
 	//TO REMOVE LATER
-	using onVBlankEvent = std::function<void()>;
+	using onVBlankEvent = std::function<void(InterruptsTypes)>;
 	onVBlankEvent mOnVBlank{ nullptr };
 
 public:
@@ -121,7 +122,7 @@ public:
 
 	//TO REMOVE LATER
 	void waitForNextFrame();
-	void setOnVBlankListener(std::function<void()> onVBlank) { mOnVBlank = onVBlank; }
+	void setOnVBlankListener(onVBlankEvent onVBlank) { mOnVBlank = onVBlank; }
 
 private:
 

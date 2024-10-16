@@ -3,7 +3,7 @@
 #include <memory>
 #include <functional>
 
-class Bus;
+class CPU;
 
 enum InterruptsTypes
 {
@@ -15,20 +15,31 @@ class InterruptsManager
 using interrupt = std::function<void()>;
 
 private:
-	std::shared_ptr<Bus> mBus;
+	CPU* mCPU;
 
-	std::vector<interrupt> mInterruptsList;
+	std::vector<interrupt> mInterruptsList = std::vector<interrupt>();
 	interrupt mVBlankInterrupt{ nullptr };
+	interrupt mSTATInterrupt{ nullptr };
+	interrupt mTimerInterrupt{ nullptr };
+	interrupt mSerialInterrupt{ nullptr };
+	interrupt mJoypadInterrupt{ nullptr };
 	
 
 
 public:
-	InterruptsManager(std::shared_ptr<Bus> bus);
+	InterruptsManager(CPU* cpu);
+	~InterruptsManager();
 
 	void callInterrupt(InterruptsTypes type) const;
 
-	void setActiveInterrupts();
+	void setActiveVBlankInterrupt();
 
 private:
 	void initInterrupts();
+
+	void vblankInterrupt() const;
+	void statInterrupt() const;
+	void timerInterrupt() const;
+	void serialInterrupt() const;
+	void joypadInterrupt() const;
 };

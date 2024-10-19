@@ -401,5 +401,7 @@ FodyWeavers.xsd
 Build/
 
 Dependencies/ImGui/
-Doc/
+Doc/Others
+Resources/test_roms
 Resources/gb-test-roms
+Resources/Roms

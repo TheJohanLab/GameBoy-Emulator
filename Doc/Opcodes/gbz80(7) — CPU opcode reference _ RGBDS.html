@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CALL_n16 -->
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-v0.6.1 docs-doc-page docs-doc-id-gbz80.7" data-has-hydrated="true" data-theme="light" data-rh="lang,dir,class,data-has-hydrated"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="Docusaurus v3.1.1">
+<title>gbz80(7) — CPU opcode reference | RGBDS</title><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="og:image" content="https://rgbds.gbdev.io/img/logo.png"><meta data-rh="true" name="og:image:width" content="128"><meta data-rh="true" name="og:image:height" content="128"><meta data-rh="true" name="og:image:alt" content="RGBDS&#39; logo"><meta data-rh="true" name="twitter:site" content="@gbdev0"><meta data-rh="true" name="docusaurus_version" content="v0.6.1"><meta data-rh="true" name="docusaurus_tag" content="docs-default-v0.6.1"><meta data-rh="true" name="docsearch:version" content="v0.6.1"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-v0.6.1"><meta data-rh="true" property="og:title" content="gbz80(7) — CPU opcode reference | RGBDS"><link data-rh="true" rel="icon" href="https://rgbds.gbdev.io/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7"><link data-rh="true" rel="alternate" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7" hreflang="en"><link data-rh="true" rel="alternate" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://1p240e1yi0-dsn.algolia.net/" crossorigin="anonymous"><link rel="search" type="application/opensearchdescription+xml" title="RGBDS" href="https://rgbds.gbdev.io/opensearch.xml">
+
+<link rel="preconnect" href="https://stats.gbdev.io/">
+<script type="text/javascript" async="" src="./gbz80(7) — CPU opcode reference _ RGBDS_files/matomo.js.télécharger"></script><script>var _paq=window._paq=window._paq||[];_paq.push(["setRequestMethod","POST"]),_paq.push(["trackPageView"]),_paq.push(["enableLinkTracking"]),_paq.push(["enableHeartBeatTimer"]),function(){var e="https://stats.gbdev.io/";_paq.push(["setRequestMethod","POST"]),_paq.push(["setTrackerUrl",e+"matomo.php"]),_paq.push(["setSiteId","1"]);var t=document,a=t.createElement("script"),p=t.getElementsByTagName("script")[0];a.type="text/javascript",a.async=!0,a.src=e+"matomo.js",p.parentNode.insertBefore(a,p)}()</script><link rel="stylesheet" href="./gbz80(7) — CPU opcode reference _ RGBDS_files/styles.59af5d0a.css">
+<script src="./gbz80(7) — CPU opcode reference _ RGBDS_files/runtime~main.639a7a66.js.télécharger" defer="defer"></script>
+<script src="./gbz80(7) — CPU opcode reference _ RGBDS_files/main.e6b55806.js.télécharger" defer="defer"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-rh="true"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2e0c78b7.b562b749.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2e0c78b7.b562b749.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a16e10f7.05bd51bf.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a16e10f7.05bd51bf.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/82ffa74e.3239d1c1.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/7197469c.07df3a5f.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/7197469c.07df3a5f.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/7bf8daa1.32c3dcf6.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/7bf8daa1.32c3dcf6.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/245a79a1.51e922d9.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/245a79a1.51e922d9.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/0a5117a5.e9570301.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/f434066d.7eea26a9.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/f434066d.7eea26a9.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/07ad1cef.ee6f18d6.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/07ad1cef.ee6f18d6.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/6090c355.2600bd94.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/935f2afb.50cbb6bd.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/935f2afb.50cbb6bd.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/e83a3f15.78525cf3.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/e83a3f15.78525cf3.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/740aa1d2.eac66e2f.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/14675be3.2fb6f68d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/14675be3.2fb6f68d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/f1002e40.d6df3285.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/f1002e40.d6df3285.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/4177417a.da5cfa98.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/b142bec1.dda037c4.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/b142bec1.dda037c4.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a1ba973d.1ae10d40.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2d2bcf9c.2787b85b.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2d2bcf9c.2787b85b.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/af30158b.f70150cc.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/49b5b43c.a1f1ddac.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/88cbdc9c.56af301c.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/91428028.440b4f5f.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/e0a4e8b0.a4f351b1.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1fd605f7.076fbde4.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/ac0d65f4.9e19e435.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/ac0d65f4.9e19e435.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/c4f5d8e4.bfb35adb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/f4e63bd6.214b379e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/f4e63bd6.214b379e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/1f391b9e.b1e1876d.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/97cea196.6c31c426.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/2f93b928.20be8c88.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5e95c892.226be2bb.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/65d1f612.ec678922.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a7bd4aaa.283d8900.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/5df84c71.6d41bf82.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/a94703ab.05a4e32e.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/17896441.12062b97.js"><link rel="prefetch" href="https://rgbds.gbdev.io/assets/js/edb6116e.dfeabf1f.js"></head>
+<body class="" style="overflow: visible;" data-rh="class">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="navbar navbar--fixed-top"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="https://rgbds.gbdev.io/"><div class="navbar__logo"><img src="./gbz80(7) — CPU opcode reference _ RGBDS_files/logo.svg" alt="RGBDS logo" class="themedComponent_mlkZ themedComponent--light_NVdE"></div><b class="navbar__title text--truncate">RGBDS</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="https://rgbds.gbdev.io/docs">Docs</a><a class="navbar__item navbar__link" href="https://rgbds.gbdev.io/faq">FAQ</a><a class="navbar__item navbar__link" href="https://rgbds.gbdev.io/install">Install</a></div><div class="navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class="navbar__link" aria-haspopup="true" aria-expanded="false" role="button" href="https://rgbds.gbdev.io/docs/v0.6.1/">v0.6.1</a><ul class="dropdown__menu"><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/master/gbz80.7">master</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.7.0/gbz80.7">v0.7.0</a></li><li><a aria-current="page" class="dropdown__link dropdown__link--active" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7">v0.6.1</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.6.0/gbz80.7">v0.6.0</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.6.0-welease-cnyandidayte/gbz80.7">v0.6.0-welease-cnyandidayte</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.5.2/gbz80.7">v0.5.2</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.5.1/gbz80.7">v0.5.1</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.5.0/gbz80.7">v0.5.0</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.5.0-rcCar/gbz80.7">v0.5.0-rcCar</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.4.2/gbz80.7">v0.4.2</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.4.1/gbz80.7">v0.4.1</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.4.0/gbz80.7">v0.4.0</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.10/gbz80.7">v0.3.10</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.9/">v0.3.9</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.8/gbz80.7">v0.3.8</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.7/gbz80.7">v0.3.7</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.6/gbz80.7">v0.3.6</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.5/gbz80.7">v0.3.5</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.4/gbz80.7">v0.3.4</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.3/gbz80.7">v0.3.3</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.2/gbz80.7">v0.3.2</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.1/gbz80.7">v0.3.1</a></li><li><a class="dropdown__link" href="https://rgbds.gbdev.io/docs/v0.3.0/gbz80.7">v0.3.0</a></li></ul></div><a href="https://github.com/gbdev/rgbds" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link" aria-label="GitHub repository"></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP" type="button" title="Switch between dark and light mode (currently light mode)" aria-label="Switch between dark and light mode (currently light mode)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 20 20"><path d="M14.386 14.386l4.0877 4.0877-4.0877-4.0877c-2.9418 2.9419-7.7115 2.9419-10.6533 0-2.9419-2.9418-2.9419-7.7115 0-10.6533 2.9418-2.9419 7.7115-2.9419 10.6533 0 2.9419 2.9418 2.9419 7.7115 0 10.6533z" stroke="currentColor" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"><kbd class="DocSearch-Button-Key"><svg width="15" height="15" class="DocSearch-Control-Key-Icon"><path d="M4.505 4.496h2M5.505 5.496v5M8.216 4.496l.055 5.993M10 7.5c.333.333.5.667.5 1v2M12.326 4.5v5.996M8.384 4.496c1.674 0 2.116 0 2.116 1.5s-.442 1.5-2.116 1.5M3.205 9.303c-.09.448-.277 1.21-1.241 1.203C1 10.5.5 9.513.5 8V7c0-1.57.5-2.5 1.464-2.494.964.006 1.134.598 1.24 1.342M12.553 10.5h1.953" stroke-width="1.2" stroke="currentColor" fill="none" stroke-linecap="square"></path></svg></kbd><kbd class="DocSearch-Button-Key">K</kbd></span></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU backToTopButtonShow_xfvO" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="https://rgbds.gbdev.io/docs/v0.6.1/">Release information</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--active">Language reference</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbasm.5">Assembly syntax</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7">CPU instructions</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="https://rgbds.gbdev.io/docs/v0.6.1/rgblink.5">Linkerscript format</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbds.5">Object file format</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link">Command-line options</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbasm.1">RGBASM</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="https://rgbds.gbdev.io/docs/v0.6.1/rgblink.1">RGBLINK</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbfix.1">RGBFIX</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbgfx.1">RGBGFX</a></li></ul></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbds.7">History</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="https://rgbds.gbdev.io/docs/v0.6.1/feedback">Submitting feedback</a></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role="alert"><div>This is documentation for <!-- -->RGBDS<!-- --> <b>v0.6.1</b>, which is no longer actively maintained.</div><div class="margin-top--md">For up-to-date documentation, see the <b><a href="https://rgbds.gbdev.io/docs/v0.7.0/gbz80.7">latest version</a></b> (<!-- -->v0.7.0<!-- -->).</div></div><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="https://rgbds.gbdev.io/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Language reference</span><meta itemprop="position" content="1"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">CPU instructions</span><meta itemprop="position" content="2"></li></ul></nav><span class="theme-doc-version-badge badge badge--secondary">Version: v0.6.1</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><h1>gbz80(7) — CPU opcode reference</h1>
+<!-- -->
+<div class="manual-text"><section class="Sh">
+<h2 class="Sh" id="DESCRIPTION"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DESCRIPTION">DESCRIPTION</a></h2>
+<p class="Pp">This is the list of opcodes supported by
+    <a class="Xr" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbasm.1">rgbasm(1)</a>, including a short
+    description, the number of bytes needed to encode them and the number of CPU
+    cycles at 1MHz (or 2MHz in GBC dual speed mode) needed to complete them.</p>
+<p class="Pp">Note: All arithmetic/logic operations that use register
+    <b class="Sy">A</b> as destination can omit the destination as it is assumed
+    to be register <b class="Sy">A</b> by default. The following two lines have
+    the same effect:</p>
+<div class="Bd Pp Bd-indent Li">
+<pre>OR A,B
+OR B</pre>
+</div>
+</section>
+<section class="Sh">
+<h2 class="Sh" id="LEGEND"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LEGEND">LEGEND</a></h2>
+<p class="Pp">List of abbreviations used in this document.</p>
+<dl class="Bl-tag">
+  <dt id="B"><var class="Ar">r8</var></dt>
+  <dd>Any of the 8-bit registers (<b class="Sy">A</b>,
+      <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#B"><b class="Sy">B</b></a>,
+      <b class="Sy">C</b>,
+      <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#D"><b class="Sy" id="D">D</b></a>,
+      <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#E"><b class="Sy" id="E">E</b></a>,
+      <b class="Sy">H</b>,
+      <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#L"><b class="Sy" id="L">L</b></a>).</dd>
+  <dt id="BC"><var class="Ar">r16</var></dt>
+  <dd>Any of the general-purpose 16-bit registers
+      (<a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#BC"><b class="Sy">BC</b></a>,
+      <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DE"><b class="Sy" id="DE">DE</b></a>,
+      <b class="Sy">HL</b>).</dd>
+  <dt><var class="Ar">n8</var></dt>
+  <dd>8-bit integer constant.</dd>
+  <dt><var class="Ar">n16</var></dt>
+  <dd>16-bit integer constant.</dd>
+  <dt><var class="Ar">e8</var></dt>
+  <dd>8-bit offset (<b class="Sy">-128</b> to <b class="Sy">127</b>).</dd>
+  <dt id="0"><var class="Ar">u3</var></dt>
+  <dd>3-bit unsigned integer constant
+      (<a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#0"><b class="Sy">0</b></a> to
+      <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#7"><b class="Sy" id="7">7</b></a>).</dd>
+  <dt><var class="Ar">cc</var></dt>
+  <dd>Condition codes:
+    <dl class="Bl-tag Bl-compact">
+      <dt id="Z"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z"><b class="Sy">Z</b></a></dt>
+      <dd>Execute if Z is set.</dd>
+      <dt id="NZ"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#NZ"><b class="Sy">NZ</b></a></dt>
+      <dd>Execute if Z is not set.</dd>
+      <dt id="C"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C"><b class="Sy">C</b></a></dt>
+      <dd>Execute if C is set.</dd>
+      <dt id="NC"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#NC"><b class="Sy">NC</b></a></dt>
+      <dd>Execute if C is not set.</dd>
+      <dt id="cc">!
+        <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#cc"><b class="Sy">cc</b></a></dt>
+      <dd>Negates a condition code.</dd>
+    </dl>
+  </dd>
+  <dt id="RST"><var class="Ar">vec</var></dt>
+  <dd>One of the <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RST"><b class="Sy">RST</b></a>
+      vectors (<span class="Ad">0x00</span>, <span class="Ad">0x08</span>,
+      <span class="Ad">0x10</span>, <span class="Ad">0x18</span>,
+      <span class="Ad">0x20</span>, <span class="Ad">0x28</span>,
+      <span class="Ad">0x30</span>, and <span class="Ad">0x38</span>).</dd>
+</dl>
+</section>
+<section class="Sh">
+<h2 class="Sh" id="INSTRUCTION_OVERVIEW"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INSTRUCTION_OVERVIEW">INSTRUCTION
+  OVERVIEW</a></h2>
+<section class="Ss">
+<h3 class="Ss" id="8-bit_Arithmetic_and_Logic_Instructions"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#8-bit_Arithmetic_and_Logic_Instructions">8-bit
+  Arithmetic and Logic Instructions</a></h3>
+<dl class="Bl-inset Bl-compact">
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADC_A,r8">ADC A,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADC_A,_HL_">ADC A,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADC_A,n8">ADC A,n8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_A,r8">ADD A,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_A,_HL_">ADD A,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_A,n8">ADD A,n8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#AND_A,r8">AND A,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#AND_A,_HL_">AND A,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#AND_A,n8">AND A,n8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CP_A,r8">CP A,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CP_A,_HL_">CP A,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CP_A,n8">CP A,n8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DEC_r8">DEC r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DEC__HL_">DEC [HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INC_r8">INC r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INC__HL_">INC [HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#OR_A,r8">OR A,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#OR_A,_HL_">OR A,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#OR_A,n8">OR A,n8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SBC_A,r8">SBC A,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SBC_A,_HL_">SBC A,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SBC_A,n8">SBC A,n8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SUB_A,r8">SUB A,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SUB_A,_HL_">SUB A,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SUB_A,n8">SUB A,n8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#XOR_A,r8">XOR A,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#XOR_A,_HL_">XOR A,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#XOR_A,n8">XOR A,n8</a></dt>
+  <dd></dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="16-bit_Arithmetic_Instructions"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#16-bit_Arithmetic_Instructions">16-bit
+  Arithmetic Instructions</a></h3>
+<dl class="Bl-inset Bl-compact">
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_HL,r16">ADD HL,r16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DEC_r16">DEC r16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INC_r16">INC r16</a></dt>
+  <dd></dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="Bit_Operations_Instructions"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Bit_Operations_Instructions">Bit
+  Operations Instructions</a></h3>
+<dl class="Bl-inset Bl-compact">
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#BIT_u3,r8">BIT u3,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#BIT_u3,_HL_">BIT u3,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RES_u3,r8">RES u3,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RES_u3,_HL_">RES u3,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SET_u3,r8">SET u3,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SET_u3,_HL_">SET u3,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SWAP_r8">SWAP r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SWAP__HL_">SWAP [HL]</a></dt>
+  <dd></dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="Bit_Shift_Instructions"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Bit_Shift_Instructions">Bit
+  Shift Instructions</a></h3>
+<dl class="Bl-inset Bl-compact">
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RL_r8">RL r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RL__HL_">RL [HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RLA">RLA</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RLC_r8">RLC r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RLC__HL_">RLC [HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RLCA">RLCA</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RR_r8">RR r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RR__HL_">RR [HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RRA">RRA</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RRC_r8">RRC r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RRC__HL_">RRC [HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RRCA">RRCA</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SLA_r8">SLA r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SLA__HL_">SLA [HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRA_r8">SRA r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRA__HL_">SRA [HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRL_r8">SRL r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRL__HL_">SRL [HL]</a></dt>
+  <dd></dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="Load_Instructions"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Load_Instructions">Load
+  Instructions</a></h3>
+<dl class="Bl-inset Bl-compact">
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_r8,r8">LD r8,r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_r8,n8">LD r8,n8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_r16,n16">LD r16,n16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__HL_,r8">LD [HL],r8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__HL_,n8">LD [HL],n8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_r8,_HL_">LD r8,[HL]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__r16_,A">LD [r16],A</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__n16_,A">LD [n16],A</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LDH__n16_,A">LDH [n16],A</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LDH__C_,A">LDH [C],A</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_A,_r16_">LD A,[r16]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_A,_n16_">LD A,[n16]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LDH_A,_n16_">LDH A,[n16]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LDH_A,_C_">LDH A,[C]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__HLI_,A">LD [HLI],A</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__HLD_,A">LD [HLD],A</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_A,_HLI_">LD A,[HLI]</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_A,_HLD_">LD A,[HLD]</a></dt>
+  <dd></dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="Jumps_and_Subroutines"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Jumps_and_Subroutines">Jumps
+  and Subroutines</a></h3>
+<dl class="Bl-inset Bl-compact">
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CALL_n16">CALL n16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CALL_cc,n16">CALL cc,n16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JP_HL">JP HL</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JP_n16">JP n16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JP_cc,n16">JP cc,n16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JR_n16">JR n16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JR_cc,n16">JR cc,n16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RET_cc">RET cc</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RET">RET</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RETI">RETI</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RST_vec">RST vec</a></dt>
+  <dd></dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="Stack_Operations_Instructions"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Stack_Operations_Instructions">Stack
+  Operations Instructions</a></h3>
+<dl class="Bl-inset Bl-compact">
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_HL,SP">ADD HL,SP</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_SP,e8">ADD SP,e8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DEC_SP">DEC SP</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INC_SP">INC SP</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_SP,n16">LD SP,n16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__n16_,SP">LD [n16],SP</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_HL,SP+e8">LD HL,SP+e8</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_SP,HL">LD SP,HL</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#POP_AF">POP AF</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#POP_r16">POP r16</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#PUSH_AF">PUSH AF</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#PUSH_r16">PUSH r16</a></dt>
+  <dd></dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="Miscellaneous_Instructions"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Miscellaneous_Instructions">Miscellaneous
+  Instructions</a></h3>
+<dl class="Bl-inset Bl-compact">
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CCF">CCF</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CPL">CPL</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DAA">DAA</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DI">DI</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#EI">EI</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#HALT">HALT</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#NOP">NOP</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SCF">SCF</a></dt>
+  <dd></dd>
+  <dt><a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#STOP">STOP</a></dt>
+  <dd></dd>
+</dl>
+</section>
+</section>
+<section class="Sh">
+<h2 class="Sh" id="INSTRUCTION_REFERENCE"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INSTRUCTION_REFERENCE">INSTRUCTION
+  REFERENCE</a></h2>
+<section class="Ss">
+<h3 class="Ss" id="ADC_A,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADC_A,r8">ADC
+  A,r8</a></h3>
+<p class="Pp">Add the value in <var class="Ar">r8</var> plus the carry flag to
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~2"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~2"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H"><b class="Sy">H</b></a></dt>
+  <dd>Set if overflow from bit 3.</dd>
+  <dt id="C~2"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~2"><b class="Sy">C</b></a></dt>
+  <dd>Set if overflow from bit 7.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="ADC_A,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADC_A,_HL_">ADC
+  A,[HL]</a></h3>
+<p class="Pp">Add the byte pointed to by <b class="Sy">HL</b> plus the carry
+    flag to <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADC_A,r8">ADC A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="ADC_A,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADC_A,n8">ADC
+  A,n8</a></h3>
+<p class="Pp">Add the value <var class="Ar">n8</var> plus the carry flag to
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADC_A,r8">ADC A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="ADD_A,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_A,r8">ADD
+  A,r8</a></h3>
+<p class="Pp">Add the value in <var class="Ar">r8</var> to
+  <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~3"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~3"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~2"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~2"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~2"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~2"><b class="Sy">H</b></a></dt>
+  <dd>Set if overflow from bit 3.</dd>
+  <dt id="C~3"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~3"><b class="Sy">C</b></a></dt>
+  <dd>Set if overflow from bit 7.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="ADD_A,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_A,_HL_">ADD
+  A,[HL]</a></h3>
+<p class="Pp">Add the byte pointed to by <b class="Sy">HL</b> to
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_A,r8">ADD A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="ADD_A,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_A,n8">ADD
+  A,n8</a></h3>
+<p class="Pp">Add the value <var class="Ar">n8</var> to <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_A,r8">ADD A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="ADD_HL,r16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_HL,r16">ADD
+  HL,r16</a></h3>
+<p class="Pp">Add the value in <var class="Ar">r16</var> to
+    <b class="Sy">HL</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="N~3"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~3"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~3"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~3"><b class="Sy">H</b></a></dt>
+  <dd>Set if overflow from bit 11.</dd>
+  <dt id="C~4"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~4"><b class="Sy">C</b></a></dt>
+  <dd>Set if overflow from bit 15.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="ADD_HL,SP"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_HL,SP">ADD
+  HL,SP</a></h3>
+<p class="Pp">Add the value in <b class="Sy">SP</b> to <b class="Sy">HL</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_HL,r16">ADD HL,r16</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="ADD_SP,e8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#ADD_SP,e8">ADD
+  SP,e8</a></h3>
+<p class="Pp">Add the signed value <var class="Ar">e8</var> to
+    <b class="Sy">SP</b>.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~4"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~4"><b class="Sy">Z</b></a></dt>
+  <dd>0</dd>
+  <dt id="N~4"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~4"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~4"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~4"><b class="Sy">H</b></a></dt>
+  <dd>Set if overflow from bit 3.</dd>
+  <dt id="C~5"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~5"><b class="Sy">C</b></a></dt>
+  <dd>Set if overflow from bit 7.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="AND_A,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#AND_A,r8">AND
+  A,r8</a></h3>
+<p class="Pp">Bitwise AND between the value in <var class="Ar">r8</var> and
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~5"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~5"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~5"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~5"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~5"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~5"><b class="Sy">H</b></a></dt>
+  <dd>1</dd>
+  <dt id="C~6"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~6"><b class="Sy">C</b></a></dt>
+  <dd>0</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="AND_A,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#AND_A,_HL_">AND
+  A,[HL]</a></h3>
+<p class="Pp">Bitwise AND between the byte pointed to by <b class="Sy">HL</b>
+    and <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#AND_A,r8">AND A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="AND_A,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#AND_A,n8">AND
+  A,n8</a></h3>
+<p class="Pp">Bitwise AND between the value in <var class="Ar">n8</var> and
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#AND_A,r8">AND A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="BIT_u3,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#BIT_u3,r8">BIT
+  u3,r8</a></h3>
+<p class="Pp">Test bit <var class="Ar">u3</var> in register
+    <var class="Ar">r8</var>, set the zero flag if bit not set.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~6"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~6"><b class="Sy">Z</b></a></dt>
+  <dd>Set if the selected bit is 0.</dd>
+  <dt id="N~6"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~6"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~6"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~6"><b class="Sy">H</b></a></dt>
+  <dd>1</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="BIT_u3,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#BIT_u3,_HL_">BIT
+  u3,[HL]</a></h3>
+<p class="Pp">Test bit <var class="Ar">u3</var> in the byte pointed by
+    <b class="Sy">HL</b>, set the zero flag if bit not set.</p>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#BIT_u3,r8">BIT u3,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="CALL_n16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CALL_n16">CALL
+  n16</a></h3>
+<p class="Pp">Call address <var class="Ar">n16</var>. This pushes the address of
+    the instruction after the
+    <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CALL"><b class="Sy" id="CALL">CALL</b></a> on
+    the stack, such that <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RET">RET</a> can pop it later;
+    then, it executes an implicit <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JP_n16">JP n16</a>.</p>
+<p class="Pp">Cycles: 6</p>
+<p class="Pp">Bytes: 3</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="CALL_cc,n16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CALL_cc,n16">CALL
+  cc,n16</a></h3>
+<p class="Pp">Call address <var class="Ar">n16</var> if condition
+    <var class="Ar">cc</var> is met.</p>
+<p class="Pp">Cycles: 6 taken / 3 untaken</p>
+<p class="Pp">Bytes: 3</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="CCF"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CCF">CCF</a></h3>
+<p class="Pp">Complement Carry Flag.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="N~7"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~7"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~7"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~7"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~7"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~7"><b class="Sy">C</b></a></dt>
+  <dd>Inverted.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="CP_A,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CP_A,r8">CP
+  A,r8</a></h3>
+<p class="Pp">Subtract the value in <var class="Ar">r8</var> from
+    <b class="Sy">A</b> and set flags accordingly, but don't store the result.
+    This is useful for ComParing values.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~7"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~7"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~8"><b class="Sy">N</b></a></dt>
+  <dd>1</dd>
+  <dt id="H~8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~8"><b class="Sy">H</b></a></dt>
+  <dd>Set if borrow from bit 4.</dd>
+  <dt id="C~8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~8"><b class="Sy">C</b></a></dt>
+  <dd>Set if borrow (i.e. if <var class="Ar">r8</var> &gt;
+    <b class="Sy">A</b>).</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="CP_A,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CP_A,_HL_">CP
+  A,[HL]</a></h3>
+<p class="Pp">Subtract the byte pointed to by <b class="Sy">HL</b> from
+    <b class="Sy">A</b> and set flags accordingly, but don't store the
+  result.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CP_A,r8">CP A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="CP_A,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CP_A,n8">CP
+  A,n8</a></h3>
+<p class="Pp">Subtract the value <var class="Ar">n8</var> from
+    <b class="Sy">A</b> and set flags accordingly, but don't store the
+  result.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CP_A,r8">CP A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="CPL"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CPL">CPL</a></h3>
+<p class="Pp">ComPLement accumulator (<b class="Sy">A</b> =
+    <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#_A"><b class="Sy" id="_A">~A</b></a>).</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="N~9"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~9"><b class="Sy">N</b></a></dt>
+  <dd>1</dd>
+  <dt id="H~9"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~9"><b class="Sy">H</b></a></dt>
+  <dd>1</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="DAA"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DAA">DAA</a></h3>
+<p class="Pp">Decimal Adjust Accumulator to get a correct BCD representation
+    after an arithmetic instruction.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~8"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="H~10"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~10"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~9"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~9"><b class="Sy">C</b></a></dt>
+  <dd>Set or reset depending on the operation.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="DEC_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DEC_r8">DEC r8</a></h3>
+<p class="Pp">Decrement value in register <var class="Ar">r8</var> by 1.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~9"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~9"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~10"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~10"><b class="Sy">N</b></a></dt>
+  <dd>1</dd>
+  <dt id="H~11"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~11"><b class="Sy">H</b></a></dt>
+  <dd>Set if borrow from bit 4.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="DEC__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DEC__HL_">DEC
+  [HL]</a></h3>
+<p class="Pp">Decrement the byte pointed to by <b class="Sy">HL</b> by 1.</p>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DEC_r8">DEC r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="DEC_r16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DEC_r16">DEC
+  r16</a></h3>
+<p class="Pp">Decrement value in register <var class="Ar">r16</var> by 1.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="DEC_SP"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DEC_SP">DEC SP</a></h3>
+<p class="Pp">Decrement value in register <b class="Sy">SP</b> by 1.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="DI"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DI">DI</a></h3>
+<p class="Pp">Disable Interrupts by clearing the <b class="Sy">IME</b> flag.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="EI"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#EI">EI</a></h3>
+<p class="Pp">Enable Interrupts by setting the <b class="Sy">IME</b> flag. The
+    flag is only set <i class="Em">after</i> the instruction following
+    <b class="Sy">EI</b>.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="HALT"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#HALT">HALT</a></h3>
+<p class="Pp">Enter CPU low-power consumption mode until an interrupt occurs.
+    The exact behavior of this instruction depends on the state of the
+    <b class="Sy">IME</b> flag.</p>
+<dl class="Bl-tag">
+  <dt id="IME"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#IME"><b class="Sy">IME</b></a>
+    <span class="No">set</span></dt>
+  <dd>The CPU enters low-power mode until <i class="Em">after</i> an interrupt
+      is about to be serviced. The handler is executed normally, and the CPU
+      resumes execution after the <code class="Ic">HALT</code> when that
+      returns.</dd>
+  <dt id="IME~2"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#IME~2"><b class="Sy">IME</b></a>
+    <span class="No">not set</span></dt>
+  <dd>The behavior depends on whether an interrupt is pending (i.e.
+      ‘<code class="Li">[IE] &amp; [IF]</code>’ is non-zero).
+    <dl class="Bl-tag">
+      <dt id="not">None pending</dt>
+      <dd>As soon as an interrupt becomes pending, the CPU resumes execution.
+          This is like the above, except that the handler is
+          <a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#not"><i class="Em">not</i></a>
+        called.</dd>
+      <dt>Some pending</dt>
+      <dd>The CPU continues execution after the <code class="Ic">HALT</code>,
+          but the byte after it is read twice in a row (<b class="Sy">PC</b> is
+          not incremented, due to a hardware bug).</dd>
+    </dl>
+  </dd>
+</dl>
+<p class="Pp">Cycles: -</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="INC_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INC_r8">INC r8</a></h3>
+<p class="Pp">Increment value in register <var class="Ar">r8</var> by 1.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~10"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~10"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~11"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~11"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~12"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~12"><b class="Sy">H</b></a></dt>
+  <dd>Set if overflow from bit 3.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="INC__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INC__HL_">INC
+  [HL]</a></h3>
+<p class="Pp">Increment the byte pointed to by <b class="Sy">HL</b> by 1.</p>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INC_r8">INC r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="INC_r16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INC_r16">INC
+  r16</a></h3>
+<p class="Pp">Increment value in register <var class="Ar">r16</var> by 1.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="INC_SP"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INC_SP">INC SP</a></h3>
+<p class="Pp">Increment value in register <b class="Sy">SP</b> by 1.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="JP_n16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JP_n16">JP n16</a></h3>
+<p class="Pp">Jump to address <var class="Ar">n16</var>; effectively, store
+    <var class="Ar">n16</var> into <b class="Sy">PC</b>.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 3</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="JP_cc,n16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JP_cc,n16">JP
+  cc,n16</a></h3>
+<p class="Pp">Jump to address <var class="Ar">n16</var> if condition
+    <var class="Ar">cc</var> is met.</p>
+<p class="Pp">Cycles: 4 taken / 3 untaken</p>
+<p class="Pp">Bytes: 3</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="JP_HL"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JP_HL">JP HL</a></h3>
+<p class="Pp">Jump to address in <b class="Sy">HL</b>; effectively, load
+    <b class="Sy">PC</b> with value in register <b class="Sy">HL</b>.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="JR_n16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JR_n16">JR n16</a></h3>
+<p class="Pp">Relative Jump to address <var class="Ar">n16</var>. The address is
+    encoded as a signed 8-bit offset from the address immediately following the
+    <code class="Ic">JR</code> instruction, so the target address
+    <var class="Ar">n16</var> must be between <b class="Sy">-128</b> and
+    <b class="Sy">127</b> bytes away. For example:</p>
+<div class="Bd Pp Bd-indent Li">
+<pre>    JR Label  ; no-op; encoded offset of 0
+Label:
+    JR Label  ; infinite loop; encoded offset of -2</pre>
+</div>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="JR_cc,n16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#JR_cc,n16">JR
+  cc,n16</a></h3>
+<p class="Pp">Relative Jump to address <var class="Ar">n16</var> if condition
+    <var class="Ar">cc</var> is met.</p>
+<p class="Pp">Cycles: 3 taken / 2 untaken</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_r8,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_r8,r8">LD
+  r8,r8</a></h3>
+<p class="Pp">Load (copy) value in register on the right into register on the
+    left.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_r8,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_r8,n8">LD
+  r8,n8</a></h3>
+<p class="Pp">Load value <var class="Ar">n8</var> into register
+    <var class="Ar">r8</var>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_r16,n16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_r16,n16">LD
+  r16,n16</a></h3>
+<p class="Pp">Load value <var class="Ar">n16</var> into register
+    <var class="Ar">r16</var>.</p>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 3</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD__HL_,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__HL_,r8">LD
+  [HL],r8</a></h3>
+<p class="Pp">Store value in register <var class="Ar">r8</var> into the byte
+    pointed to by register <b class="Sy">HL</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD__HL_,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__HL_,n8">LD
+  [HL],n8</a></h3>
+<p class="Pp">Store value <var class="Ar">n8</var> into the byte pointed to by
+    register <b class="Sy">HL</b>.</p>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_r8,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_r8,_HL_">LD
+  r8,[HL]</a></h3>
+<p class="Pp">Load value into register <var class="Ar">r8</var> from the byte
+    pointed to by register <b class="Sy">HL</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD__r16_,A"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__r16_,A">LD
+  [r16],A</a></h3>
+<p class="Pp">Store value in register <b class="Sy">A</b> into the byte pointed
+    to by register <var class="Ar">r16</var>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD__n16_,A"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__n16_,A">LD
+  [n16],A</a></h3>
+<p class="Pp">Store value in register <b class="Sy">A</b> into the byte at
+    address <var class="Ar">n16</var>.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 3</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LDH__n16_,A"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LDH__n16_,A">LDH
+  [n16],A</a></h3>
+<p class="Pp">Store value in register <b class="Sy">A</b> into the byte at
+    address <var class="Ar">n16</var>, provided the address is between
+    <span class="Ad">$FF00</span> and <span class="Ad">$FFFF</span>.</p>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+<p class="Pp">This is sometimes written as ‘<code class="Li">LDIO
+    [n16],A</code>’, or ‘<code class="Li">LD
+    [$FF00+n8],A</code>’.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LDH__C_,A"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LDH__C_,A">LDH
+  [C],A</a></h3>
+<p class="Pp">Store value in register <b class="Sy">A</b> into the byte at
+    address <span class="Ad">$FF00+C</span>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+<p class="Pp">This is sometimes written as ‘<code class="Li">LDIO
+    [C],A</code>’, or ‘<code class="Li">LD
+    [$FF00+C],A</code>’.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_A,_r16_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_A,_r16_">LD
+  A,[r16]</a></h3>
+<p class="Pp">Load value in register <b class="Sy">A</b> from the byte pointed
+    to by register <var class="Ar">r16</var>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_A,_n16_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_A,_n16_">LD
+  A,[n16]</a></h3>
+<p class="Pp">Load value in register <b class="Sy">A</b> from the byte at
+    address <var class="Ar">n16</var>.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 3</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LDH_A,_n16_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LDH_A,_n16_">LDH
+  A,[n16]</a></h3>
+<p class="Pp">Load value in register <b class="Sy">A</b> from the byte at
+    address <var class="Ar">n16</var>, provided the address is between
+    <span class="Ad">$FF00</span> and <span class="Ad">$FFFF</span>.</p>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+<p class="Pp">This is sometimes written as ‘<code class="Li">LDIO
+    A,[n16]</code>’, or ‘<code class="Li">LD
+    A,[$FF00+n8]</code>’.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LDH_A,_C_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LDH_A,_C_">LDH
+  A,[C]</a></h3>
+<p class="Pp">Load value in register <b class="Sy">A</b> from the byte at
+    address <span class="Ad">$FF00+c</span>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+<p class="Pp">This is sometimes written as ‘<code class="Li">LDIO
+    A,[C]</code>’, or ‘<code class="Li">LD
+    A,[$FF00+C]</code>’.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD__HLI_,A"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__HLI_,A">LD
+  [HLI],A</a></h3>
+<p class="Pp">Store value in register <b class="Sy">A</b> into the byte pointed
+    by <b class="Sy">HL</b> and increment <b class="Sy">HL</b> afterwards.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+<p class="Pp">This is sometimes written as ‘<code class="Li">LD
+    [HL+],A</code>’, or ‘<code class="Li">LDI
+    [HL],A</code>’.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD__HLD_,A"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__HLD_,A">LD
+  [HLD],A</a></h3>
+<p class="Pp">Store value in register <b class="Sy">A</b> into the byte pointed
+    by <b class="Sy">HL</b> and decrement <b class="Sy">HL</b> afterwards.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+<p class="Pp">This is sometimes written as ‘<code class="Li">LD
+    [HL-],A</code>’, or ‘<code class="Li">LDD
+    [HL],A</code>’.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_A,_HLD_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_A,_HLD_">LD
+  A,[HLD]</a></h3>
+<p class="Pp">Load value into register <b class="Sy">A</b> from the byte pointed
+    by <b class="Sy">HL</b> and decrement <b class="Sy">HL</b> afterwards.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+<p class="Pp">This is sometimes written as ‘<code class="Li">LD
+    A,[HL-]</code>’, or ‘<code class="Li">LDD
+    A,[HL]</code>’.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_A,_HLI_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_A,_HLI_">LD
+  A,[HLI]</a></h3>
+<p class="Pp">Load value into register <b class="Sy">A</b> from the byte pointed
+    by <b class="Sy">HL</b> and increment <b class="Sy">HL</b> afterwards.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+<p class="Pp">This is sometimes written as ‘<code class="Li">LD
+    A,[HL+]</code>’, or ‘<code class="Li">LDI
+    A,[HL]</code>’.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_SP,n16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_SP,n16">LD
+  SP,n16</a></h3>
+<p class="Pp">Load value <var class="Ar">n16</var> into register
+    <b class="Sy">SP</b>.</p>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 3</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD__n16_,SP"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD__n16_,SP">LD
+  [n16],SP</a></h3>
+<p class="Pp">Store <b class="Sy">SP &amp; $FF</b> at address
+    <var class="Ar">n16</var> and <b class="Sy">SP &gt;&gt; 8</b> at address
+    <var class="Ar">n16</var> + 1.</p>
+<p class="Pp">Cycles: 5</p>
+<p class="Pp">Bytes: 3</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_HL,SP+e8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_HL,SP+e8">LD
+  HL,SP+e8</a></h3>
+<p class="Pp">Add the signed value <var class="Ar">e8</var> to
+    <b class="Sy">SP</b> and store the result in <b class="Sy">HL</b>.</p>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~11"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~11"><b class="Sy">Z</b></a></dt>
+  <dd>0</dd>
+  <dt id="N~12"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~12"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~13"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~13"><b class="Sy">H</b></a></dt>
+  <dd>Set if overflow from bit 3.</dd>
+  <dt id="C~10"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~10"><b class="Sy">C</b></a></dt>
+  <dd>Set if overflow from bit 7.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="LD_SP,HL"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LD_SP,HL">LD
+  SP,HL</a></h3>
+<p class="Pp">Load register <b class="Sy">HL</b> into register
+    <b class="Sy">SP</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="NOP"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#NOP">NOP</a></h3>
+<p class="Pp">No OPeration.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="OR_A,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#OR_A,r8">OR
+  A,r8</a></h3>
+<p class="Pp">Store into <b class="Sy">A</b> the bitwise OR of the value in
+    <var class="Ar">r8</var> and <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~12"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~12"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~13"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~13"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~14"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~14"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~11"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~11"><b class="Sy">C</b></a></dt>
+  <dd>0</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="OR_A,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#OR_A,_HL_">OR
+  A,[HL]</a></h3>
+<p class="Pp">Store into <b class="Sy">A</b> the bitwise OR of the byte pointed
+    to by <b class="Sy">HL</b> and <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#OR_A,r8">OR A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="OR_A,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#OR_A,n8">OR
+  A,n8</a></h3>
+<p class="Pp">Store into <b class="Sy">A</b> the bitwise OR of
+    <var class="Ar">n8</var> and <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#OR_A,r8">OR A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="POP_AF"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#POP_AF">POP AF</a></h3>
+<p class="Pp">Pop register <b class="Sy">AF</b> from the stack. This is roughly
+    equivalent to the following <i class="Em">imaginary</i> instructions:</p>
+<div class="Bd Pp Bd-indent Li">
+<pre>ld f, [sp] ; See below for individual flags
+inc sp
+ld a, [sp]
+inc sp</pre>
+</div>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~13"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~13"><b class="Sy">Z</b></a></dt>
+  <dd>Set from bit 7 of the popped low byte.</dd>
+  <dt id="N~14"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~14"><b class="Sy">N</b></a></dt>
+  <dd>Set from bit 6 of the popped low byte.</dd>
+  <dt id="H~15"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~15"><b class="Sy">H</b></a></dt>
+  <dd>Set from bit 5 of the popped low byte.</dd>
+  <dt id="C~12"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~12"><b class="Sy">C</b></a></dt>
+  <dd>Set from bit 4 of the popped low byte.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="POP_r16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#POP_r16">POP
+  r16</a></h3>
+<p class="Pp">Pop register <var class="Ar">r16</var> from the stack. This is
+    roughly equivalent to the following <i class="Em">imaginary</i>
+    instructions:</p>
+<div class="Bd Pp Bd-indent Li">
+<pre>ld LOW(r16), [sp] ; C, E or L
+inc sp
+ld HIGH(r16), [sp] ; B, D or H
+inc sp</pre>
+</div>
+<p class="Pp">Cycles: 3</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="PUSH_AF"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#PUSH_AF">PUSH
+  AF</a></h3>
+<p class="Pp">Push register <b class="Sy">AF</b> into the stack. This is roughly
+    equivalent to the following <i class="Em">imaginary</i> instructions:</p>
+<div class="Bd Pp Bd-indent Li">
+<pre>dec sp
+ld [sp], a
+dec sp
+ld [sp], flag_Z &lt;&lt; 7 | flag_N &lt;&lt; 6 | flag_H &lt;&lt; 5 | flag_C &lt;&lt; 4</pre>
+</div>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="PUSH_r16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#PUSH_r16">PUSH
+  r16</a></h3>
+<p class="Pp">Push register <var class="Ar">r16</var> into the stack. This is
+    roughly equivalent to the following <i class="Em">imaginary</i>
+    instructions:</p>
+<div class="Bd Pp Bd-indent Li">
+<pre>dec sp
+ld [sp], HIGH(r16) ; B, D or H
+dec sp
+ld [sp], LOW(r16) ; C, E or L</pre>
+</div>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RES_u3,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RES_u3,r8">RES
+  u3,r8</a></h3>
+<p class="Pp">Set bit <var class="Ar">u3</var> in register
+    <var class="Ar">r8</var> to 0. Bit 0 is the rightmost one, bit 7 the
+    leftmost one.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RES_u3,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RES_u3,_HL_">RES
+  u3,[HL]</a></h3>
+<p class="Pp">Set bit <var class="Ar">u3</var> in the byte pointed by
+    <b class="Sy">HL</b> to 0. Bit 0 is the rightmost one, bit 7 the leftmost
+    one.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RET"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RET">RET</a></h3>
+<p class="Pp">Return from subroutine. This is basically a <b class="Sy">POP
+    PC</b> (if such an instruction existed). See
+    <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#POP_r16">POP r16</a> for an explanation of how
+    <b class="Sy">POP</b> works.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RET_cc"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RET_cc">RET cc</a></h3>
+<p class="Pp">Return from subroutine if condition <var class="Ar">cc</var> is
+    met.</p>
+<p class="Pp">Cycles: 5 taken / 2 untaken</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RETI"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RETI">RETI</a></h3>
+<p class="Pp">Return from subroutine and enable interrupts. This is basically
+    equivalent to executing <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#EI">EI</a> then
+    <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RET">RET</a>, meaning that <b class="Sy">IME</b> is set
+    right after this instruction.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RL_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RL_r8">RL r8</a></h3>
+<p class="Pp">Rotate bits in register <var class="Ar">r8</var> left through
+    carry.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C &lt;- [7 &lt;- 0] &lt;- C</div>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~14"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~14"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~15"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~15"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~16"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~13"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~13"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RL__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RL__HL_">RL
+  [HL]</a></h3>
+<p class="Pp">Rotate the byte pointed to by <b class="Sy">HL</b> left through
+    carry.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C &lt;- [7 &lt;- 0] &lt;- C</div>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RL_r8">RL r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RLA"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RLA">RLA</a></h3>
+<p class="Pp">Rotate register <b class="Sy">A</b> left through carry.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C &lt;- [7 &lt;- 0] &lt;- C</div>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~15"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~15"><b class="Sy">Z</b></a></dt>
+  <dd>0</dd>
+  <dt id="N~16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~16"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~17"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~17"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~14"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~14"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RLC_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RLC_r8">RLC r8</a></h3>
+<p class="Pp">Rotate register <var class="Ar">r8</var> left.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C &lt;- [7 &lt;- 0] &lt;- [7]</div>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~16"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~17"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~17"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~18"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~18"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~15"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~15"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RLC__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RLC__HL_">RLC
+  [HL]</a></h3>
+<p class="Pp">Rotate the byte pointed to by <b class="Sy">HL</b> left.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C &lt;- [7 &lt;- 0] &lt;- [7]</div>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RLC_r8">RLC r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RLCA"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RLCA">RLCA</a></h3>
+<p class="Pp">Rotate register <b class="Sy">A</b> left.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C &lt;- [7 &lt;- 0] &lt;- [7]</div>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~17"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~17"><b class="Sy">Z</b></a></dt>
+  <dd>0</dd>
+  <dt id="N~18"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~18"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~19"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~19"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~16"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~16"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RR_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RR_r8">RR r8</a></h3>
+<p class="Pp">Rotate register <var class="Ar">r8</var> right through carry.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~18"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~18"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~19"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~19"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~20"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~20"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~17"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~17"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RR__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RR__HL_">RR
+  [HL]</a></h3>
+<p class="Pp">Rotate the byte pointed to by <b class="Sy">HL</b> right through
+    carry.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RR_r8">RR r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RRA"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RRA">RRA</a></h3>
+<p class="Pp">Rotate register <b class="Sy">A</b> right through carry.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~19"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~19"><b class="Sy">Z</b></a></dt>
+  <dd>0</dd>
+  <dt id="N~20"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~20"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~21"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~21"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~18"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~18"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RRC_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RRC_r8">RRC r8</a></h3>
+<p class="Pp">Rotate register <var class="Ar">r8</var> right.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">[0] -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~20"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~20"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~21"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~21"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~22"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~22"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~19"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~19"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RRC__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RRC__HL_">RRC
+  [HL]</a></h3>
+<p class="Pp">Rotate the byte pointed to by <b class="Sy">HL</b> right.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">[0] -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RRC_r8">RRC r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RRCA"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RRCA">RRCA</a></h3>
+<p class="Pp">Rotate register <b class="Sy">A</b> right.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">[0] -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~21"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~21"><b class="Sy">Z</b></a></dt>
+  <dd>0</dd>
+  <dt id="N~22"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~22"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~23"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~23"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~20"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~20"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="RST_vec"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#RST_vec">RST
+  vec</a></h3>
+<p class="Pp">Call address <var class="Ar">vec</var>. This is a shorter and
+    faster equivalent to <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#CALL">CALL</a> for suitable values
+    of <var class="Ar">vec</var>.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SBC_A,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SBC_A,r8">SBC
+  A,r8</a></h3>
+<p class="Pp">Subtract the value in <var class="Ar">r8</var> and the carry flag
+    from <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~22"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~22"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~23"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~23"><b class="Sy">N</b></a></dt>
+  <dd>1</dd>
+  <dt id="H~24"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~24"><b class="Sy">H</b></a></dt>
+  <dd>Set if borrow from bit 4.</dd>
+  <dt id="C~21"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~21"><b class="Sy">C</b></a></dt>
+  <dd>Set if borrow (i.e. if (<var class="Ar">r8</var> + carry) &gt;
+      <b class="Sy">A</b>).</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SBC_A,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SBC_A,_HL_">SBC
+  A,[HL]</a></h3>
+<p class="Pp">Subtract the byte pointed to by <b class="Sy">HL</b> and the carry
+    flag from <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SBC_A,r8">SBC A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SBC_A,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SBC_A,n8">SBC
+  A,n8</a></h3>
+<p class="Pp">Subtract the value <var class="Ar">n8</var> and the carry flag
+    from <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SBC_A,r8">SBC A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SCF"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SCF">SCF</a></h3>
+<p class="Pp">Set Carry Flag.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="N~24"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~24"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~25"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~25"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~22"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~22"><b class="Sy">C</b></a></dt>
+  <dd>1</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SET_u3,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SET_u3,r8">SET
+  u3,r8</a></h3>
+<p class="Pp">Set bit <var class="Ar">u3</var> in register
+    <var class="Ar">r8</var> to 1. Bit 0 is the rightmost one, bit 7 the
+    leftmost one.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SET_u3,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SET_u3,_HL_">SET
+  u3,[HL]</a></h3>
+<p class="Pp">Set bit <var class="Ar">u3</var> in the byte pointed by
+    <b class="Sy">HL</b> to 1. Bit 0 is the rightmost one, bit 7 the leftmost
+    one.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SLA_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SLA_r8">SLA r8</a></h3>
+<p class="Pp">Shift Left Arithmetically register <var class="Ar">r8</var>.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C &lt;- [7 &lt;- 0] &lt;- 0</div>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~23"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~23"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~25"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~25"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~26"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~26"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~23"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~23"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SLA__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SLA__HL_">SLA
+  [HL]</a></h3>
+<p class="Pp">Shift Left Arithmetically the byte pointed to by
+    <b class="Sy">HL</b>.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">C &lt;- [7 &lt;- 0] &lt;- 0</div>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SLA_r8">SLA r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SRA_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRA_r8">SRA r8</a></h3>
+<p class="Pp">Shift Right Arithmetically register <var class="Ar">r8</var>.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">[7] -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~24"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~24"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~26"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~26"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~27"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~27"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~24"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~24"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SRA__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRA__HL_">SRA
+  [HL]</a></h3>
+<p class="Pp">Shift Right Arithmetically the byte pointed to by
+    <b class="Sy">HL</b>.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">[7] -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRA_r8">SRA r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SRL_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRL_r8">SRL r8</a></h3>
+<p class="Pp">Shift Right Logically register <var class="Ar">r8</var>.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">0 -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~25"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~25"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~27"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~27"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~28"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~28"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~25"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~25"><b class="Sy">C</b></a></dt>
+  <dd>Set according to result.</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SRL__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRL__HL_">SRL
+  [HL]</a></h3>
+<p class="Pp">Shift Right Logically the byte pointed to by
+  <b class="Sy">HL</b>.</p>
+<p class="Pp"></p>
+<div class="Bd Bd-indent">0 -&gt; [7 -&gt; 0] -&gt; C</div>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SRA_r8">SRA r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="STOP"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#STOP">STOP</a></h3>
+<p class="Pp">Enter CPU very low power mode. Also used to switch between double
+    and normal speed CPU modes in GBC.</p>
+<p class="Pp">Cycles: -</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: None affected.</p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SUB_A,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SUB_A,r8">SUB
+  A,r8</a></h3>
+<p class="Pp">Subtract the value in <var class="Ar">r8</var> from
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~26"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~26"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~28"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~28"><b class="Sy">N</b></a></dt>
+  <dd>1</dd>
+  <dt id="H~29"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~29"><b class="Sy">H</b></a></dt>
+  <dd>Set if borrow from bit 4.</dd>
+  <dt id="C~26"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~26"><b class="Sy">C</b></a></dt>
+  <dd>Set if borrow (set if <var class="Ar">r8</var> &gt;
+    <b class="Sy">A</b>).</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SUB_A,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SUB_A,_HL_">SUB
+  A,[HL]</a></h3>
+<p class="Pp">Subtract the byte pointed to by <b class="Sy">HL</b> from
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SUB_A,r8">SUB A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SUB_A,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SUB_A,n8">SUB
+  A,n8</a></h3>
+<p class="Pp">Subtract the value <var class="Ar">n8</var> from
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SUB_A,r8">SUB A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SWAP_r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SWAP_r8">SWAP
+  r8</a></h3>
+<p class="Pp">Swap the upper 4 bits in register <var class="Ar">r8</var> and the
+    lower 4 ones.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~27"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~27"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~29"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~29"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~30"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~30"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~27"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~27"><b class="Sy">C</b></a></dt>
+  <dd>0</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="SWAP__HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SWAP__HL_">SWAP
+  [HL]</a></h3>
+<p class="Pp">Swap the upper 4 bits in the byte pointed by <b class="Sy">HL</b>
+    and the lower 4 ones.</p>
+<p class="Pp">Cycles: 4</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SWAP_r8">SWAP r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="XOR_A,r8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#XOR_A,r8">XOR
+  A,r8</a></h3>
+<p class="Pp">Bitwise XOR between the value in <var class="Ar">r8</var> and
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 1</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags:</p>
+<dl class="Bl-hang Bl-compact">
+  <dt id="Z~28"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#Z~28"><b class="Sy">Z</b></a></dt>
+  <dd>Set if result is 0.</dd>
+  <dt id="N~30"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#N~30"><b class="Sy">N</b></a></dt>
+  <dd>0</dd>
+  <dt id="H~31"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#H~31"><b class="Sy">H</b></a></dt>
+  <dd>0</dd>
+  <dt id="C~28"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#C~28"><b class="Sy">C</b></a></dt>
+  <dd>0</dd>
+</dl>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="XOR_A,_HL_"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#XOR_A,_HL_">XOR
+  A,[HL]</a></h3>
+<p class="Pp">Bitwise XOR between the byte pointed to by <b class="Sy">HL</b>
+    and <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 1</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#XOR_A,r8">XOR A,r8</a></p>
+</section>
+<section class="Ss">
+<h3 class="Ss" id="XOR_A,n8"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#XOR_A,n8">XOR
+  A,n8</a></h3>
+<p class="Pp">Bitwise XOR between the value in <var class="Ar">n8</var> and
+    <b class="Sy">A</b>.</p>
+<p class="Pp">Cycles: 2</p>
+<p class="Pp">Bytes: 2</p>
+<p class="Pp">Flags: See <a class="Sx" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#XOR_A,r8">XOR A,r8</a></p>
+</section>
+</section>
+<section class="Sh">
+<h2 class="Sh" id="SEE_ALSO"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SEE_ALSO">SEE
+  ALSO</a></h2>
+<p class="Pp"><a class="Xr" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbasm.1">rgbasm(1)</a>,
+    <a class="Xr" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbds.7">rgbds(7)</a></p>
+</section>
+<section class="Sh">
+<h2 class="Sh" id="HISTORY"><a class="permalink" href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#HISTORY">HISTORY</a></h2>
+<p class="Pp"><code class="Nm">rgbds</code> was originally written by Carsten
+    Sørensen as part of the ASMotor package, and was later packaged in
+    RGBDS by Justin Lloyd. It is now maintained by a number of contributors at
+    <a class="Lk" href="https://github.com/gbdev/rgbds">https://github.com/gbdev/rgbds</a>.</p>
+</section>
+</div></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="theme-doc-footer-edit-meta-row row"><div class="col"><a href="https://github.com/gbdev/rgbds/edit/master/man/gbz80.7" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_vwxv"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="https://rgbds.gbdev.io/docs/v0.6.1/rgbasm.5"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">rgbasm(5) — language documentation</div></a><a class="pagination-nav__link pagination-nav__link--next" href="https://rgbds.gbdev.io/docs/v0.6.1/rgblink.5"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">rgblink(5) — linker script file format</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#DESCRIPTION" class="table-of-contents__link toc-highlight">DESCRIPTION</a></li><li><a href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#LEGEND" class="table-of-contents__link toc-highlight">LEGEND</a></li><li><a href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INSTRUCTION_OVERVIEW" class="table-of-contents__link toc-highlight">INSTRUCTION OVERVIEW</a></li><li><a href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#INSTRUCTION_REFERENCE" class="table-of-contents__link toc-highlight">INSTRUCTION REFERENCE</a></li><li><a href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#SEE_ALSO" class="table-of-contents__link toc-highlight">SEE ALSO</a></li><li><a href="https://rgbds.gbdev.io/docs/v0.6.1/gbz80.7#HISTORY" class="table-of-contents__link toc-highlight">HISTORY</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://gbdev.io/gb-asm-tutorial/" target="_blank" rel="noopener noreferrer" class="footer__link-item">GB ASM Tutorial<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://gbdev.io/pandocs" target="_blank" rel="noopener noreferrer" class="footer__link-item">Game Boy technical reference<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://gbdev.io/privacypolicy" target="_blank" rel="noopener noreferrer" class="footer__link-item">Privacy Policy<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://gbdev.io/chat.html" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://fedi.gbdev.io/@gbdev" target="_blank" rel="noopener noreferrer" class="footer__link-item">Mastodon<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://hh.gbdev.io/" target="_blank" rel="noopener noreferrer" class="footer__link-item">Homebrew Games<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://gbdev.io/resources.html" target="_blank" rel="noopener noreferrer" class="footer__link-item">Game Boy Development resources<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Game Boy is a registered trademark. This project is not endorsed by Nintendo.<br> Copyright © 1997-2024 <a target="_blank" rel="noopener noreferrer" href="https://github.com/gbdev/rgbds/graphs/contributors">RGBDS contributors</a>.</div></div></div></footer></div>
+
+</body></html>

@@ -45,11 +45,13 @@ interrupt_flag Bus::getInterruptFlag() const
 
 void Bus::setInterruptEnable(const u8 flags)
 {
-	mMemory.write(INTERRUPT_ENABLE,flags);
+	u8 IE = mMemory.read(INTERRUPT_ENABLE);
+	mMemory.write(INTERRUPT_ENABLE, IE | flags);
 }
 
 void Bus::setInterruptFlag(const u8 flags)
 {
-	mMemory.write(INTERRUPT_FLAG, flags);
+	u8 IF = mMemory.read(INTERRUPT_FLAG);
+	mMemory.write(INTERRUPT_FLAG, IF | flags);
 }
 

@@ -150,7 +150,6 @@ void GameLoop::handleFrame()
 void GameLoop::handleScreenFrame()
 {
 	mPPU->executeFullFrameRender();
-	//mCPU.callInterruptHandler();
 
 	synchroniseFrame();
 
@@ -161,6 +160,7 @@ u8 GameLoop::bootStep()
 
 	u8 currentCycle{ 12 };
 	mPPU->render(currentCycle);
+	mCPU->getInterruptsManager()->callInterruptHandler();
 
 	return currentCycle;
 }
@@ -169,16 +169,10 @@ u8 GameLoop::step()
 {
 	u8 currCycle = mCPU->executeOpcode(mCPU->getOpcode());
 
-	//mPPU->writeOAM(0, 20, 20, 1, 0);
-	//m_XPos++;
-
 	mPPU->render(currCycle);
 
-	//mPPU->render(12);
+	mCPU->getInterruptsManager()->callInterruptHandler();
 
-	//mCPU.callInterruptHandler();
-
-	//return 12;
 	return currCycle;
 }
 
@@ -206,6 +200,7 @@ void GameLoop::synchroniseFrame()
 void GameLoop::setCartridgeLoaded()
 {
 	setEmulatorState(EmulatorState::BOOT);
+	mCPU->getInterruptsManager()->initInterrupts();
 	//mIsCartridgeLoaded = true;
 	/*mBootRom->initializeBootRom();*/
 }

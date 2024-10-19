@@ -29,6 +29,12 @@ namespace gbe {
 		mScreen = std::make_shared<Screen>(mBus->getCartrige(), SCREEN_WIDTH, SCREEN_HEIGHT);
 		mPPU = std::make_shared<PPU>(mBus, mScreen);
 		mCPU = std::make_shared<CPU>(mBus, mPPU);
+		auto weak_cpu = std::weak_ptr(mCPU);
+		if (weak_cpu.expired())
+			GBE_LOG_ERROR("Expired");
+		if (!weak_cpu.lock())
+			GBE_LOG_ERROR("lock error");
+		mCPU->createInternalComponents(weak_cpu);
 		//mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
 
 		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU);
@@ -45,7 +51,7 @@ namespace gbe {
 		mBus->setDMATransfertCallback(BIND_FUNC_1_ARG(mPPU, PPU::startDMATransfer));
 		//mBus->setLoadCartridgeCallback(std::bind(&Emulator::startEmulator, this));
 		mBus->setLoadCartridgeCallback(BIND_FUNC_NO_ARGS(mGameLoop, GameLoop::setCartridgeLoaded));
-		mPPU->setOnVBlankListener(BIND_FUNC_1_ARG(mCPU->getInterruptsManager(), InterruptsManager::callInterrupt));
+		mPPU->setOnVBlankListener(BIND_FUNC_1_ARG(mCPU->getInterruptsManager(), InterruptsManager::setInterrupt));
 		mCPU->getBootRom()->setStateCallback(BIND_FUNC_1_ARG(mGameLoop, GameLoop::setEmulatorState));
 	}
 

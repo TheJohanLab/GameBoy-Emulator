@@ -14,15 +14,16 @@ class PPU;
 class BootRom;
 class InterruptsManager;
 
-class CPU 
+class CPU : std::enable_shared_from_this<CPU>
 {
 	private:
 		std::shared_ptr<Bus> mBus;
+		std::shared_ptr<PPU> mPPU;
 		Registries mRegistries = Registries(*this);
 		std::array<Instruction*, instructionAmount> mInstructionSet;
 
-		std::shared_ptr<BootRom> mBootRom;
-		std::shared_ptr<InterruptsManager> mInterruptsManager;
+		std::shared_ptr<BootRom> mBootRom{ nullptr };
+		std::shared_ptr<InterruptsManager> mInterruptsManager{ nullptr };
 		
 		void initInstructionSet();
 
@@ -64,10 +65,13 @@ class CPU
 
 		
 		std::pair<interrupt_flag, interrupt_flag> getInterruptFlags() const;
-		void setInterruptFlag(const u8& flags);
+		void setInterruptFlag(const u8 flags);
+		void setInterruptEnable(const u8 flags);
 
 		std::shared_ptr<BootRom> getBootRom();
 		std::shared_ptr<InterruptsManager> getInterruptsManager();
+
+		void createInternalComponents(std::weak_ptr<CPU> cpu_weak);
 
 };
 

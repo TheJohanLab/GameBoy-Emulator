@@ -7,14 +7,13 @@
 #include "Bus/Bus.h"
 #include "CPU/CPU.h"
 
-BootRom::BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, CPU* cpu)
-	:mBus(bus), mPPU(ppu), mCPU(cpu)
+BootRom::BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, std::weak_ptr<CPU> cpu_weak)
+	:mBus(bus), mPPU(ppu), mCPU_weak(cpu_weak)
 {
 }
 
 BootRom::~BootRom()
 {
-	delete mCPU;
 }
 
 void BootRom::initializeBootRom()
@@ -32,7 +31,9 @@ void BootRom::execute()
 		//PlaySound
 		initRegistries();
 		mOnStateChange(EmulatorState::RUN);
-		mCPU->getInterruptsManager()->setActiveVBlankInterrupt();
+
+		auto cpu = mCPU_weak.lock();
+		cpu->getInterruptsManager()->setActiveVBlankInterrupt();
 	}
 
 }
@@ -138,17 +139,18 @@ void BootRom::initRegistries()
 {
 	// On utilise DMG
 	// CPU Registries
-	mCPU->setRegistries("A", 0x01);
-	mCPU->setRegistries("B", 0x00);
-	mCPU->setRegistries("C", 0x13);
-	mCPU->setRegistries("D", 0x00);
-	mCPU->setRegistries("E", 0xD8);
-	mCPU->setRegistries("H", 0x01);
-	mCPU->setRegistries("L", 0x4D);
-	mCPU->setFlagRegistry(0x80);
+	auto cpu = mCPU_weak.lock();
+	cpu->setRegistries("A", 0x01);
+	cpu->setRegistries("B", 0x00);
+	cpu->setRegistries("C", 0x13);
+	cpu->setRegistries("D", 0x00);
+	cpu->setRegistries("E", 0xD8);
+	cpu->setRegistries("H", 0x01);
+	cpu->setRegistries("L", 0x4D);
+	cpu->setFlagRegistry(0x80);
 
-	auto PC = mCPU->getPC();
-	auto SP = mCPU->getSP();
+	auto PC = cpu->getPC();
+	auto SP = cpu->getSP();
 	*PC = 0x100;
 	*SP = 0xFFFE;
 

@@ -2,12 +2,18 @@
 
 #include <memory>
 #include <functional>
+#include "Registries/IORegistries.h"
 
 class CPU;
 
 enum InterruptsTypes
 {
-	VBLANK
+	VBLANK,
+	LCD_STAT,
+	TIMER,
+	SERIAL,
+	JOYPAD,
+	NONE
 };
 
 class InterruptsManager
@@ -15,7 +21,7 @@ class InterruptsManager
 using interrupt = std::function<void()>;
 
 private:
-	CPU* mCPU;
+	std::weak_ptr<CPU> mCPU_weak;
 
 	std::vector<interrupt> mInterruptsList = std::vector<interrupt>();
 	interrupt mVBlankInterrupt{ nullptr };
@@ -23,23 +29,28 @@ private:
 	interrupt mTimerInterrupt{ nullptr };
 	interrupt mSerialInterrupt{ nullptr };
 	interrupt mJoypadInterrupt{ nullptr };
+	interrupt mNone{ nullptr };
 	
-
+	interrupt_flag mActiveInterruptFlags{ 0x00 };
 
 public:
-	InterruptsManager(CPU* cpu);
+	InterruptsManager(std::weak_ptr<CPU> CPU_weak);
 	~InterruptsManager();
 
-	void callInterrupt(InterruptsTypes type) const;
+	void initInterrupts();
+	void setInterrupt(InterruptsTypes type);
+	void callInterruptHandler();
 
 	void setActiveVBlankInterrupt();
 
 private:
-	void initInterrupts();
 
-	void vblankInterrupt() const;
-	void statInterrupt() const;
-	void timerInterrupt() const;
-	void serialInterrupt() const;
-	void joypadInterrupt() const;
+	void vblankInterrupt();
+	void statInterrupt();
+	void timerInterrupt();
+	void serialInterrupt();
+	void joypadInterrupt();
+	void none();
+
+	void getActiveInterruptFlags();
 };

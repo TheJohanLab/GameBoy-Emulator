@@ -8,9 +8,7 @@ CPU::CPU()
 }
 
 CPU::CPU(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu)
-	:	mBus(bus), 
-		mBootRom(std::make_shared<BootRom>(bus, ppu, this)),
-		mInterruptsManager(std::make_shared<InterruptsManager>(this))
+	:	mBus(bus), mPPU(ppu)
 {
 	initInstructionSet();
 }
@@ -790,9 +788,14 @@ std::pair<interrupt_flag, interrupt_flag> CPU::getInterruptFlags() const
 	return std::make_pair(IE, IF);
 }
 
-void CPU::setInterruptFlag(const u8& flags)
+void CPU::setInterruptFlag(const u8 flags)
 {
 	mBus->setInterruptFlag(flags);
+}
+
+void CPU::setInterruptEnable(const u8 flags)
+{
+	mBus->setInterruptEnable(flags);
 }
 
 std::shared_ptr<BootRom> CPU::getBootRom()
@@ -803,5 +806,12 @@ std::shared_ptr<BootRom> CPU::getBootRom()
 std::shared_ptr<InterruptsManager> CPU::getInterruptsManager()
 {
 	return mInterruptsManager;
+}
+
+void CPU::createInternalComponents(std::weak_ptr<CPU> cpu_weak)
+{
+
+	mInterruptsManager  = std::make_shared<InterruptsManager>(cpu_weak);
+	mBootRom = std::make_shared<BootRom>(mBus, mPPU, cpu_weak);
 }
 

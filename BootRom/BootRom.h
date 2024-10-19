@@ -18,7 +18,7 @@ class BootRom
 private:
 	std::shared_ptr<Bus> mBus;
 	std::shared_ptr<PPU> mPPU;
-	CPU* mCPU;
+	std::weak_ptr<CPU> mCPU_weak;
 	std::vector<u8> mExtractedBootLogo;
 
 	bool mIsBootFinished{ false };
@@ -29,7 +29,7 @@ private:
 	onStateChange mOnStateChange{ nullptr };
 	
 public:
-	BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, CPU* cpu);
+	BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, std::weak_ptr<CPU> cpu_weak);
 	~BootRom();
 
 	void initializeBootRom();

@@ -166,7 +166,7 @@ u8 GameLoop::bootStep()
 }
 
 u8 GameLoop::step()
-{
+{	
 	u8 currCycle = mCPU->executeOpcode(mCPU->getOpcode());
 
 	mPPU->render(currCycle);

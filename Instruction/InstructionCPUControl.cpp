@@ -12,6 +12,7 @@ u8 InstructionCPUControl::nop(CPU & cpu)
 
 u8 InstructionCPUControl::stop_0(CPU& cpu)
 {
+	//cpu.stopCPU();
 	return 4;
 }
 

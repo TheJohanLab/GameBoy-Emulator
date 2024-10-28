@@ -7,7 +7,8 @@ void Instruction8BitLogic::INC_R(CPU& cpu, u8* registry)
 	setHFlag(cpu, *registry, 1, false);
 
 	*registry += 1;
-
+	if (*registry == 0)
+		int a = 0;
 	setZFlag(cpu, *registry);
 	setNFlag(cpu, 0x00);
 }
@@ -17,7 +18,8 @@ void Instruction8BitLogic::DEC_R(CPU& cpu, u8* registry)
 	setHFlag(cpu, *registry, 1, true);
 
 	*registry -= 1;
-
+	if (*registry == 0)
+		int a = 0;
 	setNFlag(cpu, 0x01);
 	setZFlag(cpu, *registry);
 }

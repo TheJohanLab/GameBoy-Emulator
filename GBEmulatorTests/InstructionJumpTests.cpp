@@ -3,6 +3,8 @@
 
 #include "..\Bus\Bus.h"
 #include "..\CPU\CPU.h"
+#include "..\PPU\PPU.h"
+#include "..\Utils\Utils.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -12,21 +14,21 @@ namespace Instructions_tests
 	TEST_CLASS(IJumpTests)
 	{
 	private:
-		static Bus* bus;
-		static CPU* cpu;
+		static std::shared_ptr <Bus> bus;
+		static std::shared_ptr <PPU> ppu;
+		static std::shared_ptr<CPU> cpu;
 
 	public:
 
 		TEST_CLASS_INITIALIZE(ClassInitialize)
 		{
-			bus = new Bus();
-			cpu = new CPU(bus);
+			bus = std::make_shared<Bus>();
+			ppu = std::make_shared<PPU>(bus, nullptr);
+			cpu = std::make_shared<CPU>(bus, ppu);
 		}
 
 		TEST_CLASS_CLEANUP(ClassCleanup)
 		{
-			delete cpu;
-			delete bus;
 		}
 
 		//TODO Verifier que l'odre dans la memoire est correcte pour charger une adresse
@@ -614,6 +616,7 @@ namespace Instructions_tests
 
 	};
 
-	Bus* IJumpTests::bus = nullptr;
-	CPU* IJumpTests::cpu = nullptr;
+	std::shared_ptr<Bus> IJumpTests::bus = nullptr;
+	std::shared_ptr<CPU> IJumpTests::cpu = nullptr;
+	std::shared_ptr<PPU> IJumpTests::ppu = nullptr;
 }

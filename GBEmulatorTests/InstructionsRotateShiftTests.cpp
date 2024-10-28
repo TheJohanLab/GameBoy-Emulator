@@ -3,6 +3,8 @@
 
 #include "..\Bus\Bus.h"
 #include "..\CPU\CPU.h"
+#include "..\PPU\PPU.h"
+#include "..\Utils\Utils.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -11,21 +13,21 @@ namespace Instructions_tests
 	TEST_CLASS(IRotateShiftTests)
 	{
 	private:
-		static Bus* bus;
-		static CPU* cpu;
+		static std::shared_ptr <Bus> bus;
+		static std::shared_ptr <PPU> ppu;
+		static std::shared_ptr<CPU> cpu;
 
 	public:
 
 		TEST_CLASS_INITIALIZE(ClassInitialize)
 		{
-			bus = new Bus();
-			cpu = new CPU(bus);
+			bus = std::make_shared<Bus>();
+			ppu = std::make_shared<PPU>(bus, nullptr);
+			cpu = std::make_shared<CPU>(bus, ppu);
 		}
 
 		TEST_CLASS_CLEANUP(ClassCleanup)
 		{
-			delete cpu;
-			delete bus;
 		}
 
 		TEST_METHOD(RLC_r)
@@ -302,7 +304,7 @@ namespace Instructions_tests
 		}
 
 	};
-
-	Bus* IRotateShiftTests::bus = nullptr;
-	CPU* IRotateShiftTests::cpu = nullptr;
+	std::shared_ptr<Bus> IRotateShiftTests::bus = nullptr;
+	std::shared_ptr<CPU> IRotateShiftTests::cpu = nullptr;
+	std::shared_ptr<PPU> IRotateShiftTests::ppu = nullptr;
 }

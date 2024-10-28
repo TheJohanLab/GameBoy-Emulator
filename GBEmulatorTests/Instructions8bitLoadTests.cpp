@@ -3,6 +3,8 @@
 
 #include "..\Bus\Bus.h"
 #include "..\CPU\CPU.h"
+#include "..\PPU\PPU.h"
+#include "..\Utils\Utils.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -12,21 +14,22 @@ namespace Instructions_tests
 	TEST_CLASS(I8BitLoadTests)
 	{
 	private:
-		static Bus* bus;
-		static CPU* cpu;
+		static std::shared_ptr <Bus> bus;
+		static std::shared_ptr <PPU> ppu;
+		static std::shared_ptr<CPU> cpu;
 
 	public:
 
 		TEST_CLASS_INITIALIZE(ClassInitialize)
 		{
-			bus = new Bus();
-			cpu = new CPU(bus);
+			bus = std::make_shared<Bus>();
+			ppu = std::make_shared<PPU>(bus, nullptr);
+			cpu = std::make_shared<CPU>(bus, ppu);
 		}
 
 		TEST_CLASS_CLEANUP(ClassCleanup)
 		{
-			delete cpu;
-			delete bus;
+
 		}
 
 		TEST_METHOD(LD_pRRqcR)
@@ -242,7 +245,8 @@ namespace Instructions_tests
 			Assert::AreEqual(static_cast<u8>(0xAD), *A);
 		}
 	};
-
-	Bus* I8BitLoadTests::bus = nullptr;
-	CPU* I8BitLoadTests::cpu = nullptr;
+	
+	std::shared_ptr<Bus> I8BitLoadTests::bus = nullptr;
+	std::shared_ptr<CPU> I8BitLoadTests::cpu = nullptr;
+	std::shared_ptr<PPU> I8BitLoadTests::ppu = nullptr;
 }

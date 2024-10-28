@@ -11,7 +11,7 @@ Bus::Bus()
 
 u8 Bus::read(const u16 &address) const
 {
-	if (address >= 0x100 && address < 8000)
+	if (address >= 0x00 && address < 0x8000)
 		return mCartridge->read(address);
 	else
 		return mMemory.read(address);

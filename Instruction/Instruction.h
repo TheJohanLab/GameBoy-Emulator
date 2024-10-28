@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include "../Utils/Utils.h"
-
+#include "Utils/Utils.h"
+#include "Utils/Log.h"
 class CPU;
 
 class Instruction

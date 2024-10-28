@@ -25,6 +25,7 @@ class CPU : std::enable_shared_from_this<CPU>
 		std::shared_ptr<BootRom> mBootRom{ nullptr };
 		std::shared_ptr<InterruptsManager> mInterruptsManager{ nullptr };
 		
+		bool mIsCPUStopped{ false };
 		void initInstructionSet();
 
 	public:
@@ -53,7 +54,7 @@ class CPU : std::enable_shared_from_this<CPU>
 		void writeMemory(const u16 & address, const u8 value);
 		void writeMemory(const combinedRegistries& address, const u8 value);
 
-		u8 getOpcode() const;
+		u8 getOpcode();
 		u8 readMemory(const u16 & address) const;
 		u8 readMemory(const combinedRegistries& address) const;
 		u8* getMemoryDataPtr(const combinedRegistries& address);
@@ -72,6 +73,9 @@ class CPU : std::enable_shared_from_this<CPU>
 		std::shared_ptr<InterruptsManager> getInterruptsManager();
 
 		void createInternalComponents(std::weak_ptr<CPU> cpu_weak);
+
+		void stopCPU();
+		void resumeCPUFromInterrupt();
 
 };
 

@@ -54,6 +54,7 @@ void InterruptsManager::callInterruptHandler()
 
 	if (mActiveInterruptFlags.byte > 0x00)
 	{
+		cpu->resumeCPUFromInterrupt();
 		cpu->clearIMEFlag();
 		InstructionJump::PUSH_PC(*cpu);
 

@@ -11,7 +11,8 @@ u8 InstructionJump::JP_CCca16(CPU& cpu, const u8& flag)
 	
 	if (flag)
 	{
-		*PC = adress - 1;
+		*PC = adress;
+		//*PC = adress -1;
 		return 16;
 	}
 	
@@ -26,7 +27,7 @@ u8 InstructionJump::JR_CCca16(CPU& cpu, const u8& flag)
 	if (flag)
 	{
 		*PC += offset;
-		*PC -= 1;
+		//*PC -= 1;
 		return 12;
 	}
 	
@@ -54,7 +55,8 @@ u8 InstructionJump::CALL_CC(CPU& cpu, const u8& flag)
 	{
 		u16* PC = cpu.getPC();
 		PUSH_PC(cpu);
-		*PC = address - 1;
+		*PC = address;
+		//*PC = address -1;
 		return 24;
 	}
 	
@@ -63,10 +65,12 @@ u8 InstructionJump::CALL_CC(CPU& cpu, const u8& flag)
 
 void InstructionJump::RST_VC(CPU& cpu, const u16& address)
 {
-	u16* PC = cpu.getPC();
+	
 	PUSH_PC(cpu);
 
+	u16* PC = cpu.getPC();
 	*PC = address;
+	//*PC = address -1;
 }
 
 void InstructionJump::PUSH_PC(CPU& cpu)
@@ -95,6 +99,7 @@ u8 InstructionJump::JR_r8(CPU& cpu)
 	int8_t offset = static_cast<int8_t>(readNextOpcode(cpu));
 
 	*PC += offset;
+	//*PC += offset -1;
 
 	return 12;
 }
@@ -146,7 +151,8 @@ u8 InstructionJump::JP_a16(CPU& cpu)
 	u16* PC = cpu.getPC();
 	u16 adress = readNextTwoOpcodes(cpu);
 
-	*PC = adress-1;
+	//*PC = adress -1;
+	*PC = adress;
 
 	return 16;
 }
@@ -180,7 +186,8 @@ u8 InstructionJump::RET(CPU& cpu)
 	u8 highPC = cpu.readMemory(*SP);
 	*SP += 1;
 
-	*PC = ((highPC << 8) & 0xFF00) | (lowPC & 0x00FF) - 1;
+	*PC = (((highPC << 8) & 0xFF00) | (lowPC & 0x00FF));
+	//*PC = (((highPC << 8) & 0xFF00) | (lowPC & 0x00FF)) -1;
 
 	return 16;
 }
@@ -206,14 +213,16 @@ u8 InstructionJump::CALL_a16(CPU& cpu)
 
 	PUSH_PC(cpu);
 
-	*PC = address - 1;
+	*PC = address;
+	//*PC = address -1;
 
 	return 24;
 }
 
 u8 InstructionJump::RST_08H(CPU& cpu)
 {
-	RST_VC(cpu, 0x0800);
+	RST_VC(cpu, 0x08);
+	//RST_VC(cpu, 0x0800);
 
 	return 16;
 }
@@ -241,7 +250,8 @@ u8 InstructionJump::CALL_NCca16(CPU& cpu)
 
 u8 InstructionJump::RST_10H(CPU& cpu)
 {
-	RST_VC(cpu, 0x1000);
+	RST_VC(cpu, 0x10);
+	//RST_VC(cpu, 0x1000);
 	return 16;
 }
 
@@ -278,13 +288,15 @@ u8 InstructionJump::CALL_Cca16(CPU& cpu)
 
 u8 InstructionJump::RST_18H(CPU& cpu)
 {
-	RST_VC(cpu, 0x1800);
+	//RST_VC(cpu, 0x1800);
+	RST_VC(cpu, 0x18);
 	return 16;
 }
 
 u8 InstructionJump::RST_20H(CPU& cpu)
 {
-	RST_VC(cpu, 0x2000);
+	//RST_VC(cpu, 0x2000);
+	RST_VC(cpu, 0x20);
 	return 16;
 }
 
@@ -294,28 +306,32 @@ u8 InstructionJump::JP_pHLq(CPU& cpu)
 	u16* PC = cpu.getPC();
 	combinedRegistries* HL = cpu.getCombinedRegistries("HL");
 
-	*PC = HL->getValue() - 1;
+	*PC = HL->getValue();
+	//*PC = HL->getValue() -1;
 
 	return 4;
 }
 
 u8 InstructionJump::RST_28H(CPU& cpu)
 {
-	RST_VC(cpu, 0x2800);
+	//RST_VC(cpu, 0x2800);
+	RST_VC(cpu, 0x28);
 
 	return 16;
 }
 
 u8 InstructionJump::RST_30H(CPU& cpu)
 {
-	RST_VC(cpu, 0x3000);
+	//RST_VC(cpu, 0x3000);
+	RST_VC(cpu, 0x30);
 
 	return 16;
 }
 
 u8 InstructionJump::RST_38H(CPU& cpu)
 {
-	RST_VC(cpu, 0x3800);
+	//RST_VC(cpu, 0x3800);
+	RST_VC(cpu, 0x38);
 
 	return 16;
 }

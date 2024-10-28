@@ -35,10 +35,10 @@ void CPU::initInstructionSet()
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOGIC,	"INC C",		&Instruction8BitLogic::INC_C,		4),		//0x0C
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOGIC,	"DEC C",		&Instruction8BitLogic::DEC_C,		4),		//0x0D
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD C,d8",		&Instruction8BitLoad::LD_Ccd8,		8),		//0x0E
-		instructionFactory.createInstruction(InstructionEnum::IROTATESHIFT,	"RLRA",			&InstructionRotateShift::RRCA,		4),		//0x0F
+		instructionFactory.createInstruction(InstructionEnum::IROTATESHIFT,	"RRCA",			&InstructionRotateShift::RRCA,		4),		//0x0F
 		//0x1
 		instructionFactory.createInstruction(InstructionEnum::ICPUCONTROL,	"STOP 0",		&InstructionCPUControl::stop_0,		4),		//0x10
-		instructionFactory.createInstruction(InstructionEnum::I16BITLOAD,	"LD DE,d16",	&Instruction16BitLoad::LD_BCcd16,	12),	//0x11
+		instructionFactory.createInstruction(InstructionEnum::I16BITLOAD,	"LD DE,d16",	&Instruction16BitLoad::LD_DEcd16,	12),	//0x11
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD (DE),A",	&Instruction8BitLoad::LD_pDEqcA,	8),		//0x12
 		instructionFactory.createInstruction(InstructionEnum::I16BITLOGIC,	"INC DE",		&Instruction16BitLogic::INC_DE,		8),		//0x13
 		instructionFactory.createInstruction(InstructionEnum::I8BITLOGIC,	"INC D",		&Instruction8BitLogic::INC_D,		4),		//0x14
@@ -569,6 +569,17 @@ void CPU::initInstructionSet()
 
 u8 CPU::executeOpcode(const u16 opcode) 
 {
+	//Attente d'une interruption pour reprendre
+	if (mIsCPUStopped)
+	{
+		// Verifier l'attente lors d'un stop
+		return 4;
+	}
+	
+	auto PC = getPC();
+	std::cout << "PC : " << std::hex << *PC << "\n";
+	std::cout << "Opcode : " << std::hex << opcode << "\n";
+	//GBE_LOG_INFO("PC : {0}", *PC);
 
 	if (opcode == 0xCB) 
 	{
@@ -579,7 +590,7 @@ u8 CPU::executeOpcode(const u16 opcode)
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	//(mInstructionSet[opcode]->getFunctionPointer())(*this, *mInstructionSet[opcode]);
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
-	GBE_LOG_INFO("{0}", mInstructionSet[opcode]->getName());
+	//GBE_LOG_INFO("{0}", mInstructionSet[opcode]->getName());
 	
 	incPC();
 
@@ -592,7 +603,7 @@ u8 CPU::executeOpcodeCB(const u16 opcodeCB)
 	//u16 opcodeCB = 0x00;
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	(mInstructionSet[0x100 + opcodeCB]->getFunctionPointer())(*this);
-	GBE_LOG_INFO("{0}", mInstructionSet[0x100 + opcodeCB]->getName());
+	//GBE_LOG_INFO("{0}", mInstructionSet[0x100 + opcodeCB]->getName());
 
 	incPC();
 
@@ -730,9 +741,12 @@ void CPU::writeMemory(const combinedRegistries& registries, const u8 value)
 	mBus->write(address, value);
 }
 
-u8 CPU::getOpcode() const
+u8 CPU::getOpcode()
 {
-	return mBus->read(readPC());
+	//return mBus->read(readPC());
+	const u16* PC = getPC();
+	//TODO
+	return mBus->read(*PC);
 }
 
 u8 CPU::readMemory(const u16& address) const
@@ -813,5 +827,15 @@ void CPU::createInternalComponents(std::weak_ptr<CPU> cpu_weak)
 
 	mInterruptsManager  = std::make_shared<InterruptsManager>(cpu_weak);
 	mBootRom = std::make_shared<BootRom>(mBus, mPPU, cpu_weak);
+}
+
+void CPU::stopCPU()
+{
+	mIsCPUStopped = true;
+}
+
+void CPU::resumeCPUFromInterrupt()
+{
+	mIsCPUStopped = false;
 }
 

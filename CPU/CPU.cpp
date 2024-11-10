@@ -587,7 +587,6 @@ u8 CPU::executeOpcode(const u16 opcode)
 		return executeOpcodeCB(0x00);
 	}
 
-	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	//(mInstructionSet[opcode]->getFunctionPointer())(*this, *mInstructionSet[opcode]);
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
 	GBE_LOG_INFO("{0}", mInstructionSet[opcode]->getName());

@@ -18,7 +18,10 @@ u8 Instruction::readNextOpcode(CPU& cpu)
 {
 	u16* PC = cpu.getPC();
 	*PC += 1;
-	return cpu.readMemory(*PC);
+
+	 auto value = cpu.readMemory(*PC);
+	 std::cout << "readNextTwoOpcodes : " << std::hex << value << "\n";
+	 return value;
 }
 
 u16 Instruction::readNextTwoOpcodes(CPU& cpu)
@@ -29,6 +32,7 @@ u16 Instruction::readNextTwoOpcodes(CPU& cpu)
 	u16 twoBytesValue = lsbValue | msbValue;
 	*PC += 2;
 
+	std::cout << "readNextTwoOpcodes : " << std::hex <<  twoBytesValue << "\n";
 	return twoBytesValue;
 }
 

@@ -78,7 +78,7 @@ u8 Instruction16BitLoad::LD_DEcd16(CPU& cpu)
 
 u8 Instruction16BitLoad::LD_HLcd16(CPU& cpu)
 {
-	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("DE");
+	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
 	LD_RRcd16(cpu, *HLRegistries);
 
 	return 12;

@@ -21,6 +21,7 @@ void InterruptsManager::setInterrupt(InterruptsTypes type)
 	u8 interruptFlag = 0x01 << type;
 	auto cpu = mCPU_weak.lock();
 	cpu->setInterruptFlag(interruptFlag);
+	//A changer quand on saura quoi en faire
 	cpu->setInterruptEnable(interruptFlag);
 	cpu->setIMEFlag();
 }

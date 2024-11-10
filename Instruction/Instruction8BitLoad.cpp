@@ -719,10 +719,14 @@ u8 Instruction8BitLoad::LD_AcA(CPU& cpu)
 u8 Instruction8BitLoad::LDH_pa8qcA(CPU& cpu)
 {
 	//TODO Verifier cette instruction
-	u16* PC = cpu.getPC();
-	*PC += 1;
-	u8* ARegistry = cpu.getRegistries("A");
-	cpu.writeMemory(0xFF00 + *PC, *ARegistry);
+	//u16* PC = cpu.getPC();
+	//*PC += 1;
+	//u8* ARegistry = cpu.getRegistries("A");
+	//cpu.writeMemory(0xFF00 + *PC, *ARegistry);
+
+	u8 addressOffset = readNextOpcode(cpu);
+	auto ARegistry = cpu.getRegistries("A");
+	cpu.writeMemory(0xFF00 + addressOffset, *ARegistry);
 
 	return 12;
 }
@@ -739,10 +743,17 @@ u8 Instruction8BitLoad::LD_pCqcA(CPU& cpu)
 
 u8 Instruction8BitLoad::LD_pa16qcA(CPU& cpu)
 {
+	//u16* PC = cpu.getPC();
+	//*PC += 1;
+	//u8* ARegistry = cpu.getRegistries("A");
+	//cpu.writeMemory(*PC, *ARegistry);
+
 	u16* PC = cpu.getPC();
-	*PC += 1;
-	u8* ARegistry = cpu.getRegistries("A");
-	cpu.writeMemory(*PC, *ARegistry);
+	u16 address = readNextTwoOpcodes(cpu);
+
+	auto ARegistry = cpu.getRegistries("A");
+	cpu.writeMemory(address, *ARegistry);
+
 
 	return 16;
 }
@@ -784,9 +795,11 @@ u8 Instruction8BitLoad::LD_Acpa16q(CPU& cpu)
 
 void Instruction8BitLoad::LD_Rcd8(CPU& cpu, u8& registry)
 {
-	u16* PC = cpu.getPC();
+	/*u16* PC = cpu.getPC();
 	*PC += 1;
-	u8 data = cpu.readMemory(*PC);
+	u8 data = cpu.readMemory(*PC);*/
+
+	u8 data = readNextOpcode(cpu);
 	registry = data;
 }
 

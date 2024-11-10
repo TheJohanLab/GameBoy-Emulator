@@ -8,6 +8,7 @@
 #include "Cartridge/Cartridge.h"
 
 class Pixel;
+class Registries;
 
 enum class WindowEvent
 {
@@ -45,6 +46,8 @@ class Screen
 
 		void setOnCloseEvent(closeEventFn callback);
 		void handleEvents();
+
+		void setRegistriesRef(Registries* registries);
 
 	private:
 		int initScreen();

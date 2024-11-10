@@ -8,6 +8,8 @@
 #include <memory>
 
 #include "Cartridge/Cartridge.h"
+#include "Registries/Registries.h"
+
 
 class ImGuiRenderer
 {
@@ -17,13 +19,19 @@ private:
 
 	Cartridge* mCartridge;
 
+	Registries* mRegistries = nullptr;
+
+	bool mShowRegistries = false;
+
 public:
 	ImGuiRenderer(Cartridge* mCartridge, SDL_Window* window, SDL_Renderer* renderer);
 	~ImGuiRenderer();
 
 	void render() ;
+	void renderRegistries() const;
 	void processEvent(SDL_Event* event) const;
 		
+	void setRegistries(Registries* registries);
 
 private:
 	void initImGui() const;

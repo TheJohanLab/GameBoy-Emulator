@@ -35,6 +35,8 @@ namespace gbe {
 		if (!weak_cpu.lock())
 			GBE_LOG_ERROR("lock error");
 		mCPU->createInternalComponents(weak_cpu);
+		mPPU->setRegistriesRef(mCPU->getRegistries2());
+
 		//mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
 
 		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU);

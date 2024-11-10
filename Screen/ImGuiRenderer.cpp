@@ -10,6 +10,7 @@
 
 #include <string>
 #include "Emulator/Emulator.h"
+#include "CPU/CPU.h"
 
 ImGuiRenderer::ImGuiRenderer(Cartridge* cartridge, SDL_Window* window, SDL_Renderer* renderer)
 	:mCartridge(cartridge), mWindow(window), mRenderer(renderer)
@@ -68,10 +69,15 @@ void ImGuiRenderer::render()
 			}
 			ImGui::EndMenu();
 		}
-		//if (ImGui::BeginMenu("Edit"))
-		//{
-		//	ImGui::EndMenu();
-		//}
+
+		if (ImGui::BeginMenu("Tools"))
+		{
+			if (ImGui::MenuItem("Show Registries", nullptr, mShowRegistries)) {
+				mShowRegistries = !mShowRegistries;
+			}
+			ImGui::EndMenu();
+		}
+
 		if (ImGui::BeginMenu("About"))
 		{
 			if (ImGui::MenuItem("Show Demo Window")) {
@@ -79,20 +85,58 @@ void ImGuiRenderer::render()
 			}
 			ImGui::EndMenu();
 		}
+
 		ImGui::EndMainMenuBar();
 	}
 
 	if (mShow_demo_window)
 		ImGui::ShowDemoWindow(&mShow_demo_window);
 
+	renderRegistries();
+
 	// Finir et rendre le frame ImGui
 	ImGui::Render();
 	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), mRenderer);
 }
 
+void ImGuiRenderer::renderRegistries() const
+{
+	if (mShowRegistries) 
+	{
+		ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.65f, 0), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x * 0.35f, ImGui::GetIO().DisplaySize.y * 0.5f), ImGuiCond_Always);
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
+
+
+		ImGui::Begin("Registries");
+		ImGui::Text("A: 0x%X", (mRegistries->getA()));
+		ImGui::Text("B: 0x%X", (mRegistries->getB()));
+		ImGui::Text("C: 0x%X", (mRegistries->getC()));
+		ImGui::Text("D: 0x%X", (mRegistries->getD()));
+		ImGui::Text("E: 0x%X", (mRegistries->getE()));
+		ImGui::Text("H: 0x%X", (mRegistries->getH()));
+		ImGui::Text("L: 0x%X", (mRegistries->getL()));
+		ImGui::Text("Flags");
+		ImGui::Text("C: 0x%X", (mRegistries->getF()->flags.C));
+		ImGui::Text("H: 0x%X", (mRegistries->getF()->flags.H));
+		ImGui::Text("N: 0x%X", (mRegistries->getF()->flags.N));
+		ImGui::Text("Z: 0x%X", (mRegistries->getF()->flags.Z));
+
+		ImGui::End();
+
+		ImGui::PopStyleColor();
+	}
+}
+
+
 void ImGuiRenderer::processEvent(SDL_Event* event) const
 {
 	ImGui_ImplSDL2_ProcessEvent(event);
+}
+
+void ImGuiRenderer::setRegistries(Registries* registries)
+{
+	mRegistries = registries;
 }
 
 

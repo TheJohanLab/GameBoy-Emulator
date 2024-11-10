@@ -10,6 +10,8 @@
 #include "GameLoop/GameLoop.h"
 #include "Interrupts/InterruptsManager.h"
 
+#include "Registries/Registries.h"
+
 PPU::PPU(std::shared_ptr<Bus> bus, std::shared_ptr<Screen> screen)
 	:mBus(bus), mScreen(screen)
 {
@@ -508,4 +510,9 @@ void PPU::setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData)
 void PPU::waitForNextFrame()
 {
 	executeFullFrameRender();
+}
+
+void PPU::setRegistriesRef(Registries* registries)
+{
+	mScreen->setRegistriesRef(registries);
 }

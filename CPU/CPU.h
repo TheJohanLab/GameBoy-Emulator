@@ -77,5 +77,9 @@ class CPU : std::enable_shared_from_this<CPU>
 		void stopCPU();
 		void resumeCPUFromInterrupt();
 
+		Registries* getRegistries2() { return &mRegistries; }
+
+		void logRegistries();
+		void logOpcodesInfos(u8 opcode);
 };
 

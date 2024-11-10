@@ -70,6 +70,10 @@ int Screen::initScreen()
 	return 0;
 }
 
+void Screen::initImGui(SDL_Window* window, SDL_Renderer* renderer)
+{
+}
+
 
 const SDL_Window* Screen::getWindow() const 
 {
@@ -128,4 +132,9 @@ void Screen::handleEvents()
 		}
 		mImGuiRenderer->processEvent(&mEvent);
 	}
+}
+
+void Screen::setRegistriesRef(Registries* registries)
+{
+	mImGuiRenderer->setRegistries(registries);
 }

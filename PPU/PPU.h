@@ -15,6 +15,7 @@
 
 #define LINE_OBJ_LIMIT 10
 
+class Registries;
 
 struct Pixel
 {
@@ -123,6 +124,8 @@ public:
 	//TO REMOVE LATER
 	void waitForNextFrame();
 	void setOnVBlankListener(onVBlankEvent onVBlank) { mOnVBlank = onVBlank; }
+	void setRegistriesRef(Registries* registries);
+	
 
 private:
 

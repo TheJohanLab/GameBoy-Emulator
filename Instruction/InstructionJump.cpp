@@ -74,12 +74,16 @@ void InstructionJump::PUSH_PC(CPU& cpu)
 	u16* SP = cpu.getSP();
 	u16* PC = cpu.getPC();
 
+	*PC += 1;
+
 	u8 lowPC = *PC & 0x00FF;
 	u8 highPC = (*PC & 0xFF00) >> 8;
 	*SP -= 1;
 	cpu.writeMemory(*SP, highPC);
 	*SP -= 1;
 	cpu.writeMemory(*SP, lowPC);
+
+	*PC -= 1;
 }
 
 

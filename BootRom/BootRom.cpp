@@ -136,7 +136,7 @@ void BootRom::convertToTile(const u16 tileRawBytes)
 }
 
 void BootRom::initRegistries()
-{
+{ 
 	// On utilise DMG
 	// CPU Registries
 	auto cpu = mCPU_weak.lock();

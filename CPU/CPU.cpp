@@ -584,15 +584,18 @@ u8 CPU::executeOpcode(const u16 opcode)
 		return executeOpcodeCB(0x00);
 	}
 
+#ifdef LOG_DEBUG
+	logOpcodesInfos(opcode);
+	logRegistries();
+#endif
+
 	//(mInstructionSet[opcode]->getFunctionPointer())(*this, *mInstructionSet[opcode]);
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
 	
 	incPC();
 	
-#ifdef LOG_DEBUG
-	logOpcodesInfos(opcode);
-	logRegistries();
-#endif
+
+
 
 	return cycles;
 }
@@ -841,10 +844,11 @@ void CPU::resumeCPUFromInterrupt()
 
 void CPU::logRegistries()
 {
-	auto C = getFlagRegistry()->flags.C;
-	auto H = getFlagRegistry()->flags.H;
-	auto N = getFlagRegistry()->flags.N;
-	auto Z = getFlagRegistry()->flags.Z;
+	auto F = getFlagRegistry();
+	auto C = F->flags.C;
+	auto H = F->flags.H;
+	auto N = F->flags.N;
+	auto Z = F->flags.Z;
 
 	GBE_LOG_INFO("Registry A : {:#x}", *getRegistries("A"));
 	GBE_LOG_INFO("Registry B : {:#x}", *getRegistries("B"));
@@ -853,14 +857,18 @@ void CPU::logRegistries()
 	GBE_LOG_INFO("Registry E : {:#x}", *getRegistries("E"));
 	GBE_LOG_INFO("Registry H : {:#x}", *getRegistries("H"));
 	GBE_LOG_INFO("Registry L : {:#x}", *getRegistries("L"));
+	GBE_LOG_INFO("Registry F : {:#x}", F->F);
 	GBE_LOG_INFO("Registry F.C : {:#x}", C);
 	GBE_LOG_INFO("Registry F.H : {:#x}", H);
 	GBE_LOG_INFO("Registry F.N : {:#x}", N);
 	GBE_LOG_INFO("Registry F.Z : {:#x}", Z);
+	GBE_LOG_INFO("Registry SP : {:#x}", *getSP());
+
 }
 
 void CPU::logOpcodesInfos(u8 opcode)
 {
+	GBE_LOG_INFO("\n##########################################");
 	GBE_LOG_INFO("{0}", mInstructionSet[opcode]->getName());
 	GBE_LOG_INFO("PC : {:#x}", *getPC());
 	GBE_LOG_INFO("Opcode  : {:#x}", opcode);

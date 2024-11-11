@@ -20,7 +20,11 @@ u8 Instruction::readNextOpcode(CPU& cpu)
 	*PC += 1;
 
 	 u8 value = cpu.readMemory(*PC);
+
+#ifdef LOG_DEBUG
 	 GBE_LOG_INFO("readNextOpcode : {:#x}", value);
+#endif
+
 	 return value;
 }
 
@@ -32,7 +36,10 @@ u16 Instruction::readNextTwoOpcodes(CPU& cpu)
 	u16 twoBytesValue = lsbValue | msbValue;
 	*PC += 2;
 
+#ifdef LOG_DEBUG
 	GBE_LOG_INFO("readNextTwoOpcodes : {:#x}", twoBytesValue);
+#endif
+
 	return twoBytesValue;
 }
 

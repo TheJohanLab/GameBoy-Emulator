@@ -268,7 +268,7 @@ void CPU::initInstructionSet()
 		instructionFactory.createInstruction(InstructionEnum::IJUMP,		"RST 20H",		&InstructionJump::RST_20H,			16),	//0xE7
 		instructionFactory.createInstruction(InstructionEnum::I16BITLOGIC,	"ADD SP,r8",	&Instruction16BitLogic::ADD_SPcr8,	16),	//0xE8
 		instructionFactory.createInstruction(InstructionEnum::IJUMP,		"JP (HL)",		&InstructionJump::JP_pHLq,			4),		//0xE9
-		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LDH (a16),A",	&Instruction8BitLoad::LD_pa16qcA,	4),		//0xEA
+		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD (a16),A",	&Instruction8BitLoad::LD_pa16qcA,	4),		//0xEA
 		instructionFactory.createInstruction(InstructionEnum::ICPUCONTROL,	"",				&InstructionCPUControl::nop,		4),		//0xEB
 		instructionFactory.createInstruction(InstructionEnum::ICPUCONTROL,	"",				&InstructionCPUControl::nop,		4),		//0xEC
 		instructionFactory.createInstruction(InstructionEnum::ICPUCONTROL,	"",				&InstructionCPUControl::nop,		4),		//0xED
@@ -285,7 +285,7 @@ void CPU::initInstructionSet()
 		instructionFactory.createInstruction(InstructionEnum::IJUMP,		"RST 30H",		&InstructionJump::RST_30H,			16),	//0xF7
 		instructionFactory.createInstruction(InstructionEnum::I16BITLOAD,	"LDHL SP,r8",	&Instruction16BitLoad::LDHL_SPcr8,	12),	//0xF8
 		instructionFactory.createInstruction(InstructionEnum::I16BITLOAD,	"LD SP,HL",		&Instruction16BitLoad::LD_SPcHL,	8),		//0xF9
-		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LDH A,(a16)",	&Instruction8BitLoad::LD_Acpa16q,	4),		//0xFA
+		instructionFactory.createInstruction(InstructionEnum::I8BITLOAD,	"LD A,(a16)",	&Instruction8BitLoad::LD_Acpa16q,	4),		//0xFA
 		instructionFactory.createInstruction(InstructionEnum::ICPUCONTROL,	"EI",			&InstructionCPUControl::ei,			4),		//0xFB
 		instructionFactory.createInstruction(InstructionEnum::ICPUCONTROL,	"",				&InstructionCPUControl::nop,		4),		//0xFC
 		instructionFactory.createInstruction(InstructionEnum::ICPUCONTROL,	"",				&InstructionCPUControl::nop,		4),		//0xFD
@@ -589,8 +589,10 @@ u8 CPU::executeOpcode(const u16 opcode)
 	
 	incPC();
 	
-	//logOpcodesInfos(opcode);
-	//logRegistries();
+#ifdef LOG_DEBUG
+	logOpcodesInfos(opcode);
+	logRegistries();
+#endif
 
 	return cycles;
 }

@@ -760,10 +760,9 @@ u8 Instruction8BitLoad::LD_pa16qcA(CPU& cpu)
 
 u8 Instruction8BitLoad::LDH_Acpa8q(CPU& cpu)
 {
-	//TODO Verifier cette instruction
-	u16* PC = cpu.getPC();
-	*PC += 1;
-	u8 data = cpu.readMemory(0xFF00 + *PC);
+	u8 addressOffset = readNextOpcode(cpu);
+	
+	u8 data = cpu.readMemory(0xFF00 + addressOffset);
 	cpu.setRegistries("A", data);
 
 	return 12;
@@ -782,9 +781,8 @@ u8 Instruction8BitLoad::LD_AcpCq(CPU& cpu)
 
 u8 Instruction8BitLoad::LD_Acpa16q(CPU& cpu)
 {
-	u16* PC = cpu.getPC();
-	*PC += 1;
-	u8 data = cpu.readMemory(*PC);
+	u16 address = readNextTwoOpcodes(cpu);
+	u8 data = cpu.readMemory(address);
 	cpu.setRegistries("A", data);
 
 	return 16;

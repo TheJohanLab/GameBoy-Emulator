@@ -71,7 +71,10 @@ void InstructionJump::RST_VC(CPU& cpu, const u16& address)
 
 void InstructionJump::PUSH_PC(CPU& cpu)
 {
+	
 	u16* SP = cpu.getSP();
+	//if (*SP <= 0xFF47)
+	//	throw std::runtime_error("Stack overflow : SP reached an invalid memory region");
 	u16* PC = cpu.getPC();
 
 	*PC += 1;
@@ -210,7 +213,7 @@ u8 InstructionJump::CALL_a16(CPU& cpu)
 
 	PUSH_PC(cpu);
 
-	*PC = address -1;
+	*PC = address - 1;
 
 	return 24;
 }

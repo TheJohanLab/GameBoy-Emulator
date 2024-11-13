@@ -13,15 +13,17 @@ void GameLoop::decVirtualWaitingDots(u16 dots)
 	GameLoop::waitingDots -= dots;
 }
 
-GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu)
-	:	mCPU(cpu), 
-		mPPU(ppu), 
-		mStateFactory(std::make_unique<EmulatorStateFactory>(cpu->getBootRom()))
+GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<WindowEventManager> eventManager)
+	: mCPU(cpu),
+	mPPU(ppu),
+	mStateFactory(std::make_unique<EmulatorStateFactory>(eventManager, cpu->getBootRom()))
 {
 	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
 	mStateFactory->setHandleFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleFrame));
 	mStateFactory->setHandleBootFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleBootFrame));
 	mStateFactory->setDrawCallback(BIND_FUNC_NO_ARGS(mPPU, PPU::draw));
+	mStateFactory->setStepCallback(BIND_FUNC_NO_ARGS(this, GameLoop::step));
+
 	setEmulatorState(EmulatorState::INIT);
 
 }

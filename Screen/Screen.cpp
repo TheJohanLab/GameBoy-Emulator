@@ -3,8 +3,8 @@
 
 #include "PPU/PPU.h"
 
-Screen::Screen(Cartridge* cartridge, u16 width, u16 height)
-	:mWidth(width), mHeight(height)
+Screen::Screen(std::shared_ptr<WindowEventManager> eventManager, Cartridge* cartridge, u16 width, u16 height)
+	:mEventManager(eventManager), mWidth(width), mHeight(height)
 {
 	initScreen();
 	mImGuiRenderer = std::make_shared<ImGuiRenderer>(cartridge, mWindow, mRenderer);
@@ -126,12 +126,17 @@ void Screen::setOnCloseEvent(closeEventFn callback)
 
 void Screen::handleEvents()
 {
-	while (SDL_PollEvent(&mEvent) != 0) {
-		if (mEvent.type == SDL_QUIT) {
-			closeEventCallback();
-		}
-		mImGuiRenderer->processEvent(&mEvent);
-	}
+	mEventManager->handleEvents(mImGuiRenderer);
+	//while (SDL_PollEvent(&mEvent) != 0) {
+	//	if (mEvent.type == SDL_QUIT) {
+	//		closeEventCallback();
+	//	}
+
+
+
+
+	//	mImGuiRenderer->processEvent(&mEvent);
+	//}
 }
 
 void Screen::setRegistriesRef(Registries* registries)

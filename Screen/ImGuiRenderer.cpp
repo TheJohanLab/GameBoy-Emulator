@@ -109,13 +109,13 @@ void ImGuiRenderer::renderRegistries() const
 
 
 		ImGui::Begin("Registries");
-		ImGui::Text("A: 0x%X", (mRegistries->getA()));
-		ImGui::Text("B: 0x%X", (mRegistries->getB()));
-		ImGui::Text("C: 0x%X", (mRegistries->getC()));
-		ImGui::Text("D: 0x%X", (mRegistries->getD()));
-		ImGui::Text("E: 0x%X", (mRegistries->getE()));
-		ImGui::Text("H: 0x%X", (mRegistries->getH()));
-		ImGui::Text("L: 0x%X", (mRegistries->getL()));
+		ImGui::Text("A: 0x%X", *(mRegistries->getA()));
+		ImGui::Text("B: 0x%X", *(mRegistries->getB()));
+		ImGui::Text("C: 0x%X", *(mRegistries->getC()));
+		ImGui::Text("D: 0x%X", *(mRegistries->getD()));
+		ImGui::Text("E: 0x%X", *(mRegistries->getE()));
+		ImGui::Text("H: 0x%X", *(mRegistries->getH()));
+		ImGui::Text("L: 0x%X", *(mRegistries->getL()));
 		ImGui::Text("Flags");
 		ImGui::Text("C: 0x%X", (mRegistries->getF()->flags.C));
 		ImGui::Text("H: 0x%X", (mRegistries->getF()->flags.H));

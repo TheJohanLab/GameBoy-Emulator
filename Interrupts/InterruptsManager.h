@@ -23,7 +23,7 @@ using interrupt = std::function<void()>;
 private:
 	std::weak_ptr<CPU> mCPU_weak;
 
-	std::vector<interrupt> mInterruptsList = std::vector<interrupt>();
+	std::vector<interrupt*> mInterruptsList = std::vector<interrupt*>();
 	interrupt mVBlankInterrupt{ nullptr };
 	interrupt mSTATInterrupt{ nullptr };
 	interrupt mTimerInterrupt{ nullptr };

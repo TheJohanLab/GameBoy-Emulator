@@ -30,8 +30,14 @@ void BootRom::execute()
 	{
 		//PlaySound
 		initRegistries();
+		
+#ifdef STEP_DEBUG
+		mOnStateChange(EmulatorState::STEP);
+#else
 		mOnStateChange(EmulatorState::RUN);
+#endif
 
+		mPPU->resetPPUModeDots();
 		auto cpu = mCPU_weak.lock();
 		cpu->getInterruptsManager()->setActiveVBlankInterrupt();
 	}
@@ -185,7 +191,7 @@ void BootRom::initRegistries()
 	mBus->write(0xFF25, 0xF3);
 	mBus->write(0xFF26, 0xF1);
 	mBus->write(0xFF40, 0x91);
-	mBus->write(0xFF41, 0x85);
+	mBus->write(0xFF41, 0x86);
 	mBus->write(0xFF42, 0x00);
 	mBus->write(0xFF43, 0x00);
 	mBus->write(0xFF44, 0x00);

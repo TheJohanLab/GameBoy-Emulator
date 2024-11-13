@@ -25,8 +25,8 @@ namespace gbe {
 	{
 		mBus = std::make_shared<Bus>();
 
-
-		mScreen = std::make_shared<Screen>(mBus->getCartrige(), SCREEN_WIDTH, SCREEN_HEIGHT);
+		mEventManager = std::make_shared<WindowEventManager>();
+		mScreen = std::make_shared<Screen>(mEventManager, mBus->getCartrige(), SCREEN_WIDTH, SCREEN_HEIGHT);
 		mPPU = std::make_shared<PPU>(mBus, mScreen);
 		mCPU = std::make_shared<CPU>(mBus, mPPU);
 		auto weak_cpu = std::weak_ptr(mCPU);
@@ -39,7 +39,7 @@ namespace gbe {
 
 		//mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
 
-		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU);
+		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU, mEventManager);
 
 		setCallbacks();
 

@@ -57,7 +57,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);LOG_DEBUG_</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);LOG_DEBUG;STEP_DEBUG_</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Dependencies\spd_log\include;$(SolutionDir)Dependencies\Imgui\backends;$(SolutionDir)Dependencies\Imgui\;$(SolutionDir)Dependencies\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -79,7 +79,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);LOG_DEBUG</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Dependencies\spd_log\include;$(SolutionDir)Dependencies\Imgui\backends;$(SolutionDir)Dependencies\Imgui\;$(SolutionDir)Dependencies\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -133,12 +133,14 @@
     <ClInclude Include="BootRom\BootRom.h" />
     <ClInclude Include="Cartridge\Cartridge.h" />
     <ClInclude Include="Cartridge\CartridgeManager.h" />
+    <ClInclude Include="Emulator\States\StateStep.h" />
     <ClInclude Include="Emulator\States\StateBoot.h" />
     <ClInclude Include="Emulator\States\StatePause.h" />
     <ClInclude Include="Emulator\States\StateRun.h" />
     <ClInclude Include="Emulator\States\EmulatorStateFactory.h" />
     <ClInclude Include="Emulator\States\StateInit.h" />
     <ClInclude Include="Emulator\States\EmulatorBaseState.h" />
+    <ClInclude Include="Emulator\WindowEventManager.h" />
     <ClInclude Include="ImGuiMenu\ImGuiMenu.h" />
     <ClInclude Include="Interrupts\InterruptsManager.h" />
     <ClInclude Include="PPU\Renderer\BackgroundRenderer.h" />

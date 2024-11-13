@@ -595,7 +595,7 @@ u8 CPU::executeOpcode(const u16 opcode)
 	incPC();
 	
 
-
+	//C7F3
 
 	return cycles;
 }
@@ -863,6 +863,7 @@ void CPU::logRegistries()
 	GBE_LOG_INFO("Registry F.N : {:#x}", N);
 	GBE_LOG_INFO("Registry F.Z : {:#x}", Z);
 	GBE_LOG_INFO("Registry SP : {:#x}", *getSP());
+	GBE_LOG_INFO("LY : {:#x}", mBus->read(0xFF44));
 
 }
 

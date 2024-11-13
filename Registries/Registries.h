@@ -86,7 +86,8 @@ class Registries
 		u8 A,B,C,D,E,H,L;
 		combinedRegistries AF, BC, DE, HL;
 		flags F;
-		u16 SP,PC;
+		u16 SP{ 0xFFFE };
+		u16 PC{ 0x0 };
 		u8 IME;
 
 	public:

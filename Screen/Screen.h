@@ -6,6 +6,7 @@
 #include "ImGuiRenderer.h"
 #include <functional>
 #include "Cartridge/Cartridge.h"
+#include "Emulator/WindowEventManager.h"
 
 class Pixel;
 class Registries;
@@ -20,6 +21,9 @@ using closeEventFn = std::function<void()>;
 class Screen
 {
 	private:
+		std::shared_ptr<ImGuiRenderer> mImGuiRenderer;
+		std::shared_ptr<WindowEventManager> mEventManager;
+
 		u16 mWidth;
 		u16 mHeight;
 
@@ -30,10 +34,9 @@ class Screen
 
 		closeEventFn closeEventCallback;
 
-		std::shared_ptr<ImGuiRenderer> mImGuiRenderer { nullptr };
 
 	public:
-		Screen(Cartridge* cartridge, u16 width, u16 height);
+		Screen(std::shared_ptr<WindowEventManager>, Cartridge* cartridge, u16 width, u16 height);
 		~Screen();
 
 		const SDL_Window* getWindow() const;

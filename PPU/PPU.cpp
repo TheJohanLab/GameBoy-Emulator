@@ -298,6 +298,7 @@ void PPU::render(u8 cycle)
 			// Si ligne suivante = 154 : on revient en haut et passe en OAM
 			// Interrupt ?
 			setPPUMode(PPU_OAM_SCAN);
+
 		}
 
 

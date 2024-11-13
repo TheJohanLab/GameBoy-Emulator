@@ -6,6 +6,7 @@
 #include <functional>
 #include <SDL.h>
 
+#include "WindowEventManager.h"
 #include "Clock/Clock.h"
 #include "Bus/Bus.h"
 #include "CPU/CPU.h"
@@ -23,6 +24,7 @@ namespace gbe {
 	class Emulator 
 	{
 	protected:
+		std::shared_ptr<WindowEventManager> mEventManager;
 		std::shared_ptr<Screen> mScreen;
 		std::shared_ptr<Bus> mBus;
 		std::shared_ptr<CPU> mCPU;

@@ -60,15 +60,15 @@ void InterruptsManager::callInterruptHandler()
 		InstructionJump::PUSH_PC(*cpu);
 
 		if (mActiveInterruptFlags.flags.Vblank)
-			mInterruptsList[VBLANK]();
+			(*mInterruptsList[VBLANK])();
 		else if (mActiveInterruptFlags.flags.LCD_STAT)
-			mInterruptsList[LCD_STAT]();
+			(*mInterruptsList[LCD_STAT])();
 		else if (mActiveInterruptFlags.flags.Timer)
-			mInterruptsList[TIMER]();
+			(*mInterruptsList[TIMER])();
 		else if (mActiveInterruptFlags.flags.SerialTransferCompletion)
-			mInterruptsList[SERIAL]();
+			(*mInterruptsList[SERIAL])();
 		else if (mActiveInterruptFlags.flags.Joypad)
-			mInterruptsList[SERIAL]();
+			(*mInterruptsList[SERIAL])();
 
 		cpu->setInterruptFlag(mActiveInterruptFlags.byte);
 
@@ -93,12 +93,12 @@ void InterruptsManager::initInterrupts()
 	mJoypadInterrupt = BIND_FUNC_NO_ARGS(this, InterruptsManager::joypadInterrupt);
 	mNone = BIND_FUNC_NO_ARGS(this, InterruptsManager::none);
 
-	mInterruptsList.push_back(mVBlankInterrupt);
-	mInterruptsList.push_back(mSTATInterrupt);
-	mInterruptsList.push_back(mTimerInterrupt);
-	mInterruptsList.push_back(mSerialInterrupt);
-	mInterruptsList.push_back(mJoypadInterrupt);
-	mInterruptsList.push_back(mNone);
+	mInterruptsList.emplace_back(&mVBlankInterrupt);
+	mInterruptsList.emplace_back(&mSTATInterrupt);
+	mInterruptsList.emplace_back(&mTimerInterrupt);
+	mInterruptsList.emplace_back(&mSerialInterrupt);
+	mInterruptsList.emplace_back(&mJoypadInterrupt);
+	mInterruptsList.emplace_back(&mNone);
 }
 
 void InterruptsManager::vblankInterrupt() 

@@ -10,6 +10,7 @@
 
 #include "Utils/Utils.h"
 
+class WindowEventManager;
 
 class GameLoop
 {
@@ -35,7 +36,7 @@ private:
 	bool mIsCartridgeLoaded{ false };
 
 public:
-	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu);
+	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<WindowEventManager> eventManager);
 	virtual ~GameLoop() = default;
 
 	void setEmulatorState(EmulatorState state);

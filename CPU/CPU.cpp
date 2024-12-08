@@ -590,6 +590,7 @@ u8 CPU::executeOpcode(const u16 opcode)
 #endif
 
 	//(mInstructionSet[opcode]->getFunctionPointer())(*this, *mInstructionSet[opcode]);
+	GBE_LOG_INFO("{0}", mInstructionSet[opcode]->getName());
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
 	
 	incPC();
@@ -805,14 +806,14 @@ std::pair<interrupt_flag, interrupt_flag> CPU::getInterruptFlags() const
 	return std::make_pair(IE, IF);
 }
 
-void CPU::setInterruptFlag(const u8 flags)
+void CPU::setInterruptFlag(const u8 flags, bool clearIF)
 {
-	mBus->setInterruptFlag(flags);
+	mBus->setInterruptFlag(flags, clearIF);
 }
 
-void CPU::setInterruptEnable(const u8 flags)
+void CPU::setInterruptEnable(const u8 flags, bool clearIE)
 {
-	mBus->setInterruptEnable(flags);
+	mBus->setInterruptEnable(flags, clearIE);
 }
 
 std::shared_ptr<BootRom> CPU::getBootRom()

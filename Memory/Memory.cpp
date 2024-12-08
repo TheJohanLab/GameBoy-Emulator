@@ -74,7 +74,7 @@ void Memory::write(u16 const& address, u8 const& data)
 	else if (address == DMA)
 	{
 		mDmaRegistry = data;
-		mDMACallback(data);
+ 		mDMACallback(data);
 	}
 
 }

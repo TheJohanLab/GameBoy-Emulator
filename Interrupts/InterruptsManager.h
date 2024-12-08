@@ -39,6 +39,8 @@ public:
 
 	void initInterrupts();
 	void setInterrupt(InterruptsTypes type);
+	void clearInterrupts();
+	
 	void callInterruptHandler();
 
 	void setActiveVBlankInterrupt();

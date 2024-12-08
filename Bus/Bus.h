@@ -25,8 +25,8 @@ class Bus
 		//Interrupts
 		interrupt_flag getInterruptEnable() const;
 		interrupt_flag getInterruptFlag() const;
-		void setInterruptEnable(const u8 flags);
-		void setInterruptFlag(const u8 flags);
+		void setInterruptEnable(const u8 flags, bool clearIE);
+		void setInterruptFlag(const u8 flags, bool clearIF);
 
 		void setDMATransfertCallback(std::function<void(const u8)> callback) { mMemory.setDMACallback(callback); }
 		void setLoadCartridgeCallback(std::function<void()> callback) { mCartridge->setLoadCallback(callback); }

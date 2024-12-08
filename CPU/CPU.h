@@ -66,8 +66,8 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		
 		std::pair<interrupt_flag, interrupt_flag> getInterruptFlags() const;
-		void setInterruptFlag(const u8 flags);
-		void setInterruptEnable(const u8 flags);
+		void setInterruptFlag(const u8 flags, bool clearIF = false);
+		void setInterruptEnable(const u8 flags, bool clearIE = false);
 
 		std::shared_ptr<BootRom> getBootRom();
 		std::shared_ptr<InterruptsManager> getInterruptsManager();

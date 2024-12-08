@@ -21,6 +21,8 @@ void BootRom::initializeBootRom()
 	extractBootLogo();
 	mScrollingIter = 0;
 	mBus->write(SCY, 0x64);
+	auto cpu = mCPU_weak.lock();
+	cpu->setIMEFlag();
 }
 
 void BootRom::execute()
@@ -40,12 +42,14 @@ void BootRom::execute()
 		mPPU->resetPPUModeDots();
 		auto cpu = mCPU_weak.lock();
 		cpu->getInterruptsManager()->setActiveVBlankInterrupt();
+		cpu->clearIMEFlag();
 	}
 
 }
 
 void BootRom::scrollLogo()
 {
+	GBE_LOG_INFO("DEBUG Iter scroll logo {0}", DEBUG_SCROLL_LOGO_IT++);
 	//auto PC = mCPU->getPC();
 	//*PC = 0x0040;
 	if (mScrollingIter < mTotalScrollingIter)
@@ -54,6 +58,7 @@ void BootRom::scrollLogo()
 			mVBLankCnt++;
 		else
 		{
+			GBE_LOG_INFO("DEBUG mScrollIter++ {0}", mScrollingIter);
 			mPPU->decSCY();
 			mScrollingIter++;
 			mVBLankCnt = 0;
@@ -61,8 +66,16 @@ void BootRom::scrollLogo()
 	}
 	else
 	{
+		GBE_LOG_INFO("mScrollingIter < mTotalScrollingIter");
 		mIsBootFinished = true;
 	}
+
+	auto cpu = mCPU_weak.lock();
+	auto SP = cpu->getSP();
+	*SP += 2;
+	cpu->getInterruptsManager()->clearInterrupts();
+
+
 }
 
 

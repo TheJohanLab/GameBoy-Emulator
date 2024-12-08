@@ -151,8 +151,8 @@ u8 PPU::readSCX() const
 //FF44
 inline u8 PPU::readLY() const
 {
-	return mLY;
-	//return mBus->read(LY);
+	//return mLY;
+	return mBus->read(LY);
 }
 
 //FF45
@@ -163,9 +163,9 @@ inline u8 PPU::readLYC() const
 
 inline void PPU::incLY()
 {
-	mLY = (mLY + 1) % 144;
-	//u8 ly = mBus->read(LY);
-	mBus->write(LY, mLY);
+	//mLY = (mLY + 1) % 144;
+	u8 ly = mBus->read(LY);
+	mBus->write(LY, (ly + 1) % 144);
 }
 
 inline void PPU::incSCY()
@@ -311,7 +311,8 @@ void PPU::render(u8 cycle)
 		if (mPPUModeDots >= PPU_OAM_SCAN_DOTS)
 		{
 			//TODO gerer les dots dans le CPU
-			mPPUModeDots -= cycle;
+			//mPPUModeDots -= cycle;
+			mPPUModeDots -= PPU_OAM_SCAN_DOTS;
 			setPPUMode(PPU_DRAWING);
 		}
 		break;
@@ -333,6 +334,7 @@ void PPU::render(u8 cycle)
 			if (readLY() >= SCREEN_HEIGHT - 1)
 			{
 				setPPUMode(PPU_VBLANK);
+				GBE_LOG_INFO("DEBUG VBLANK");
 				mOnVBlank(InterruptsTypes::VBLANK);
 			}
 			else

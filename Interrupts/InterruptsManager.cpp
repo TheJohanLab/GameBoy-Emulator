@@ -23,7 +23,16 @@ void InterruptsManager::setInterrupt(InterruptsTypes type)
 	cpu->setInterruptFlag(interruptFlag);
 	//A changer quand on saura quoi en faire
 	cpu->setInterruptEnable(interruptFlag);
-	cpu->setIMEFlag();
+	//cpu->setIMEFlag();
+}
+
+void InterruptsManager::clearInterrupts()
+{
+	mActiveInterruptFlags.flags.Vblank = 0;
+	mActiveInterruptFlags.flags.Joypad= 0;
+	mActiveInterruptFlags.flags.LCD_STAT= 0;
+	mActiveInterruptFlags.flags.Timer= 0;
+	mActiveInterruptFlags.flags.SerialTransferCompletion = 0;
 }
 
 //void InterruptsManager::callInterruptHandler()
@@ -56,7 +65,7 @@ void InterruptsManager::callInterruptHandler()
 	if (mActiveInterruptFlags.byte > 0x00)
 	{
 		cpu->resumeCPUFromInterrupt();
-		cpu->clearIMEFlag();
+		//cpu->clearIMEFlag();
 		InstructionJump::PUSH_PC(*cpu);
 
 		if (mActiveInterruptFlags.flags.Vblank)
@@ -68,9 +77,9 @@ void InterruptsManager::callInterruptHandler()
 		else if (mActiveInterruptFlags.flags.SerialTransferCompletion)
 			(*mInterruptsList[SERIAL])();
 		else if (mActiveInterruptFlags.flags.Joypad)
-			(*mInterruptsList[SERIAL])();
+			(*mInterruptsList[JOYPAD])();
 
-		cpu->setInterruptFlag(mActiveInterruptFlags.byte);
+		cpu->setInterruptFlag(mActiveInterruptFlags.byte, true);
 
 	}
 

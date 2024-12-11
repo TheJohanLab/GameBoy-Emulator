@@ -49,7 +49,6 @@ void BootRom::execute()
 
 void BootRom::scrollLogo()
 {
-	GBE_LOG_INFO("DEBUG Iter scroll logo {0}", DEBUG_SCROLL_LOGO_IT++);
 	//auto PC = mCPU->getPC();
 	//*PC = 0x0040;
 	if (mScrollingIter < mTotalScrollingIter)
@@ -58,7 +57,6 @@ void BootRom::scrollLogo()
 			mVBLankCnt++;
 		else
 		{
-			GBE_LOG_INFO("DEBUG mScrollIter++ {0}", mScrollingIter);
 			mPPU->decSCY();
 			mScrollingIter++;
 			mVBLankCnt = 0;
@@ -66,7 +64,6 @@ void BootRom::scrollLogo()
 	}
 	else
 	{
-		GBE_LOG_INFO("mScrollingIter < mTotalScrollingIter");
 		mIsBootFinished = true;
 	}
 

@@ -20,7 +20,9 @@ void InterruptsManager::setInterrupt(InterruptsTypes type)
 {
 	u8 interruptFlag = 0x01 << type;
 	auto cpu = mCPU_weak.lock();
-	cpu->setInterruptFlag(interruptFlag);
+
+	std::pair< interrupt_flag, interrupt_flag> interruptFlags = cpu->getInterruptFlags();
+	cpu->setInterruptFlag(interruptFlags.second.byte | interruptFlag);
 	//A changer quand on saura quoi en faire
 	cpu->setInterruptEnable(interruptFlag);
 	//cpu->setIMEFlag();
@@ -79,7 +81,7 @@ void InterruptsManager::callInterruptHandler()
 		else if (mActiveInterruptFlags.flags.Joypad)
 			(*mInterruptsList[JOYPAD])();
 
-		cpu->setInterruptFlag(mActiveInterruptFlags.byte, true);
+		cpu->setInterruptFlag(mActiveInterruptFlags.byte);
 
 	}
 

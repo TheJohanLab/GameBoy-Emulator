@@ -43,21 +43,14 @@ interrupt_flag Bus::getInterruptFlag() const
 	return IF;
 }
 
-void Bus::setInterruptEnable(const u8 flags, bool clearIE)
+void Bus::setInterruptEnable(const u8 flags)
 {
-	u8 IE{ 0 };
-	if (!clearIE)
-		IE = mMemory.read(INTERRUPT_ENABLE);
-
-	mMemory.write(INTERRUPT_ENABLE, IE | flags);
+	mMemory.write(INTERRUPT_ENABLE, flags);
 }
 
-void Bus::setInterruptFlag(const u8 flags, bool clearIF)
+void Bus::setInterruptFlag(const u8 flags)
 {
-	u8 IF{ 0 }; 
-	if (!clearIF)
-		IF = mMemory.read(INTERRUPT_FLAG);
 
-	mMemory.write(INTERRUPT_FLAG, IF | flags);
+	mMemory.write(INTERRUPT_FLAG, flags);
 }
 

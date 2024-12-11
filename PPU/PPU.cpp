@@ -256,14 +256,25 @@ void PPU::render(u8 cycle)
 		//Mode 0
 	case PPU_HBLANK :
 		// fin de scanline
-		
+#ifdef _DEBUG
+		GBE_LOG_INFO("HBLANK Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_HBLANK_DOTS);
+#endif
 		if (mPPUModeDots >= PPU_HBLANK_DOTS) 
 		{
 			mPPUModeDots -= PPU_HBLANK_DOTS;
 			
 			incLY();
 			//mOAM->getObjects()[2].XPos = (mOAM->getObjects()[2].XPos + 1) % 256;
-			setPPUMode(PPU_OAM_SCAN);
+
+			if (readLY() >= SCREEN_HEIGHT - 1)
+			{
+				setPPUMode(PPU_VBLANK);
+				mOnVBlank(InterruptsTypes::VBLANK);
+			}
+			else
+				setPPUMode(PPU_OAM_SCAN);
+
+			
 			// On passe à la ligne suivante
 
 			/* Si ligne suivante = 144 :
@@ -285,6 +296,9 @@ void PPU::render(u8 cycle)
 		 // Mode 1
 	case PPU_VBLANK :
 
+#ifdef _DEBUG
+		GBE_LOG_INFO("VBLANK Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_VBLANK_DOTS);
+#endif
 		if (mPPUModeDots >= PPU_VBLANK_DOTS) 
 		{
 
@@ -308,6 +322,9 @@ void PPU::render(u8 cycle)
 	case PPU_OAM_SCAN :
 		// On décrémente les cycles et on passe en DRAWING
 
+#ifdef _DEBUG
+		GBE_LOG_INFO("OAM SCAN Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_OAM_SCAN_DOTS);
+#endif
 		if (mPPUModeDots >= PPU_OAM_SCAN_DOTS)
 		{
 			//TODO gerer les dots dans le CPU
@@ -320,26 +337,24 @@ void PPU::render(u8 cycle)
 		//Mode 3
 	case PPU_DRAWING :
 
+
+
+
 		if (!mIsScanlineDrawn)
 		{
 			mDotsElapsed = renderPixelsScanline();
 			mIsScanlineDrawn = true;
 		}
 
+#ifdef _DEBUG
+		GBE_LOG_INFO("DRAWING Mode - mPPUModeDots : {0} / {1}, dots elapsed : {2}", mPPUModeDots, PPU_DRAWING_DOTS, mDotsElapsed);
+#endif
 		if ((mPPUModeDots + mDotsElapsed) >= PPU_DRAWING_DOTS)
 		{
 			mIsScanlineDrawn = false;
-			mPPUModeDots -= PPU_DRAWING_DOTS;
+			mPPUModeDots -= (PPU_DRAWING_DOTS - mDotsElapsed);
 			
-			if (readLY() >= SCREEN_HEIGHT - 1)
-			{
-				setPPUMode(PPU_VBLANK);
-				GBE_LOG_INFO("DEBUG VBLANK");
-				mOnVBlank(InterruptsTypes::VBLANK);
-			}
-			else
-				setPPUMode(PPU_HBLANK);
-			
+			setPPUMode(PPU_HBLANK);
 		}
 		// On passe en HBLANK
 		// Interrupt ?
@@ -361,7 +376,7 @@ void PPU::render(u8 cycle)
 
 	double scanlineElapsedInSec = (double)(SDL_GetPerformanceCounter() - scanlineBegin) / SDL_GetPerformanceFrequency();
 
-	return (scanlineElapsedInSec * 4194304);
+	return (scanlineElapsedInSec * CLOCK_FREQUENCY);
 }
 
 // ------------------------------------//

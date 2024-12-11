@@ -590,7 +590,7 @@ u8 CPU::executeOpcode(const u16 opcode)
 #endif
 
 	//(mInstructionSet[opcode]->getFunctionPointer())(*this, *mInstructionSet[opcode]);
-	GBE_LOG_INFO("{0}", mInstructionSet[opcode]->getName());
+	//GBE_LOG_INFO("{0}", mInstructionSet[opcode]->getName());
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
 	
 	incPC();
@@ -607,7 +607,7 @@ u8 CPU::executeOpcodeCB(const u16 opcodeCB)
 	//u16 opcodeCB = 0x00;
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	(mInstructionSet[0x100 + opcodeCB]->getFunctionPointer())(*this);
-	GBE_LOG_INFO("{0}", mInstructionSet[0x100 + opcodeCB]->getName());
+	//GBE_LOG_INFO("{0}", mInstructionSet[0x100 + opcodeCB]->getName());
 
 	incPC();
 
@@ -806,14 +806,14 @@ std::pair<interrupt_flag, interrupt_flag> CPU::getInterruptFlags() const
 	return std::make_pair(IE, IF);
 }
 
-void CPU::setInterruptFlag(const u8 flags, bool clearIF)
+void CPU::setInterruptFlag(const u8 flags)
 {
-	mBus->setInterruptFlag(flags, clearIF);
+	mBus->setInterruptFlag(flags);
 }
 
-void CPU::setInterruptEnable(const u8 flags, bool clearIE)
+void CPU::setInterruptEnable(const u8 flags)
 {
-	mBus->setInterruptEnable(flags, clearIE);
+	mBus->setInterruptEnable(flags);
 }
 
 std::shared_ptr<BootRom> CPU::getBootRom()

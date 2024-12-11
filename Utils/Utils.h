@@ -31,7 +31,7 @@ const u8 PPU_DRAWING = 0x03;
 
 // PPU cycles modes durations (in dots - 1 dot = 1 cycle) 456 dots per line
 #define PPU_HBLANK_DOTS 87
-#define PPU_VBLANK_DOTS 456
+#define PPU_VBLANK_DOTS 4560
 #define PPU_OAM_SCAN_DOTS 80
 #define PPU_DRAWING_DOTS 289
 
@@ -41,6 +41,8 @@ const u8 PPU_DRAWING = 0x03;
 
 #define TILE_MAP_1_BEG_ADDRESS 0x9800
 #define TILE_MAP_2_BEG_ADDRESS 0x9C00
+
+#define CLOCK_FREQUENCY 4194304
 
 
 typedef struct s_flags {

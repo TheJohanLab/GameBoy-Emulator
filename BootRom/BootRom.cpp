@@ -43,6 +43,9 @@ void BootRom::execute()
 		auto cpu = mCPU_weak.lock();
 		cpu->getInterruptsManager()->setActiveVBlankInterrupt();
 		cpu->clearIMEFlag();
+#ifdef _DEBUG
+		mPPU->resetCurrCycles();
+#endif
 	}
 
 }

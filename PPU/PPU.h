@@ -48,6 +48,10 @@ private:
 	using onVBlankEvent = std::function<void(InterruptsTypes)>;
 	onVBlankEvent mOnVBlank{ nullptr };
 
+#ifdef _DEBUG
+    u16 m_currCycles{ 0 };
+#endif
+
 public:
 	PPU(std::shared_ptr<Bus> bus, std::shared_ptr<Screen> screen);
 	~PPU();
@@ -127,6 +131,9 @@ public:
 	void setOnVBlankListener(onVBlankEvent onVBlank) { mOnVBlank = onVBlank; }
 	void setRegistriesRef(Registries* registries);
 	
+#ifdef _DEBUG
+	void resetCurrCycles() {	m_currCycles = 0;}
+#endif
 
 private:
 

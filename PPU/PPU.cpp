@@ -235,6 +235,7 @@ u8 PPU::readWX() const
 	return  mBus->read(WINDOW_X);
 }
 
+
 void PPU::render(u8 cycle)
 {
 
@@ -250,6 +251,12 @@ void PPU::render(u8 cycle)
 	//setPPUMode(PPU_DRAWING);
 
 	mPPUModeDots += cycle;
+
+#ifdef _DEBUG
+	m_currCycles += cycle;
+	GBE_LOG_INFO("nb cycles : {0}", cycle);
+	GBE_LOG_INFO("frame en cours - nb cycles ecoules : {0}", m_currCycles % 456);
+#endif
 
 	switch (getPPUMode())
 	{
@@ -349,10 +356,10 @@ void PPU::render(u8 cycle)
 #ifdef _DEBUG
 		GBE_LOG_INFO("DRAWING Mode - mPPUModeDots : {0} / {1}, dots elapsed : {2}", mPPUModeDots, PPU_DRAWING_DOTS, mDotsElapsed);
 #endif
-		if ((mPPUModeDots + mDotsElapsed) >= PPU_DRAWING_DOTS)
+		if ((mPPUModeDots ) >= PPU_DRAWING_DOTS)
 		{
 			mIsScanlineDrawn = false;
-			mPPUModeDots -= (PPU_DRAWING_DOTS - mDotsElapsed);
+			mPPUModeDots -= (PPU_DRAWING_DOTS );
 			
 			setPPUMode(PPU_HBLANK);
 		}

@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "BootRom.h"
 
 #include "Utils/Addresses.h"
@@ -23,6 +25,7 @@ void BootRom::initializeBootRom()
 	mBus->write(SCY, 0x64);
 	auto cpu = mCPU_weak.lock();
 	cpu->setIMEFlag();
+	cpu->setInterruptEnable(0x01); // VBLANK interrupt only
 }
 
 void BootRom::execute()
@@ -74,6 +77,8 @@ void BootRom::scrollLogo()
 	auto SP = cpu->getSP();
 	*SP += 2;
 	cpu->getInterruptsManager()->clearInterrupts();
+
+	cpu->setIMEFlag();
 
 
 }

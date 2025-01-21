@@ -1,8 +1,10 @@
 #pragma once
 
-#include <vector>
-#include <memory>
-#include <functional>
+
+
+//#include <vector>
+//#include <memory>
+//#include <functional>
 
 #include "Utils/Utils.h"
 #include "Emulator/States/EmulatorBaseState.h"
@@ -25,8 +27,8 @@ private:
 	u8 mScrollingIter{ 0 };
 	u8 mVBLankCnt{ 0 };
 	u8 DEBUG_SCROLL_LOGO_IT{ 0 };
-	//const u16 mTotalScrollingIter{ 0x64 };
-	const u16 mTotalScrollingIter{ 0x1 };
+	const u16 mTotalScrollingIter{ 0x64 };
+	//const u16 mTotalScrollingIter{ 0x1 };
 
 	onStateChange mOnStateChange{ nullptr };
 	

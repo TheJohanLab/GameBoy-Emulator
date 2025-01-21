@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Cartridge.h"
 
 //Cartridge::Cartridge(std::shared_ptr<Bus> bus)

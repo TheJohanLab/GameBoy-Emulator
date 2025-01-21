@@ -61,6 +61,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Dependencies\spd_log\include;$(SolutionDir)Dependencies\Imgui\backends;$(SolutionDir)Dependencies\Imgui\;$(SolutionDir)Dependencies\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,6 +130,10 @@
     <ClCompile Include="Screen\Screen.cpp" />
     <ClCompile Include="Utils\Log.cpp" />
     <ClCompile Include="PPU\Renderer\WindowRenderer.cpp" />
+    <ClCompile Include="Utils\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BootRom\BootRom.h" />
@@ -250,6 +256,7 @@
     <ClInclude Include="Screen\Screen.h" />
     <ClInclude Include="Utils\Addresses.h" />
     <ClInclude Include="Utils\Log.h" />
+    <ClInclude Include="Utils\pch.h" />
     <ClInclude Include="Utils\ScreenColors.h" />
     <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="PPU\Renderer\WindowRenderer.h" />

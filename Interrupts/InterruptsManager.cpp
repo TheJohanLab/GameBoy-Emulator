@@ -23,9 +23,7 @@ void InterruptsManager::setInterrupt(InterruptsTypes type)
 
 	std::pair< interrupt_flag, interrupt_flag> interruptFlags = cpu->getInterruptFlags();
 	cpu->setInterruptFlag(interruptFlags.second.byte | interruptFlag);
-	//A changer quand on saura quoi en faire
-	cpu->setInterruptEnable(interruptFlag);
-	//cpu->setIMEFlag();
+
 }
 
 void InterruptsManager::clearInterrupts()
@@ -67,7 +65,7 @@ void InterruptsManager::callInterruptHandler()
 	if (mActiveInterruptFlags.byte > 0x00)
 	{
 		cpu->resumeCPUFromInterrupt();
-		//cpu->clearIMEFlag();
+		cpu->clearIMEFlag(); 
 		InstructionJump::PUSH_PC(*cpu);
 
 		if (mActiveInterruptFlags.flags.Vblank)

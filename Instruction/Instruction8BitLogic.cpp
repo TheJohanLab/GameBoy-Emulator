@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Instruction8BitLogic.h"
 
 

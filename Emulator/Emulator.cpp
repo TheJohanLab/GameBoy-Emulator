@@ -1,5 +1,8 @@
+#include "pch.h"
+
 #include "Emulator.h"
 #include "Interrupts/InterruptsManager.h"
+
 
 namespace gbe {
 

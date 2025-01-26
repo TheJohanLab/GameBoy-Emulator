@@ -1,5 +1,7 @@
+#include "pch.h"
+
 #include "Registries.h"
-#include "../CPU/CPU.h"
+#include "CPU/CPU.h"
 
 Registries::Registries()
 {

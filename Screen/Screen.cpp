@@ -1,5 +1,7 @@
+#include "pch.h"
+
 #include "Screen.h"
-#include <iostream>
+//#include <iostream>
 
 #include "PPU/PPU.h"
 

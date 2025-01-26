@@ -1,8 +1,10 @@
+#include "pch.h"
+
 #include "BackgroundRenderer.h"
 
-#include "Utils/Utils.h"
+//#include "Utils/Utils.h"
 #include "PPU/PPU.h"
-#include "Utils/Addresses.h"
+//#include "Utils/Addresses.h"
 #include "Utils/ScreenColors.h"
 
 BackgroundRenderer::BackgroundRenderer(PPU* ppu)

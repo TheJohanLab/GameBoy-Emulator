@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Instruction.h"
-#include "../CPU/CPU.h"
-#include "../Registries/Registries.h"
+#include "CPU/CPU.h"
+#include "Registries/Registries.h"
 
 class Instruction8BitLoad : public Instruction
 {

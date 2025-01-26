@@ -1,10 +1,12 @@
+#include "pch.h"
+
 #include "InterruptsManager.h"
 
 #include "CPU/CPU.h"
-#include "Utils/Utils.h"
+//#include "Utils/Utils.h"
 #include "BootRom/BootRom.h"
 
-#include "Utils/Log.h"
+//#include "Utils/Log.h"
 
 InterruptsManager::InterruptsManager(std::weak_ptr<CPU> cpu_weak)
 	:mCPU_weak(cpu_weak)

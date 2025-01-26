@@ -1,7 +1,9 @@
+#include "pch.h"
+
 #include "WindowRenderer.h"
 
 #include "PPU/PPU.h"
-#include "Utils/Addresses.h"
+//#include "Utils/Addresses.h"
 
 WindowRenderer::WindowRenderer(PPU* ppu)
 	:mPPU(ppu)

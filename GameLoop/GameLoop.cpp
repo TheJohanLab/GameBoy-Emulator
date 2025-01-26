@@ -1,6 +1,8 @@
+#include "pch.h"
+
 #include "GameLoop.h"
 
-#include "Utils/Log.h"
+//#include "Utils/Log.h"
 
 u16 GameLoop::waitingDots = 0;
 

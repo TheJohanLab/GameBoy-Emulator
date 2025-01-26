@@ -1,6 +1,6 @@
 #pragma once
 #include "Instruction.h"
-#include "../CPU/CPU.h"
+#include "CPU/CPU.h"
 
 class InstructionRotateShift : public Instruction
 {

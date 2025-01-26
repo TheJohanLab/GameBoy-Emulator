@@ -1,5 +1,7 @@
+#include "pch.h"
+
 #include "ImGuiRenderer.h"
-#include <iostream>
+//#include <iostream>
 
 #include "imgui.h"
 #include "backends/imgui_impl_sdl2.h"
@@ -8,7 +10,7 @@
 #include "Cartridge/CartridgeManager.h"
 #include "Cartridge/Cartridge.h"
 
-#include <string>
+//#include <string>
 #include "Emulator/Emulator.h"
 #include "CPU/CPU.h"
 

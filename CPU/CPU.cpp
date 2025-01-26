@@ -1,7 +1,9 @@
+#include "pch.h"
+
 #include "CPU.h"
 #include "BootRom/BootRom.h"
 #include "Interrupts/InterruptsManager.h"
-#include "Utils/Log.h"
+//#include "Utils/Log.h"
 
 CPU::CPU()
 {

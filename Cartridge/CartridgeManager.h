@@ -1,11 +1,13 @@
 #pragma once
 
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <string>
+#include "pch.h"
 
-#include <sstream>
+//#include <iostream>
+//#include <fstream>
+//#include <iomanip>
+//#include <string>
+//
+//#include <sstream>
 
 
 class CartridgeManager

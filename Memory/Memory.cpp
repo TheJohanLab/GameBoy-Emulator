@@ -1,7 +1,9 @@
-#include "Memory.h"
-#include <iostream>
+#include "pch.h"
 
-#include "../Utils/Addresses.h"
+#include "Memory.h"
+//#include <iostream>
+
+//#include "../Utils/Addresses.h"
 
 
 /*0b00101111, 0b11111000,

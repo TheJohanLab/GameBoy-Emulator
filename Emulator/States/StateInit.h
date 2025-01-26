@@ -1,7 +1,7 @@
 #pragma once
 
 #include "EmulatorBaseState.h"
-#include "Utils/Log.h"
+//#include "Utils/Log.h"
 
 #include "BootRom/BootRom.h"
 

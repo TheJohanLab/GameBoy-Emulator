@@ -1,7 +1,7 @@
 #pragma once
-#include <iostream>
+//#include <iostream>
 #include "Instruction.h"
-#include "../CPU/CPU.h"
+#include "CPU/CPU.h"
 
 class Instruction1BitOperation : public Instruction
 {

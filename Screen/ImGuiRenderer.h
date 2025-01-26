@@ -1,11 +1,11 @@
 #pragma once
 
 #include <SDL.h>
-#include <fstream>
+//#include <fstream>
 #include <windows.h> 
 #include <commdlg.h>
 #include <cstring> 
-#include <memory>
+//#include <memory>
 
 #include "Cartridge/Cartridge.h"
 #include "Registries/Registries.h"

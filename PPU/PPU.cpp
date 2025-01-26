@@ -1,6 +1,8 @@
+#include "pch.h"
+
 #include "PPU.h"
-#include "../Utils/Addresses.h"
-#include "../Utils/Log.h"
+//#include "../Utils/Addresses.h"
+//#include "../Utils/Log.h"
 #include "Utils/ScreenColors.h"
 
 #include "Renderer/BackgroundRenderer.h"

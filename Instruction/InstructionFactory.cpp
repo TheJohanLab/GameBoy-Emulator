@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "InstructionFactory.h"
 
 InstructionFactory::InstructionFactory()

@@ -1,6 +1,8 @@
+#include "pch.h"
+
 #include "PPU.h"
-#include "../Utils/Addresses.h"
-#include "../Utils/Log.h"
+//#include "../Utils/Addresses.h"
+//#include "../Utils/Log.h"
 #include "Utils/ScreenColors.h"
 
 #include "Renderer/BackgroundRenderer.h"
@@ -252,7 +254,7 @@ void PPU::render(u8 cycle)
 
 	mPPUModeDots += cycle;
 
-#ifdef _DEBUG
+#ifdef LOG_DEBUG
 	m_currCycles += cycle;
 	GBE_LOG_INFO("nb cycles : {0}", cycle);
 	GBE_LOG_INFO("frame en cours - nb cycles ecoules : {0}", m_currCycles % 456);
@@ -263,7 +265,7 @@ void PPU::render(u8 cycle)
 		//Mode 0
 	case PPU_HBLANK :
 		// fin de scanline
-#ifdef _DEBUG
+#ifdef DEBUG_LOG
 		GBE_LOG_INFO("HBLANK Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_HBLANK_DOTS);
 #endif
 		if (mPPUModeDots >= PPU_HBLANK_DOTS) 
@@ -303,7 +305,7 @@ void PPU::render(u8 cycle)
 		 // Mode 1
 	case PPU_VBLANK :
 
-#ifdef _DEBUG
+#ifdef LOG_DEBUG
 		GBE_LOG_INFO("VBLANK Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_VBLANK_DOTS);
 #endif
 		if (mPPUModeDots >= PPU_VBLANK_DOTS) 
@@ -329,7 +331,7 @@ void PPU::render(u8 cycle)
 	case PPU_OAM_SCAN :
 		// On décrémente les cycles et on passe en DRAWING
 
-#ifdef _DEBUG
+#ifdef LOG__DEBUG
 		GBE_LOG_INFO("OAM SCAN Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_OAM_SCAN_DOTS);
 #endif
 		if (mPPUModeDots >= PPU_OAM_SCAN_DOTS)
@@ -353,7 +355,7 @@ void PPU::render(u8 cycle)
 			mIsScanlineDrawn = true;
 		}
 
-#ifdef _DEBUG
+#ifdef LOG_DEBUG
 		GBE_LOG_INFO("DRAWING Mode - mPPUModeDots : {0} / {1}, dots elapsed : {2}", mPPUModeDots, PPU_DRAWING_DOTS, mDotsElapsed);
 #endif
 		if ((mPPUModeDots ) >= PPU_DRAWING_DOTS)

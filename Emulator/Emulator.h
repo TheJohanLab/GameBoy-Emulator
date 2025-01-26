@@ -1,13 +1,13 @@
 #pragma once
 
-#include <iostream>
-#include <chrono>
-#include <memory>
-#include <functional>
-#include <SDL.h>
+//#include <iostream>
+//#include <chrono>
+//#include <memory>
+//#include <functional>
+//#include <SDL.h>
 
 #include "WindowEventManager.h"
-#include "Clock/Clock.h"
+//#include "Clock/Clock.h"
 #include "Bus/Bus.h"
 #include "CPU/CPU.h"
 #include "GameLoop/GameLoop.h"
@@ -15,8 +15,8 @@
 #include "PPU/PPU.h"
 #include "Interrupts/InterruptsManager.h"
 
-#include "Utils/Log.h"
-#include "Utils/Utils.h"
+//#include "Utils/Log.h"
+//#include "Utils/Utils.h"
 #include "Utils/Addresses.h"
 
 namespace gbe {

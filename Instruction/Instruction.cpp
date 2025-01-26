@@ -1,5 +1,7 @@
+#include "pch.h"
+
 #include "Instruction.h"
-#include "../CPU/CPU.h"
+#include "CPU/CPU.h"
 
 
 Instruction::Instruction()

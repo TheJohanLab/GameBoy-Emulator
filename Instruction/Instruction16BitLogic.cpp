@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Instruction16BitLogic.h"
 
 void Instruction16BitLogic::INC_RR(CPU& cpu, combinedRegistries* registries)

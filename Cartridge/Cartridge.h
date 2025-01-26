@@ -1,15 +1,15 @@
 #pragma once
 //#include <memory>
 //#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <string>
-#include <sstream>
+//#include <fstream>
+//#include <iomanip>
+//#include <string>
+//#include <sstream>
 
 //#include <vector>
 #include "Utils/Utils.h"
 
-//#include <functional>
+#include <functional>
 
 class Cartridge
 {

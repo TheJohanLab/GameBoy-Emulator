@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "InstructionRotateShift.h"
 
 InstructionRotateShift::InstructionRotateShift(const char* name, u8(*pInstruction)(CPU& cpu), u8 ClockCycle)

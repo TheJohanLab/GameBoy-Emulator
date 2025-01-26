@@ -57,7 +57,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);LOG_DEBUG;STEP_DEBUG_</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);LOG_DEBUG;STEP_DEBUG_;NO_BOOT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Dependencies\spd_log\include;$(SolutionDir)Dependencies\Imgui\backends;$(SolutionDir)Dependencies\Imgui\;$(SolutionDir)Dependencies\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -106,7 +106,6 @@
     <ClCompile Include="Interrupts\InterruptsManager.cpp" />
     <ClCompile Include="PPU\Renderer\BackgroundRenderer.cpp" />
     <ClCompile Include="Bus\Bus.cpp" />
-    <ClCompile Include="Clock\Clock.cpp" />
     <ClCompile Include="CPU\CPU.cpp" />
     <ClCompile Include="Emulator\Emulator.cpp" />
     <ClCompile Include="GameLoop\GameLoop.cpp" />
@@ -120,7 +119,6 @@
     <ClCompile Include="Instruction\Instruction16BitLoad.cpp" />
     <ClCompile Include="Instruction\Instruction8BitLoad.cpp" />
     <ClCompile Include="Instruction\Instruction.cpp" />
-    <ClCompile Include="main2.cpp" />
     <ClCompile Include="Memory\Memory.cpp" />
     <ClCompile Include="PPU\Renderer\ObjectRenderer.cpp" />
     <ClCompile Include="PPU\OAM.cpp" />
@@ -130,7 +128,7 @@
     <ClCompile Include="Screen\Screen.cpp" />
     <ClCompile Include="Utils\Log.cpp" />
     <ClCompile Include="PPU\Renderer\WindowRenderer.cpp" />
-    <ClCompile Include="Utils\pch.cpp">
+    <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -151,7 +149,6 @@
     <ClInclude Include="Interrupts\InterruptsManager.h" />
     <ClInclude Include="PPU\Renderer\BackgroundRenderer.h" />
     <ClInclude Include="Bus\Bus.h" />
-    <ClInclude Include="Clock\Clock.h" />
     <ClInclude Include="CPU\CPU.h" />
     <ClInclude Include="Dependencies\SDL2\include\begin_code.h" />
     <ClInclude Include="Dependencies\SDL2\include\close_code.h" />
@@ -256,7 +253,7 @@
     <ClInclude Include="Screen\Screen.h" />
     <ClInclude Include="Utils\Addresses.h" />
     <ClInclude Include="Utils\Log.h" />
-    <ClInclude Include="Utils\pch.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="Utils\ScreenColors.h" />
     <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="PPU\Renderer\WindowRenderer.h" />

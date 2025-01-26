@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "ObjectRenderer.h"
 
 #define X_COORD 0
@@ -5,7 +7,7 @@
 #define PIXEL_INDEX 2
 
 #include "PPU/PPU.h"
-#include "Utils/Addresses.h"
+//#include "Utils/Addresses.h"
 
 ObjectRenderer::ObjectRenderer(PPU* ppu)
 	: mPPU(ppu)

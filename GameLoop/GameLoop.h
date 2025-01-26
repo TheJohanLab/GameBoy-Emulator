@@ -1,14 +1,14 @@
 #pragma once
 
-#include <functional>
-#include <SDL.h>
+//#include <functional>
+//#include <SDL.h>
 
 #include "CPU/CPU.h"
 #include "PPU/PPU.h"
 #include "BootRom/BootRom.h"
 #include "Emulator/States/EmulatorStateFactory.h"
 
-#include "Utils/Utils.h"
+//#include "Utils/Utils.h"
 
 class WindowEventManager;
 

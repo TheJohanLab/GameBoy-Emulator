@@ -1,10 +1,10 @@
 #pragma once
 
-#include <array>
-#include <memory>
+//#include <array>
+//#include <memory>
 #include <variant>
-#include <cstdint>
-#include <functional>
+//#include <cstdint>
+//#include <functional>
 
 #include "Bus/Bus.h"
 #include "Screen/Screen.h"

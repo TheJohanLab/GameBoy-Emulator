@@ -2,8 +2,8 @@
 
 #include "BootRom.h"
 
-#include "Utils/Addresses.h"
-#include "Utils/Log.h"
+//#include "Utils/Addresses.h"
+//#include "Utils/Log.h"
 
 #include "PPU/PPU.h"
 #include "Bus/Bus.h"
@@ -30,6 +30,10 @@ void BootRom::initializeBootRom()
 
 void BootRom::execute()
 {
+
+#ifdef NO_BOOT
+	mIsBootFinished = true;
+#endif
 
 	if (mIsBootFinished)
 	{

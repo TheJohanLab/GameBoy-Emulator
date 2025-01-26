@@ -1,3 +1,5 @@
+#include "pch.h"
+
 #include "Instruction1BitOperation.h"
 
 Instruction1BitOperation::Instruction1BitOperation(const char* name, u8 (*pInstruction)(CPU & cpu), u8 ClockCycle)

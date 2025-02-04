@@ -702,9 +702,12 @@ u8 Instruction8BitLoad::LD_AcL(CPU& cpu)
 
 u8 Instruction8BitLoad::LD_AcpHLq(CPU& cpu)
 {
-	u8* dstRegistry = cpu.getRegistries("A");
+	// (HL) F0
+	//LD A (HL)
+	// A => F0
+  	u8* dstRegistry = cpu.getRegistries("A");
 	combinedRegistries* addrRegistries = cpu.getCombinedRegistries("HL");
-	LD_pRRqcR(cpu, *addrRegistries, *dstRegistry);
+	LD_RcpRRq(cpu, *addrRegistries, *dstRegistry);
 
 	return 8;
 }

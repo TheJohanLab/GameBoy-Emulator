@@ -43,6 +43,8 @@ u8 Memory::read(u16 const& address) const
 		return mVRAM[address - 0x8000];
 	else if (address >= 0xA000 && address <= 0xBFFF)
 		return mERAM[address - 0xA000];
+	else if (address >= 0xFE00 && address <= 0xFE9F) // OAM
+		return mOAM[address - 0xFE00];
 	else if (address >= LCD_CONTROL && address <= WINDOW_X)
 		return readLCD(address);
 	else if (address >= 0xFF80 && address <= 0xFFFE)
@@ -89,6 +91,8 @@ u8* Memory::getDataPtr(u16 const& address)
 		return &mVRAM[address - 0x8000];
 	if (address >= 0xA000 && address <= 0xBFFF)
 		return &mERAM[address - 0xA000];
+	else if (address >= 0xFE00 && address <= 0xFE9F) // OAM
+		return &mOAM[address - 0xFE00];
 	else if (address >= LCD_CONTROL && address <= WINDOW_X)
 		return getLCDPtr(address);
 	if (address >= 0xFF80 && address <= 0xFFFE)

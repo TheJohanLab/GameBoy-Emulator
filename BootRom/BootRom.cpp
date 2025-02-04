@@ -31,6 +31,10 @@ void BootRom::initializeBootRom()
 void BootRom::execute()
 {
 
+#ifdef NO_BOOT
+	mIsBootFinished = true;
+#endif
+
 	if (mIsBootFinished)
 	{
 		//PlaySound

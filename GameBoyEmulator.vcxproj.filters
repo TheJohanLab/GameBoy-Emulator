@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main2.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="CPU\CPU.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>

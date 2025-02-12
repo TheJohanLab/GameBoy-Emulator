@@ -7,8 +7,12 @@
 #include <cstring> 
 //#include <memory>
 
+#include "imgui.h"
+
 class Cartridge;
 class Registries;
+class CPU;
+class PPU;
 
 class ImGuiRenderer
 {
@@ -18,9 +22,15 @@ private:
 
 	std::shared_ptr<Cartridge> mCartridge{ nullptr };
 
-	std::shared_ptr<Registries> mRegistries = nullptr;
+	std::shared_ptr<Registries> mRegistries{ nullptr };
+	std::shared_ptr<CPU> mCPU{ nullptr };
+	std::shared_ptr<PPU> mPPU{ nullptr };
+	
+	std::shared_ptr<u8> mOpcodeValue{ nullptr };
+	static std::string mOpcodeDescription;
 
 	bool mShowRegistries{ false };
+	bool mShowEmulatorData{ false };
 
 	static bool mStepMode;
 
@@ -29,12 +39,18 @@ public:
 	~ImGuiRenderer();
 
 	void render() ;
-	void renderRegistries() const;
+	void renderDataWindows() const;
+	void renderRegistries(const ImVec2& pos,const ImVec2& size) const;
+	void renderEmulatorData(const ImVec2& pos, const ImVec2& size) const;
 	void processEvent(SDL_Event* event) const;
 		
-	void setRegistries(std::shared_ptr<Registries>);
+	void setRegistriesReference(std::shared_ptr<Registries>);
+	void setCPUReference(const std::shared_ptr<CPU>);
+	void setPPUReference(const std::shared_ptr<PPU>);
+	void setOpcodeReference(std::shared_ptr<u8> opcode);
 
 	static bool isStepMode();
+	static void setOpcodeDesc(const std::string&);
 
 private:
 	void initImGui() const;

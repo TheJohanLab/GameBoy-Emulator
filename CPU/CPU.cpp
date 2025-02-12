@@ -5,6 +5,8 @@
 #include "Interrupts/InterruptsManager.h"
 //#include "Utils/Log.h"
 
+#include "ImGui/ImGuiRenderer.h"
+
 CPU::CPU()
 {
 }
@@ -571,6 +573,7 @@ void CPU::initInstructionSet()
 
 u8 CPU::executeOpcode(const u16 opcode) 
 {
+	ImGuiRenderer::setOpcodeDesc(mInstructionSet[opcode]->getName()); // TODO changer la facon de recuperer la description
 	//Attente d'une interruption pour reprendre
 	if (mIsCPUStopped)
 	{

@@ -30,6 +30,8 @@ GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shar
 	mWindowEventManager = WindowEventManager::GetInstance();
 	//mWindowEventManager = std::make_shared<WindowEventManager>();
 
+	mImGuiHandler->setOpcodeReference(std::shared_ptr<u8>(&mCurrentOpcode));
+
 	setEmulatorState(EmulatorState::INIT);
 
 }
@@ -77,52 +79,15 @@ void GameLoop::startGame()
 	while (mIsRunning)
 	{
 		mWindowEventManager->handleEvents();
-		//mScreen->startRendering()
-		//mPPU->handleWindowEvents();
 		mCurrentEmulatorState->execute();
 	}
-	
-	//if (mSequence.empty())
-	//{
-	//	while (mIsRunning)
-	//	{
-	//		if (!mIsCartridgeLoaded)
-	//		{
-	//			//mBootRom->execute();
-	//			mPPU->handleWindowEvents();
-	//			mPPU->draw();
-	//		}
-	//		else
-	//		{
-	//			mPPU->handleWindowEvents();
-	//			handleFrame();
-	//			//handleScreenFrame();
-	//		}
 
-	//	}
-	//}
-	//else
-	//{
-	//	while (mIsRunning)
-	//	{
-	//		std::vector<std::function<void()>>::iterator sequenceIterator = mSequence.begin();
-	//
-	//		for (sequenceIterator; sequenceIterator != mSequence.end(); sequenceIterator++)
-	//		{
-	//			waitForNextFrame();
-	//			mPPU->handleWindowEvents();
-	//			(*sequenceIterator)();
-	//			handleScreenFrame();
-	//		}	
-	//	}
-	//}
 }
 
 
 void GameLoop::handleBootFrame()
 {
 	if (mCycles < cyclesPerFrame)
-	//if (mCycles < 20)
 	{
 
 		mCycles += bootStep();
@@ -165,7 +130,6 @@ inline void GameLoop::setCallbacks()
 void GameLoop::handleFrame()
 {
 	if (mCycles < cyclesPerFrame)
-	//if (mCycles < 20)
 	{
 		if (GameLoop::waitingDots != 0)
 		{

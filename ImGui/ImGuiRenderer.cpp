@@ -17,6 +17,7 @@
 #include "Emulator/Emulator.h"
 
 bool ImGuiRenderer::mStepMode{ false };
+std::string ImGuiRenderer::mOpcodeDescription{ "" };
 
 ImGuiRenderer::ImGuiRenderer(std::shared_ptr<Cartridge> cartridge, 
 							SDL_Window* window, 
@@ -86,6 +87,9 @@ void ImGuiRenderer::render()
 			if (ImGui::MenuItem("Show Registries", nullptr, mShowRegistries)) {
 				mShowRegistries = !mShowRegistries;
 			}
+			if (ImGui::MenuItem("Show emulator data", nullptr, mShowEmulatorData)) {
+				mShowEmulatorData = !mShowEmulatorData;
+			}
 			if (ImGui::MenuItem("Enable Step Debugging", nullptr, mStepMode)) {
 				mStepMode = !mStepMode;
 				mOnStepOption(mStepMode);
@@ -107,22 +111,42 @@ void ImGuiRenderer::render()
 	if (mShow_demo_window)
 		ImGui::ShowDemoWindow(&mShow_demo_window);
 
-	renderRegistries();
+	renderDataWindows();
 
 	// Finir et rendre le frame ImGui
 	ImGui::Render();
 	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), mRenderer);
 }
 
-void ImGuiRenderer::renderRegistries() const
+void ImGuiRenderer::renderDataWindows() const
+{
+	ImVec2 screenSize = ImGui::GetIO().DisplaySize;
+	ImVec2 windowSize1 = ImVec2(screenSize.x * 0.35f, screenSize.y * 0.40f);
+	ImVec2 windowSize2 = ImVec2(screenSize.x * 0.35f, screenSize.y * 0.20f);
+
+	ImVec2 pos1 = ImVec2(screenSize.x * 0.65f, 0.05f);
+	ImVec2 pos2 = ImVec2(screenSize.x * 0.65f, screenSize.y * 0.40f);
+
+	if (!mShowRegistries && mShowEmulatorData) 
+		pos2 = pos1;
+	
+	renderRegistries(pos1, windowSize1);
+	renderEmulatorData(pos2, windowSize2);
+}
+
+void ImGuiRenderer::renderRegistries(const ImVec2& pos, const ImVec2& size) const
 {
 	if (mShowRegistries) 
 	{
-		ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.65f, 0), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x * 0.35f, ImGui::GetIO().DisplaySize.y * 0.5f), ImGuiCond_Always);
+		ImGui::SetNextWindowPos(pos, ImGuiCond_Always);
+		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
 
+		//ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.65f, 0.05f), ImGuiCond_Always);
+		//ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x * 0.35f, ImGui::GetIO().DisplaySize.y * 0.40f), ImGuiCond_Always);
+		//ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
 
+		
 		ImGui::Begin("Registries");
 		ImGui::Text("A: 0x%X", *(mRegistries->getA()));
 		ImGui::Text("B: 0x%X", *(mRegistries->getB()));
@@ -143,20 +167,66 @@ void ImGuiRenderer::renderRegistries() const
 	}
 }
 
+void ImGuiRenderer::renderEmulatorData(const ImVec2& pos, const ImVec2& size) const
+{
+	if (mShowEmulatorData)
+	{
+		ImGui::SetNextWindowPos(pos, ImGuiCond_Always);
+		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
+		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
+
+		//ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.65f, ImGui::GetIO().DisplaySize.y * 0.40f), ImGuiCond_Always);
+		//ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x * 0.35f, ImGui::GetIO().DisplaySize.y * 0.20f), ImGuiCond_Always);
+		//ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
+
+
+		ImGui::Begin("Data");
+		ImGui::Text("OpCode: %s", mOpcodeDescription.c_str());
+		ImGui::Text("Value:  0x%X", *mOpcodeValue);
+		ImGui::Text("PC:     0x%X", *(mCPU->getPC()));
+		ImGui::Text("SP:     0x%X", *(mCPU->getSP()));
+
+		ImGui::End();
+
+		ImGui::PopStyleColor();
+	}
+}
+
 
 void ImGuiRenderer::processEvent(SDL_Event* event) const
 {
 	ImGui_ImplSDL2_ProcessEvent(event);
 }
 
-void ImGuiRenderer::setRegistries(std::shared_ptr<Registries> registries)
+void ImGuiRenderer::setRegistriesReference(std::shared_ptr<Registries> registries)
 {
 	mRegistries = registries;
+}
+
+void ImGuiRenderer::setCPUReference(const std::shared_ptr<CPU> cpu)
+{
+	mCPU = cpu;
+}
+
+void ImGuiRenderer::setPPUReference(const std::shared_ptr<PPU> ppu)
+{
+	mPPU = ppu;
+}
+
+void ImGuiRenderer::setOpcodeReference(std::shared_ptr<u8> opcode)
+{
+	mOpcodeValue = opcode;
 }
 
 bool ImGuiRenderer::isStepMode()
 {
 	return mStepMode;
+}
+
+
+void ImGuiRenderer::setOpcodeDesc(const std::string& description)
+{
+	mOpcodeDescription = description;
 }
 
 

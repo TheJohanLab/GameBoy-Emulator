@@ -42,7 +42,10 @@ namespace gbe {
 			GBE_LOG_ERROR("lock error");
 
 		mCPU->createInternalComponents(weak_cpu);
-		mImGui->setRegistriesReference(mCPU->getRegistries2()); //TODO Revoir cette methode getRegistries2
+
+		mImGui->setRegistriesReference(mCPU->getRegistriesRef());
+		mImGui->setCPUReference(mCPU);
+		mImGui->setPPUReference(mPPU);
 
 		//mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
 

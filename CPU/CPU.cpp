@@ -7,6 +7,9 @@
 
 #include "ImGui/ImGuiRenderer.h"
 
+
+u16 CPU::mPC{ 0 };
+
 CPU::CPU()
 {
 }
@@ -581,7 +584,6 @@ u8 CPU::executeOpcode(const u16 opcode)
 		return 4;
 	}
 	
-	auto PC = getPC();
 
 	if (opcode == 0xCB) 
 	{
@@ -600,6 +602,7 @@ u8 CPU::executeOpcode(const u16 opcode)
 	
 	incPC();
 	
+	mPC = *(getPC());
 	//DEBUG JLA : adresse ou je me suis arrete
 	//C7F3
 

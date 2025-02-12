@@ -16,11 +16,17 @@ ImGuiHandler::ImGuiHandler(std::shared_ptr<Cartridge> cartridge,
 
 	//callbacks
 	mImGuiRenderer->setOnStepOption(BIND_FUNC_1_ARG(this, ImGuiHandler::setStepMode));
+	mImGuiRenderer->setOnGotoMode(BIND_FUNC_1_ARG(this, ImGuiHandler::setGotoMode));
 }
 
 void ImGuiHandler::setOnStepModeCallback(onSetModeCallback callback)
 {
 	mOnSetMode = callback;
+}
+
+void ImGuiHandler::setOnGotoModeCallback(onGotoModeCallback callback)
+{
+	mOnGotoMode = callback;
 }
 
 void ImGuiHandler::setRegistriesReference(std::shared_ptr<Registries> registries)
@@ -46,6 +52,11 @@ void ImGuiHandler::setOpcodeReference(std::shared_ptr<u8> opcode)
 void ImGuiHandler::setStepMode(bool stepMode)
 {
 	mOnSetMode(stepMode ? EmulatorState::STEP : EmulatorState::RUN);
+}
+
+void ImGuiHandler::setGotoMode(u16 address)
+{
+	mOnGotoMode(address);
 }
 
 void ImGuiHandler::render()

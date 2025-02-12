@@ -137,6 +137,7 @@
     <ClInclude Include="BootRom\BootRom.h" />
     <ClInclude Include="Cartridge\Cartridge.h" />
     <ClInclude Include="Cartridge\CartridgeManager.h" />
+    <ClInclude Include="Emulator\States\StateGotoAddress.h" />
     <ClInclude Include="Emulator\States\StateStep.h" />
     <ClInclude Include="Emulator\States\StateBoot.h" />
     <ClInclude Include="Emulator\States\StatePause.h" />

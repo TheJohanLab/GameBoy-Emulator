@@ -7,10 +7,11 @@
 #include "PPU/PPU.h"
 #include "BootRom/BootRom.h"
 #include "Emulator/States/EmulatorStateFactory.h"
-#include "ImGui/ImGuiHandler.h"
+//#include "ImGui/ImGuiHandler.h"
 //#include "Utils/Utils.h"
 
 class WindowEventManager;
+class ImGuiHandler;
 
 class GameLoop
 {
@@ -40,7 +41,9 @@ private:
 	bool mIsCartridgeLoaded{ false };
 
 	u8 mCurrentOpcode;
-	static EmulatorState mCurrState;
+	static EmulatorState mInitCurrState;
+	u16 mGotoAddress{ 0x0000 };
+
 
 public:
 	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<ImGuiHandler> imGui);
@@ -48,6 +51,7 @@ public:
 
 	void setEmulatorState(EmulatorState state);
 	void setEmulatorStateStep(EmulatorState state);
+	void setEmulatorStateGoto(u16 address);
 
 	void startGame();
 	void stopGame() { mIsRunning = false; }
@@ -65,7 +69,7 @@ public:
 	static void addVirtualWaitingDots(u16 dots);
 	static void decVirtualWaitingDots(u16 dots);
 
-	static EmulatorState getCurrentEmulatorState() { return mCurrState; }
+	static EmulatorState getCurrentEmulatorState() { return mInitCurrState; }
 
 private:
 	inline void setCallbacks();

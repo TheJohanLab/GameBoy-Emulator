@@ -5,7 +5,7 @@
 #include "ImGui/ImGuiHandler.h"
 //#include "Utils/Log.h"
 
-EmulatorState GameLoop::mCurrState{ EmulatorState::INIT };
+EmulatorState GameLoop::mInitCurrState{ EmulatorState::INIT };
 
 u16 GameLoop::waitingDots = 0;
 
@@ -25,10 +25,10 @@ GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shar
 		mStateFactory(std::make_unique<EmulatorStateFactory>(cpu->getBootRom()))
 {
 	setCallbacks();
+
 	mScreen = mPPU->getScreen(); //TODO check what to do with screen in GameLoop (singleton ?)
 
 	mWindowEventManager = WindowEventManager::GetInstance();
-	//mWindowEventManager = std::make_shared<WindowEventManager>();
 
 	mImGuiHandler->setOpcodeReference(std::shared_ptr<u8>(&mCurrentOpcode));
 
@@ -38,6 +38,7 @@ GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shar
 
 void GameLoop::setEmulatorState(EmulatorState state)
 {
+	//TODO print directly the state using the enum if possible
 	switch (state)
 	{
 		case EmulatorState::INIT:
@@ -52,22 +53,37 @@ void GameLoop::setEmulatorState(EmulatorState state)
 		case EmulatorState::STEP:
 			GBE_LOG_INFO("Change emulator state to STEP");
 			break;
+		case EmulatorState::GOTO:
+			GBE_LOG_INFO("Change emulator state to GOTO");
+
+			break;
 	}
-	mCurrentEmulatorState = mStateFactory->createState(state);
-	//mCurrState = state;
-	
+	mCurrentEmulatorState = mStateFactory->createState(state, mGotoAddress);
 }
 
 void GameLoop::setEmulatorStateStep(EmulatorState state)
 {
-	if (!(mCurrState == EmulatorState::INIT || mCurrState == EmulatorState::BOOT))
+	if (!(mInitCurrState == EmulatorState::INIT || mInitCurrState == EmulatorState::BOOT))
 	{
 		setEmulatorState(state);
 	}
 	
 	// This line is necessary for the end of the boot rom routine
-	mCurrState = state;
+	mInitCurrState = state;
 
+}
+
+void GameLoop::setEmulatorStateGoto(u16 address)
+{
+	mGotoAddress = address;
+
+	if (!(mInitCurrState == EmulatorState::INIT || mInitCurrState == EmulatorState::BOOT))
+	{
+		setEmulatorState(EmulatorState::GOTO);
+	}
+
+	// This line is necessary for the end of the boot rom routine
+	mInitCurrState = EmulatorState::GOTO;
 }
 
 void GameLoop::startGame()
@@ -76,6 +92,7 @@ void GameLoop::startGame()
 	mFrameStart = SDL_GetPerformanceCounter();
 	mIsRunning = true;
 
+	// Main loop
 	while (mIsRunning)
 	{
 		mWindowEventManager->handleEvents();
@@ -123,8 +140,10 @@ inline void GameLoop::setCallbacks()
 	mStateFactory->setDrawCallback(BIND_FUNC_NO_ARGS(mPPU, PPU::draw));
 	mStateFactory->setStepCallback(BIND_FUNC_NO_ARGS(this, GameLoop::step)); //TODO revoir ce callback pour le mode step
 	mStateFactory->setLogsCallback(BIND_FUNC_NO_ARGS(this, GameLoop::logInfos));
+	mStateFactory->setModeCallback(BIND_FUNC_1_ARG(this, GameLoop::setEmulatorState));
 
 	mImGuiHandler->setOnStepModeCallback(BIND_FUNC_1_ARG(this, GameLoop::setEmulatorStateStep));
+	mImGuiHandler->setOnGotoModeCallback(BIND_FUNC_1_ARG(this, GameLoop::setEmulatorStateGoto));
 }
 
 void GameLoop::handleFrame()

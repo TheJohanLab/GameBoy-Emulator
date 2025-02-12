@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 
 #include "ImGuiRenderer.h"
 //#include <iostream>
@@ -14,9 +14,9 @@
 
 
 //#include <string>
-#include "Emulator/Emulator.h"
+//#include "Emulator/Emulator.h"
+#include "CPU/CPU.h"
 
-bool ImGuiRenderer::mStepMode{ false };
 std::string ImGuiRenderer::mOpcodeDescription{ "" };
 
 ImGuiRenderer::ImGuiRenderer(std::shared_ptr<Cartridge> cartridge, 
@@ -62,14 +62,14 @@ void ImGuiRenderer::render()
 	
 	std::string loadedFilePath = "";
 
-	// Créer une barre de menu en haut
+	// CrÃ©er une barre de menu en haut
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Load", "Ctrl+L"))
 			{
-				// Ouvrir une boîte de dialogue de sélection de fichier
+				// Ouvrir une boÃ®te de dialogue de sÃ©lection de fichier
 				auto filePath = openFileDialog();
 				if (!filePath.empty()) {
 					loadedFilePath = wstringToString(filePath);
@@ -81,20 +81,61 @@ void ImGuiRenderer::render()
 			}
 			ImGui::EndMenu();
 		}
-
 		if (ImGui::BeginMenu("Tools"))
 		{
-			if (ImGui::MenuItem("Show Registries", nullptr, mShowRegistries)) {
-				mShowRegistries = !mShowRegistries;
-			}
-			if (ImGui::MenuItem("Show emulator data", nullptr, mShowEmulatorData)) {
-				mShowEmulatorData = !mShowEmulatorData;
-			}
-			if (ImGui::MenuItem("Enable Step Debugging", nullptr, mStepMode)) {
+			if (ImGui::MenuItem("Enable Step Debugging", nullptr, mStepMode))
+			{
 				mStepMode = !mStepMode;
 				mOnStepOption(mStepMode);
 			}
+
+			if (ImGui::Button("Goto adress"))
+			{
+				ImGui::OpenPopup("goto");
+			}
+			//if (ImGui::MenuItem("Goto adress", nullptr, mGotoMode))
+			//
+			if (ImGui::BeginPopup("goto"))
+			{
+				char buff[10] = "";
+				/*if (ImGui::InputText("Your name?", buff, 4))
+				{
+
+				}*/
+				ImGui::Text(" Enter a 16 bit hex address you want to go to :");
+				ImGui::InputText("##hexInput", buff, IM_ARRAYSIZE(buff), ImGuiInputTextFlags_CharsHexadecimal);
+
+				if (ImGui::Button("Accept")) {
+					// Convert to u16
+					mShowGotoPopup = false;
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::SameLine();
+
+				if (ImGui::Button("Cancel")) {
+					mShowGotoPopup = false;
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();	
+			}
+				//mShowGotoPopup = true;
+				//char inputBuffer[4] = "";
+				//renderGotoPopUp(inputBuffer);
+				
+				//mGotoMode = !mGotoMode;
+				//mStepMode = true;
+				//mOnStepOption(true); // STEP mode to be able to use the goto address
+				//mOnGotoMode(0x216);
+			
 			ImGui::EndMenu();
+		}
+		
+		if (ImGui::MenuItem("Registries", nullptr, mShowRegistries)) {
+			mShowRegistries = !mShowRegistries;
+		}
+		if (ImGui::MenuItem("Emulator's Data", nullptr, mShowEmulatorData)) {
+			mShowEmulatorData = !mShowEmulatorData;
 		}
 
 		if (ImGui::BeginMenu("About"))
@@ -107,6 +148,8 @@ void ImGuiRenderer::render()
 
 		ImGui::EndMainMenuBar();
 	}
+
+
 
 	if (mShow_demo_window)
 		ImGui::ShowDemoWindow(&mShow_demo_window);
@@ -141,11 +184,6 @@ void ImGuiRenderer::renderRegistries(const ImVec2& pos, const ImVec2& size) cons
 		ImGui::SetNextWindowPos(pos, ImGuiCond_Always);
 		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
-
-		//ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.65f, 0.05f), ImGuiCond_Always);
-		//ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x * 0.35f, ImGui::GetIO().DisplaySize.y * 0.40f), ImGuiCond_Always);
-		//ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
-
 		
 		ImGui::Begin("Registries");
 		ImGui::Text("A: 0x%X", *(mRegistries->getA()));
@@ -175,10 +213,6 @@ void ImGuiRenderer::renderEmulatorData(const ImVec2& pos, const ImVec2& size) co
 		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
 
-		//ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.65f, ImGui::GetIO().DisplaySize.y * 0.40f), ImGuiCond_Always);
-		//ImGui::SetNextWindowSize(ImVec2(ImGui::GetIO().DisplaySize.x * 0.35f, ImGui::GetIO().DisplaySize.y * 0.20f), ImGuiCond_Always);
-		//ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
-
 
 		ImGui::Begin("Data");
 		ImGui::Text("OpCode: %s", mOpcodeDescription.c_str());
@@ -190,6 +224,35 @@ void ImGuiRenderer::renderEmulatorData(const ImVec2& pos, const ImVec2& size) co
 
 		ImGui::PopStyleColor();
 	}
+}
+
+void ImGuiRenderer::renderGotoPopUp(char* input)
+{
+	//if (mShowGotoPopup)
+	//{
+		ImGui::OpenPopup("Enter 16 bit hex value");
+
+		if (ImGui::BeginPopupModal("Enter value", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+			ImGui::Text(" (16 bits) :");
+			ImGui::InputText("##hexInput", input, IM_ARRAYSIZE(input), ImGuiInputTextFlags_CharsHexadecimal);
+
+			if (ImGui::Button("Accept")) {
+				// Convert to u16
+				mShowGotoPopup = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("Cancel")) {
+				mShowGotoPopup = false;
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
+
+		}
+	//}
 }
 
 
@@ -218,11 +281,6 @@ void ImGuiRenderer::setOpcodeReference(std::shared_ptr<u8> opcode)
 	mOpcodeValue = opcode;
 }
 
-bool ImGuiRenderer::isStepMode()
-{
-	return mStepMode;
-}
-
 
 void ImGuiRenderer::setOpcodeDesc(const std::string& description)
 {
@@ -240,11 +298,11 @@ std::wstring ImGuiRenderer::openFileDialog() const
 
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = NULL;
-	ofn.lpstrFilter = L"Tous les fichiers\0*.*\0Fichiers texte\0*.TXT\0"; // Utiliser des chaînes Unicode
+	ofn.lpstrFilter = L"Tous les fichiers\0*.*\0Fichiers texte\0*.TXT\0"; // Utiliser des chaÃ®nes Unicode
 	ofn.lpstrFile = filename;
 	ofn.nMaxFile = MAX_PATH;
 	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
-	ofn.lpstrDefExt = L"txt"; // Extension par défaut en Unicode
+	ofn.lpstrDefExt = L"txt"; // Extension par dÃ©faut en Unicode
 
 	std::wstring filePath;
 
@@ -253,7 +311,7 @@ std::wstring ImGuiRenderer::openFileDialog() const
 		filePath = filename;
 	}
 	else {
-		std::wcout << L"Aucun fichier sélectionné ou erreur lors de la sélection." << std::endl;
+		std::wcout << L"Aucun fichier sÃ©lectionnÃ© ou erreur lors de la sÃ©lection." << std::endl;
 	}
 
 	return filePath;
@@ -287,4 +345,9 @@ std::string ImGuiRenderer::wstringToString(const std::wstring& wstr) const
 void ImGuiRenderer::setOnStepOption(onStepOption callback)
 {
 	mOnStepOption = callback;
+}
+
+void ImGuiRenderer::setOnGotoMode(onGotoMode callback)
+{
+	mOnGotoMode = callback;
 }

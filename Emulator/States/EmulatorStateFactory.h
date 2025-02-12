@@ -8,23 +8,26 @@
 #include "StateBoot.h"
 #include "StateRun.h"
 #include "StateStep.h"
+#include "StateGotoAddress.h"
 #include "BootRom/BootRom.h"
 //#include "Emulator/WindowEventManager.h"
 
 class EmulatorStateFactory
 {
-	using frameCallback = std::function<void()>;
+	using Callback = std::function<void()>;
+	using ModeCallback = std::function<void(EmulatorState)>;
 
 protected:
 	//std::shared_ptr<WindowEventManager> mEventManager;
 
 private:
 	std::shared_ptr<BootRom> mBootRom;
-	frameCallback mHandleFrameCallback{ nullptr };
-	frameCallback mHandleBootFrameCallback{ nullptr };
-	frameCallback mDrawCallback{ nullptr };
-	frameCallback mStepCallback{ nullptr };
-	frameCallback mLogsCallback{ nullptr };
+	Callback mHandleFrameCallback{ nullptr };
+	Callback mHandleBootFrameCallback{ nullptr };
+	Callback mDrawCallback{ nullptr };
+	Callback mStepCallback{ nullptr };
+	Callback mLogsCallback{ nullptr };
+	ModeCallback mSetModeCallback{ nullptr };
 
 public:
 	EmulatorStateFactory( std::shared_ptr<BootRom> bootRom)
@@ -37,8 +40,9 @@ public:
 	void setDrawCallback(std::function<void()> callback) { mDrawCallback = callback; }
 	void setStepCallback(std::function<void()> callback) { mStepCallback = callback; }
 	void setLogsCallback(std::function<void()> callback) { mLogsCallback = callback; }
+	void setModeCallback(std::function<void(EmulatorState)> callback) { mSetModeCallback = callback; }
 
-	std::unique_ptr<class EmulatorBaseState> createState(EmulatorState stateType)
+	std::unique_ptr<class EmulatorBaseState> createState(EmulatorState stateType, u16 gotoAddress = 0x0000)
 	{
 		std::unique_ptr<class EmulatorBaseState> state;
 
@@ -56,6 +60,10 @@ public:
 			case EmulatorState::STEP:
 				state = std::make_unique<EmulatorStepState>();
 				break;
+			case EmulatorState::GOTO:
+				//auto address = GameLoop::getGotoAddress();
+				state = std::make_unique<EmulatorGotoAddressState>(gotoAddress);
+				break;
 			default:
 				GBE_LOG_ERROR("The state is undefined");
 				break;
@@ -66,6 +74,7 @@ public:
 		state->setDrawCallback(mDrawCallback);
 		state->setStepCallback(mStepCallback);
 		state->setLogsCallback(mLogsCallback);
+		state->setSetModeCallback(mSetModeCallback);
 
 		return state;
 	}

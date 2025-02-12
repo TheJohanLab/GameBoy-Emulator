@@ -44,9 +44,21 @@ void BootRom::execute()
 //#ifdef STEP_DEBUG
 //		mOnStateChange(EmulatorState::STEP);
 //#else
-		GameLoop::getCurrentEmulatorState() == EmulatorState::STEP
-			? mOnStateChange(EmulatorState::STEP)
-			: mOnStateChange(EmulatorState::RUN);
+		switch (GameLoop::getCurrentEmulatorState())
+		{
+		case EmulatorState::STEP:
+			mOnStateChange(EmulatorState::STEP);
+			break;
+		case EmulatorState::RUN:
+			mOnStateChange(EmulatorState::RUN);
+			break;
+		case EmulatorState::GOTO:
+			mOnStateChange(EmulatorState::GOTO);
+			break;
+		};
+		//GameLoop::getCurrentEmulatorState() == EmulatorState::STEP
+		//	? mOnStateChange(EmulatorState::STEP)
+		//	: mOnStateChange(EmulatorState::RUN);
 //#endif
 
 		mPPU->resetPPUModeDots();

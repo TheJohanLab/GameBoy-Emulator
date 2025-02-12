@@ -17,6 +17,8 @@ class InterruptsManager;
 class CPU : std::enable_shared_from_this<CPU>
 {
 	private:
+		static u16 mPC;
+
 		std::shared_ptr<Bus> mBus;
 		std::shared_ptr<PPU> mPPU;
 		Registries mRegistries = Registries(*this);
@@ -81,5 +83,13 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		void logRegistries();
 		void logOpcodesInfos(u8 opcode);
+
+		//TODO Voir plus tard comment recuperer PC
+private:
+public:
+	
+	static u16 getCurrPC() { return mPC; }
 };
+
+
 

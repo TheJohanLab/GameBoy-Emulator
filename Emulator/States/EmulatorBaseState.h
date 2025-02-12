@@ -19,6 +19,7 @@ public:
 	void setHandleBootFrameCallback(Callback callback) { mHandleBootFrameCallback = callback; }
 	void setDrawCallback(Callback callback) { mDrawCallback = callback; }
 	void setStepCallback(Callback callback) { mStepCallback = callback; }
+	void setLogsCallback(Callback callback) { mLogsCallback = callback; }
 
 protected:
 
@@ -26,5 +27,6 @@ protected:
 	Callback mHandleBootFrameCallback;
 	Callback mDrawCallback;
 	Callback mStepCallback;
+	Callback mLogsCallback;
 
 };

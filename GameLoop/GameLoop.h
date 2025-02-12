@@ -39,12 +39,15 @@ private:
 
 	bool mIsCartridgeLoaded{ false };
 
+	u8 mCurrentOpcode;
+	static EmulatorState mCurrState;
+
 public:
 	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<ImGuiHandler> imGui);
 	virtual ~GameLoop() = default;
 
 	void setEmulatorState(EmulatorState state);
-	void setEmulatorState2();
+	void setEmulatorStateStep(EmulatorState state);
 
 	void startGame();
 	void stopGame() { mIsRunning = false; }
@@ -62,7 +65,11 @@ public:
 	static void addVirtualWaitingDots(u16 dots);
 	static void decVirtualWaitingDots(u16 dots);
 
+	static EmulatorState getCurrentEmulatorState() { return mCurrState; }
+
 private:
+	inline void setCallbacks();
+
 	inline void handleFrame();
 	inline void handleBootFrame();
 	inline void handleScreenFrame();
@@ -70,6 +77,7 @@ private:
 	inline u8 bootStep();
 	inline void synchroniseFrame();
 	inline void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray);
+	inline void logInfos() const;
 	//inline void render(u8* pixelArray);
 };
 

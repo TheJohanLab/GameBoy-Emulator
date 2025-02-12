@@ -14,7 +14,7 @@ private:
 	std::unique_ptr<ImGuiRenderer> mImGuiRenderer{nullptr};
 	std::shared_ptr<Cartridge> mCartridge;
 
-	onSetModeCallback mSetModeCallback{ nullptr };
+	onSetModeCallback mOnSetMode{ nullptr };
 
 
 public:
@@ -23,7 +23,7 @@ public:
 
 	void setOnStepModeCallback(onSetModeCallback callback);
 	void setRegistriesReference(std::shared_ptr<Registries>);
-	void setMode(EmulatorState);
+	void setStepMode(bool);
 	void render();
 
 };

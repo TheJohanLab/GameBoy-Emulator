@@ -24,6 +24,7 @@ private:
 	frameCallback mHandleBootFrameCallback{ nullptr };
 	frameCallback mDrawCallback{ nullptr };
 	frameCallback mStepCallback{ nullptr };
+	frameCallback mLogsCallback{ nullptr };
 
 public:
 	EmulatorStateFactory( std::shared_ptr<BootRom> bootRom)
@@ -35,6 +36,7 @@ public:
 	
 	void setDrawCallback(std::function<void()> callback) { mDrawCallback = callback; }
 	void setStepCallback(std::function<void()> callback) { mStepCallback = callback; }
+	void setLogsCallback(std::function<void()> callback) { mLogsCallback = callback; }
 
 	std::unique_ptr<class EmulatorBaseState> createState(EmulatorState stateType)
 	{
@@ -63,6 +65,7 @@ public:
 		state->setHandleBootFrameCallback(mHandleBootFrameCallback);
 		state->setDrawCallback(mDrawCallback);
 		state->setStepCallback(mStepCallback);
+		state->setLogsCallback(mLogsCallback);
 
 		return state;
 	}

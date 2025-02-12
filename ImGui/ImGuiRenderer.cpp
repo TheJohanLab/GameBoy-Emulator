@@ -88,6 +88,7 @@ void ImGuiRenderer::render()
 			}
 			if (ImGui::MenuItem("Enable Step Debugging", nullptr, mStepMode)) {
 				mStepMode = !mStepMode;
+				mOnStepOption(mStepMode);
 			}
 			ImGui::EndMenu();
 		}
@@ -211,4 +212,9 @@ std::string ImGuiRenderer::wstringToString(const std::wstring& wstr) const
 	// Convertir wchar_t* vers char*
 	std::string str(wstr.begin(), wstr.end());
 	return str;
+}
+
+void ImGuiRenderer::setOnStepOption(onStepOption callback)
+{
+	mOnStepOption = callback;
 }

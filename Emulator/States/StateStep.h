@@ -14,20 +14,20 @@ public:
 	EmulatorStepState()
 	{
 		mWindowEventManager = WindowEventManager::GetInstance();
-		//mWindowEventManager = std::make_shared<WindowEventManager>();
 	}
 
 
 	void execute() override
 	{
+
 		if (mWindowEventManager->isKeyPressed(SDLK_SPACE))
+		{
 			mStepCallback();
+			mLogsCallback();
+		}
 		
-		else
-			mDrawCallback();
+		mDrawCallback();
+		
 
-
-		//mHandleBootFrameCallback();
-		//mBootRom->execute();
 	}
 };

@@ -8,6 +8,7 @@
 #include "PPU/PPU.h"
 #include "Bus/Bus.h"
 #include "CPU/CPU.h"
+#include "GameLoop/GameLoop.h"
 
 BootRom::BootRom(std::shared_ptr<Bus> bus, std::shared_ptr<PPU> ppu, std::weak_ptr<CPU> cpu_weak)
 	:mBus(bus), mPPU(ppu), mCPU_weak(cpu_weak)
@@ -40,17 +41,19 @@ void BootRom::execute()
 		//PlaySound
 		initRegistries();
 		
-#ifdef STEP_DEBUG
-		mOnStateChange(EmulatorState::STEP);
-#else
-		mOnStateChange(EmulatorState::RUN);
-#endif
+//#ifdef STEP_DEBUG
+//		mOnStateChange(EmulatorState::STEP);
+//#else
+		GameLoop::getCurrentEmulatorState() == EmulatorState::STEP
+			? mOnStateChange(EmulatorState::STEP)
+			: mOnStateChange(EmulatorState::RUN);
+//#endif
 
 		mPPU->resetPPUModeDots();
 		auto cpu = mCPU_weak.lock();
 		cpu->getInterruptsManager()->setActiveVBlankInterrupt();
 		cpu->clearIMEFlag();
-#ifdef _DEBUG
+#ifdef _DEBUG //TODO verifier pourquoi cette ligne est en debug uniquement
 		mPPU->resetCurrCycles();
 #endif
 	}

@@ -43,4 +43,13 @@ private:
 	void loadFile(const std::wstring& filePath) const;
 	std::string wstringToString(const std::wstring& wstr) const;
 	bool mShow_demo_window = false;
+
+//callbacks
+private:
+	using onStepOption = std::function<void(bool)>;
+
+	onStepOption mOnStepOption{ nullptr };
+
+public:
+	void setOnStepOption(onStepOption callback);
 };

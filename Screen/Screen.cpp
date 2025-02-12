@@ -112,7 +112,7 @@ void Screen::startRendering( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_
 
 	//SDL_LockTexture(mTexture, nullptr, (void**)&pixelArray, &pitch);
 	SDL_LockTexture(mTexture, nullptr, (void**)&pPixels, &pitch);
-	memcpy(pPixels, static_cast<void const*>(&pixelArray), 160 * 144 * 4);
+	memcpy(pPixels, static_cast<void const*>(&pixelArray), SCREEN_WIDTH * SCREEN_HEIGHT * 4);
 	SDL_UnlockTexture(mTexture);
 	SDL_RenderCopy(mRenderer, mTexture, nullptr, nullptr);
 

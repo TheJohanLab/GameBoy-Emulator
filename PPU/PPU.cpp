@@ -492,10 +492,10 @@ void PPU::setCloseEventCallback(std::function<void()> callback)
 	mScreen->setOnCloseEvent(callback);
 }
 
-void PPU::handleWindowEvents()
-{
-	mScreen->handleEvents();
-}
+//void PPU::handleWindowEvents()
+//{
+//	mScreen->handleEvents();
+//}
 
 void PPU::executeFullFrameRender()
 {
@@ -510,7 +510,10 @@ void PPU::executeFullFrameRender()
 
 void PPU::draw()
 {
-	mScreen->render(mPixelArray);
+	//u8* pPixels = new u8[sizeof(mPixelArray)];
+	//memcpy(pPixels, static_cast<void const*>(&mPixelArray), 160 * 144 * 4);
+	mOnRender(mPixelArray);
+	//mScreen->startRendering(mPixelArray);
 }
 
 void PPU::setTile(u8 tileIndex, const std::vector<u8>& tileData)
@@ -539,7 +542,7 @@ void PPU::waitForNextFrame()
 	executeFullFrameRender();
 }
 
-void PPU::setRegistriesRef(Registries* registries)
-{
-	mScreen->setRegistriesRef(registries);
-}
+//void PPU::setRegistriesRef(Registries* registries)
+//{
+//	mScreen->setRegistriesRef(registries);
+//}

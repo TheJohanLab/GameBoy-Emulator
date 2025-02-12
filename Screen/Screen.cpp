@@ -4,12 +4,14 @@
 //#include <iostream>
 
 #include "PPU/PPU.h"
+//#include "ImGui/ImGuiHandler.h"
 
-Screen::Screen(std::shared_ptr<WindowEventManager> eventManager, Cartridge* cartridge, u16 width, u16 height)
-	:mEventManager(eventManager), mWidth(width), mHeight(height)
+Screen::Screen(u16 width, u16 height)
+	:mWidth(width), mHeight(height)
 {
+	//TODO remove cartridge from Screen
 	initScreen();
-	mImGuiRenderer = std::make_shared<ImGuiRenderer>(cartridge, mWindow, mRenderer);
+	//mImGuiRenderer = std::make_shared<ImGuiRenderer>(cartridge, mWindow, mRenderer);
 }
 
 Screen::~Screen()
@@ -58,6 +60,8 @@ int Screen::initScreen()
 				std::cout << "Renderer = " << rendererInfo.name << std::endl;
 			
 				//ARGB format
+
+
 			}
 
 			mTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_BGRA8888, SDL_TEXTUREACCESS_STREAMING, 160, 144);
@@ -72,31 +76,32 @@ int Screen::initScreen()
 	return 0;
 }
 
-void Screen::initImGui(SDL_Window* window, SDL_Renderer* renderer)
-{
-}
+//void Screen::initImGui(SDL_Window* window, SDL_Renderer* renderer)
+//{
+//}
 
 
-const SDL_Window* Screen::getWindow() const 
+SDL_Window* Screen::getWindow()
 {
 	return mWindow;
 }
 
-const SDL_Renderer* Screen::getRenderer() const 
+SDL_Renderer* Screen::getRenderer()
 {
 	return mRenderer;
 }
 
 
-void Screen::render() const
+void Screen::startRendering() const
 {
 	SDL_RenderClear(mRenderer);
-	renderImGui();
-	SDL_RenderPresent(mRenderer);
+	//renderImGui();
+	//SDL_RenderPresent(mRenderer);
 }
 
 //void Screen::render() const
-void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const
+//void Screen::startRendering(u8* pixelArray) const
+void Screen::startRendering( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const
 {
 
 	SDL_RenderClear(mRenderer);
@@ -105,20 +110,26 @@ void Screen::render( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&
 	u8* pPixels;
 	int pitch = 0;
 
+	//SDL_LockTexture(mTexture, nullptr, (void**)&pixelArray, &pitch);
 	SDL_LockTexture(mTexture, nullptr, (void**)&pPixels, &pitch);
 	memcpy(pPixels, static_cast<void const*>(&pixelArray), 160 * 144 * 4);
 	SDL_UnlockTexture(mTexture);
 	SDL_RenderCopy(mRenderer, mTexture, nullptr, nullptr);
 
-	renderImGui();
+	//renderImGui();
 
+	
+}
+
+void Screen::render() const
+{
 	SDL_RenderPresent(mRenderer);
 }
 
-inline void Screen::renderImGui() const
-{
-	mImGuiRenderer->render();
-}
+//inline void Screen::renderImGui() const
+//{
+//	mImGuiRenderer->render();
+//}
 
 
 void Screen::setOnCloseEvent(closeEventFn callback)
@@ -126,22 +137,19 @@ void Screen::setOnCloseEvent(closeEventFn callback)
 	closeEventCallback = callback;
 }
 
-void Screen::handleEvents()
-{
-	mEventManager->handleEvents(mImGuiRenderer);
-	//while (SDL_PollEvent(&mEvent) != 0) {
-	//	if (mEvent.type == SDL_QUIT) {
-	//		closeEventCallback();
-	//	}
+//void Screen::handleEvents()
+//{
+//	mEventManager->handleEvents();
+//	//while (SDL_PollEvent(&mEvent) != 0) {
+//	//	if (mEvent.type == SDL_QUIT) {
+//	//		closeEventCallback();
+//	//	}
+//
+//
+//
+//
+//	//	mImGuiRenderer->processEvent(&mEvent);
+//	//}
+//}
 
 
-
-
-	//	mImGuiRenderer->processEvent(&mEvent);
-	//}
-}
-
-void Screen::setRegistriesRef(Registries* registries)
-{
-	mImGuiRenderer->setRegistries(registries);
-}

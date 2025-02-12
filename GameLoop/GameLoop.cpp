@@ -2,6 +2,7 @@
 
 #include "GameLoop.h"
 
+#include "ImGui/ImGuiHandler.h"
 //#include "Utils/Log.h"
 
 u16 GameLoop::waitingDots = 0;
@@ -15,16 +16,26 @@ void GameLoop::decVirtualWaitingDots(u16 dots)
 	GameLoop::waitingDots -= dots;
 }
 
-GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<WindowEventManager> eventManager)
-	: mCPU(cpu),
-	mPPU(ppu),
-	mStateFactory(std::make_unique<EmulatorStateFactory>(eventManager, cpu->getBootRom()))
+GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<ImGuiHandler> imGui)
+	:	mCPU(cpu),
+		mPPU(ppu),
+		mImGuiHandler(imGui),
+		mStateFactory(std::make_unique<EmulatorStateFactory>(cpu->getBootRom()))
 {
 	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
+	mPPU->setOnRenderListener(BIND_FUNC_1_ARG(this, GameLoop::render));
+
 	mStateFactory->setHandleFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleFrame));
 	mStateFactory->setHandleBootFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleBootFrame));
 	mStateFactory->setDrawCallback(BIND_FUNC_NO_ARGS(mPPU, PPU::draw));
 	mStateFactory->setStepCallback(BIND_FUNC_NO_ARGS(this, GameLoop::step));
+
+	//mImGuiHandler->setOnStepModeCallback([this](EmulatorState state) {this->setEmulatorState(state); });
+	mImGuiHandler->setOnStepModeCallback(BIND_FUNC_1_ARG(this, GameLoop::setEmulatorState));
+	mScreen = mPPU->getScreen(); //TODO check what to do with screen in GameLoop (singleton ?)
+
+	mWindowEventManager = WindowEventManager::GetInstance();
+	//mWindowEventManager = std::make_shared<WindowEventManager>();
 
 	setEmulatorState(EmulatorState::INIT);
 
@@ -36,6 +47,10 @@ void GameLoop::setEmulatorState(EmulatorState state)
 
 }
 
+void GameLoop::setEmulatorState2()
+{
+}
+
 void GameLoop::startGame()
 {
 	
@@ -44,7 +59,9 @@ void GameLoop::startGame()
 
 	while (mIsRunning)
 	{
-		mPPU->handleWindowEvents();
+		mWindowEventManager->handleEvents();
+		//mScreen->startRendering()
+		//mPPU->handleWindowEvents();
 		mCurrentEmulatorState->execute();
 	}
 	
@@ -198,6 +215,13 @@ void GameLoop::synchroniseFrame()
 
 	mFrameStart = mFrameEnd;
 
+}
+
+inline void GameLoop::render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray)
+{
+	mScreen->startRendering(pixelArray);
+	mImGuiHandler->render();
+	mScreen->render();
 }
 
 

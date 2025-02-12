@@ -31,7 +31,7 @@ class Bus
 		void setDMATransfertCallback(std::function<void(const u8)> callback) { mMemory.setDMACallback(callback); }
 		void setLoadCartridgeCallback(std::function<void()> callback) { mCartridge->setLoadCallback(callback); }
 
-		Cartridge* getCartrige() { return mCartridge.get(); }
+		std::shared_ptr<Cartridge> getCartrige() { return mCartridge; }
 
 };
 

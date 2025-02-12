@@ -9,14 +9,14 @@
 #include "StateRun.h"
 #include "StateStep.h"
 #include "BootRom/BootRom.h"
-#include "Emulator/WindowEventManager.h"
+//#include "Emulator/WindowEventManager.h"
 
 class EmulatorStateFactory
 {
 	using frameCallback = std::function<void()>;
 
 protected:
-	std::shared_ptr<WindowEventManager> mEventManager;
+	//std::shared_ptr<WindowEventManager> mEventManager;
 
 private:
 	std::shared_ptr<BootRom> mBootRom;
@@ -26,8 +26,8 @@ private:
 	frameCallback mStepCallback{ nullptr };
 
 public:
-	EmulatorStateFactory(std::shared_ptr<WindowEventManager> eventManager, std::shared_ptr<BootRom> bootRom)
-		:mEventManager(eventManager), mBootRom(bootRom)
+	EmulatorStateFactory( std::shared_ptr<BootRom> bootRom)
+		: mBootRom(bootRom)
 	{}
 
 	void setHandleFrameCallback(std::function<void()> callback) { mHandleFrameCallback = callback; }
@@ -52,7 +52,7 @@ public:
 				state = std::make_unique<EmulatorRunState>();
 				break;
 			case EmulatorState::STEP:
-				state = std::make_unique<EmulatorStepState>(mEventManager);
+				state = std::make_unique<EmulatorStepState>();
 				break;
 			default:
 				GBE_LOG_ERROR("The state is undefined");

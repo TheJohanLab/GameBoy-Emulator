@@ -4,6 +4,7 @@
 #include "Interrupts/InterruptsManager.h"
 
 
+
 namespace gbe {
 
 	Emulator::Emulator()
@@ -28,21 +29,24 @@ namespace gbe {
 	{
 		mBus = std::make_shared<Bus>();
 
-		mEventManager = std::make_shared<WindowEventManager>();
-		mScreen = std::make_shared<Screen>(mEventManager, mBus->getCartrige(), SCREEN_WIDTH, SCREEN_HEIGHT);
+		//mEventManager = std::make_shared<WindowEventManager>();
+		mScreen = std::make_shared<Screen>(SCREEN_WIDTH, SCREEN_HEIGHT);
 		mPPU = std::make_shared<PPU>(mBus, mScreen);
 		mCPU = std::make_shared<CPU>(mBus, mPPU);
+		mImGui = std::make_shared<ImGuiHandler>(mBus->getCartrige(), mScreen->getWindow(), mScreen->getRenderer());
+
 		auto weak_cpu = std::weak_ptr(mCPU);
 		if (weak_cpu.expired())
 			GBE_LOG_ERROR("Expired");
 		if (!weak_cpu.lock())
 			GBE_LOG_ERROR("lock error");
+
 		mCPU->createInternalComponents(weak_cpu);
-		mPPU->setRegistriesRef(mCPU->getRegistries2());
+		mImGui->setRegistriesReference(mCPU->getRegistries2()); //TODO Revoir cette methode getRegistries2
 
 		//mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
 
-		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU, mEventManager);
+		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU, mImGui);
 
 		setCallbacks();
 

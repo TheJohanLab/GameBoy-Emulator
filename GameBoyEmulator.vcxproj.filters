@@ -84,7 +84,7 @@
     <ClCompile Include="PPU\Renderer\BackgroundRenderer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Screen\ImGuiRenderer.cpp">
+    <ClCompile Include="ImGui\ImGuiRenderer.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="BootRom\BootRom.cpp">
@@ -93,7 +93,7 @@
     <ClCompile Include="Cartridge\Cartridge.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="ImGuiMenu\ImGuiMenu.cpp">
+    <ClCompile Include="ImGui\ImGuiHandler.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Interrupts\InterruptsManager.cpp">
@@ -428,7 +428,7 @@
     <ClInclude Include="PPU\Renderer\IRenderer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Screen\ImGuiRenderer.h">
+    <ClInclude Include="ImGui\ImGuiRenderer.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Cartridge\CartridgeManager.h">
@@ -455,7 +455,7 @@
     <ClInclude Include="Emulator\States\StateRun.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="ImGuiMenu\ImGuiMenu.h">
+    <ClInclude Include="ImGui\ImGuiHandler.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Interrupts\InterruptsManager.h">
@@ -471,6 +471,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Singleton.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

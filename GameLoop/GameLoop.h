@@ -7,7 +7,7 @@
 #include "PPU/PPU.h"
 #include "BootRom/BootRom.h"
 #include "Emulator/States/EmulatorStateFactory.h"
-
+#include "ImGui/ImGuiHandler.h"
 //#include "Utils/Utils.h"
 
 class WindowEventManager;
@@ -18,9 +18,13 @@ private:
 	std::shared_ptr<CPU> mCPU;
 	std::shared_ptr<PPU> mPPU;
 	std::shared_ptr<BootRom> mBootRom;
+	std::shared_ptr<Screen> mScreen;
 
 	std::unique_ptr<EmulatorStateFactory> mStateFactory;
 	std::shared_ptr<EmulatorBaseState> mCurrentEmulatorState{ nullptr };
+
+	std::shared_ptr<ImGuiHandler> mImGuiHandler{ nullptr };
+	std::shared_ptr<WindowEventManager> mWindowEventManager{ nullptr };
 
 	bool mIsRunning;
 	bool mIsPaused;
@@ -36,10 +40,11 @@ private:
 	bool mIsCartridgeLoaded{ false };
 
 public:
-	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<WindowEventManager> eventManager);
+	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<ImGuiHandler> imGui);
 	virtual ~GameLoop() = default;
 
 	void setEmulatorState(EmulatorState state);
+	void setEmulatorState2();
 
 	void startGame();
 	void stopGame() { mIsRunning = false; }
@@ -64,5 +69,7 @@ private:
 	inline u8 step();
 	inline u8 bootStep();
 	inline void synchroniseFrame();
+	inline void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray);
+	//inline void render(u8* pixelArray);
 };
 

@@ -4,18 +4,23 @@
 //#include <unordered_map>
 //#include <memory>
 
-#include "Screen/ImGuiRenderer.h"
+#include "ImGui/ImGuiRenderer.h"
 
-class WindowEventManager {
+#include "Utils/Singleton.h"
+
+class WindowEventManager : public Singleton<WindowEventManager> 
+{
 
 private:
+
     SDL_Event mEvent;
+    std::shared_ptr<ImGuiRenderer> mImGuiRenderer;
     std::unordered_map<SDL_Keycode, bool> mKeyStates;
     bool mQuit = false;
 
 public:
 
-    void handleEvents(std::shared_ptr<ImGuiRenderer> imGuiRenderer) {
+    void handleEvents() {
         mKeyStates.clear();
 
         while (SDL_PollEvent(&mEvent) != 0) {
@@ -29,7 +34,7 @@ public:
                 mKeyStates[mEvent.key.keysym.sym] = false;
             }
 
-            imGuiRenderer->processEvent(&mEvent);
+            mImGuiRenderer->processEvent(&mEvent);
         }
     }
 
@@ -38,7 +43,10 @@ public:
         return mKeyStates[key];
     }
 
-
+    void setImGuiRenderer(std::shared_ptr<ImGuiRenderer> renderer)
+    {
+        mImGuiRenderer = renderer;
+    }
 
 
 };

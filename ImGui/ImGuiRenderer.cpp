@@ -10,15 +10,22 @@
 #include "Cartridge/CartridgeManager.h"
 #include "Cartridge/Cartridge.h"
 
+#include "Registries/Registries.h"
+
+
 //#include <string>
 #include "Emulator/Emulator.h"
-#include "CPU/CPU.h"
 
-ImGuiRenderer::ImGuiRenderer(Cartridge* cartridge, SDL_Window* window, SDL_Renderer* renderer)
+bool ImGuiRenderer::mStepMode{ false };
+
+ImGuiRenderer::ImGuiRenderer(std::shared_ptr<Cartridge> cartridge, 
+							SDL_Window* window, 
+							SDL_Renderer* renderer)
 	:mCartridge(cartridge), mWindow(window), mRenderer(renderer)
 {
 	initImGui();
 }
+
 
 ImGuiRenderer::~ImGuiRenderer()
 {
@@ -27,8 +34,10 @@ ImGuiRenderer::~ImGuiRenderer()
 	ImGui::DestroyContext();
 }
 
-void ImGuiRenderer::initImGui()const
+
+void ImGuiRenderer::initImGui() const
 {
+
 	// Initialiser ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -76,6 +85,9 @@ void ImGuiRenderer::render()
 		{
 			if (ImGui::MenuItem("Show Registries", nullptr, mShowRegistries)) {
 				mShowRegistries = !mShowRegistries;
+			}
+			if (ImGui::MenuItem("Enable Step Debugging", nullptr, mStepMode)) {
+				mStepMode = !mStepMode;
 			}
 			ImGui::EndMenu();
 		}
@@ -136,9 +148,14 @@ void ImGuiRenderer::processEvent(SDL_Event* event) const
 	ImGui_ImplSDL2_ProcessEvent(event);
 }
 
-void ImGuiRenderer::setRegistries(Registries* registries)
+void ImGuiRenderer::setRegistries(std::shared_ptr<Registries> registries)
 {
 	mRegistries = registries;
+}
+
+bool ImGuiRenderer::isStepMode()
+{
+	return mStepMode;
 }
 
 

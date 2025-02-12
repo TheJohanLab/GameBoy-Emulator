@@ -21,3 +21,5 @@
 #include "Utils/Log.h"
 #include "Utils/Utils.h"
 #include "Utils/Addresses.h"
+
+#include "Utils/Singleton.h"

@@ -7,31 +7,34 @@
 #include <cstring> 
 //#include <memory>
 
-#include "Cartridge/Cartridge.h"
-#include "Registries/Registries.h"
-
+class Cartridge;
+class Registries;
 
 class ImGuiRenderer
 {
 private:
-	SDL_Window* mWindow;
-	SDL_Renderer* mRenderer;
+	SDL_Window* mWindow{ nullptr };
+	SDL_Renderer* mRenderer{ nullptr };
 
-	Cartridge* mCartridge;
+	std::shared_ptr<Cartridge> mCartridge{ nullptr };
 
-	Registries* mRegistries = nullptr;
+	std::shared_ptr<Registries> mRegistries = nullptr;
 
-	bool mShowRegistries = false;
+	bool mShowRegistries{ false };
+
+	static bool mStepMode;
 
 public:
-	ImGuiRenderer(Cartridge* mCartridge, SDL_Window* window, SDL_Renderer* renderer);
+	ImGuiRenderer(std::shared_ptr<Cartridge>, SDL_Window*, SDL_Renderer*);
 	~ImGuiRenderer();
 
 	void render() ;
 	void renderRegistries() const;
 	void processEvent(SDL_Event* event) const;
 		
-	void setRegistries(Registries* registries);
+	void setRegistries(std::shared_ptr<Registries>);
+
+	static bool isStepMode();
 
 private:
 	void initImGui() const;

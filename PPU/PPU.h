@@ -8,7 +8,7 @@
 
 #include "Bus/Bus.h"
 #include "Screen/Screen.h"
-#include "Screen/ImGuiRenderer.h"
+//#include "ImGui/ImGuiRenderer.h"
 #include "OAM.h"
 
 #include "Interrupts/InterruptsManager.h"
@@ -27,6 +27,11 @@ struct Pixel
 
 class PPU
 {
+	using onRenderCallback = std::function<void(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&)>;
+	//using onRenderCallback = std::function<void(u8*)>;
+	//TO REMOVE LATER
+	using onVBlankEvent = std::function<void(InterruptsTypes)>;
+
 private:
 
 	std::shared_ptr<Bus> mBus;
@@ -44,9 +49,8 @@ private:
 	bool mIsScanlineDrawn = false;
 	u8 mDotsElapsed = 0;
 
-	//TO REMOVE LATER
-	using onVBlankEvent = std::function<void(InterruptsTypes)>;
 	onVBlankEvent mOnVBlank{ nullptr };
+	onRenderCallback mOnRender{ nullptr };
 
 #ifdef _DEBUG
     u16 m_currCycles{ 0 };
@@ -56,7 +60,7 @@ public:
 	PPU(std::shared_ptr<Bus> bus, std::shared_ptr<Screen> screen);
 	~PPU();
 
-	Screen* getScreen() { return mScreen.get(); }
+	std::shared_ptr<Screen> getScreen() { return mScreen; }
 
 	LCD_control getLCDControl() const; //FF40
 	LCD_status getLCDStatus() const; //FF41
@@ -112,7 +116,7 @@ public:
 	void startDMATransfer(const u8& address);
 
 	void setCloseEventCallback(std::function<void()> callback);
-	void handleWindowEvents();
+	//void handleWindowEvents();
 
 	u8 readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const;
 	u16 getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const;
@@ -129,7 +133,9 @@ public:
 	//TO REMOVE LATER
 	void waitForNextFrame();
 	void setOnVBlankListener(onVBlankEvent onVBlank) { mOnVBlank = onVBlank; }
-	void setRegistriesRef(Registries* registries);
+	void setOnRenderListener(onRenderCallback callback) { mOnRender = callback; }
+
+	//void setRegistriesRef(Registries* registries);
 	
 #ifdef _DEBUG
 	void resetCurrCycles() {	m_currCycles = 0;}

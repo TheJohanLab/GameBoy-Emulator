@@ -21,7 +21,7 @@ const float FPS{ 120.0 };
 const double timePerFrame = 1.0 / FPS;
 
 constexpr u16 SCREEN_WIDTH = 160;
-const u16 SCREEN_HEIGHT = 144;
+constexpr u16 SCREEN_HEIGHT = 144;
 
 // PPU cycle modes
 const u8 PPU_HBLANK = 0x00;

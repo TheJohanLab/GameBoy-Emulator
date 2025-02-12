@@ -8,12 +8,14 @@
 class EmulatorStepState : public EmulatorBaseState
 {
 private:
-	std::shared_ptr<WindowEventManager> mWindowEventManager;
+	std::shared_ptr<WindowEventManager> mWindowEventManager{ nullptr };
 
 public:
-	EmulatorStepState(std::shared_ptr<WindowEventManager> eventManager)
-		:mWindowEventManager(eventManager)
-	{}
+	EmulatorStepState()
+	{
+		mWindowEventManager = WindowEventManager::GetInstance();
+		//mWindowEventManager = std::make_shared<WindowEventManager>();
+	}
 
 
 	void execute() override

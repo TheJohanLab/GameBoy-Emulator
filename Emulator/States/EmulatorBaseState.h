@@ -9,6 +9,7 @@ enum class EmulatorState
 };
 
 class EmulatorBaseState
+
 {
 using Callback = std::function<void()>;
 

@@ -57,7 +57,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);LOG_DEBUG;STEP_DEBUG_;NO_BOOT</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG_;_CONSOLE;%(PreprocessorDefinitions);LOG_DEBUG_;STEP_DEBUG_;NO_BOOT_</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)Dependencies\spd_log\include;$(SolutionDir)Dependencies\Imgui\backends;$(SolutionDir)Dependencies\Imgui\;$(SolutionDir)Dependencies\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -102,7 +102,7 @@
   <ItemGroup>
     <ClCompile Include="BootRom\BootRom.cpp" />
     <ClCompile Include="Cartridge\Cartridge.cpp" />
-    <ClCompile Include="ImGuiMenu\ImGuiMenu.cpp" />
+    <ClCompile Include="ImGui\ImGuiHandler.cpp" />
     <ClCompile Include="Interrupts\InterruptsManager.cpp" />
     <ClCompile Include="PPU\Renderer\BackgroundRenderer.cpp" />
     <ClCompile Include="Bus\Bus.cpp" />
@@ -124,7 +124,7 @@
     <ClCompile Include="PPU\OAM.cpp" />
     <ClCompile Include="PPU\PPU.cpp" />
     <ClCompile Include="Registries\Registries.cpp" />
-    <ClCompile Include="Screen\ImGuiRenderer.cpp" />
+    <ClCompile Include="ImGui\ImGuiRenderer.cpp" />
     <ClCompile Include="Screen\Screen.cpp" />
     <ClCompile Include="Utils\Log.cpp" />
     <ClCompile Include="PPU\Renderer\WindowRenderer.cpp" />
@@ -145,7 +145,7 @@
     <ClInclude Include="Emulator\States\StateInit.h" />
     <ClInclude Include="Emulator\States\EmulatorBaseState.h" />
     <ClInclude Include="Emulator\WindowEventManager.h" />
-    <ClInclude Include="ImGuiMenu\ImGuiMenu.h" />
+    <ClInclude Include="ImGui\ImGuiHandler.h" />
     <ClInclude Include="Interrupts\InterruptsManager.h" />
     <ClInclude Include="PPU\Renderer\BackgroundRenderer.h" />
     <ClInclude Include="Bus\Bus.h" />
@@ -249,12 +249,13 @@
     <ClInclude Include="PPU\PPU.h" />
     <ClInclude Include="Registries\IORegistries.h" />
     <ClInclude Include="Registries\Registries.h" />
-    <ClInclude Include="Screen\ImGuiRenderer.h" />
+    <ClInclude Include="ImGui\ImGuiRenderer.h" />
     <ClInclude Include="Screen\Screen.h" />
     <ClInclude Include="Utils\Addresses.h" />
     <ClInclude Include="Utils\Log.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Utils\ScreenColors.h" />
+    <ClInclude Include="Utils\Singleton.h" />
     <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="PPU\Renderer\WindowRenderer.h" />
   </ItemGroup>

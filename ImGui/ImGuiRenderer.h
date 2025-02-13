@@ -46,7 +46,7 @@ public:
 	void renderDataWindows() const;
 	void renderRegistries(const ImVec2& pos,const ImVec2& size) const;
 	void renderEmulatorData(const ImVec2& pos, const ImVec2& size) const;
-	void renderGotoPopUp(char* input);
+	void renderGotoPopUp(std::string& input);
 	void processEvent(SDL_Event* event) const;
 		
 	void setRegistriesReference(std::shared_ptr<Registries>);
@@ -66,13 +66,13 @@ private:
 
 //callbacks
 private:
-	using onStepOption = std::function<void(bool)>;
-	using onGotoMode = std::function<void(u16)>;
+	using onStepMode = std::function<void(bool)>;
+	using onGotoMode = std::function<void(std::string&)>;
 
-	onStepOption mOnStepOption{ nullptr };
+	onStepMode mOnStepMode{ nullptr };
 	onGotoMode mOnGotoMode{ nullptr };
 
 public:
-	void setOnStepOption(onStepOption callback);
-	void setOnGotoMode(onGotoMode callback);
+	void setOnStepModeCallback(onStepMode callback);
+	void setOnGotoModeCallback(onGotoMode callback);
 };

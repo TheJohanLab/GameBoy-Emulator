@@ -132,7 +132,7 @@ void GameLoop::handleBootFrame()
 
 inline void GameLoop::setCallbacks()
 {
-	mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
+	//mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
 	mPPU->setOnRenderListener(BIND_FUNC_1_ARG(this, GameLoop::render));
 
 	mStateFactory->setHandleFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleFrame));

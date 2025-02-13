@@ -16,13 +16,10 @@ enum class WindowEvent
 	CLOSE_EVENT
 };
 
-using closeEventFn = std::function<void()>;
 
 class Screen
 {
 	private:
-		//std::shared_ptr<ImGuiRenderer> mImGuiRenderer;
-		//std::shared_ptr<WindowEventManager> mEventManager;
 
 		u16 mWidth;
 		u16 mHeight;
@@ -31,8 +28,6 @@ class Screen
 		SDL_Window* mWindow;
 		SDL_Texture* mTexture;
 		SDL_Event mEvent;
-
-		closeEventFn closeEventCallback;
 
 
 	public:
@@ -44,16 +39,11 @@ class Screen
 
 
 		void startRendering() const;
-		//void startRendering(u8* pixelArray) const;
 		void startRendering(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const;
 		void render() const;
-		//inline void renderImGui() const;
-
-		void setOnCloseEvent(closeEventFn callback);
 
 	private:
 		int initScreen();
-		//void initImGui(SDL_Window* window, SDL_Renderer* renderer);
 
 };
 

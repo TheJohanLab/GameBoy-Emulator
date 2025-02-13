@@ -86,47 +86,17 @@ void ImGuiRenderer::render()
 			if (ImGui::MenuItem("Enable Step Debugging", nullptr, mStepMode))
 			{
 				mStepMode = !mStepMode;
-				mOnStepOption(mStepMode);
+				mOnStepMode(mStepMode);
 			}
 
-			if (ImGui::Button("Goto adress"))
+			if (ImGui::Button("Goto address"))
 			{
 				ImGui::OpenPopup("goto");
+				mShowGotoPopup = true;
 			}
-			//if (ImGui::MenuItem("Goto adress", nullptr, mGotoMode))
-			//
-			if (ImGui::BeginPopup("goto"))
-			{
-				char buff[10] = "";
-				/*if (ImGui::InputText("Your name?", buff, 4))
-				{
 
-				}*/
-				ImGui::Text(" Enter a 16 bit hex address you want to go to :");
-				ImGui::InputText("##hexInput", buff, IM_ARRAYSIZE(buff), ImGuiInputTextFlags_CharsHexadecimal);
-
-				if (ImGui::Button("Accept")) {
-					// Convert to u16
-					mShowGotoPopup = false;
-					ImGui::CloseCurrentPopup();
-				}
-
-				ImGui::SameLine();
-
-				if (ImGui::Button("Cancel")) {
-					mShowGotoPopup = false;
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();	
-			}
-				//mShowGotoPopup = true;
-				//char inputBuffer[4] = "";
-				//renderGotoPopUp(inputBuffer);
-				
-				//mGotoMode = !mGotoMode;
-				//mStepMode = true;
-				//mOnStepOption(true); // STEP mode to be able to use the goto address
-				//mOnGotoMode(0x216);
+			std::string inputBuffer;
+			renderGotoPopUp(inputBuffer);
 			
 			ImGui::EndMenu();
 		}
@@ -226,33 +196,31 @@ void ImGuiRenderer::renderEmulatorData(const ImVec2& pos, const ImVec2& size) co
 	}
 }
 
-void ImGuiRenderer::renderGotoPopUp(char* input)
+char buffer[16] = "";
+void ImGuiRenderer::renderGotoPopUp(std::string& input)
 {
-	//if (mShowGotoPopup)
-	//{
-		ImGui::OpenPopup("Enter 16 bit hex value");
-
-		if (ImGui::BeginPopupModal("Enter value", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-			ImGui::Text(" (16 bits) :");
-			ImGui::InputText("##hexInput", input, IM_ARRAYSIZE(input), ImGuiInputTextFlags_CharsHexadecimal);
-
-			if (ImGui::Button("Accept")) {
-				// Convert to u16
-				mShowGotoPopup = false;
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::SameLine();
-
-			if (ImGui::Button("Cancel")) {
-				mShowGotoPopup = false;
-				ImGui::CloseCurrentPopup();
-			}
-
-			ImGui::EndPopup();
-
+	if (ImGui::BeginPopup("goto") && mShowGotoPopup)
+	{
+	
+		ImGui::Text(" Enter a 16 bit hex address you want to go to :");
+		if (ImGui::InputText("GOTO address", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue)
+			|| ImGui::Button("Accept"))
+		{
+			input = std::string(buffer);
+			mShowGotoPopup = false;
+			ImGui::CloseCurrentPopup();
+			mStepMode = true;
+			mOnGotoMode(input);
 		}
-	//}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			mShowGotoPopup = false;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
 }
 
 
@@ -342,12 +310,12 @@ std::string ImGuiRenderer::wstringToString(const std::wstring& wstr) const
 	return str;
 }
 
-void ImGuiRenderer::setOnStepOption(onStepOption callback)
+void ImGuiRenderer::setOnStepModeCallback(onStepMode callback)
 {
-	mOnStepOption = callback;
+	mOnStepMode = callback;
 }
 
-void ImGuiRenderer::setOnGotoMode(onGotoMode callback)
+void ImGuiRenderer::setOnGotoModeCallback(onGotoMode callback)
 {
 	mOnGotoMode = callback;
 }

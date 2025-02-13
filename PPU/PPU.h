@@ -28,8 +28,7 @@ struct Pixel
 class PPU
 {
 	using onRenderCallback = std::function<void(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&)>;
-	//using onRenderCallback = std::function<void(u8*)>;
-	//TO REMOVE LATER
+	//TODO REMOVE LATER
 	using onVBlankEvent = std::function<void(InterruptsTypes)>;
 
 private:
@@ -114,9 +113,6 @@ public:
 	u8 renderPixelsScanline();
 
 	void startDMATransfer(const u8& address);
-
-	void setCloseEventCallback(std::function<void()> callback);
-	//void handleWindowEvents();
 
 	u8 readIndexInTileMap(u8 xIndex, u8 yIndex, u8 tileMapId) const;
 	u16 getTileIndexInVRAM(std::variant<u8, int8_t> tileIndex, u8 tileDataAddressingType) const;

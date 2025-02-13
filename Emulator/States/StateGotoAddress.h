@@ -19,6 +19,7 @@ public:
 
 	void execute() override
 	{
+
 		auto pc = CPU::getCurrPC();
 		if (pc == mGoToAddress || mWindowEventManager->isKeyPressed(SDLK_RETURN))
 		{

@@ -576,33 +576,32 @@ void CPU::initInstructionSet()
 
 u8 CPU::executeOpcode(const u16 opcode) 
 {
-	ImGuiRenderer::setOpcodeDesc(mInstructionSet[opcode]->getName()); // TODO changer la facon de recuperer la description
+
+
 	//Attente d'une interruption pour reprendre
 	if (mIsCPUStopped)
 	{
-		// Verifier l'attente lors d'un stop
+		// TODO Verifier l'attente lors d'un stop
 		return 4;
 	}
 	
 
 	if (opcode == 0xCB) 
 	{
-		//read opcode
 		return executeOpcodeCB(0x00);
 	}
 
-#ifdef LOG_DEBUG
-	logOpcodesInfos(opcode);
-	logRegistries();
-#endif
-
-	//(mInstructionSet[opcode]->getFunctionPointer())(*this, *mInstructionSet[opcode]);
-	//GBE_LOG_INFO("{0}", mInstructionSet[opcode]->getName());
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
 	
 	incPC();
 	
+#ifdef _DEBUG 
+	//Show PC and opcode for ImGui
 	mPC = *(getPC());
+	ImGuiRenderer::setOpcodeDesc(mInstructionSet[getOpcode()]->getName()); // TODO changer la facon de recuperer la description
+#endif
+
+
 	//DEBUG JLA : adresse ou je me suis arrete
 	//C7F3
 

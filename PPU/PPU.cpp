@@ -487,16 +487,6 @@ inline void PPU::renderScanline()
 
 }
 
-void PPU::setCloseEventCallback(std::function<void()> callback)
-{
-	mScreen->setOnCloseEvent(callback);
-}
-
-//void PPU::handleWindowEvents()
-//{
-//	mScreen->handleEvents();
-//}
-
 void PPU::executeFullFrameRender()
 {
 	mLY = 0;

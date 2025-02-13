@@ -76,10 +76,6 @@ int Screen::initScreen()
 	return 0;
 }
 
-//void Screen::initImGui(SDL_Window* window, SDL_Renderer* renderer)
-//{
-//}
-
 
 SDL_Window* Screen::getWindow()
 {
@@ -95,12 +91,8 @@ SDL_Renderer* Screen::getRenderer()
 void Screen::startRendering() const
 {
 	SDL_RenderClear(mRenderer);
-	//renderImGui();
-	//SDL_RenderPresent(mRenderer);
 }
 
-//void Screen::render() const
-//void Screen::startRendering(u8* pixelArray) const
 void Screen::startRendering( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const
 {
 
@@ -125,31 +117,5 @@ void Screen::render() const
 {
 	SDL_RenderPresent(mRenderer);
 }
-
-//inline void Screen::renderImGui() const
-//{
-//	mImGuiRenderer->render();
-//}
-
-
-void Screen::setOnCloseEvent(closeEventFn callback)
-{
-	closeEventCallback = callback;
-}
-
-//void Screen::handleEvents()
-//{
-//	mEventManager->handleEvents();
-//	//while (SDL_PollEvent(&mEvent) != 0) {
-//	//	if (mEvent.type == SDL_QUIT) {
-//	//		closeEventCallback();
-//	//	}
-//
-//
-//
-//
-//	//	mImGuiRenderer->processEvent(&mEvent);
-//	//}
-//}
 
 

@@ -55,6 +55,9 @@ void BootRom::execute()
 		case EmulatorState::GOTO:
 			mOnStateChange(EmulatorState::GOTO);
 			break;
+		default:
+			mOnStateChange(EmulatorState::RUN);
+			break;
 		};
 		//GameLoop::getCurrentEmulatorState() == EmulatorState::STEP
 		//	? mOnStateChange(EmulatorState::STEP)

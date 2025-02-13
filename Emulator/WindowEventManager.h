@@ -16,7 +16,6 @@ private:
     SDL_Event mEvent;
     std::shared_ptr<ImGuiRenderer> mImGuiRenderer;
     std::unordered_map<SDL_Keycode, bool> mKeyStates;
-    bool mQuit = false;
 
 public:
 
@@ -25,7 +24,7 @@ public:
 
         while (SDL_PollEvent(&mEvent) != 0) {
             if (mEvent.type == SDL_QUIT) {
-                mQuit = true;
+                mOnQuit();
             }
             if (mEvent.type == SDL_KEYDOWN) {
                 mKeyStates[mEvent.key.keysym.sym] = true;
@@ -48,5 +47,13 @@ public:
         mImGuiRenderer = renderer;
     }
 
+
+//callbacks
+private:
+    using onQuitCallback = std::function<void()>;
+    onQuitCallback mOnQuit{ nullptr };
+
+public:
+    void setOnQuitCallback(onQuitCallback callback) { mOnQuit = callback; }
 
 };

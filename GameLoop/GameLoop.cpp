@@ -24,13 +24,12 @@ GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shar
 		mImGuiHandler(imGui),
 		mStateFactory(std::make_unique<EmulatorStateFactory>(cpu->getBootRom()))
 {
-	setCallbacks();
 
 	mScreen = mPPU->getScreen(); //TODO check what to do with screen in GameLoop (singleton ?)
-
 	mWindowEventManager = WindowEventManager::GetInstance();
-
 	mImGuiHandler->setOpcodeReference(std::shared_ptr<u8>(&mCurrentOpcode));
+	
+	setCallbacks();
 
 	setEmulatorState(EmulatorState::INIT);
 
@@ -144,6 +143,8 @@ inline void GameLoop::setCallbacks()
 
 	mImGuiHandler->setOnStepModeCallback(BIND_FUNC_1_ARG(this, GameLoop::setEmulatorStateStep));
 	mImGuiHandler->setOnGotoModeCallback(BIND_FUNC_1_ARG(this, GameLoop::setEmulatorStateGoto));
+
+	mWindowEventManager->setOnQuitCallback(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
 }
 
 void GameLoop::handleFrame()

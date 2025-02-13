@@ -41,9 +41,6 @@ void BootRom::execute()
 		//PlaySound
 		initRegistries();
 		
-//#ifdef STEP_DEBUG
-//		mOnStateChange(EmulatorState::STEP);
-//#else
 		switch (GameLoop::getCurrentEmulatorState())
 		{
 		case EmulatorState::STEP:
@@ -59,10 +56,7 @@ void BootRom::execute()
 			mOnStateChange(EmulatorState::RUN);
 			break;
 		};
-		//GameLoop::getCurrentEmulatorState() == EmulatorState::STEP
-		//	? mOnStateChange(EmulatorState::STEP)
-		//	: mOnStateChange(EmulatorState::RUN);
-//#endif
+		
 
 		mPPU->resetPPUModeDots();
 		auto cpu = mCPU_weak.lock();

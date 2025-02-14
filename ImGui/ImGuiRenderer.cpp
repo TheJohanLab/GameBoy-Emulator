@@ -69,13 +69,19 @@ void ImGuiRenderer::render()
 		{
 			if (ImGui::MenuItem("Load", "Ctrl+L"))
 			{
-				// Ouvrir une boîte de dialogue de sélection de fichier
-				auto filePath = openFileDialog();
-				if (!filePath.empty()) {
-					loadedFilePath = wstringToString(filePath);
-					loadFile(filePath);  // Lire et traiter le fichier
-				}
+				mOnRomLoaded(false);
+				// //Ouvrir une boîte de dialogue de sélection de fichier
+				//auto filePath = openFileDialog();
+				//if (!filePath.empty()) {
+				//	loadedFilePath = wstringToString(filePath);
+				//	loadFile(filePath);  // Lire et traiter le fichier
+				//}
 			}
+			if (ImGui::MenuItem("Reload"))
+			{
+				mOnRomLoaded(true);
+			}
+
 			if (ImGui::MenuItem("Quit", "Ctrl+Q")) {
 				
 			}
@@ -256,59 +262,59 @@ void ImGuiRenderer::setOpcodeDesc(const std::string& description)
 }
 
 
-std::wstring ImGuiRenderer::openFileDialog() const
-{
-	wchar_t filename[MAX_PATH];
-	OPENFILENAMEW ofn; // Utilisation de la version W (Unicode)
-
-	memset(&filename, 0, sizeof(filename));
-	memset(&ofn, 0, sizeof(ofn));
-
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = NULL;
-	ofn.lpstrFilter = L"Tous les fichiers\0*.*\0Fichiers texte\0*.TXT\0"; // Utiliser des chaînes Unicode
-	ofn.lpstrFile = filename;
-	ofn.nMaxFile = MAX_PATH;
-	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
-	ofn.lpstrDefExt = L"txt"; // Extension par défaut en Unicode
-
-	std::wstring filePath;
-
-	// Utiliser la version Unicode de GetOpenFileName
-	if (GetOpenFileNameW(&ofn)) {
-		filePath = filename;
-	}
-	else {
-		std::wcout << L"Aucun fichier sélectionné ou erreur lors de la sélection." << std::endl;
-	}
-
-	return filePath;
-}
-
-void ImGuiRenderer::loadFile(const std::wstring& filePath) const
-{
-	//printRomInHex(filePath);
-	mCartridge->loadCartridge(filePath);
-	
-	//std::wifstream file(filePath); // Utiliser wifstream pour les fichiers en Unicode
-	//if (file.is_open()) {
-	//	std::wstring line;
-	//	while (std::getline(file, line)) {
-	//		std::wcout << line << std::endl;
-	//	}
-	//	file.close();
-	//}
-	//else {
-	//	std::wcerr << L"Erreur lors de l'ouverture du fichier : " << filePath << std::endl;
-	//}
-}
-
-std::string ImGuiRenderer::wstringToString(const std::wstring& wstr) const
-{
-	// Convertir wchar_t* vers char*
-	std::string str(wstr.begin(), wstr.end());
-	return str;
-}
+//std::wstring ImGuiRenderer::openFileDialog() const
+//{
+//	wchar_t filename[MAX_PATH];
+//	OPENFILENAMEW ofn; // Utilisation de la version W (Unicode)
+//
+//	memset(&filename, 0, sizeof(filename));
+//	memset(&ofn, 0, sizeof(ofn));
+//
+//	ofn.lStructSize = sizeof(ofn);
+//	ofn.hwndOwner = NULL;
+//	ofn.lpstrFilter = L"Tous les fichiers\0*.*\0Fichiers texte\0*.TXT\0"; // Utiliser des chaînes Unicode
+//	ofn.lpstrFile = filename;
+//	ofn.nMaxFile = MAX_PATH;
+//	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
+//	ofn.lpstrDefExt = L"txt"; // Extension par défaut en Unicode
+//
+//	std::wstring filePath;
+//
+//	// Utiliser la version Unicode de GetOpenFileName
+//	if (GetOpenFileNameW(&ofn)) {
+//		filePath = filename;
+//	}
+//	else {
+//		std::wcout << L"Aucun fichier sélectionné ou erreur lors de la sélection." << std::endl;
+//	}
+//
+//	return filePath;
+//}
+//
+//void ImGuiRenderer::loadFile(const std::wstring& filePath) const
+//{
+//	//printRomInHex(filePath);
+//	mCartridge->loadCartridge(filePath);
+//	
+//	//std::wifstream file(filePath); // Utiliser wifstream pour les fichiers en Unicode
+//	//if (file.is_open()) {
+//	//	std::wstring line;
+//	//	while (std::getline(file, line)) {
+//	//		std::wcout << line << std::endl;
+//	//	}
+//	//	file.close();
+//	//}
+//	//else {
+//	//	std::wcerr << L"Erreur lors de l'ouverture du fichier : " << filePath << std::endl;
+//	//}
+//}
+//
+//std::string ImGuiRenderer::wstringToString(const std::wstring& wstr) const
+//{
+//	// Convertir wchar_t* vers char*
+//	std::string str(wstr.begin(), wstr.end());
+//	return str;
+//}
 
 void ImGuiRenderer::setOnStepModeCallback(onStepMode callback)
 {
@@ -318,4 +324,9 @@ void ImGuiRenderer::setOnStepModeCallback(onStepMode callback)
 void ImGuiRenderer::setOnGotoModeCallback(onGotoMode callback)
 {
 	mOnGotoMode = callback;
+}
+
+void ImGuiRenderer::setOnRomLoadedCallback(onRomLoaded callback)
+{
+	mOnRomLoaded = callback;
 }

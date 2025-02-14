@@ -527,6 +527,23 @@ void PPU::setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData)
 	}
 }
 
+
+void PPU::reset()
+{
+	mOAM->reset();
+
+	for (int i = 0; i < SCREEN_HEIGHT; i++)
+	{
+		for (int j = 0; j < SCREEN_WIDTH; j++)
+			mPixelArray[i][j] = { 0 };
+	}
+
+	mObjectsOAMIndex.clear();
+
+	initializePPU();
+
+}
+
 void PPU::waitForNextFrame()
 {
 	executeFullFrameRender();

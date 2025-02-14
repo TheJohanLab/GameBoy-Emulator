@@ -150,6 +150,26 @@ u8 Memory::readLCD(const u16& address) const
 }
 
 
+void Memory::reset()
+{
+	for (auto& WRAM : mWRAM)
+		WRAM = { 0x00 };
+	for (auto& VRAM : mVRAM)
+		VRAM = { 0x00 };
+	for (auto& ERAM : mERAM)
+		ERAM = { 0x00 };
+	for (auto& HRAM : mHRAM)
+		HRAM = { 0x00 };
+	for (auto& OAM : mOAM)
+		OAM = { 0x00 };
+	//for (auto& IR : mInterruptRegistries)
+	//	IR = { 0x00 };
+	//for (auto& LCDR : mLCDRegistries)
+	//	LCDR = { 0x00 };
+
+	mDmaRegistry = 0x00;
+}
+
 void Memory::writeLCD(const u16& address, const u8& data)
 {
 	switch(address)

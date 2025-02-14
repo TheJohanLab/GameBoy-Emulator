@@ -29,9 +29,11 @@ class Bus
 		void setInterruptFlag(const u8 flags);
 
 		void setDMATransfertCallback(std::function<void(const u8)> callback) { mMemory.setDMACallback(callback); }
-		void setLoadCartridgeCallback(std::function<void()> callback) { mCartridge->setLoadCallback(callback); }
+		//void setLoadCartridgeCallback(std::function<void()> callback) { mCartridge->setLoadCallback(callback); }
 
 		std::shared_ptr<Cartridge> getCartrige() { return mCartridge; }
+
+		void reset();
 
 };
 

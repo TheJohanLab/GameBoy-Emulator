@@ -125,6 +125,7 @@ public:
 	void setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData);
 
 	void resetPPUModeDots() { mPPUModeDots = 0; };
+	void reset();
 
 	//TO REMOVE LATER
 	void waitForNextFrame();

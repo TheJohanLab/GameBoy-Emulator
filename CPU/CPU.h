@@ -81,12 +81,12 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		std::shared_ptr<Registries> getRegistriesRef() { return std::shared_ptr<Registries>(&mRegistries); } //TODO make mRegistries shared_ptr
 
+		void resetMemory();
+
 		void logRegistries();
 		void logOpcodesInfos(u8 opcode);
 
-private:
 public:
-	
 	static u16 getCurrPC() { return mPC; }
 };
 

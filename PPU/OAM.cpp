@@ -4,13 +4,7 @@
 
 OAM::OAM()
 {
-	for (auto& object : mObjects)
-	{
-		object.AttributeFlags.byte = 0x00;
-		object.XPos = 0x00;
-		object.YPos = 0x00;
-		object.tileIndex = 0x00;
-	}
+	reset();
 }
 
 void OAM::write(u8 index, const u8& YPos, const u8& XPos, const u8& tileIndex, const u8& attrs)
@@ -56,6 +50,17 @@ u8 OAM::readYPos(u8 index) const
 std::array<OAM::Object, MAX_OBJECTS>& OAM::getObjects()
 {
 	 return mObjects;
+}
+
+void OAM::reset()
+{
+	for (auto& object : mObjects)
+	{
+		object.AttributeFlags.byte = 0x00;
+		object.XPos = 0x00;
+		object.YPos = 0x00;
+		object.tileIndex = 0x00;
+	}
 }
 
 u8 OAM::readXPos(u8 index) const

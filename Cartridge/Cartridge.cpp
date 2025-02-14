@@ -25,7 +25,7 @@ void Cartridge::loadCartridge(const std::wstring& filePath)
         return;
     }
 
-    mLoadCartridgeCallback();
+    //mLoadCartridgeCallback();
 }
 
 void Cartridge::setLoadCallback(std::function<void()> callback)

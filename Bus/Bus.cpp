@@ -56,3 +56,8 @@ void Bus::setInterruptFlag(const u8 flags)
 	mMemory.write(INTERRUPT_FLAG, flags);
 }
 
+void Bus::reset()
+{
+	mMemory.reset();
+}
+

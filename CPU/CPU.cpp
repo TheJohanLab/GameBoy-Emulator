@@ -850,6 +850,11 @@ void CPU::resumeCPUFromInterrupt()
 	mIsCPUStopped = false;
 }
 
+void CPU::resetMemory()
+{
+	mBus->reset();
+}
+
 void CPU::logRegistries()
 {
 	auto F = getFlagRegistry();

@@ -49,4 +49,6 @@ public:
 	u8 readAttrs(u8 index) const;
 
 	std::array<Object, MAX_OBJECTS>& getObjects();
+
+	void reset();
 };

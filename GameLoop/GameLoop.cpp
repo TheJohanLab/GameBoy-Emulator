@@ -60,7 +60,7 @@ void GameLoop::setEmulatorState(EmulatorState state)
 	mCurrentEmulatorState = mStateFactory->createState(state, mGotoAddress);
 }
 
-void GameLoop::setEmulatorStateStep(EmulatorState state)
+void GameLoop::onSetEmulatorStateStep(EmulatorState state)
 {
 	if (!(mInitCurrState == EmulatorState::INIT || mInitCurrState == EmulatorState::BOOT))
 	{
@@ -72,7 +72,7 @@ void GameLoop::setEmulatorStateStep(EmulatorState state)
 
 }
 
-void GameLoop::setEmulatorStateGoto(u16 address)
+void GameLoop::onSetEmulatorStateGoto(u16 address)
 {
 	mGotoAddress = address;
 
@@ -141,10 +141,11 @@ inline void GameLoop::setCallbacks()
 	mStateFactory->setLogsCallback(BIND_FUNC_NO_ARGS(this, GameLoop::logInfos));
 	mStateFactory->setModeCallback(BIND_FUNC_1_ARG(this, GameLoop::setEmulatorState));
 
-	mImGuiHandler->setOnStepModeCallback(BIND_FUNC_1_ARG(this, GameLoop::setEmulatorStateStep));
-	mImGuiHandler->setOnGotoModeCallback(BIND_FUNC_1_ARG(this, GameLoop::setEmulatorStateGoto));
+	mImGuiHandler->setOnStepModeCallback(BIND_FUNC_1_ARG(this, GameLoop::onSetEmulatorStateStep));
+	mImGuiHandler->setOnGotoModeCallback(BIND_FUNC_1_ARG(this, GameLoop::onSetEmulatorStateGoto));
+	mImGuiHandler->setOnRomLoadedCallback(BIND_FUNC_NO_ARGS(this, GameLoop::onRomLoaded));
 
-	mWindowEventManager->setOnQuitCallback(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
+	mWindowEventManager->setOnQuitCallback(BIND_FUNC_NO_ARGS(this, GameLoop::onStopGame));
 }
 
 void GameLoop::handleFrame()
@@ -246,9 +247,16 @@ inline void GameLoop::logInfos() const
 	mCPU->logRegistries();
 }
 
-
-void GameLoop::setCartridgeLoaded()
+inline void GameLoop::reset()
 {
+	mCPU->resetMemory();
+	mPPU->reset();
+}
+
+
+void GameLoop::onRomLoaded()
+{
+	reset();
 	setEmulatorState(EmulatorState::BOOT);
 	mCPU->getInterruptsManager()->initInterrupts();
 	//mIsCartridgeLoaded = true;

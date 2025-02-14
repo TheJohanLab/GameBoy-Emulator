@@ -2,9 +2,9 @@
 
 #include <SDL.h>
 //#include <fstream>
-#include <windows.h> 
-#include <commdlg.h>
-#include <cstring> 
+//#include <windows.h> 
+//#include <commdlg.h>
+//#include <cstring> 
 //#include <memory>
 
 #include "imgui.h"
@@ -59,20 +59,23 @@ public:
 private:
 	void initImGui() const;
 
-	std::wstring openFileDialog() const;
-	void loadFile(const std::wstring& filePath) const;
-	std::string wstringToString(const std::wstring& wstr) const;
+	//std::wstring openFileDialog() const;
+	//void loadFile(const std::wstring& filePath) const;
+	//std::string wstringToString(const std::wstring& wstr) const;
 	bool mShow_demo_window = false;
 
 //callbacks
 private:
 	using onStepMode = std::function<void(bool)>;
 	using onGotoMode = std::function<void(std::string&)>;
+	using onRomLoaded = std::function<void(bool)>;
 
 	onStepMode mOnStepMode{ nullptr };
 	onGotoMode mOnGotoMode{ nullptr };
+	onRomLoaded mOnRomLoaded{ nullptr };
 
 public:
 	void setOnStepModeCallback(onStepMode callback);
 	void setOnGotoModeCallback(onGotoMode callback);
+	void setOnRomLoadedCallback(onRomLoaded callback);
 };

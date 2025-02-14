@@ -22,7 +22,10 @@ BootRom::~BootRom()
 void BootRom::initializeBootRom()
 {
 	extractBootLogo();
+
+	mIsBootFinished = false;
 	mScrollingIter = 0;
+	mVBLankCnt = 0;
 	mBus->write(SCY, 0x64);
 	auto cpu = mCPU_weak.lock();
 	cpu->setIMEFlag();

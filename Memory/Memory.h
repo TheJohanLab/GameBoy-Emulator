@@ -32,6 +32,8 @@ class Memory
 
 		void setDMACallback(const DMACallback& callback) { mDMACallback = callback; }
 
+		void reset();
+
 	private:
 		void writeLCD(const u16& address, const u8& data);
 		u8 readLCD(const u16& address) const;

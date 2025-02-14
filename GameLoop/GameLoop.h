@@ -50,15 +50,15 @@ public:
 	virtual ~GameLoop() = default;
 
 	void setEmulatorState(EmulatorState state);
-	void setEmulatorStateStep(EmulatorState state);
-	void setEmulatorStateGoto(u16 address);
+	void onSetEmulatorStateStep(EmulatorState state);
+	void onSetEmulatorStateGoto(u16 address);
 
 	void startGame();
-	void stopGame() { mIsRunning = false; }
+	void onStopGame() { mIsRunning = false; }
 	void pauseGame() { mIsPaused = true; }
 	void resumeGame() { mIsPaused = false; }
 
-	void setCartridgeLoaded();
+	void onRomLoaded();
 
 
 	void addToSequence(std::function<void()> task);
@@ -82,6 +82,8 @@ private:
 	inline void synchroniseFrame();
 	inline void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray);
 	inline void logInfos() const;
+
+	inline void reset();
 	//inline void render(u8* pixelArray);
 };
 

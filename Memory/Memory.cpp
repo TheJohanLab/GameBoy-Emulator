@@ -162,6 +162,7 @@ void Memory::reset()
 		HRAM = { 0x00 };
 	for (auto& OAM : mOAM)
 		OAM = { 0x00 };
+	//TODO Check why these two reset don't work
 	//for (auto& IR : mInterruptRegistries)
 	//	IR = { 0x00 };
 	//for (auto& LCDR : mLCDRegistries)

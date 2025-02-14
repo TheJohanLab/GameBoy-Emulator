@@ -20,6 +20,7 @@ ImGuiHandler::ImGuiHandler(std::shared_ptr<Cartridge> cartridge,
 	mImGuiRenderer->setOnStepModeCallback(BIND_FUNC_1_ARG(this, ImGuiHandler::setStepMode));
 	mImGuiRenderer->setOnGotoModeCallback(BIND_FUNC_1_ARG(this, ImGuiHandler::setGotoMode));
 	mImGuiRenderer->setOnRomLoadedCallback(BIND_FUNC_1_ARG(this, ImGuiHandler::loadRom));
+	mImGuiRenderer->setOnQuitCallback(BIND_FUNC_NO_ARGS(this, ImGuiHandler::quit));
 }
 
 void ImGuiHandler::setOnStepModeCallback(onSetModeCallback callback)
@@ -35,6 +36,11 @@ void ImGuiHandler::setOnGotoModeCallback(onGotoModeCallback callback)
 void ImGuiHandler::setOnRomLoadedCallback(onRomLoaded callback)
 {
 	mOnRomLoaded = callback;
+}
+
+void ImGuiHandler::setOnQuitCallback(onRomLoaded callback)
+{
+	mOnQuit = callback;
 }
 
 
@@ -112,6 +118,11 @@ void ImGuiHandler::loadRom(bool reload)
 	}
 	else
 		GBE_LOG_ERROR("Error, no rom loaded. Load a ROM first");
+}
+
+void ImGuiHandler::quit() const
+{
+	mOnQuit();
 }
 
 

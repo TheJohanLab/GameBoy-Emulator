@@ -44,19 +44,23 @@ private:
 	u16 convertToU16(const std::string& input);
 
 	void loadRom(bool reload);
+	void quit() const;
 
 //callbacks
 private:
 	using onSetModeCallback = std::function<void(EmulatorState)>;
 	using onGotoModeCallback = std::function<void(u16)>;
 	using onRomLoaded = std::function<void()>;
+	using onQuit = std::function<void()>;
 
 	onSetModeCallback mOnSetMode{ nullptr };
 	onGotoModeCallback mOnGotoMode{ nullptr };
 	onRomLoaded mOnRomLoaded{ nullptr };
+	onQuit mOnQuit{ nullptr };
 
 public:
 	void setOnStepModeCallback(onSetModeCallback callback);
 	void setOnGotoModeCallback(onGotoModeCallback callback);
 	void setOnRomLoadedCallback(onRomLoaded callback);
+	void setOnQuitCallback(onRomLoaded callback);
 };

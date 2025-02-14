@@ -144,6 +144,7 @@ inline void GameLoop::setCallbacks()
 	mImGuiHandler->setOnStepModeCallback(BIND_FUNC_1_ARG(this, GameLoop::onSetEmulatorStateStep));
 	mImGuiHandler->setOnGotoModeCallback(BIND_FUNC_1_ARG(this, GameLoop::onSetEmulatorStateGoto));
 	mImGuiHandler->setOnRomLoadedCallback(BIND_FUNC_NO_ARGS(this, GameLoop::onRomLoaded));
+	mImGuiHandler->setOnQuitCallback(BIND_FUNC_NO_ARGS(this, GameLoop::onStopGame));
 
 	mWindowEventManager->setOnQuitCallback(BIND_FUNC_NO_ARGS(this, GameLoop::onStopGame));
 }
@@ -205,6 +206,7 @@ u8 GameLoop::bootStep()
 u8 GameLoop::step()
 {	
 	mCurrentOpcode = mCPU->getOpcode();
+
 	u8 currCycle = mCPU->executeOpcode(mCurrentOpcode);
 
 	mPPU->render(currCycle);

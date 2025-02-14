@@ -69,13 +69,17 @@ private:
 	using onStepMode = std::function<void(bool)>;
 	using onGotoMode = std::function<void(std::string&)>;
 	using onRomLoaded = std::function<void(bool)>;
+	using onQuit = std::function<void()>;
+
 
 	onStepMode mOnStepMode{ nullptr };
 	onGotoMode mOnGotoMode{ nullptr };
 	onRomLoaded mOnRomLoaded{ nullptr };
+	onQuit mOnQuit{ nullptr };
 
 public:
 	void setOnStepModeCallback(onStepMode callback);
 	void setOnGotoModeCallback(onGotoMode callback);
 	void setOnRomLoadedCallback(onRomLoaded callback);
+	void setOnQuitCallback(onQuit callback);
 };

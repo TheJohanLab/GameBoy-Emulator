@@ -28,6 +28,8 @@ class CPU : std::enable_shared_from_this<CPU>
 		std::shared_ptr<InterruptsManager> mInterruptsManager{ nullptr };
 		
 		bool mIsCPUStopped{ false };
+		std::string mNextOpcodes;
+
 		void initInstructionSet();
 
 	public:
@@ -57,6 +59,7 @@ class CPU : std::enable_shared_from_this<CPU>
 		void writeMemory(const combinedRegistries& address, const u8 value);
 
 		u8 getOpcode();
+		u8 getNextOpcodePreview() const;
 		u8 readMemory(const u16 & address) const;
 		u8 readMemory(const combinedRegistries& address) const;
 		u8* getMemoryDataPtr(const combinedRegistries& address);
@@ -85,6 +88,9 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		void logRegistries();
 		void logOpcodesInfos(u8 opcode);
+
+		const std::string getNextOpcodesValue() { return mNextOpcodes; }
+		void setNextOpcodesValue(const std::string& opcodes) { mNextOpcodes = opcodes; }
 
 public:
 	static u16 getCurrPC() { return mPC; }

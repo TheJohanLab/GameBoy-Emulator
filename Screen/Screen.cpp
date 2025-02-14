@@ -35,7 +35,12 @@ int Screen::initScreen()
 
 		//Create the window.
 		mWindow = SDL_CreateWindow("Gameboy emulator",
-			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 576, 0);
+			SDL_WINDOWPOS_CENTERED, 
+			SDL_WINDOWPOS_CENTERED, 
+			SCREEN_WIDTH * 5,
+			SCREEN_HEIGHT * 5, 
+			SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+
 		if (mWindow == nullptr)
 		{
 			std::cout << "Error: Couldn't create window = " << SDL_GetError() << std::endl;

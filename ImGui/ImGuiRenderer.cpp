@@ -17,7 +17,7 @@
 //#include "Emulator/Emulator.h"
 #include "CPU/CPU.h"
 
-std::string ImGuiRenderer::mOpcodeDescription{ "" };
+std::string ImGuiRenderer::mOpcodeDescription{ "NOP" };
 
 ImGuiRenderer::ImGuiRenderer(std::shared_ptr<Cartridge> cartridge, 
 							SDL_Window* window, 
@@ -68,23 +68,14 @@ void ImGuiRenderer::render()
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Load", "Ctrl+L"))
-			{
 				mOnRomLoaded(false);
-				// //Ouvrir une boîte de dialogue de sélection de fichier
-				//auto filePath = openFileDialog();
-				//if (!filePath.empty()) {
-				//	loadedFilePath = wstringToString(filePath);
-				//	loadFile(filePath);  // Lire et traiter le fichier
-				//}
-			}
-			if (ImGui::MenuItem("Reload"))
-			{
+			
+			if (ImGui::MenuItem("Reload", "Ctrl+R"))
 				mOnRomLoaded(true);
-			}
+			
+			if (ImGui::MenuItem("Quit", "Ctrl+Q"))
+				mOnQuit();
 
-			if (ImGui::MenuItem("Quit", "Ctrl+Q")) {
-				
-			}
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Tools"))
@@ -110,7 +101,7 @@ void ImGuiRenderer::render()
 		if (ImGui::MenuItem("Registries", nullptr, mShowRegistries)) {
 			mShowRegistries = !mShowRegistries;
 		}
-		if (ImGui::MenuItem("Emulator's Data", nullptr, mShowEmulatorData)) {
+		if (ImGui::MenuItem("Data", nullptr, mShowEmulatorData)) {
 			mShowEmulatorData = !mShowEmulatorData;
 		}
 
@@ -132,7 +123,6 @@ void ImGuiRenderer::render()
 
 	renderDataWindows();
 
-	// Finir et rendre le frame ImGui
 	ImGui::Render();
 	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), mRenderer);
 }
@@ -191,9 +181,9 @@ void ImGuiRenderer::renderEmulatorData(const ImVec2& pos, const ImVec2& size) co
 
 
 		ImGui::Begin("Data");
+		ImGui::Text("PC:     0x%X", CPU::getCurrPC()); //TODO Change this static mPC to a private variable
 		ImGui::Text("OpCode: %s", mOpcodeDescription.c_str());
-		ImGui::Text("Value:  0x%X", *mOpcodeValue);
-		ImGui::Text("PC:     0x%X", *(mCPU->getPC()));
+		ImGui::Text("Next Opcodes:  %s", mCPU->getNextOpcodesValue().c_str());
 		ImGui::Text("SP:     0x%X", *(mCPU->getSP()));
 
 		ImGui::End();
@@ -262,60 +252,6 @@ void ImGuiRenderer::setOpcodeDesc(const std::string& description)
 }
 
 
-//std::wstring ImGuiRenderer::openFileDialog() const
-//{
-//	wchar_t filename[MAX_PATH];
-//	OPENFILENAMEW ofn; // Utilisation de la version W (Unicode)
-//
-//	memset(&filename, 0, sizeof(filename));
-//	memset(&ofn, 0, sizeof(ofn));
-//
-//	ofn.lStructSize = sizeof(ofn);
-//	ofn.hwndOwner = NULL;
-//	ofn.lpstrFilter = L"Tous les fichiers\0*.*\0Fichiers texte\0*.TXT\0"; // Utiliser des chaînes Unicode
-//	ofn.lpstrFile = filename;
-//	ofn.nMaxFile = MAX_PATH;
-//	ofn.Flags = OFN_DONTADDTORECENT | OFN_FILEMUSTEXIST;
-//	ofn.lpstrDefExt = L"txt"; // Extension par défaut en Unicode
-//
-//	std::wstring filePath;
-//
-//	// Utiliser la version Unicode de GetOpenFileName
-//	if (GetOpenFileNameW(&ofn)) {
-//		filePath = filename;
-//	}
-//	else {
-//		std::wcout << L"Aucun fichier sélectionné ou erreur lors de la sélection." << std::endl;
-//	}
-//
-//	return filePath;
-//}
-//
-//void ImGuiRenderer::loadFile(const std::wstring& filePath) const
-//{
-//	//printRomInHex(filePath);
-//	mCartridge->loadCartridge(filePath);
-//	
-//	//std::wifstream file(filePath); // Utiliser wifstream pour les fichiers en Unicode
-//	//if (file.is_open()) {
-//	//	std::wstring line;
-//	//	while (std::getline(file, line)) {
-//	//		std::wcout << line << std::endl;
-//	//	}
-//	//	file.close();
-//	//}
-//	//else {
-//	//	std::wcerr << L"Erreur lors de l'ouverture du fichier : " << filePath << std::endl;
-//	//}
-//}
-//
-//std::string ImGuiRenderer::wstringToString(const std::wstring& wstr) const
-//{
-//	// Convertir wchar_t* vers char*
-//	std::string str(wstr.begin(), wstr.end());
-//	return str;
-//}
-
 void ImGuiRenderer::setOnStepModeCallback(onStepMode callback)
 {
 	mOnStepMode = callback;
@@ -329,4 +265,9 @@ void ImGuiRenderer::setOnGotoModeCallback(onGotoMode callback)
 void ImGuiRenderer::setOnRomLoadedCallback(onRomLoaded callback)
 {
 	mOnRomLoaded = callback;
+}
+
+void ImGuiRenderer::setOnQuitCallback(onQuit callback)
+{
+	mOnQuit = callback;
 }

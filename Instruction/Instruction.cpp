@@ -23,6 +23,12 @@ u8 Instruction::readNextOpcode(CPU& cpu)
 
 	 u8 value = cpu.readMemory(*PC);
 
+#ifdef _DEBUG
+	 std::stringstream ss;
+	 ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(value);
+	 cpu.setNextOpcodesValue("0x" + ss.str());
+#endif
+
 #ifdef LOG_DEBUG
 	 GBE_LOG_INFO("readNextOpcode : {:#x}", value);
 #endif
@@ -37,6 +43,12 @@ u16 Instruction::readNextTwoOpcodes(CPU& cpu)
 	u16 msbValue = (static_cast<u16>(cpu.readMemory((*PC) + 2)) << 8) & 0xFF00;
 	u16 twoBytesValue = lsbValue | msbValue;
 	*PC += 2;
+
+#ifdef _DEBUG
+	std::stringstream ss;
+	ss << std::hex << std::setw(4) << std::setfill('0') << static_cast<int>(twoBytesValue);
+	cpu.setNextOpcodesValue("0x" + ss.str());
+#endif
 
 #ifdef LOG_DEBUG
 	GBE_LOG_INFO("readNextTwoOpcodes : {:#x}", twoBytesValue);

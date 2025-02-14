@@ -260,9 +260,6 @@
     <ClInclude Include="Utils\Utils.h" />
     <ClInclude Include="PPU\Renderer\WindowRenderer.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="NewFile.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

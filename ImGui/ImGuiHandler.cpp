@@ -65,6 +65,12 @@ void ImGuiHandler::setOpcodeReference(std::shared_ptr<u8> opcode)
 	mImGuiRenderer->setOpcodeReference(opcode);
 }
 
+void ImGuiHandler::setMemoryReference(std::shared_ptr<const Memory> memory)
+{
+	mImGuiRenderer->setMemoryReference(memory);
+}
+
+
 void ImGuiHandler::setStepMode(bool stepMode)
 {
 	mOnSetMode(stepMode ? EmulatorState::STEP : EmulatorState::RUN);

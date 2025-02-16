@@ -29,6 +29,7 @@ public:
 	void setCPUReference(std::shared_ptr<CPU>);
 	void setPPUReference(std::shared_ptr<PPU>);
 	void setOpcodeReference(std::shared_ptr<u8>);
+	void setMemoryReference(std::shared_ptr<const Memory>);
 
 	void setStepMode(bool);
 	void setGotoMode(std::string& input);

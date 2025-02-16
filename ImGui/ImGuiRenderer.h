@@ -7,6 +7,8 @@
 //#include <cstring> 
 //#include <memory>
 
+#include "Memory/Memory.h"
+
 #include "imgui.h"
 
 class Cartridge;
@@ -25,6 +27,8 @@ private:
 	std::shared_ptr<Registries> mRegistries{ nullptr };
 	std::shared_ptr<CPU> mCPU{ nullptr };
 	std::shared_ptr<PPU> mPPU{ nullptr };
+
+	std::shared_ptr<const Memory> mMemoryRef{ nullptr };
 	
 	std::shared_ptr<u8> mOpcodeValue{ nullptr };
 	static std::string mOpcodeDescription;
@@ -32,11 +36,31 @@ private:
 	bool mShowRegistries{ false };
 	bool mShowEmulatorData{ false };
 	bool mShowGotoPopup{ false };
+	bool mShowMemory{ false };
 
 	bool mStepMode{ false };
 	bool mGotoMode{ false };
 
 	u16 gotoAddressValue{ 0x0000 };
+	
+	//GOTO address renderer
+	char mGotoAddrbuffer[16] = "";
+
+	// Memory renderer
+	std::unordered_map<std::string, bool> sectionVisibility = {
+		{"VRAM", true},
+		{"ERAM", true},
+		{"WRAM", true},
+		{"OAM", true},
+		{"LCD_CTRL", true},
+		{"HRAM", true},
+		{"IF", true},
+		{"IE", true},
+	};
+
+	char mSearchBuffer[10] = "";
+	int mSearchAddress = -1;
+	bool mSearchScrolled{ false };
 
 public:
 	ImGuiRenderer(std::shared_ptr<Cartridge>, SDL_Window*, SDL_Renderer*);
@@ -46,13 +70,16 @@ public:
 	void renderDataWindows() const;
 	void renderRegistries(const ImVec2& pos,const ImVec2& size) const;
 	void renderEmulatorData(const ImVec2& pos, const ImVec2& size) const;
+	void renderMemory();
+
 	void renderGotoPopUp(std::string& input);
 	void processEvent(SDL_Event* event) const;
 		
 	void setRegistriesReference(std::shared_ptr<Registries>);
 	void setCPUReference(const std::shared_ptr<CPU>);
 	void setPPUReference(const std::shared_ptr<PPU>);
-	void setOpcodeReference(std::shared_ptr<u8> opcode);
+	void setOpcodeReference(std::shared_ptr<u8>);
+	void setMemoryReference(std::shared_ptr<const Memory>);
 
 	static void setOpcodeDesc(const std::string&);
 

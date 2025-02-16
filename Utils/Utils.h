@@ -9,10 +9,11 @@ using u64 = uint64_t;
 
 const u16 instructionAmount = 512;
 
+constexpr u32 MEMORY_SIZE = 0x10000;
 const u16 kiB = 1024;
 const u8 HRAM_SIZE = 127;
-
 const u8 OAM_SIZE = 160;
+const u8 LCD_CTRL_SIZE = 12;
 const u8 MAX_OBJECTS = 40;
 
 // Screen refresh

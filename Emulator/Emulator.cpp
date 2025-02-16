@@ -46,6 +46,7 @@ namespace gbe {
 		mImGui->setRegistriesReference(mCPU->getRegistriesRef());
 		mImGui->setCPUReference(mCPU);
 		mImGui->setPPUReference(mPPU);
+		mImGui->setMemoryReference(mBus->getMemoryRef());
 
 		//mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
 

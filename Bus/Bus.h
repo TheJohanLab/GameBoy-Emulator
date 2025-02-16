@@ -32,6 +32,8 @@ class Bus
 		//void setLoadCartridgeCallback(std::function<void()> callback) { mCartridge->setLoadCallback(callback); }
 
 		std::shared_ptr<Cartridge> getCartrige() { return mCartridge; }
+		const MemoryUnion& getMemoryReference() const { return mMemory.getMemory(); } // TODO check if still needed
+		std::shared_ptr<const Memory> getMemoryRef() const { return std::shared_ptr<const Memory>(&mMemory); }
 
 		void reset();
 

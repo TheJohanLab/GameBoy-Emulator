@@ -98,10 +98,12 @@ void ImGuiRenderer::render()
 			ImGui::EndMenu();
 		}
 		
-		if (ImGui::MenuItem("Registries", nullptr, mShowRegistries)) {
+		if (ImGui::MenuItem("Registries", nullptr, mShowRegistries)) 
+		{
 			mShowRegistries = !mShowRegistries;
 		}
-		if (ImGui::MenuItem("Data", nullptr, mShowEmulatorData)) {
+		if (ImGui::MenuItem("Data", nullptr, mShowEmulatorData)) 
+		{
 			mShowEmulatorData = !mShowEmulatorData;
 		}
 
@@ -113,6 +115,15 @@ void ImGuiRenderer::render()
 			ImGui::EndMenu();
 		}
 
+
+
+		if (ImGui::MenuItem("Memory", nullptr, mShowMemory))
+		{
+			mShowMemory = !mShowMemory;
+		}
+
+
+
 		ImGui::EndMainMenuBar();
 	}
 
@@ -122,6 +133,7 @@ void ImGuiRenderer::render()
 		ImGui::ShowDemoWindow(&mShow_demo_window);
 
 	renderDataWindows();
+	renderMemory();
 
 	ImGui::Render();
 	ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), mRenderer);
@@ -129,11 +141,17 @@ void ImGuiRenderer::render()
 
 void ImGuiRenderer::renderDataWindows() const
 {
-	ImVec2 screenSize = ImGui::GetIO().DisplaySize;
-	ImVec2 windowSize1 = ImVec2(screenSize.x * 0.35f, screenSize.y * 0.40f);
-	ImVec2 windowSize2 = ImVec2(screenSize.x * 0.35f, screenSize.y * 0.20f);
+	float mainMenuHeight = 0.0f;
+	if (ImGui::BeginMainMenuBar()) {
+		mainMenuHeight = ImGui::GetWindowSize().y;
+		ImGui::EndMainMenuBar();
+	}
 
-	ImVec2 pos1 = ImVec2(screenSize.x * 0.65f, 0.05f);
+	ImVec2 screenSize = ImGui::GetIO().DisplaySize;
+	ImVec2 windowSize1 = ImVec2(screenSize.x * 0.35f, screenSize.y * 0.40f - mainMenuHeight);
+	ImVec2 windowSize2 = ImVec2(screenSize.x * 0.35f, screenSize.y * 0.20f - mainMenuHeight);
+
+	ImVec2 pos1 = ImVec2(screenSize.x * 0.65f, mainMenuHeight);
 	ImVec2 pos2 = ImVec2(screenSize.x * 0.65f, screenSize.y * 0.40f);
 
 	if (!mShowRegistries && mShowEmulatorData) 
@@ -147,24 +165,33 @@ void ImGuiRenderer::renderRegistries(const ImVec2& pos, const ImVec2& size) cons
 {
 	if (mShowRegistries) 
 	{
-		ImGui::SetNextWindowPos(pos, ImGuiCond_Always);
-		ImGui::SetNextWindowSize(size, ImGuiCond_Always);
+
+		ImGui::SetNextWindowPos(pos);
+		ImGui::SetNextWindowSize(size);
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
 		
 		ImGui::Begin("Registries");
 		ImGui::Text("A: 0x%X", *(mRegistries->getA()));
+		ImGui::SameLine();
+		ImGui::Text("F: 0x%X", *(mRegistries->getF()));
 		ImGui::Text("B: 0x%X", *(mRegistries->getB()));
+		ImGui::SameLine();
 		ImGui::Text("C: 0x%X", *(mRegistries->getC()));
 		ImGui::Text("D: 0x%X", *(mRegistries->getD()));
+		ImGui::SameLine();
 		ImGui::Text("E: 0x%X", *(mRegistries->getE()));
 		ImGui::Text("H: 0x%X", *(mRegistries->getH()));
+		ImGui::SameLine();
 		ImGui::Text("L: 0x%X", *(mRegistries->getL()));
 		ImGui::Text("Flags");
 		ImGui::Text("C: 0x%X", (mRegistries->getF()->flags.C));
+		ImGui::SameLine();
 		ImGui::Text("H: 0x%X", (mRegistries->getF()->flags.H));
 		ImGui::Text("N: 0x%X", (mRegistries->getF()->flags.N));
+		ImGui::SameLine();
 		ImGui::Text("Z: 0x%X", (mRegistries->getF()->flags.Z));
-
+		ImGui::Text("STATS");
+		ImGui::Text("LCD STATS: 0x%X", (mCPU->getInterruptFlags().first.flags.LCD_STAT));
 		ImGui::End();
 
 		ImGui::PopStyleColor();
@@ -192,17 +219,102 @@ void ImGuiRenderer::renderEmulatorData(const ImVec2& pos, const ImVec2& size) co
 	}
 }
 
-char buffer[16] = "";
+
+void ImGuiRenderer::renderMemory()
+{
+	if (!mShowMemory)
+		return;
+
+	float mainMenuHeight = 0.0f;
+	if (ImGui::BeginMainMenuBar()) {
+		mainMenuHeight = ImGui::GetWindowSize().y;
+		ImGui::EndMainMenuBar();
+	}
+
+	ImGui::SetNextWindowPos(ImVec2(0, mainMenuHeight));
+	ImGui::SetNextWindowSize(ImVec2(500, 350 - mainMenuHeight));
+
+
+	ImGui::Begin("Memory");
+
+	bool search = ImGui::InputText(" ", mSearchBuffer, IM_ARRAYSIZE(mSearchBuffer), ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_EnterReturnsTrue);
+	ImGui::SameLine();
+	if (ImGui::Button("Search") || search) 
+	{
+		mSearchAddress = std::strtol(mSearchBuffer, nullptr, 16);
+		mSearchScrolled = false;
+	}
+
+	ImGui::Separator();
+
+	if (ImGui::BeginTable("MemoryTable", 17, ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY)) 
+	{
+		ImGui::TableSetupColumn("Address", ImGuiTableColumnFlags_WidthFixed, 70.0f); 
+		for (int i = 0; i < 16; i++) 
+		{
+			ImGui::TableSetupColumn((std::stringstream() << std::uppercase << std::hex << i).str().c_str());
+		}
+		ImGui::TableHeadersRow();
+
+		for (const auto& [sectionName, memoryRegion] : mMemoryRef->getMemoryRegions()) 
+		{
+			for (u16 rowStart = 0; rowStart < memoryRegion.size; rowStart += 16) 
+			{
+				auto currAddr = rowStart + memoryRegion.offset;
+				bool highlight = (mSearchAddress >= currAddr && mSearchAddress < currAddr + 16);
+
+				ImGui::TableNextRow();
+
+				if (highlight && !mSearchScrolled)
+				{
+					mSearchScrolled = true;
+					ImGui::SetScrollHereY(0.5f); //  Scroll to the searching line
+				}
+					 
+				ImGui::TableSetColumnIndex(0);
+				if (highlight) 
+					ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, IM_COL32(255, 255, 0, 50)); // Yellow highlight whole row
+				
+				ImGui::Text("%s: %04X", sectionName.c_str(), currAddr); 
+
+				for (int i = 0; i < 16; i++) 
+				{
+					u16 index = rowStart + i;
+					if (index >= memoryRegion.size)
+						break;
+
+					ImGui::TableSetColumnIndex(i + 1);
+					if (currAddr + i == mSearchAddress) 
+						ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(255, 0, 0, 100)); // Red highlight for search
+					
+					ImGui::Text("%02X", *(mMemoryRef->getMemoryRegionData(memoryRegion) + index));
+
+					// Tooltip on hover
+					if (ImGui::IsItemHovered()) 
+						ImGui::SetTooltip("Adresse: 0x%04X", currAddr + i);
+					
+				}
+			}
+		}
+
+		ImGui::EndTable();
+	}
+
+	ImGui::End();
+
+}
+
+
 void ImGuiRenderer::renderGotoPopUp(std::string& input)
 {
 	if (ImGui::BeginPopup("goto") && mShowGotoPopup)
 	{
 	
 		ImGui::Text(" Enter a 16 bit hex address you want to go to :");
-		if (ImGui::InputText("GOTO address", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue)
+		if (ImGui::InputText("GOTO address", mGotoAddrbuffer, IM_ARRAYSIZE(mGotoAddrbuffer), ImGuiInputTextFlags_EnterReturnsTrue)
 			|| ImGui::Button("Accept"))
 		{
-			input = std::string(buffer);
+			input = std::string(mGotoAddrbuffer);
 			mShowGotoPopup = false;
 			ImGui::CloseCurrentPopup();
 			mStepMode = true;
@@ -243,6 +355,11 @@ void ImGuiRenderer::setPPUReference(const std::shared_ptr<PPU> ppu)
 void ImGuiRenderer::setOpcodeReference(std::shared_ptr<u8> opcode)
 {
 	mOpcodeValue = opcode;
+}
+
+void ImGuiRenderer::setMemoryReference(std::shared_ptr<const Memory> memory)
+{
+	mMemoryRef = memory;
 }
 
 

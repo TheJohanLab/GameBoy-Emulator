@@ -952,7 +952,7 @@ u8 Instruction8BitLogic::AND_d8(CPU& cpu)
 	u8* ARegistry = cpu.getRegistries("A");
 	u8 n8 = readNextOpcode(cpu);
 
-	SBC_RcR(cpu, &n8, ARegistry);
+	AND_R(cpu, &n8, ARegistry);
 
 	return 8;
 }
@@ -982,7 +982,7 @@ u8 Instruction8BitLogic::CP_d8(CPU& cpu)
 	u8* ARegistry = cpu.getRegistries("A");
 	u8 n8 = readNextOpcode(cpu);
 
-	CP_R(cpu, ARegistry , n8);
+	CP_R(cpu, &n8, *ARegistry);
 
 	return 8;
 }

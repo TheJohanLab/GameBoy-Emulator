@@ -12,15 +12,16 @@ class Bus
 {
 	private:
 		Memory mMemory;
+		//std::shared_ptr<Memory> mMemory{nullptr};
 		std::shared_ptr<Cartridge> mCartridge;
 
 	public:
 		Bus();
 		virtual ~Bus() = default;
 
-		u8 read(const u16 &address) const;
-		void write(const u16 &address, const u8 &data);
-		u8* getDataPtr(const u16& address);
+		u8 read(const u16 address) const;
+		void write(const u16 address, const u8 data);
+		u8* getDataPtr(const u16 address);
 
 		//Interrupts
 		interrupt_flag getInterruptEnable() const;
@@ -33,7 +34,7 @@ class Bus
 
 		std::shared_ptr<Cartridge> getCartrige() { return mCartridge; }
 		const MemoryUnion& getMemoryReference() const { return mMemory.getMemory(); } // TODO check if still needed
-		std::shared_ptr<const Memory> getMemoryRef() const { return std::shared_ptr<const Memory>(&mMemory); }
+		std::shared_ptr<const Memory> getMemoryRef() { return std::shared_ptr<const Memory>(& mMemory); }
 
 		void reset();
 

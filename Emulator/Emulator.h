@@ -27,6 +27,7 @@ namespace gbe {
 	{
 	protected:
 		//std::shared_ptr<WindowEventManager> mEventManager;
+		std::shared_ptr<Memory> mMemory;
 		std::shared_ptr<Screen> mScreen;
 		std::shared_ptr<Bus> mBus;
 		std::shared_ptr<CPU> mCPU;

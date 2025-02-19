@@ -4,14 +4,13 @@
 //#include "Utils/Addresses.h"
 //#include <memory>
 
-Bus::Bus() 
-	:mCartridge(std::make_shared<Cartridge>())
+Bus::Bus()
+	: mCartridge(std::make_shared<Cartridge>())
 {
-	mMemory = Memory();
-	//mCartridge = Cartridge();
+	
 }
 
-u8 Bus::read(const u16 &address) const
+u8 Bus::read(const u16 address) const
 {
 	if (address >= 0x00 && address < 0x8000)
 		return mCartridge->read(address);
@@ -20,12 +19,12 @@ u8 Bus::read(const u16 &address) const
 
 }
 
-void Bus::write(const u16 &address, const u8 &data)
+void Bus::write(const u16 address, const u8 data)
 {
 	mMemory.write(address, data);
 }
 
-u8* Bus::getDataPtr(const u16& address)
+u8* Bus::getDataPtr(const u16 address)
 {
 	return mMemory.getDataPtr(address);
 }

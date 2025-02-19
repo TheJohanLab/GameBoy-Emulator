@@ -148,11 +148,11 @@ void ImGuiRenderer::renderDataWindows() const
 	}
 
 	ImVec2 screenSize = ImGui::GetIO().DisplaySize;
-	ImVec2 windowSize1 = ImVec2(screenSize.x * 0.35f, screenSize.y * 0.40f - mainMenuHeight);
+	ImVec2 windowSize1 = ImVec2(screenSize.x * 0.35f, screenSize.y * 0.30f - mainMenuHeight);
 	ImVec2 windowSize2 = ImVec2(screenSize.x * 0.35f, screenSize.y * 0.20f - mainMenuHeight);
 
 	ImVec2 pos1 = ImVec2(screenSize.x * 0.65f, mainMenuHeight);
-	ImVec2 pos2 = ImVec2(screenSize.x * 0.65f, screenSize.y * 0.40f);
+	ImVec2 pos2 = ImVec2(screenSize.x * 0.65f, screenSize.y * 0.30f);
 
 	if (!mShowRegistries && mShowEmulatorData) 
 		pos2 = pos1;

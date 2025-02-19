@@ -48,15 +48,19 @@ void GameLoop::setEmulatorState(EmulatorState state)
 			break;
 		case EmulatorState::RUN:
 			GBE_LOG_INFO("Change emulator state to RUN");
+			mInitCurrState = state;
 			break;
 		case EmulatorState::STEP:
 			GBE_LOG_INFO("Change emulator state to STEP");
+			mInitCurrState = state;
 			break;
 		case EmulatorState::GOTO:
 			GBE_LOG_INFO("Change emulator state to GOTO");
+			mInitCurrState = state;
 
 			break;
 	}
+	
 	mCurrentEmulatorState = mStateFactory->createState(state, mGotoAddress);
 }
 

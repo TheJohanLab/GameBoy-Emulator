@@ -1,34 +1,14 @@
 #include "pch.h"
 
 #include "Memory.h"
-//#include <iostream>
-
-//#include "../Utils/Addresses.h"
-
 
 
 Memory::Memory()
 {
-	mMemory.rawMemory[VRAM_OFFSET] = 0x01; // Assurez-vous que la valeur change bien
-	mMemory.rawMemory[HRAM_OFFSET] = 0x02; // Assurez-vous que la valeur change bien
-	mMemory.rawMemory[ERAM_OFFSET] = 0x03; // Assurez-vous que la valeur change bien
-	mMemory.rawMemory[WRAM_OFFSET] = 0x04; // Assurez-vous que la valeur change bien
-	mMemory.rawMemory[OAM_OFFSET] = 0x05; // Assurez-vous que la valeur change bien
-	mMemory.rawMemory[LCD_CTRL_OFFSET] = 0x06; // Assurez-vous que la valeur change bien
-	mMemory.rawMemory[IF_OFFSET] = 0x07; // Assurez-vous que la valeur change bien
-	mMemory.rawMemory[IE_OFFSET] = 0x08; // Assurez-vous que la valeur change bien
-	std::cout << "VRAM[0]: " << std::hex << (int)mMemory.VRAM[0] << std::endl;
-	std::cout << "HRAM[0]: " << std::hex << (int)mMemory.HRAM[0] << std::endl;
-	std::cout << "ERAM[0]: " << std::hex << (int)mMemory.ERAM[0] << std::endl;
-	std::cout << "WRAM[0]: " << std::hex << (int)mMemory.WRAM[0] << std::endl;
-	std::cout << "OAM[0]: " << std::hex << (int)mMemory.OAM[0] << std::endl;
-	std::cout << "LCD[0]: " << std::hex << (int)mMemory.LCD_CTRL[0] << std::endl;
-	std::cout << "IF[0]: " << std::hex << (int)mMemory.IF << std::endl;
-	std::cout << "IE[0]: " << std::hex << (int)mMemory.IE << std::endl;
 }        
 
 
-u8 Memory::read(u16 const& address) const
+u8 Memory::read(u16 const address) const
 {
 	//if (address >= 0xC000 && address <= 0xDFFF)
 	//	return mWRAM[address - 0xC000];
@@ -48,12 +28,12 @@ u8 Memory::read(u16 const& address) const
 	//	return mInterruptRegistries[1];
 
 	return mMemory.rawMemory[address];
-
 }	
 
 
-void Memory::write(u16 const& address, u8 const& data)
+void Memory::write(u16 const address, u8 const data)
 {
+
 	mMemory.rawMemory[address] = data;
 	if (address == DMA)
 		mDMACallback(data);
@@ -78,13 +58,9 @@ void Memory::write(u16 const& address, u8 const& data)
 	{
  		mDMACallback(data);
 	}*/
-
-
-
-
 }
 
-u8* Memory::getDataPtr(u16 const& address)
+u8* Memory::getDataPtr(u16 const address)
 {
 	//if (address >= 0xC000 && address <= 0xDFFF)
 	//	return &mWRAM[address - 0xC000];
@@ -118,7 +94,6 @@ void Memory::reset()
 
 	//TODO check why the is necesarry for the reset
 	mMemory.LCD_CTRL = LCD_CTRL;
-	mMemory.VRAM[0] = 0x0A;
 
 	//for (auto& WRAM : mWRAM)
 	//	WRAM = { 0x00 };

@@ -67,6 +67,7 @@ typedef struct RGB{
 
 
 #define BIND_FUNC_1_ARG(obj, fn) std::bind(&fn, obj, std::placeholders::_1)
+#define BIND_FUNC_2_ARGS(obj, fn) std::bind(&fn, obj, std::placeholders::_1, std::placeholders::_2)
 #define BIND_FUNC_NO_ARGS(obj, fn) std::bind(&fn, obj)
 #define BIT(x, n) ((x >> n) & 1)
 #define JOIN_BYTES(msb, lsb) ((MSB << 8) + LSB)

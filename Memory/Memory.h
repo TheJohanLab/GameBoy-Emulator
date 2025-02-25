@@ -65,6 +65,9 @@ class Memory
 			{"IF"		, {1							, IF_OFFSET}},
 			{"IE"		, {1							, IE_OFFSET}}
 		};
+
+		using writerHandler = std::function<void(const u16, const u8)>;
+		writerHandler mWriterHandler[MEMORY_SIZE];
 	
 	public:
 		Memory();
@@ -80,6 +83,11 @@ class Memory
 		const MemoryUnion& getMemory() const;
 		std::vector<std::pair<std::string, MemoryRegion>> getMemoryRegions() const;
 		const u8* getMemoryRegionData(const MemoryRegion& region) const;
+
+	private:
+		void initWriterHandler();
+		void defaultWrite(const u16 address, const u8 data);
+		void DMAWrite(const u16 address, const u8 data);
 
 
 //callbacks

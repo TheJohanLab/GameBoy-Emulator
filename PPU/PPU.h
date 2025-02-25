@@ -129,7 +129,7 @@ public:
 
 	//TO REMOVE LATER
 	void waitForNextFrame();
-	void setOnVBlankListener(onVBlankEvent onVBlank) { mOnVBlank = onVBlank; }
+	//void setOnVBlankListener(onVBlankEvent onVBlank) { mOnVBlank = onVBlank; }
 	void setOnRenderListener(onRenderCallback callback) { mOnRender = callback; }
 
 	//void setRegistriesRef(Registries* registries);

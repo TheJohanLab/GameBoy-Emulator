@@ -35,7 +35,7 @@ namespace gbe {
 		std::shared_ptr<ImGuiHandler> mImGui;
 		std::shared_ptr<BootRom> mBootRom;
 		std::shared_ptr<GameLoop> mGameLoop;
-		std::shared_ptr<InterruptsManager> mInterruptsManager;
+		//std::shared_ptr<InterruptsManager> mInterruptsManager;
 
 	public:
 		Emulator();

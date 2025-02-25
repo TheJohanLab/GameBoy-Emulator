@@ -14,6 +14,8 @@
 
 #include "Registries/Registries.h"
 
+#include "Interrupts/InterruptsManager.h"
+
 PPU::PPU(std::shared_ptr<Bus> bus, std::shared_ptr<Screen> screen)
 	:mBus(bus), mScreen(screen)
 {
@@ -278,7 +280,9 @@ void PPU::render(u8 cycle)
 			if (readLY() >= SCREEN_HEIGHT - 1)
 			{
 				setPPUMode(PPU_VBLANK);
-				mOnVBlank(InterruptsTypes::VBLANK);
+				//mOnVBlank(InterruptsTypes::VBLANK);
+				InterruptsManager::setInterrupt(InterruptsTypes::VBLANK);
+
 			}
 			else
 				setPPUMode(PPU_OAM_SCAN);

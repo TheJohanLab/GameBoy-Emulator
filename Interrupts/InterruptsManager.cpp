@@ -8,10 +8,10 @@
 
 //#include "Utils/Log.h"
 
-InterruptsManager::InterruptsManager(std::weak_ptr<CPU> cpu_weak)
-	:mCPU_weak(cpu_weak)
+std::weak_ptr<CPU> InterruptsManager::mCPU_weak;
+
+InterruptsManager::InterruptsManager()
 {
-	
 }
 
 InterruptsManager::~InterruptsManager()
@@ -28,6 +28,11 @@ void InterruptsManager::setInterrupt(InterruptsTypes type)
 
 }
 
+void InterruptsManager::setCPU(std::weak_ptr<CPU> cpu)
+{
+	mCPU_weak = cpu;
+}
+
 void InterruptsManager::clearInterrupts()
 {
 	mActiveInterruptFlags.flags.Vblank = 0;
@@ -37,24 +42,6 @@ void InterruptsManager::clearInterrupts()
 	mActiveInterruptFlags.flags.SerialTransferCompletion = 0;
 }
 
-//void InterruptsManager::callInterruptHandler()
-//{
-//	if (!mCPU->getIMEFlag())
-//		return;
-//
-//	/*std::pair< interrupt_flag, interrupt_flag> interruptFlags = mCPU->getInterruptFlags();
-//
-//	interrupt_flag activeInterrupts;
-//	activeInterrupts.byte = ((interruptFlags.first.byte & interruptFlags.second.byte) & 0x0F);*/
-//
-//	//if (mCurrentInterrupt != InterruptsTypes::NONE)
-//	//{
-//	//	mCPU->clearIMEFlag();
-//	//	InstructionJump::PUSH_PC(*mCPU);
-//
-//	//	mInterruptsList[mCurrentInterrupt]();
-//	//}
-//}
 
 void InterruptsManager::callInterruptHandler()
 {

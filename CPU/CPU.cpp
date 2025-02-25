@@ -838,8 +838,8 @@ std::shared_ptr<InterruptsManager> CPU::getInterruptsManager()
 
 void CPU::createInternalComponents(std::weak_ptr<CPU> cpu_weak)
 {
-
-	mInterruptsManager  = std::make_shared<InterruptsManager>(cpu_weak);
+	mInterruptsManager  = std::make_shared<InterruptsManager>();
+	InterruptsManager::setCPU(cpu_weak);
 	mBootRom = std::make_shared<BootRom>(mBus, mPPU, cpu_weak);
 }
 

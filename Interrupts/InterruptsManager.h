@@ -21,7 +21,7 @@ class InterruptsManager
 using interrupt = std::function<void()>;
 
 private:
-	std::weak_ptr<CPU> mCPU_weak;
+	static std::weak_ptr<CPU> mCPU_weak;
 
 	std::vector<interrupt*> mInterruptsList = std::vector<interrupt*>();
 	interrupt mVBlankInterrupt{ nullptr };
@@ -34,16 +34,21 @@ private:
 	interrupt_flag mActiveInterruptFlags{ 0x00 };
 
 public:
-	InterruptsManager(std::weak_ptr<CPU> CPU_weak);
+	InterruptsManager();
 	~InterruptsManager();
 
 	void initInterrupts();
-	void setInterrupt(InterruptsTypes type);
+	
+	static void setInterrupt(InterruptsTypes type);
+	static void setCPU(std::weak_ptr<CPU> cpu);
+	
 	void clearInterrupts();
 	
 	void callInterruptHandler();
 
 	void setActiveVBlankInterrupt();
+
+	
 
 private:
 

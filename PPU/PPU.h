@@ -46,9 +46,11 @@ private:
 	std::array<Pixel, 4> mScreenColors;
 
 	bool mIsScanlineDrawn = false;
-	u8 mDotsElapsed = 0;
+	u8 mDotsElapsed{ 0 };
 
-	onVBlankEvent mOnVBlank{ nullptr };
+	u8 mStatLine{ 0 };
+
+	//onVBlankEvent mOnVBlank{ nullptr };
 	onRenderCallback mOnRender{ nullptr };
 
 #ifdef _DEBUG
@@ -144,6 +146,8 @@ private:
 
 	template<typename T>
 	void renderScanline();
+
+	void STATInterruptHandler();
 };
 
 

@@ -60,9 +60,9 @@ u8 PPU::getPPUMode() const
 
 void PPU::setPPUMode(u8 mode)
 {
-	LCD_status flags = getLCDStatus();
-	flags.flags.PPUMode = mode & (0x03);
-	setLCDStatus(flags.byte);
+	LCD_status STAT = getLCDStatus();
+	STAT.flags.PPUMode = mode & (0x03);
+	setLCDStatus(STAT.byte);
 
 }
 
@@ -168,7 +168,20 @@ inline u8 PPU::readLYC() const
 inline void PPU::incLY()
 {
 	//mLY = (mLY + 1) % 144;
-	u8 ly = mBus->read(LY);
+	u8 ly = readLY();
+	u8 lyc = readLYC();
+	if (ly == lyc) 
+	{
+		LCD_status STAT = getLCDStatus();
+		STAT.flags.LYC_LY = 0x01;
+		setLCDStatus(STAT.byte);
+	}
+	else 
+	{
+		LCD_status STAT = getLCDStatus();
+		STAT.flags.LYC_LY = 0x00;
+		setLCDStatus(STAT.byte);
+	}
 	mBus->write(LY, (ly + 1) % 144);
 }
 
@@ -285,20 +298,23 @@ void PPU::render(u8 cycle)
 
 			}
 			else
+			{
 				setPPUMode(PPU_OAM_SCAN);
+			}
 
+			STATInterruptHandler();
 			
 			// On passe à la ligne suivante
 
 			/* Si ligne suivante = 144 :
 			*   On passe à VBLANK
 			*	On a fait toutes les lignes, on render l'image
-			*	Interrupt ?
+			*	Interrupt STAT
 			*/
 
 			/* Sinon :
 			*	On passe en OAM pour recommencer
-			*	Interrupt ?
+			*	Interrupt STAT
 			*/
 
 
@@ -306,7 +322,7 @@ void PPU::render(u8 cycle)
 		
 		break;
 
-		 // Mode 1
+		// Mode 1
 	case PPU_VBLANK :
 
 #ifdef LOG_DEBUG
@@ -325,6 +341,7 @@ void PPU::render(u8 cycle)
 			// Si ligne suivante = 154 : on revient en haut et passe en OAM
 			// Interrupt ?
 			setPPUMode(PPU_OAM_SCAN);
+			STATInterruptHandler();
 
 		}
 
@@ -368,6 +385,7 @@ void PPU::render(u8 cycle)
 			mPPUModeDots -= (PPU_DRAWING_DOTS );
 			
 			setPPUMode(PPU_HBLANK);
+			STATInterruptHandler();
 		}
 		// On passe en HBLANK
 		// Interrupt ?
@@ -553,7 +571,37 @@ void PPU::waitForNextFrame()
 	executeFullFrameRender();
 }
 
-//void PPU::setRegistriesRef(Registries* registries)
-//{
-//	mScreen->setRegistriesRef(registries);
-//}
+
+void PPU::STATInterruptHandler()
+{
+	LCD_status STAT = getLCDStatus();
+	u8 LYCCondition = STAT.flags.LYCintSelect == 0x01 ? STAT.flags.LYC_LY : 0x00;
+	u8 mode0Condition = 0x00;
+	if (STAT.flags.mode0intSelect == 0x01)
+	{
+		mode0Condition = STAT.flags.PPUMode == 0x00 ? 0x01 : 0x00;
+	}
+	u8 mode1Condition = 0x00;
+	if (STAT.flags.mode1intSelect == 0x01)
+	{
+		mode1Condition = STAT.flags.PPUMode == 0x01 ? 0x01 : 0x00;
+	}
+	u8 mode2Condition = 0x00;
+	if (STAT.flags.mode2intSelect == 0x01)
+	{
+		mode2Condition = STAT.flags.PPUMode == 0x02 ? 0x01 : 0x00;
+	}
+
+	u8 newStatLine = LYCCondition | mode0Condition | mode1Condition | mode2Condition;
+
+	if (mStatLine == 0x00 && newStatLine == 0x01)
+	{
+		InterruptsManager::setInterrupt(InterruptsTypes::LCD_STAT);
+	}
+
+	mStatLine = newStatLine;
+
+
+
+
+}

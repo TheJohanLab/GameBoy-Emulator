@@ -22,13 +22,12 @@ private:
 	SDL_Window* mWindow{ nullptr };
 	SDL_Renderer* mRenderer{ nullptr };
 
-	std::shared_ptr<Cartridge> mCartridge{ nullptr };
-
 	std::shared_ptr<Registries> mRegistries{ nullptr };
 	std::shared_ptr<CPU> mCPU{ nullptr };
 	std::shared_ptr<PPU> mPPU{ nullptr };
 
 	std::shared_ptr<const Memory> mMemoryRef{ nullptr };
+	std::shared_ptr<const Cartridge> mCartridgeRef{ nullptr };
 	
 	std::shared_ptr<u8> mOpcodeValue{ nullptr };
 	static std::string mOpcodeDescription;
@@ -46,24 +45,13 @@ private:
 	//GOTO address renderer
 	char mGotoAddrbuffer[16] = "";
 
-	// Memory renderer
-	std::unordered_map<std::string, bool> sectionVisibility = {
-		{"VRAM", true},
-		{"ERAM", true},
-		{"WRAM", true},
-		{"OAM", true},
-		{"LCD_CTRL", true},
-		{"HRAM", true},
-		{"IF", true},
-		{"IE", true},
-	};
 
 	char mSearchBuffer[10] = "";
-	int mSearchAddress = -1;
+	int mSearchAddress{ -1 };
 	bool mSearchScrolled{ false };
 
 public:
-	ImGuiRenderer(std::shared_ptr<Cartridge>, SDL_Window*, SDL_Renderer*);
+	ImGuiRenderer(SDL_Window*, SDL_Renderer*);
 	~ImGuiRenderer();
 
 	void render() ;
@@ -80,15 +68,13 @@ public:
 	void setPPUReference(const std::shared_ptr<PPU>);
 	void setOpcodeReference(std::shared_ptr<u8>);
 	void setMemoryReference(std::shared_ptr<const Memory>);
+	void setCartridgeReference(std::shared_ptr<const Cartridge>);
 
 	static void setOpcodeDesc(const std::string&);
 
 private:
 	void initImGui() const;
 
-	//std::wstring openFileDialog() const;
-	//void loadFile(const std::wstring& filePath) const;
-	//std::string wstringToString(const std::wstring& wstr) const;
 	bool mShow_demo_window = false;
 
 //callbacks

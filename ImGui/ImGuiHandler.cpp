@@ -6,15 +6,9 @@
 
 #include <regex>
 
-ImGuiHandler::ImGuiHandler(std::shared_ptr<Cartridge> cartridge, 
-							SDL_Window* window, 
-							SDL_Renderer* renderer)
-	: mCartridge(cartridge)
+ImGuiHandler::ImGuiHandler( SDL_Window* window, SDL_Renderer* renderer)
 {
-	mImGuiRenderer = std::make_unique<ImGuiRenderer>(
-		cartridge,
-		window,
-		renderer);
+	mImGuiRenderer = std::make_unique<ImGuiRenderer>(window, renderer);
 
 	//callbacks
 	mImGuiRenderer->setOnStepModeCallback(BIND_FUNC_1_ARG(this, ImGuiHandler::setStepMode));
@@ -36,6 +30,11 @@ void ImGuiHandler::setOnGotoModeCallback(onGotoModeCallback callback)
 void ImGuiHandler::setOnRomLoadedCallback(onRomLoaded callback)
 {
 	mOnRomLoaded = callback;
+}
+
+void ImGuiHandler::setOnLoadCartridgeCallback(onCartridgeLoaded callback)
+{
+	mOnCartridgeLoaded = callback;
 }
 
 void ImGuiHandler::setOnQuitCallback(onRomLoaded callback)
@@ -68,6 +67,11 @@ void ImGuiHandler::setOpcodeReference(std::shared_ptr<u8> opcode)
 void ImGuiHandler::setMemoryReference(std::shared_ptr<const Memory> memory)
 {
 	mImGuiRenderer->setMemoryReference(memory);
+}
+
+void ImGuiHandler::setCartridgeReference(std::shared_ptr<const Cartridge> cartridge)
+{
+	mImGuiRenderer->setCartridgeReference(cartridge);
 }
 
 
@@ -114,12 +118,9 @@ void ImGuiHandler::loadRom(bool reload)
 	{
 		mRomFilePath.clear();
 		mRomFilePath = openFileDialog();
-
 	}
 
-
 	if (!mRomFilePath.empty()) {
-		//loadedFilePath = wstringToString(filePath);
 		loadFile(mRomFilePath);
 	}
 	else
@@ -164,8 +165,8 @@ std::wstring ImGuiHandler::openFileDialog() const
 void ImGuiHandler::loadFile(const std::wstring& filePath) const
 {
 	//printRomInHex(filePath);
-	mCartridge->loadCartridge(filePath);
-	mOnRomLoaded();
+	mOnCartridgeLoaded(filePath);
+	mOnRomLoaded(); // TODO Remove this callback and merge it with the previous one
 
 
 	//std::wifstream file(filePath); // Utiliser wifstream pour les fichiers en Unicode

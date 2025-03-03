@@ -16,10 +16,7 @@ class Cartridge
 using loadCallback = std::function<void()>;
 
 private:
-	//std::shared_ptr<Bus> mBus = nullptr;
-
 	std::vector<u8> mROMData;
-	std::vector<u8> mRAMData;
 
 	loadCallback mLoadCartridgeCallback = nullptr;
 public:
@@ -31,5 +28,9 @@ public:
 	void setLoadCallback(std::function<void()> callback);
 
 	u8 read(u16 address) const;
+
+
+	const std::vector<u8>& getROMData() const { return mROMData; }
+
 
 };

@@ -26,13 +26,13 @@ u8* Memory::getDataPtr(u16 const address)
 }
 
 
-void Memory::reset()
+void Memory::resetMemory()
 {
 	auto LCD_CTRL = mMemory.LCD_CTRL;
 	
 	mMemory.rawMemory.fill(0x00);
 
-	//TODO check why the is necesarry for the reset
+	//TODO check why it is mandatory for the reset
 	mMemory.LCD_CTRL = LCD_CTRL;
 
 }

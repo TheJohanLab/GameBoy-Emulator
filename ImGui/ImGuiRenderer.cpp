@@ -19,10 +19,8 @@
 
 std::string ImGuiRenderer::mOpcodeDescription{ "NOP" };
 
-ImGuiRenderer::ImGuiRenderer(std::shared_ptr<Cartridge> cartridge, 
-							SDL_Window* window, 
-							SDL_Renderer* renderer)
-	:mCartridge(cartridge), mWindow(window), mRenderer(renderer)
+ImGuiRenderer::ImGuiRenderer(SDL_Window* window, SDL_Renderer* renderer)
+	:mWindow(window), mRenderer(renderer)
 {
 	initImGui();
 }
@@ -190,7 +188,6 @@ void ImGuiRenderer::renderRegistries(const ImVec2& pos, const ImVec2& size) cons
 		ImGui::Text("N: 0x%X", (mRegistries->getF()->flags.N));
 		ImGui::SameLine();
 		ImGui::Text("Z: 0x%X", (mRegistries->getF()->flags.Z));
-		ImGui::Text("STATS");
 		ImGui::Text("LCD STATS: 0x%X", (mCPU->getInterruptFlags().first.flags.LCD_STAT));
 		ImGui::End();
 
@@ -256,6 +253,46 @@ void ImGuiRenderer::renderMemory()
 		}
 		ImGui::TableHeadersRow();
 
+		//ROM (Cartridge)
+		const auto& romData = mCartridgeRef->getROMData();
+		for (u16 rowStart = 0; rowStart < romData.size(); rowStart += 16)
+		{
+			auto currAddr = rowStart;
+			bool highlight = (mSearchAddress >= currAddr && mSearchAddress < currAddr + 16);
+
+			ImGui::TableNextRow();
+
+			if (highlight && !mSearchScrolled)
+			{
+				mSearchScrolled = true;
+				ImGui::SetScrollHereY(0.5f);
+			}
+
+			ImGui::TableSetColumnIndex(0);
+			if (highlight)
+				ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, IM_COL32(255, 255, 0, 50));
+
+			std::string sectionName = currAddr < 0x4000 ? "ROM0" : "ROM1";
+			ImGui::Text("%s: %04X", sectionName.c_str(), currAddr);
+
+			for (int i = 0; i < 16; i++)
+			{
+				u16 index = rowStart + i;
+				if (index >= romData.size())
+					break;
+
+				ImGui::TableSetColumnIndex(i + 1);
+				if (currAddr + i == mSearchAddress)
+					ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(255, 0, 0, 100));
+
+				ImGui::Text("%02X", romData[index]);
+
+				if (ImGui::IsItemHovered())
+					ImGui::SetTooltip("Adresse: 0x%04X", currAddr + i);
+			}
+		}
+
+		//RAM
 		for (const auto& [sectionName, memoryRegion] : mMemoryRef->getMemoryRegions()) 
 		{
 			for (u16 rowStart = 0; rowStart < memoryRegion.size; rowStart += 16) 
@@ -360,6 +397,11 @@ void ImGuiRenderer::setOpcodeReference(std::shared_ptr<u8> opcode)
 void ImGuiRenderer::setMemoryReference(std::shared_ptr<const Memory> memory)
 {
 	mMemoryRef = memory;
+}
+
+void ImGuiRenderer::setCartridgeReference(std::shared_ptr<const Cartridge> cartridge)
+{
+	mCartridgeRef = cartridge;
 }
 
 

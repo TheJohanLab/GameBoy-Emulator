@@ -255,8 +255,8 @@ inline void GameLoop::logInfos() const
 
 inline void GameLoop::reset()
 {
-	mCPU->resetMemory();
 	mPPU->reset();
+	mCPU->resetMemory();
 }
 
 

@@ -27,13 +27,14 @@ namespace gbe {
 
 	void Emulator::initEmulator()
 	{
-		mBus = std::make_shared<Bus>();
+		mMemory = std::make_shared<Memory>();
+		mCartridge = std::make_shared<Cartridge>();
+		mBus = std::make_shared<Bus>(mMemory, mCartridge);
 
-		//mEventManager = std::make_shared<WindowEventManager>();
 		mScreen = std::make_shared<Screen>(SCREEN_WIDTH, SCREEN_HEIGHT);
 		mPPU = std::make_shared<PPU>(mBus, mScreen);
 		mCPU = std::make_shared<CPU>(mBus, mPPU);
-		mImGui = std::make_shared<ImGuiHandler>(mBus->getCartrige(), mScreen->getWindow(), mScreen->getRenderer());
+		mImGui = std::make_shared<ImGuiHandler>(mScreen->getWindow(), mScreen->getRenderer());
 
 		auto weak_cpu = std::weak_ptr(mCPU);
 		if (weak_cpu.expired())
@@ -46,17 +47,14 @@ namespace gbe {
 		mImGui->setRegistriesReference(mCPU->getRegistriesRef());
 		mImGui->setCPUReference(mCPU);
 		mImGui->setPPUReference(mPPU);
-		mImGui->setMemoryReference(mBus->getMemoryRef());
+		mImGui->setMemoryReference(mMemory);
+		mImGui->setCartridgeReference(mCartridge);
 
-		//mBootRom = std::make_shared<BootRom>(mBus, mPPU, mCPU);
 
 		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU, mImGui);
 
 		setCallbacks();
 
-		//mPPU->writeOAM(1, 20, 50, 2, 0);
-		//mPPU->writeOAM(2, 22, 52, 2, 0);
-		//mBus->write(DMA, 0xC0);
 	}
 
 	void Emulator::setCallbacks()
@@ -66,6 +64,8 @@ namespace gbe {
 		//mBus->setLoadCartridgeCallback(BIND_FUNC_NO_ARGS(mGameLoop, GameLoop::setCartridgeLoaded));
 		//mPPU->setOnVBlankListener(BIND_FUNC_1_ARG(mCPU->getInterruptsManager(), InterruptsManager::setInterrupt));
 		mCPU->getBootRom()->setStateCallback(BIND_FUNC_1_ARG(mGameLoop, GameLoop::setEmulatorState));
+
+		mImGui->setOnLoadCartridgeCallback(BIND_FUNC_1_ARG(mCartridge, Cartridge::loadCartridge));
 	}
 
 	void Emulator::boot()

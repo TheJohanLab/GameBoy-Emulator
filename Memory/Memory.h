@@ -78,7 +78,7 @@ class Memory
 
 		u8* getDataPtr(u16 const address);
 
-		void reset();
+		void resetMemory();
 
 		const MemoryUnion& getMemory() const;
 		std::vector<std::pair<std::string, MemoryRegion>> getMemoryRegions() const;

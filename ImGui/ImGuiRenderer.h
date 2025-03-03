@@ -23,8 +23,8 @@ private:
 	SDL_Renderer* mRenderer{ nullptr };
 
 	std::shared_ptr<Registries> mRegistries{ nullptr };
-	std::shared_ptr<CPU> mCPU{ nullptr };
-	std::shared_ptr<PPU> mPPU{ nullptr };
+	std::shared_ptr<CPU> mCPURef{ nullptr };
+	std::shared_ptr<PPU> mPPURef{ nullptr };
 
 	std::shared_ptr<const Memory> mMemoryRef{ nullptr };
 	std::shared_ptr<const Cartridge> mCartridgeRef{ nullptr };

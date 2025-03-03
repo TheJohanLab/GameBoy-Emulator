@@ -3,7 +3,6 @@
 #include "GameLoop.h"
 
 #include "ImGui/ImGuiHandler.h"
-//#include "Utils/Log.h"
 
 EmulatorState GameLoop::mInitCurrState{ EmulatorState::INIT };
 
@@ -265,8 +264,6 @@ void GameLoop::onRomLoaded()
 	reset();
 	setEmulatorState(EmulatorState::BOOT);
 	mCPU->getInterruptsManager()->initInterrupts();
-	//mIsCartridgeLoaded = true;
-	/*mBootRom->initializeBootRom();*/
 }
 
 void GameLoop::addToSequence(std::function<void()> task)

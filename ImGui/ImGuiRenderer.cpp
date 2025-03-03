@@ -188,7 +188,7 @@ void ImGuiRenderer::renderRegistries(const ImVec2& pos, const ImVec2& size) cons
 		ImGui::Text("N: 0x%X", (mRegistries->getF()->flags.N));
 		ImGui::SameLine();
 		ImGui::Text("Z: 0x%X", (mRegistries->getF()->flags.Z));
-		ImGui::Text("LCD STATS: 0x%X", (mCPU->getInterruptFlags().first.flags.LCD_STAT));
+		ImGui::Text("LCD STAT: 0x%X", (mMemoryRef->read(LCD_STATUS)));
 		ImGui::End();
 
 		ImGui::PopStyleColor();
@@ -207,8 +207,8 @@ void ImGuiRenderer::renderEmulatorData(const ImVec2& pos, const ImVec2& size) co
 		ImGui::Begin("Data");
 		ImGui::Text("PC:     0x%X", CPU::getCurrPC()); //TODO Change this static mPC to a private variable
 		ImGui::Text("OpCode: %s", mOpcodeDescription.c_str());
-		ImGui::Text("Next Opcodes:  %s", mCPU->getNextOpcodesValue().c_str());
-		ImGui::Text("SP:     0x%X", *(mCPU->getSP()));
+		ImGui::Text("Next Opcodes:  %s", mCPURef->getNextOpcodesValue().c_str());
+		ImGui::Text("SP:     0x%X", *(mCPURef->getSP()));
 
 		ImGui::End();
 
@@ -381,12 +381,12 @@ void ImGuiRenderer::setRegistriesReference(std::shared_ptr<Registries> registrie
 
 void ImGuiRenderer::setCPUReference(const std::shared_ptr<CPU> cpu)
 {
-	mCPU = cpu;
+	mCPURef = cpu;
 }
 
 void ImGuiRenderer::setPPUReference(const std::shared_ptr<PPU> ppu)
 {
-	mPPU = ppu;
+	mPPURef = ppu;
 }
 
 void ImGuiRenderer::setOpcodeReference(std::shared_ptr<u8> opcode)

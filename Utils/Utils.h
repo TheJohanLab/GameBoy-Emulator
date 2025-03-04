@@ -10,6 +10,7 @@ using u64 = uint64_t;
 const u16 instructionAmount = 512;
 
 constexpr u32 MEMORY_SIZE = 0x10000;
+constexpr u16 CARTRIDGE_MEMORY_SIZE{ 0x8000 };
 const u16 kiB = 1024;
 const u8 HRAM_SIZE = 127;
 const u8 OAM_SIZE = 160;

@@ -255,40 +255,46 @@ void ImGuiRenderer::renderMemory()
 
 		//ROM (Cartridge)
 		const auto& romData = mCartridgeRef->getROMData();
-		for (u16 rowStart = 0; rowStart < romData.size(); rowStart += 16)
+		for (u16 rowStart = 0; rowStart < CARTRIDGE_MEMORY_SIZE; rowStart += 16)
 		{
 			auto currAddr = rowStart;
 			bool highlight = (mSearchAddress >= currAddr && mSearchAddress < currAddr + 16);
-
+		
 			ImGui::TableNextRow();
-
+		
 			if (highlight && !mSearchScrolled)
 			{
 				mSearchScrolled = true;
 				ImGui::SetScrollHereY(0.5f);
 			}
-
+		
 			ImGui::TableSetColumnIndex(0);
 			if (highlight)
 				ImGui::TableSetBgColor(ImGuiTableBgTarget_RowBg0, IM_COL32(255, 255, 0, 50));
-
+		
 			std::string sectionName = currAddr < 0x4000 ? "ROM0" : "ROM1";
 			ImGui::Text("%s: %04X", sectionName.c_str(), currAddr);
-
+		
 			for (int i = 0; i < 16; i++)
 			{
 				u16 index = rowStart + i;
 				if (index >= romData.size())
 					break;
-
+		
 				ImGui::TableSetColumnIndex(i + 1);
 				if (currAddr + i == mSearchAddress)
 					ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, IM_COL32(255, 0, 0, 100));
-
+		
 				ImGui::Text("%02X", romData[index]);
-
+		
 				if (ImGui::IsItemHovered())
 					ImGui::SetTooltip("Adresse: 0x%04X", currAddr + i);
+			}
+
+			if (currAddr >= 0x7000)
+			{
+				int a = 0;
+				GBE_LOG_INFO("1");
 			}
 		}
 

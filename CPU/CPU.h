@@ -21,7 +21,8 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		std::shared_ptr<Bus> mBus;
 		std::shared_ptr<PPU> mPPU;
-		Registries mRegistries = Registries(*this);
+		Registries mRegistries;
+
 		std::array<Instruction*, instructionAmount> mInstructionSet;
 
 		std::shared_ptr<BootRom> mBootRom{ nullptr };
@@ -39,7 +40,7 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		u8 executeOpcode(const u16 opcode);
 		u8 executeOpcodeCB(const u16 opcodeCB);
-		void callInterruptHandler();
+		//void callInterruptHandler();
 
 		u8* getRegistries(const std::string& registry);
 		combinedRegistries* getCombinedRegistries(const std::string& registry);
@@ -67,7 +68,7 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		void setIMEFlag();
 		void clearIMEFlag();
-		inline u8 getIMEFlag() const;
+		u8 getIMEFlag() const;
 
 		
 		std::pair<interrupt_flag, interrupt_flag> getInterruptFlags() const;
@@ -91,6 +92,8 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		const std::string getNextOpcodesValue() { return mNextOpcodes; }
 		void setNextOpcodesValue(const std::string& opcodes) { mNextOpcodes = opcodes; }
+
+
 
 public:
 	static u16 getCurrPC() { return mPC; }

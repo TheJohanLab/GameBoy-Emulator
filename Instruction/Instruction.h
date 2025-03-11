@@ -2,16 +2,18 @@
 //#include <string>
 //#include "Utils/Utils.h"
 #include "Utils/Log.h"
+
 class CPU;
+class Registries;
+class Bus;
 
 class Instruction
 {
 protected:
 	const char* mName;
-	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
-	//void (*pmInstruction)(CPU & cpu, Instruction& instance);
-	u8 (*pmInstruction)(CPU & cpu);
-	u8 mClockCycle;
+
+	std::function<u8(CPU& cpu)> mInstruction;
+
 
 	static u8 readNextOpcode(CPU& cpu);
 	static u16 readNextTwoOpcodes(CPU& cpu);
@@ -35,13 +37,25 @@ protected:
 
 	static void setClockCycle(Instruction& instance, const u8& clockCycle);
 
+	//New approch
+	std::vector<std::reference_wrapper<uint8_t>>& mRegistries; 
+	uint16_t& mPC;
+	uint16_t& mSP;
+	uint16_t& mBC;
+	uint16_t& mDE;
+	uint16_t& mHL;
+	uint16_t& mAF;
+	std::shared_ptr<Bus> mBus;
+
 public:
-	Instruction();
-	Instruction(const char* name, u8(*pInstruction)(CPU& cpu), u8 clockCycles);
+	//Instruction();
+	//Instruction(const char* name, u8(*pInstruction)(CPU& cpu), u8 clockCycles);
+	Instruction(const char* name, std::function<u8(CPU& cpu)> instruction, Registries&, std::shared_ptr<Bus>);
 	virtual ~Instruction() = default;
 
 	std::string getName() const { return mName; }
-	auto getFunctionPointer() const { return pmInstruction; }
-	u8 getClockCycle() const { return mClockCycle; }
+	//auto getFunctionPointer() const { return pmInstruction; }
+	//New approch
+	auto getFunctionPointer() const { return mInstruction; }
 };
 

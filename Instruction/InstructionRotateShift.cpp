@@ -2,8 +2,8 @@
 
 #include "InstructionRotateShift.h"
 
-InstructionRotateShift::InstructionRotateShift(const char* name, u8(*pInstruction)(CPU& cpu), u8 ClockCycle)
-	:Instruction(name, pInstruction, ClockCycle)
+InstructionRotateShift::InstructionRotateShift(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus)
+	:Instruction(name, instruction, reg, bus)
 {
 }
 

@@ -4,13 +4,12 @@
 #include "CPU/CPU.h"
 
 
-Instruction::Instruction()
-	:mName("unnamed"), pmInstruction(nullptr), mClockCycle(0)
-{
-}
-
-Instruction::Instruction(const char* name, u8(*pInstruction)(CPU& cpu), u8 clockCycles)
-	:mName(name), pmInstruction(pInstruction), mClockCycle(clockCycles)
+Instruction::Instruction(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& registries, std::shared_ptr<Bus> bus)
+	:mName(name), mInstruction(instruction),
+	mBus(bus),
+	mRegistries(registries.getRegistriesRef()),
+	mAF(registries.getAFRef()), mBC(registries.getAFRef()), mDE(registries.getAFRef()), mHL(registries.getAFRef()),
+	mSP(registries.getSPRef()), mPC(registries.getPCRef())
 {
 }
 
@@ -199,8 +198,3 @@ bool Instruction::isOverflow(const u16& baseValue, const u16& additionalValue, b
 
 }
 
-//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
-void Instruction::setClockCycle(Instruction& instance, const u8& clockCycle)
-{
-	instance.mClockCycle = clockCycle;
-}

@@ -122,8 +122,8 @@ void Instruction8BitLogic::CP_R(CPU& cpu, u8* cmpRegistry, u8 ARegistry)
 
 
 // Public methods
-Instruction8BitLogic::Instruction8BitLogic(const char* name, u8(*pInstruction)(CPU& cpu), u8 ClockCycle)
-	:Instruction(name, pInstruction, ClockCycle)
+Instruction8BitLogic::Instruction8BitLogic(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus)
+	:Instruction(name, instruction, reg, bus)
 {
 }
 

@@ -5,7 +5,7 @@
 class InstructionRotateShift : public Instruction
 {
 	public:
-		InstructionRotateShift(const char* name, u8 (*pInstruction)(CPU & cpu), u8 clockCycles);
+		InstructionRotateShift(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus);
 		virtual ~InstructionRotateShift() = default;
 
 		static u8 RLCA(CPU& cpu);				//0x07 RLCA

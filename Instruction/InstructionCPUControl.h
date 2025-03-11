@@ -6,7 +6,7 @@
 class InstructionCPUControl : public Instruction
 {
 		public:
-			InstructionCPUControl(const char* name, u8 (*pInstruction)(CPU & cpu), u8 clockCycles);
+			InstructionCPUControl(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus);
 			virtual ~InstructionCPUControl() = default;
 
 			static u8 nop(CPU & cpu);			//0x00 NOP

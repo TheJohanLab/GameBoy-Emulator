@@ -32,8 +32,8 @@ void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, u16 registriesValue)
 	HLRegistries->setValue(result);
 }
 
-Instruction16BitLogic::Instruction16BitLogic(const char* name, u8 (*pInstruction)(CPU & cpu), u8 ClockCycle)
-	:Instruction(name, pInstruction, ClockCycle)
+Instruction16BitLogic::Instruction16BitLogic(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus)
+	:Instruction(name, instruction, reg, bus)
 {
 }
 

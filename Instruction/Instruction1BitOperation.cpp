@@ -2,13 +2,17 @@
 
 #include "Instruction1BitOperation.h"
 
-Instruction1BitOperation::Instruction1BitOperation(const char* name, u8 (*pInstruction)(CPU & cpu), u8 ClockCycle)
-	:Instruction(name, pInstruction, ClockCycle)
+//Instruction1BitOperation::Instruction1BitOperation(const char* name, u8 (*pInstruction)(CPU & cpu), u8 ClockCycle)
+//	:Instruction(name, pInstruction, ClockCycle)
+//{
+//}
+
+Instruction1BitOperation::Instruction1BitOperation(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus)
+	:Instruction(name, instruction, reg, bus)
 {
 }
 
-// Instructions test bit
-// TODO : refactor ?
+
 u8 Instruction1BitOperation::BIT_0cB(CPU& cpu)
 {
 	u8* registry = cpu.getRegistries("B");

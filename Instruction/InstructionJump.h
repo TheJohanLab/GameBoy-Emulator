@@ -6,7 +6,7 @@
 class InstructionJump : public Instruction
 {
 	public:
-		InstructionJump(const char* name, u8 (*pInstruction)(CPU & cpu), u8 clockCycles);
+		InstructionJump(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus);
 		virtual ~InstructionJump() = default;
 
 		static u8 JR_r8(CPU& cpu);		//0x18 JR r8

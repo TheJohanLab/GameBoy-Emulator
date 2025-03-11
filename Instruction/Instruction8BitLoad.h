@@ -13,7 +13,8 @@ private:
 		static void LD_RcpRRq(CPU& cpu, combinedRegistries& addrRegistries, u8& dstRegistry);
 
 public:
-		Instruction8BitLoad(const char* name, u8(*pInstruction)(CPU & cpu), u8 clockCycles);
+		//Instruction8BitLoad(const char* name, u8(*pInstruction)(CPU & cpu), u8 clockCycles);
+		Instruction8BitLoad(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus);
 		virtual ~Instruction8BitLoad() = default;
 
 		static u8 LD_pBCqcA(CPU& cpu);	//0x02 LD (BC),A

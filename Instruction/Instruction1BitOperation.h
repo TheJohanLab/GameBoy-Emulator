@@ -6,7 +6,9 @@
 class Instruction1BitOperation : public Instruction
 {
 	public:
-		Instruction1BitOperation(const char* name, u8 (*pInstruction)(CPU & cpu), u8 clockCycles);
+		//Instruction1BitOperation(const char* name, u8 (*pInstruction)(CPU & cpu), u8 clockCycles);
+		//New approch
+		Instruction1BitOperation(const char* name, std::function<u8(CPU& cpu)> instruction, Registries&, std::shared_ptr<Bus>);
 		virtual ~Instruction1BitOperation() = default;
 		
 		static u8 BIT_0cB(CPU& cpu);		//0xCB40 BIT 0,B
@@ -15,7 +17,7 @@ class Instruction1BitOperation : public Instruction
 		static u8 BIT_0cE(CPU& cpu);		//0xCB43 BIT 0,E
 		static u8 BIT_0cH(CPU& cpu);		//0xCB44 BIT 0,H
 		static u8 BIT_0cL(CPU& cpu);		//0xCB45 BIT 0,L
-		static u8 BIT_0cpHLq(CPU& cpu);	//0xCB46 BIT 0,(HL)
+		static u8 BIT_0cpHLq(CPU& cpu);		//0xCB46 BIT 0,(HL)
 		static u8 BIT_0cA(CPU& cpu);		//0xCB47 BIT 0,A
 		static u8 BIT_1cB(CPU& cpu);		//0xCB48 BIT 1,B
 		static u8 BIT_1cC(CPU& cpu);		//0xCB49 BIT 1,C

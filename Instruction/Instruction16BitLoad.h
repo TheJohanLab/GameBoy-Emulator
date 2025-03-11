@@ -13,7 +13,7 @@ private:
 	static void POP_RR(CPU& cpu, combinedRegistries& registries);
 
 public:
-	Instruction16BitLoad(const char* name, u8 (*pInstruction)(CPU & cpu), u8 clockCycles);
+	Instruction16BitLoad(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus);
 	virtual ~Instruction16BitLoad() = default;
 
 	static u8 LD_BCcd16(CPU& cpu);	//0x01 LD BC,d16

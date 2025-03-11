@@ -2,6 +2,12 @@
 //#include "../Utils/Utils.h"
 //#include <iostream>
 
+
+enum Reg
+{
+	A = 0, B, C, D, E, H, L, F	
+};
+
 struct combinedRegistries 
 {
 	u8* highRegistry;
@@ -77,22 +83,31 @@ struct combinedRegistries
 
 };
 
-class CPU;
 
 class Registries
 {
 	private:
 
-		u8 A,B,C,D,E,H,L;
+		//TODO Remove unused parts when it's working with new approch
+		u8 A{ 0 }, B{ 0 }, C{ 0 }, D{ 0 }, E{ 0 }, H{ 0 }, L{ 0 };
 		combinedRegistries AF, BC, DE, HL;
 		flags F;
 		u16 SP{ 0xFFFE };
 		u16 PC{ 0x0 };
-		u8 IME;
+		u8 IME{ 0 };
+
+		
+		// New approch
+		std::vector<std::reference_wrapper<u8>> mRegistries;
+
+		u16& mBC = *reinterpret_cast<u16*>(&B);
+		u16& mDE = *reinterpret_cast<u16*>(&D);
+		u16& mHL = *reinterpret_cast<u16*>(&H);
+		u16& mAF = *reinterpret_cast<u16*>(&A);
 
 	public:
 		Registries();
-		Registries(CPU& cpu);
+		//Registries(CPU& cpu);
 		virtual ~Registries() = default;
 
 		u8* getA() { return &A; }
@@ -137,6 +152,23 @@ class Registries
 		void setIME() { this->IME = 1; }
 		void clearIME() { this->IME = 0; }
 		u8 getIME() const { return this->IME; } 
+
+		//New approch
+		const std::vector<std::reference_wrapper<const u8>>& getRegistriesRef() const;
+		std::vector<std::reference_wrapper<u8>>& getRegistriesRef();
+
+		const u16& getPCRef() const;
+		u16& getPCRef();
+
+		const u16& getSPRef() const;
+		u16& getSPRef();
+
+		u16& getAFRef();
+		u16& getBCRef();
+		u16& getDERef();
+		u16& getHLRef();
+
+
 
 };
 

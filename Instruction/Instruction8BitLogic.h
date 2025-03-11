@@ -19,7 +19,7 @@ class Instruction8BitLogic : public Instruction
 		static void CP_R(CPU& cpu, u8* cmpRegistry, u8 ARegistry);
 
 	public:
-		Instruction8BitLogic(const char* name, u8 (*pInstruction)(CPU & cpu), u8 clockCycles);
+		Instruction8BitLogic(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus);
 		virtual ~Instruction8BitLogic() = default;
 
 		static u8 INC_B(CPU& cpu);		//0x04 INC B

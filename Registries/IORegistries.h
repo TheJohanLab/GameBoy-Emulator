@@ -49,7 +49,7 @@ typedef struct s_LCD_status {
     u8 mode1intSelect : 1;
     u8 mode2intSelect : 1;
     u8 LYCintSelect : 1;
-    u8 NOT_USED : 2;
+    u8 NOT_USED : 1;
 
 } s_LCD_status;
 

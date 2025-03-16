@@ -23,7 +23,7 @@ class CPU : std::enable_shared_from_this<CPU>
 		std::shared_ptr<PPU> mPPU;
 		Registries mRegistries;
 
-		std::array<Instruction*, instructionAmount> mInstructionSet;
+		std::array<std::unique_ptr<Instruction>, instructionAmount> mInstructionSet;
 
 		std::shared_ptr<BootRom> mBootRom{ nullptr };
 		std::shared_ptr<InterruptsManager> mInterruptsManager{ nullptr };

@@ -18,6 +18,6 @@ class InstructionFactory
 		virtual ~InstructionFactory() = default;
 		//Instruction* createInstruction(InstructionEnum instructionEnum, const char* name, u8 (*pInstruction)(CPU & cpu), u8 clockCycles) const;
 		//New approch
-		Instruction* createInstruction(InstructionEnum instructionEnum, const char* name, std::function<u8(CPU& cpu)>) const;
+		std::unique_ptr<Instruction> createInstruction(InstructionEnum instructionEnum, const char* name, std::function<u8(CPU& cpu)>) const;
 };
 

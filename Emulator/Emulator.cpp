@@ -57,12 +57,14 @@ namespace gbe {
 
 	}
 
+
+
 	void Emulator::setCallbacks()
 	{
+
+
 		mBus->setDMATransfertCallback(BIND_FUNC_1_ARG(mPPU, PPU::startDMATransfer));
-		//mBus->setLoadCartridgeCallback(std::bind(&Emulator::startEmulator, this));
-		//mBus->setLoadCartridgeCallback(BIND_FUNC_NO_ARGS(mGameLoop, GameLoop::setCartridgeLoaded));
-		//mPPU->setOnVBlankListener(BIND_FUNC_1_ARG(mCPU->getInterruptsManager(), InterruptsManager::setInterrupt));
+
 		mCPU->getBootRom()->setStateCallback(BIND_FUNC_1_ARG(mGameLoop, GameLoop::setEmulatorState));
 
 		mImGui->setOnLoadCartridgeCallback(BIND_FUNC_1_ARG(mCartridge, Cartridge::loadCartridge));

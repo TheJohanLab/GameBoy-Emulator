@@ -28,6 +28,7 @@ public:
 	void setLoadCallback(std::function<void()> callback);
 
 	u8 read(u16 address) const;
+	u8& read(u16 address);
 
 
 	const std::vector<u8>& getROMData() const { return mROMData; }

@@ -74,6 +74,8 @@ class Memory
 		virtual ~Memory() = default;
 
 		u8 read(u16 const address) const;
+		u8& read(u16 const address);
+
 		void write(u16 const address, u8 const data);
 
 		u8* getDataPtr(u16 const address);

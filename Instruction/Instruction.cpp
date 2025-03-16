@@ -3,14 +3,32 @@
 #include "Instruction.h"
 #include "CPU/CPU.h"
 
+std::vector<std::reference_wrapper<uint8_t>>* Instruction::mRegistries;
+flags* Instruction::mFlags = nullptr;
+uint16_t* Instruction::mPC = nullptr;
+uint16_t* Instruction::mSP = nullptr;
+uint16_t* Instruction::mBC = nullptr;
+uint16_t* Instruction::mDE = nullptr;
+uint16_t* Instruction::mHL = nullptr;
+uint16_t* Instruction::mAF = nullptr;
+std::shared_ptr<Bus> Instruction::mBus = nullptr;
 
 Instruction::Instruction(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& registries, std::shared_ptr<Bus> bus)
-	:mName(name), mInstruction(instruction),
-	mBus(bus),
-	mRegistries(registries.getRegistriesRef()),
-	mAF(registries.getAFRef()), mBC(registries.getAFRef()), mDE(registries.getAFRef()), mHL(registries.getAFRef()),
-	mSP(registries.getSPRef()), mPC(registries.getPCRef())
+	:mName(name), mInstruction(instruction)
 {
+}
+
+void Instruction::setDataReferences(Registries& registries, std::shared_ptr<Bus> bus)
+{
+	mRegistries = &registries.getRegistriesRef();
+	mFlags = &registries.getFlagsRef();
+	mAF = &registries.getAFRef();
+	mBC = &registries.getBCRef();
+	mDE = &registries.getDERef();
+	mHL = &registries.getHLRef();
+	mSP = &registries.getSPRef();
+	mPC = &registries.getPCRef();
+	mBus = bus;
 }
 
 
@@ -83,22 +101,24 @@ void Instruction::setHFlag(CPU& cpu, u8 baseValue, u8 additionalValue, bool subs
 	flagRegistry->flags.H = isHalfOverflow(baseValue, additionalValue, substract) ? 1 : 0;
 }
 
-void Instruction::setHFlag(CPU& cpu, u8 value)
+void Instruction::setHFlag(CPU& cpu, const u8 value)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	flagRegistry->flags.H = (value == 0x01) ? 1 : 0;
+	//flags* flagRegistry = cpu.getFlagRegistry();
+	//flagRegistry->flags.H = (value == 0x01) ? 1 : 0;
+	mFlags->flags.H = value;
 }
 
-void Instruction::setZFlag(CPU& cpu, u8 value)
+void Instruction::setZFlag(CPU& cpu, const u8 value)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	flagRegistry->flags.Z = (value == 0x00) ? 1 : 0;
+
+	mFlags->flags.Z = value;
 }
 
-void Instruction::setNFlag(CPU& cpu, u8 value)
+void Instruction::setNFlag(CPU& cpu, const u8 value)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	flagRegistry->flags.N = (value == 0x01) ? 1 : 0;
+	//flags* flagRegistry = cpu.getFlagRegistry();
+	//flagRegistry->flags.N = (value == 0x01) ? 1 : 0;
+	mFlags->flags.N = value;
 }
 
 void Instruction::setCFlag(CPU& cpu, const u8& baseValue, const u8& additionnalValue, bool substract)

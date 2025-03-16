@@ -93,6 +93,10 @@ class CPU : std::enable_shared_from_this<CPU>
 		const std::string getNextOpcodesValue() { return mNextOpcodes; }
 		void setNextOpcodesValue(const std::string& opcodes) { mNextOpcodes = opcodes; }
 
+		//New approch
+		Registries& getRegistriesRef2() { return mRegistries; }
+
+
 
 
 public:

@@ -14,6 +14,8 @@ namespace Instructions_tests
 	TEST_CLASS(I16BitLogicTests)
 	{
 	private:
+		static std::shared_ptr <Memory> memory;
+		static std::shared_ptr <Cartridge> cartridge;
 		static std::shared_ptr <Bus> bus;
 		static std::shared_ptr <PPU> ppu;
 		static std::shared_ptr<CPU> cpu;
@@ -22,7 +24,9 @@ namespace Instructions_tests
 
 		TEST_CLASS_INITIALIZE(ClassInitialize)
 		{
-			bus = std::make_shared<Bus>();
+			memory = std::make_shared<Memory>();
+			cartridge = std::make_shared<Cartridge>();
+			bus = std::make_shared<Bus>(memory, cartridge);
 			ppu = std::make_shared<PPU>(bus, nullptr);
 			cpu = std::make_shared<CPU>(bus, ppu);
 		}
@@ -136,6 +140,8 @@ namespace Instructions_tests
 
 		
 	};
+	std::shared_ptr<Memory> I16BitLogicTests::memory = nullptr;
+	std::shared_ptr<Cartridge> I16BitLogicTests::cartridge = nullptr;
 	std::shared_ptr<Bus> I16BitLogicTests::bus = nullptr;
 	std::shared_ptr<CPU> I16BitLogicTests::cpu = nullptr;
 	std::shared_ptr<PPU> I16BitLogicTests::ppu = nullptr;

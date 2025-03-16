@@ -20,6 +20,14 @@ u8 Bus::read(const u16 address) const
 
 }
 
+u8& Bus::read(const u16 address)
+{
+	if (address >= 0x00 && address < 0x8000)
+		return mCartridge->read(address);
+	else
+		return mMemory->read(address);
+}
+
 void Bus::write(const u16 address, const u8 data)
 {
 	mMemory->write(address, data);

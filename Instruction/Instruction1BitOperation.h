@@ -217,9 +217,9 @@ class Instruction1BitOperation : public Instruction
 
 	private:
 
-		static void BIT_bcr(u8& registry, flags& flagRegistry, u8 bit, CPU& cpu);
-		static void RES_bcr(u8& registry, flags& flagRegistry, u8 bit);
-		static void RES_bcpHLq(u8& registry, flags& flagRegistry, u8 bit, CPU& cpu);
+		static void BIT_bcr(const u8& registry, const u8 bit, CPU& cpu);
+		static void RES_bcr(u8& registry, u8 bit);
+		static void RES_bcpHLq(u8& registry, u8 bit, CPU& cpu);
 		static void SET_bcr(u8& registry, flags& flagRegistry, u8 bit);
 		static void SET_bcpHLq(u8& registry, flags& flagRegistry, u8 bit, CPU& cpu);
 };

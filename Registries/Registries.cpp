@@ -17,7 +17,7 @@ Registries::Registries()
 	HL.highRegistry = &H;
 	HL.lowRegistry = &L;
 
-	mRegistries = { A, B, C, D, E, H, L, F.F };
+	mRegistries = { A, F.F, B, C, D, E, H, L};
 }
 
 std::vector<std::reference_wrapper<u8>>& Registries::getRegistriesRef()
@@ -49,6 +49,16 @@ const u16& Registries::getSPRef() const
 u16& Registries::getSPRef()
 {
 	return SP;
+}
+
+const flags& Registries::getFlagsRef() const
+{
+	return F;
+}
+
+flags& Registries::getFlagsRef()
+{
+	return F;
 }
 
 u16& Registries::getAFRef()

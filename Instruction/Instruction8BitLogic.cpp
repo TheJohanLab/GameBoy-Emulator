@@ -4,26 +4,23 @@
 
 
 // Private methods
-void Instruction8BitLogic::INC_R(CPU& cpu, u8* registry)
+void Instruction8BitLogic::INC_R(CPU& cpu, u8& registry)
 {
-	setHFlag(cpu, *registry, 1, false);
+	setHFlag(cpu, registry, 1, false);
 
-	*registry += 1;
-	if (*registry == 0)
-		int a = 0;
-	setZFlag(cpu, *registry);
+	registry += 1;
+
+	setZFlag(cpu, registry == 0);
 	setNFlag(cpu, 0x00);
 }
 
-void Instruction8BitLogic::DEC_R(CPU& cpu, u8* registry)
+void Instruction8BitLogic::DEC_R(CPU& cpu, u8& registry)
 {
-	setHFlag(cpu, *registry, 1, true);
+	setHFlag(cpu, registry, 1, true);
 
-	*registry -= 1;
-	if (*registry == 0)
-		int a = 0;
+	registry -= 1;
+	setZFlag(cpu, registry == 0);
 	setNFlag(cpu, 0x01);
-	setZFlag(cpu, *registry);
 }
 
 void Instruction8BitLogic::ADD_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry)
@@ -34,7 +31,7 @@ void Instruction8BitLogic::ADD_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistr
 	*dstRegistry += *additionalValue;
 
 	setNFlag(cpu, 0x00);
-	setZFlag(cpu, *dstRegistry);
+	setZFlag(cpu, *dstRegistry == 0);
 
 }
 
@@ -48,7 +45,7 @@ void Instruction8BitLogic::ADC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistr
 	*dstRegistry += *additionalValue + carryFlag;
 
 	setNFlag(cpu, 0x00);
-	setZFlag(cpu, *dstRegistry);
+	setZFlag(cpu, *dstRegistry == 0);
 
 }
 
@@ -61,7 +58,7 @@ void Instruction8BitLogic::SUB_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistr
 	*dstRegistry -= *additionalValue;
 
 	setNFlag(cpu, 0x01);
-	setZFlag(cpu, *dstRegistry);
+	setZFlag(cpu, *dstRegistry == 0);
 }
 
 void Instruction8BitLogic::SBC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry)
@@ -73,7 +70,7 @@ void Instruction8BitLogic::SBC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistr
 	*dstRegistry -= (*additionalValue + carryFlag);
 
 	setNFlag(cpu, 0x01);
-	setZFlag(cpu, *dstRegistry);
+	setZFlag(cpu, *dstRegistry == 0);
 }
 
 
@@ -81,7 +78,7 @@ void Instruction8BitLogic::AND_R(CPU& cpu, u8* additionalValue, u8* dstRegistry)
 {
 	*dstRegistry = *dstRegistry & *additionalValue;
 
-	setZFlag(cpu, *dstRegistry);
+	setZFlag(cpu, *dstRegistry == 0);
 	setHFlag(cpu, 0x01);
 	setNFlag(cpu, 0x00);
 	setCFlag(cpu, 0x00);
@@ -91,7 +88,7 @@ void Instruction8BitLogic::XOR_R(CPU& cpu, u8* additionalValue, u8* dstRegistry)
 {
 	*dstRegistry = *dstRegistry ^ *additionalValue;
 
-	setZFlag(cpu, *dstRegistry);
+	setZFlag(cpu, *dstRegistry == 0);
 	setHFlag(cpu, 0x00);
 	setNFlag(cpu, 0x00);
 	setCFlag(cpu, 0x00);
@@ -101,7 +98,7 @@ void Instruction8BitLogic::OR_R(CPU& cpu, u8* additionalValue, u8* dstRegistry)
 {
 	*dstRegistry = *dstRegistry | *additionalValue;
 
-	setZFlag(cpu, *dstRegistry);
+	setZFlag(cpu, *dstRegistry == 0);
 	setHFlag(cpu, 0x00);
 	setNFlag(cpu, 0x00);
 	setCFlag(cpu, 0x00);
@@ -129,80 +126,80 @@ Instruction8BitLogic::Instruction8BitLogic(const char* name, std::function<u8(CP
 
 u8 Instruction8BitLogic::INC_B(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	INC_R(cpu, registry);
+	auto& B = (*mRegistries)[Reg::B];
+	INC_R(cpu, B);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::DEC_B(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	DEC_R(cpu, registry);
+	auto& B = (*mRegistries)[Reg::B];
+	DEC_R(cpu, B);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::INC_C(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	INC_R(cpu, registry);
+	auto& C = (*mRegistries)[Reg::C];
+	INC_R(cpu, C);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::DEC_C(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	DEC_R(cpu, registry);
+	auto& C = (*mRegistries)[Reg::C];
+	DEC_R(cpu, C);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::INC_D(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	INC_R(cpu, registry);
+	auto& D = (*mRegistries)[Reg::D];
+	INC_R(cpu, D);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::DEC_D(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	DEC_R(cpu, registry);
+	auto& D = (*mRegistries)[Reg::D];
+	DEC_R(cpu, D);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::INC_E(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	INC_R(cpu, registry);
+	auto& E = (*mRegistries)[Reg::E];
+	INC_R(cpu, E);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::DEC_E(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	DEC_R(cpu, registry);
+	auto& E = (*mRegistries)[Reg::E];
+	DEC_R(cpu, E);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::INC_H(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	INC_R(cpu, registry);
+	auto& H = (*mRegistries)[Reg::H];
+	INC_R(cpu, H);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::DEC_H(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	DEC_R(cpu, registry);
+	auto& H = (*mRegistries)[Reg::H];
+	DEC_R(cpu, H);
 
 	return 4;
 }
@@ -234,16 +231,16 @@ u8 Instruction8BitLogic::DAA(CPU& cpu)
 
 u8 Instruction8BitLogic::INC_L(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	INC_R(cpu, registry);
+	auto& L = (*mRegistries)[Reg::L];
+	INC_R(cpu, L);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::DEC_L(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	DEC_R(cpu, registry);
+	auto& L = (*mRegistries)[Reg::L];
+	DEC_R(cpu, L);
 
 	return 4;
 }
@@ -260,20 +257,16 @@ u8 Instruction8BitLogic::CPL(CPU& cpu)
 
 u8 Instruction8BitLogic::INC_pHLq(CPU& cpu)
 {
-	u8* A_registry = cpu.getRegistries("A");
-	combinedRegistries* HL_registry = cpu.getCombinedRegistries("HL");
-	u8* pData = cpu.getMemoryDataPtr(*HL_registry);
-	INC_R(cpu, pData);
+	auto& data = mBus->read(*mHL);
+	INC_R(cpu, data);
 
 	return 12;
 }
 
 u8 Instruction8BitLogic::DEC_pHLq(CPU& cpu)
 {
-	u8* A_registry = cpu.getRegistries("A");
-	combinedRegistries* HL_registry = cpu.getCombinedRegistries("HL");
-	u8* pData = cpu.getMemoryDataPtr(*HL_registry);
-	DEC_R(cpu, pData);
+	auto& data = mBus->read(*mHL);
+	DEC_R(cpu, data);
 
 	return 12;
 }
@@ -290,16 +283,16 @@ u8 Instruction8BitLogic::SCF(CPU& cpu)
 
 u8 Instruction8BitLogic::INC_A(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	INC_R(cpu, registry);
+	auto& A = (*mRegistries)[Reg::A];
+	INC_R(cpu, A);
 
 	return 4;
 }
 
 u8 Instruction8BitLogic::DEC_A(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	DEC_R(cpu, registry);
+	auto& A = (*mRegistries)[Reg::A];
+	DEC_R(cpu, A);
 
 	return 4;
 }

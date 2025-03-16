@@ -12,7 +12,13 @@ Memory::Memory()
 u8 Memory::read(u16 const address) const
 {
 	return mMemory.rawMemory[address];
-}	
+}
+
+u8& Memory::read(u16 const address)
+{
+	return mMemory.rawMemory[address];
+}
+
 
 
 void Memory::write(u16 const address, u8 const data)

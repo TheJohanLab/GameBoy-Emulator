@@ -168,26 +168,28 @@ void ImGuiRenderer::renderRegistries(const ImVec2& pos, const ImVec2& size) cons
 		ImGui::SetNextWindowSize(size);
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.5f));
 		
+		auto registries = mRegistries->getRegistriesRef();
+
 		ImGui::Begin("Registries");
-		ImGui::Text("A: 0x%X", *(mRegistries->getA()));
+		ImGui::Text("A: 0x%X", (registries[Reg::A].get()));
 		ImGui::SameLine();
-		ImGui::Text("F: 0x%X", *(mRegistries->getF()));
-		ImGui::Text("B: 0x%X", *(mRegistries->getB()));
+		ImGui::Text("F: 0x%X", (registries[Reg::F].get()));
+		ImGui::Text("B: 0x%X", (registries[Reg::B].get()));
 		ImGui::SameLine();
-		ImGui::Text("C: 0x%X", *(mRegistries->getC()));
-		ImGui::Text("D: 0x%X", *(mRegistries->getD()));
+		ImGui::Text("C: 0x%X", (registries[Reg::C].get()));
+		ImGui::Text("D: 0x%X", (registries[Reg::D].get()));
 		ImGui::SameLine();
-		ImGui::Text("E: 0x%X", *(mRegistries->getE()));
-		ImGui::Text("H: 0x%X", *(mRegistries->getH()));
+		ImGui::Text("E: 0x%X", (registries[Reg::E].get()));
+		ImGui::Text("H: 0x%X", (registries[Reg::H].get()));
 		ImGui::SameLine();
-		ImGui::Text("L: 0x%X", *(mRegistries->getL()));
+		ImGui::Text("L: 0x%X", (registries[Reg::L].get()));
 		ImGui::Text("Flags");
-		ImGui::Text("C: 0x%X", (mRegistries->getF()->flags.C));
+		ImGui::Text("C: 0x%X", (mRegistries->getFlagsRef().flags.C));
 		ImGui::SameLine();
-		ImGui::Text("H: 0x%X", (mRegistries->getF()->flags.H));
-		ImGui::Text("N: 0x%X", (mRegistries->getF()->flags.N));
+		ImGui::Text("H: 0x%X", (mRegistries->getFlagsRef().flags.H));
+		ImGui::Text("N: 0x%X", (mRegistries->getFlagsRef().flags.N));
 		ImGui::SameLine();
-		ImGui::Text("Z: 0x%X", (mRegistries->getF()->flags.Z));
+		ImGui::Text("Z: 0x%X", (mRegistries->getFlagsRef().flags.Z));
 		ImGui::Text("LCD STAT: 0x%X", (mMemoryRef->read(LCD_STATUS)));
 		ImGui::End();
 
@@ -291,11 +293,6 @@ void ImGuiRenderer::renderMemory()
 					ImGui::SetTooltip("Adresse: 0x%04X", currAddr + i);
 			}
 
-			if (currAddr >= 0x7000)
-			{
-				int a = 0;
-				GBE_LOG_INFO("1");
-			}
 		}
 
 		//RAM
@@ -380,9 +377,9 @@ void ImGuiRenderer::processEvent(SDL_Event* event) const
 	ImGui_ImplSDL2_ProcessEvent(event);
 }
 
-void ImGuiRenderer::setRegistriesReference(std::shared_ptr<Registries> registries)
+void ImGuiRenderer::setRegistriesReference(const Registries & registries)
 {
-	mRegistries = registries;
+	mRegistries = &registries;
 }
 
 void ImGuiRenderer::setCPUReference(const std::shared_ptr<CPU> cpu)

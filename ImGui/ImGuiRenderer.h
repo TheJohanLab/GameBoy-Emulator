@@ -22,7 +22,7 @@ private:
 	SDL_Window* mWindow{ nullptr };
 	SDL_Renderer* mRenderer{ nullptr };
 
-	std::shared_ptr<Registries> mRegistries{ nullptr };
+	const Registries* mRegistries{ nullptr };
 	std::shared_ptr<CPU> mCPURef{ nullptr };
 	std::shared_ptr<PPU> mPPURef{ nullptr };
 
@@ -63,7 +63,7 @@ public:
 	void renderGotoPopUp(std::string& input);
 	void processEvent(SDL_Event* event) const;
 		
-	void setRegistriesReference(std::shared_ptr<Registries>);
+	void setRegistriesReference(const Registries &);
 	void setCPUReference(const std::shared_ptr<CPU>);
 	void setPPUReference(const std::shared_ptr<PPU>);
 	void setOpcodeReference(std::shared_ptr<u8>);

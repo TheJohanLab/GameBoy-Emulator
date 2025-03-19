@@ -24,7 +24,7 @@ private:
 public:
 	ImGuiHandler(SDL_Window*, SDL_Renderer*);
 
-	void setRegistriesReference(std::shared_ptr<Registries>);
+	void setRegistriesReference(const Registries & registries);
 	void setCPUReference(std::shared_ptr<CPU>);
 	void setPPUReference(std::shared_ptr<PPU>);
 	void setOpcodeReference(std::shared_ptr<u8>);

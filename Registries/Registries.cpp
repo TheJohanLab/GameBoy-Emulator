@@ -18,6 +18,7 @@ Registries::Registries()
 	HL.lowRegistry = &L;
 
 	mRegistries = { A, F.F, B, C, D, E, H, L};
+	mConstRegistries = { A, F.F, B, C, D, E, H, L};
 }
 
 std::vector<std::reference_wrapper<u8>>& Registries::getRegistriesRef()
@@ -25,10 +26,10 @@ std::vector<std::reference_wrapper<u8>>& Registries::getRegistriesRef()
 	return mRegistries;
 }
 
+
 const std::vector<std::reference_wrapper<const u8>>& Registries::getRegistriesRef() const
 {
-	//TODO
-	return std::vector<std::reference_wrapper<const u8>>();
+	return mConstRegistries;
 }
 
 const u16& Registries::getPCRef() const

@@ -1039,580 +1039,515 @@ u8 Instruction1BitOperation::RES_7cA(CPU& cpu)
 	return 8;
 }
 
-// Instructions set bit
-// TODO : refactor ?
+
 u8 Instruction1BitOperation::SET_0cB(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x00);
+	auto& B = (*mRegistries)[Reg::B];
+	SET_bcr(B, 0x00);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_0cC(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x00);
+	auto& C = (*mRegistries)[Reg::C];
+	SET_bcr(C, 0x00);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_0cD(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x00);
+	auto& D = (*mRegistries)[Reg::D];
+	SET_bcr(D, 0x00);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_0cE(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x00);
+	auto& E = (*mRegistries)[Reg::E];
+	SET_bcr(E, 0x00);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_0cH(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x00);
+	auto& H = (*mRegistries)[Reg::H];
+	SET_bcr(H, 0x00);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_0cL(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x00);
+	auto& L = (*mRegistries)[Reg::L];
+	SET_bcr(L, 0x00);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_0cpHLq(CPU& cpu)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcpHLq(*registry, *flagRegistry, 0x00, cpu);
+	u8& data = mBus->read(*mHL);
+	SET_bcpHLq(data, 0x00, cpu);
 
 	return 16;
 }
 
 u8 Instruction1BitOperation::SET_0cA(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x00);
+	auto& A = (*mRegistries)[Reg::A];
+	SET_bcr(A, 0x00);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_1cB(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x01);
+	auto& B = (*mRegistries)[Reg::B];
+	SET_bcr(B, 0x01);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_1cC(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x01);
+	auto& C = (*mRegistries)[Reg::C];
+	SET_bcr(C, 0x01);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_1cD(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x01);
+	auto& D = (*mRegistries)[Reg::D];
+	SET_bcr(D, 0x01);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_1cE(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x01);
+	auto& E = (*mRegistries)[Reg::E];
+	SET_bcr(E, 0x01);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_1cH(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x01);
+	auto& H = (*mRegistries)[Reg::H];
+	SET_bcr(H, 0x01);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_1cL(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x01);
+	auto& L = (*mRegistries)[Reg::L];
+	SET_bcr(L, 0x01);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_1cpHLq(CPU& cpu)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcpHLq(*registry, *flagRegistry, 0x01, cpu);
+	u8& data = mBus->read(*mHL);
+	SET_bcpHLq(data, 0x01, cpu);
 
 	return 16;
 }
 
 u8 Instruction1BitOperation::SET_1cA(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x01);
+	auto& A = (*mRegistries)[Reg::A];
+	SET_bcr(A, 0x01);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_2cB(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x02);
+	auto& B = (*mRegistries)[Reg::B];
+	SET_bcr(B, 0x02);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_2cC(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x02);
+	auto& C = (*mRegistries)[Reg::C];
+	SET_bcr(C, 0x02);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_2cD(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x02);
+	auto& D = (*mRegistries)[Reg::D];
+	SET_bcr(D, 0x02);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_2cE(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x02);
+	auto& E = (*mRegistries)[Reg::E];
+	SET_bcr(E, 0x02);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_2cH(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x02);
+	auto& H = (*mRegistries)[Reg::H];
+	SET_bcr(H, 0x02);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_2cL(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x02);
+	auto& L = (*mRegistries)[Reg::L];
+	SET_bcr(L, 0x02);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_2cpHLq(CPU& cpu)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcpHLq(*registry, *flagRegistry, 0x02, cpu);
+	u8& data = mBus->read(*mHL);
+	SET_bcpHLq(data, 0x02, cpu);
 
 	return 16;
 }
 
 u8 Instruction1BitOperation::SET_2cA(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x02);
+	auto& A = (*mRegistries)[Reg::A];
+	SET_bcr(A, 0x02);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_3cB(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x03);
+	auto& B = (*mRegistries)[Reg::B];
+	SET_bcr(B, 0x03);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_3cC(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x03);
+	auto& C = (*mRegistries)[Reg::C];
+	SET_bcr(C, 0x03);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_3cD(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x03);
+	auto& D = (*mRegistries)[Reg::D];
+	SET_bcr(D, 0x03);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_3cE(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x03);
+	auto& E = (*mRegistries)[Reg::E];
+	SET_bcr(E, 0x03);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_3cH(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x03);
+	auto& H = (*mRegistries)[Reg::H];
+	SET_bcr(H, 0x03);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_3cL(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x03);
+	auto& L = (*mRegistries)[Reg::L];
+	SET_bcr(L, 0x03);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_3cpHLq(CPU& cpu)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcpHLq(*registry, *flagRegistry, 0x03, cpu);
+	u8& data = mBus->read(*mHL);
+	SET_bcpHLq(data, 0x03, cpu);
 
 	return 16;
 }
 
 u8 Instruction1BitOperation::SET_3cA(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x03);
+	auto& A = (*mRegistries)[Reg::A];
+	SET_bcr(A, 0x03);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_4cB(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x04);
+	auto& B = (*mRegistries)[Reg::B];
+	SET_bcr(B, 0x04);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_4cC(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x04);
+	auto& C = (*mRegistries)[Reg::C];
+	SET_bcr(C, 0x04);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_4cD(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x04);
+	auto& D = (*mRegistries)[Reg::D];
+	SET_bcr(D, 0x04);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_4cE(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x04);
+	auto& E = (*mRegistries)[Reg::E];
+	SET_bcr(E, 0x04);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_4cH(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x04);
+	auto& H = (*mRegistries)[Reg::H];
+	SET_bcr(H, 0x04);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_4cL(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x04);
+	auto& L = (*mRegistries)[Reg::L];
+	SET_bcr(L, 0x04);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_4cpHLq(CPU& cpu)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcpHLq(*registry, *flagRegistry, 0x04, cpu);
+	u8& data = mBus->read(*mHL);
+	SET_bcpHLq(data, 0x04, cpu);
 
 	return 16;
 }
 
 u8 Instruction1BitOperation::SET_4cA(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x04);
+	auto& A = (*mRegistries)[Reg::A];
+	SET_bcr(A, 0x04);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_5cB(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x05);
+	auto& B = (*mRegistries)[Reg::B];
+	SET_bcr(B, 0x05);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_5cC(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x05);
+	auto& C = (*mRegistries)[Reg::C];
+	SET_bcr(C, 0x05);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_5cD(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x05);
+	auto& D = (*mRegistries)[Reg::D];
+	SET_bcr(D, 0x05);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_5cE(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x05);
+	auto& E = (*mRegistries)[Reg::E];
+	SET_bcr(E, 0x05);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_5cH(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x05);
+	auto& H = (*mRegistries)[Reg::H];
+	SET_bcr(H, 0x05);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_5cL(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x05);
+	auto& L = (*mRegistries)[Reg::L];
+	SET_bcr(L, 0x05);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_5cpHLq(CPU& cpu)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcpHLq(*registry, *flagRegistry, 0x05, cpu);
+	u8& data = mBus->read(*mHL);
+	SET_bcpHLq(data, 0x05, cpu);
 
 	return 16;
 }
 
 u8 Instruction1BitOperation::SET_5cA(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x05);
+	auto& A = (*mRegistries)[Reg::A];
+	SET_bcr(A, 0x05);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_6cB(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x06);
+	auto& B = (*mRegistries)[Reg::B];
+	SET_bcr(B, 0x06);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_6cC(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x06);
+	auto& C = (*mRegistries)[Reg::C];
+	SET_bcr(C, 0x06);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_6cD(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x06);
+	auto& D = (*mRegistries)[Reg::D];
+	SET_bcr(D, 0x06);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_6cE(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x06);
+	auto& E = (*mRegistries)[Reg::E];
+	SET_bcr(E, 0x06);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_6cH(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x06);
+	auto& H = (*mRegistries)[Reg::H];
+	SET_bcr(H, 0x06);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_6cL(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x06);
+	auto& L = (*mRegistries)[Reg::L];
+	SET_bcr(L, 0x06);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_6cpHLq(CPU& cpu)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcpHLq(*registry, *flagRegistry, 0x06, cpu);
+	u8& data = mBus->read(*mHL);
+	SET_bcpHLq(data, 0x06, cpu);
 
 	return 16;
 }
 
 u8 Instruction1BitOperation::SET_6cA(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x06);
+	auto& A = (*mRegistries)[Reg::A];
+	SET_bcr(A, 0x06);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_7cB(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("B");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x07);
+	auto& B = (*mRegistries)[Reg::B];
+	SET_bcr(B, 0x07);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_7cC(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("C");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x07);
+	auto& C = (*mRegistries)[Reg::C];
+	SET_bcr(C, 0x07);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_7cD(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("D");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x07);
+	auto& D = (*mRegistries)[Reg::D];
+	SET_bcr(D, 0x07);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_7cE(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("E");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x07);
+	auto& E = (*mRegistries)[Reg::E];
+	SET_bcr(E, 0x07);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_7cH(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("H");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x07);
+	auto& H = (*mRegistries)[Reg::H];
+	SET_bcr(H, 0x07);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_7cL(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("L");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x07);
+	auto& L = (*mRegistries)[Reg::L];
+	SET_bcr(L, 0x07);
 
 	return 8;
 }
 
 u8 Instruction1BitOperation::SET_7cpHLq(CPU& cpu)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	u8* registry = cpu.getMemoryDataPtr(*cpu.getCombinedRegistries("HL"));
-	SET_bcpHLq(*registry, *flagRegistry, 0x07, cpu);
+	u8& data = mBus->read(*mHL);
+	SET_bcpHLq(data, 0x07, cpu);
 
 	return 16;
 }
 
 u8 Instruction1BitOperation::SET_7cA(CPU& cpu)
 {
-	u8* registry = cpu.getRegistries("A");
-	flags* flagRegistry = cpu.getFlagRegistry();
-	SET_bcr(*registry, *flagRegistry, 0x07);
+	auto& A = (*mRegistries)[Reg::A];
+	SET_bcr(A, 0x07);
 
 	return 8;
 }
@@ -1626,22 +1561,22 @@ void Instruction1BitOperation::BIT_bcr(const u8& registry, const u8 bit, CPU& cp
 
 void Instruction1BitOperation::RES_bcr(u8& registry, u8 bit)
 {
-	setBit(registry, bit, 0x00);
+	SET_BIT(registry, bit, 0x00);
 }
 
 void Instruction1BitOperation::RES_bcpHLq(u8& registry, u8 bit, CPU& cpu)
 {
-	setBit(registry, bit, 0x00);
+	SET_BIT(registry, bit, 0x00);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), registry);
 }
 
-void Instruction1BitOperation::SET_bcr(u8& registry, flags& flagRegistry, u8 bit)
+void Instruction1BitOperation::SET_bcr(u8& registry, u8 bit)
 {
-	setBit(registry, bit, 0x01);
+	SET_BIT(registry, bit, 0x01);
 }
 
-void Instruction1BitOperation::SET_bcpHLq(u8& registry, flags& flagRegistry, u8 bit, CPU& cpu)
+void Instruction1BitOperation::SET_bcpHLq(u8& registry, u8 bit, CPU& cpu)
 {
-	setBit(registry, bit, 0x01);
+	SET_BIT(registry, bit, 0x01);
 	cpu.writeMemory(*cpu.getCombinedRegistries("HL"), registry);
 }

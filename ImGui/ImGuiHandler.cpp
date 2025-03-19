@@ -44,7 +44,7 @@ void ImGuiHandler::setOnQuitCallback(onRomLoaded callback)
 
 
 
-void ImGuiHandler::setRegistriesReference(std::shared_ptr<Registries> registries)
+void ImGuiHandler::setRegistriesReference(const  Registries & registries)
 {
 	mImGuiRenderer->setRegistriesReference(registries);
 }

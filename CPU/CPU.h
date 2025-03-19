@@ -83,7 +83,7 @@ class CPU : std::enable_shared_from_this<CPU>
 		void stopCPU();
 		void resumeCPUFromInterrupt();
 
-		std::shared_ptr<Registries> getRegistriesRef() { return std::shared_ptr<Registries>(&mRegistries); } //TODO make mRegistries shared_ptr
+		//std::shared_ptr<Registries> getRegistriesRef() { return std::shared_ptr<Registries>(&mRegistries); } //TODO make mRegistries shared_ptr
 
 		void resetMemory();
 
@@ -94,7 +94,7 @@ class CPU : std::enable_shared_from_this<CPU>
 		void setNextOpcodesValue(const std::string& opcodes) { mNextOpcodes = opcodes; }
 
 		//New approch
-		Registries& getRegistriesRef2() { return mRegistries; }
+		Registries& getRegistriesRef() { return mRegistries; }
 
 
 

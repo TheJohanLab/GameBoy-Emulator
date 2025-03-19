@@ -70,7 +70,9 @@ typedef struct RGB{
 #define BIND_FUNC_1_ARG(obj, fn) std::bind(&fn, obj, std::placeholders::_1)
 #define BIND_FUNC_2_ARGS(obj, fn) std::bind(&fn, obj, std::placeholders::_1, std::placeholders::_2)
 #define BIND_FUNC_NO_ARGS(obj, fn) std::bind(&fn, obj)
-#define BIT(x, n) ((x >> n) & 1)
+
+#define BIT(byte, pos) ((byte >> pos) & 1)
+#define SET_BIT(byte, pos, val) ((byte) = ((byte) & ~(1 << (pos))) | ((val) << (pos)))
 #define JOIN_BYTES(msb, lsb) ((MSB << 8) + LSB)
 
 #define CONVERT_SEC_TO_DOT(sec) sec * 4194304

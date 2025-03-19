@@ -106,6 +106,8 @@ class Registries
 		
 		// New approch
 		std::vector<std::reference_wrapper<u8>> mRegistries;
+		std::vector<std::reference_wrapper<const u8>> mConstRegistries; 
+
 
 		u16& mBC = *reinterpret_cast<u16*>(&C);
 		u16& mDE = *reinterpret_cast<u16*>(&E);

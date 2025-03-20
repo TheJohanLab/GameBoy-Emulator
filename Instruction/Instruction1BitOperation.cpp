@@ -525,8 +525,7 @@ u8 Instruction1BitOperation::BIT_7cA(CPU& cpu)
 	return 8;
 }
 
-// Instructions reset bit
-// TODO : refactor ?
+
 u8 Instruction1BitOperation::RES_0cB(CPU& cpu)
 {
 	auto& B = (*mRegistries)[Reg::B];
@@ -537,7 +536,7 @@ u8 Instruction1BitOperation::RES_0cB(CPU& cpu)
 
 u8 Instruction1BitOperation::RES_0cC(CPU& cpu)
 {
-	auto& C = (*mRegistries)[Reg::B];
+	auto& C = (*mRegistries)[Reg::C];
 	RES_bcr(C, 0x00);
 
 	return 8;

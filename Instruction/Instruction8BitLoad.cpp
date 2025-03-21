@@ -11,10 +11,11 @@ Instruction8BitLoad::Instruction8BitLoad(const char* name, std::function<u8(CPU&
 
 u8 Instruction8BitLoad::LD_pBCqcA(CPU& cpu)
 {
-	u8* Aregistry = cpu.getRegistries("A");
+	u8& A = (*mRegistries)[Reg::A];
+	auto& BC = *mBC;
 	combinedRegistries* BCRegistries = cpu.getCombinedRegistries("BC");
 
-	LD_pRRqcR(cpu, *BCRegistries, *Aregistry);
+	LD_pRRqcR(cpu, *BCRegistries, A);
 
 	return 8;
 }

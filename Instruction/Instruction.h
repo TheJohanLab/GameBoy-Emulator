@@ -37,14 +37,13 @@ protected:
 
 
 	//New approch
-	static std::vector<std::reference_wrapper<uint8_t>>* mRegistries; 
+	static std::vector<std::reference_wrapper<u8>>* mRegistries; 
+	static std::vector<std::reference_wrapper<u16>>* mDoubleRegistries; 
+
 	static flags* mFlags;
 	static u16* mPC;
 	static u16* mSP;
-	static u16* mBC;
-	static u16* mDE;
-	static u16* mHL;
-	static u16* mAF;
+
 	static std::shared_ptr<Bus> mBus;
 
 public:

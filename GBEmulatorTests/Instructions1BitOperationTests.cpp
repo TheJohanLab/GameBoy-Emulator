@@ -27,7 +27,7 @@ TEST_METHOD(BIT_##n##c##reg) \
 TEST_METHOD(BIT_##n##cpHLq) \
 { \
 	bus->write(0x8000, (1 << n));\
-	cpu->getRegistriesRef().getHLRef() = 0x8000;\
+	cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL].get() = 0x8000;\
     cpu->executeOpcodeCB(opcode); \
 	Assert::AreEqual(static_cast<u8>(0x00), static_cast<u8>(cpu->getFlagRegistry()->flags.Z));\
 	Assert::AreEqual(static_cast<u8>(0x01), static_cast<u8>(cpu->getFlagRegistry()->flags.H));\
@@ -55,7 +55,7 @@ TEST_METHOD(RES_##bit##c##reg)\
 #define TEST_RES_pHLq(bit, opcode) \
 TEST_METHOD(RES_##bit##_pHLq) \
 { \
-	cpu->getRegistriesRef().getHLRef() = 0xC000;\
+	cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL].get() = 0xC000;\
 	cpu->writeMemory(0xC000, 0xFF);\
 	cpu->executeOpcodeCB(opcode);\
 	Assert::AreEqual(static_cast<u8>(0xFF & ~(1 << bit)), cpu->readMemory(0xC000));\
@@ -82,7 +82,7 @@ TEST_METHOD(SET_##bit##c##reg) \
 #define TEST_SET_pHLq(bit, opcode) \
 TEST_METHOD(SET_##bit##cpHLq) \
 { \
-    cpu->getRegistriesRef().getHLRef() = 0xC000; \
+    cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL].get() = 0xC000; \
     cpu->writeMemory(0xC000, 0x00); \
     cpu->executeOpcodeCB(opcode); \
     Assert::AreEqual(static_cast<u8>(1 << bit), cpu->readMemory(0xC000)); \

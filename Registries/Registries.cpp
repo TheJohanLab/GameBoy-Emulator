@@ -19,11 +19,17 @@ Registries::Registries()
 
 	mRegistries = { A, F.F, B, C, D, E, H, L};
 	mConstRegistries = { A, F.F, B, C, D, E, H, L};
+	mDoubleRegistries = { mAF, mBC, mDE, mHL};
 }
 
 std::vector<std::reference_wrapper<u8>>& Registries::getRegistriesRef()
 {
 	return mRegistries;
+}
+
+std::vector<std::reference_wrapper<u16>>& Registries::getDoubleRegistriesRef()
+{
+	return mDoubleRegistries;
 }
 
 
@@ -61,25 +67,4 @@ flags& Registries::getFlagsRef()
 {
 	return F;
 }
-
-u16& Registries::getAFRef()
-{
-	return mAF;
-}
-
-u16& Registries::getBCRef()
-{
-	return mBC;
-}
-
-u16& Registries::getDERef()
-{
-	return mDE;
-}
-
-u16& Registries::getHLRef()
-{
-	return mHL;
-}
-
 

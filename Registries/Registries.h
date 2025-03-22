@@ -8,6 +8,11 @@ enum Reg
 	A = 0, F, B, C, D, E, H, L	
 };
 
+enum DoubleReg
+{
+	AF = 0, BC, DE, HL
+};
+
 struct combinedRegistries 
 {
 	u8* highRegistry;
@@ -107,6 +112,7 @@ class Registries
 		// New approch
 		std::vector<std::reference_wrapper<u8>> mRegistries;
 		std::vector<std::reference_wrapper<const u8>> mConstRegistries; 
+		std::vector<std::reference_wrapper<u16>> mDoubleRegistries; 
 
 
 		u16& mBC = *reinterpret_cast<u16*>(&C);
@@ -166,6 +172,8 @@ class Registries
 		const std::vector<std::reference_wrapper<const u8>>& getRegistriesRef() const;
 		std::vector<std::reference_wrapper<u8>>& getRegistriesRef();
 
+		std::vector<std::reference_wrapper<u16>>& getDoubleRegistriesRef();
+
 		const u16& getPCRef() const;
 		u16& getPCRef();
 
@@ -174,12 +182,6 @@ class Registries
 
 		const flags& getFlagsRef() const;
 		flags& getFlagsRef();
-
-		u16& getAFRef();
-		u16& getBCRef();
-		u16& getDERef();
-		u16& getHLRef();
-
 
 
 };

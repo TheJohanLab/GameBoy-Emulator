@@ -63,8 +63,8 @@ u8 Instruction1BitOperation::BIT_0cL(CPU& cpu)
 
 u8 Instruction1BitOperation::BIT_0cpHLq(CPU& cpu)
 {
-	auto HLByte = mBus->read(*mHL);
-	BIT_bcr(HLByte, 0x00, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	BIT_bcr(byte, 0x00, cpu);
 
 	return 16;
 }
@@ -127,8 +127,8 @@ u8 Instruction1BitOperation::BIT_1cL(CPU& cpu)
 
 u8 Instruction1BitOperation::BIT_1cpHLq(CPU& cpu)
 {
-	auto HLByte = mBus->read(*mHL);
-	BIT_bcr(HLByte, 0x01, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	BIT_bcr(byte, 0x01, cpu);
 
 	return 16;
 }
@@ -191,8 +191,8 @@ u8 Instruction1BitOperation::BIT_2cL(CPU& cpu)
 
 u8 Instruction1BitOperation::BIT_2cpHLq(CPU& cpu)
 {
-	auto HLByte = mBus->read(*mHL);
-	BIT_bcr(HLByte, 0x02, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	BIT_bcr(byte, 0x02, cpu);
 
 	return 16;
 }
@@ -255,8 +255,8 @@ u8 Instruction1BitOperation::BIT_3cL(CPU& cpu)
 
 u8 Instruction1BitOperation::BIT_3cpHLq(CPU& cpu)
 {
-	auto HLByte = mBus->read(*mHL);
-	BIT_bcr(HLByte, 0x03, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	BIT_bcr(byte, 0x03, cpu);
 
 	return 16;
 }
@@ -319,8 +319,8 @@ u8 Instruction1BitOperation::BIT_4cL(CPU& cpu)
 
 u8 Instruction1BitOperation::BIT_4cpHLq(CPU& cpu)
 {
-	auto HLByte = mBus->read(*mHL);
-	BIT_bcr(HLByte, 0x04, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	BIT_bcr(byte, 0x04, cpu);
 
 	return 16;
 }
@@ -383,8 +383,8 @@ u8 Instruction1BitOperation::BIT_5cL(CPU& cpu)
 
 u8 Instruction1BitOperation::BIT_5cpHLq(CPU& cpu)
 {
-	auto HLByte = mBus->read(*mHL);
-	BIT_bcr(HLByte, 0x05, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	BIT_bcr(byte, 0x05, cpu);
 
 	return 16;
 }
@@ -447,8 +447,8 @@ u8 Instruction1BitOperation::BIT_6cL(CPU& cpu)
 
 u8 Instruction1BitOperation::BIT_6cpHLq(CPU& cpu)
 {
-	auto HLByte = mBus->read(*mHL);
-	BIT_bcr(HLByte, 0x06, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	BIT_bcr(byte, 0x06, cpu);
 
 	return 16;
 }
@@ -511,8 +511,8 @@ u8 Instruction1BitOperation::BIT_7cL(CPU& cpu)
 
 u8 Instruction1BitOperation::BIT_7cpHLq(CPU& cpu)
 {
-	auto HLByte = mBus->read(*mHL);
-	BIT_bcr(HLByte, 0x07, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	BIT_bcr(byte, 0x07, cpu);
 
 	return 16;
 }
@@ -576,8 +576,8 @@ u8 Instruction1BitOperation::RES_0cL(CPU& cpu)
 
 u8 Instruction1BitOperation::RES_0cpHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
-	RES_bcpHLq(data, 0x00, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	RES_bcpHLq(byte, 0x00, cpu);
 
 	return 16;
 }
@@ -640,8 +640,8 @@ u8 Instruction1BitOperation::RES_1cL(CPU& cpu)
 
 u8 Instruction1BitOperation::RES_1cpHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
-	RES_bcpHLq(data, 0x01, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	RES_bcpHLq(byte, 0x01, cpu);
 
 	return 16;
 }
@@ -704,8 +704,8 @@ u8 Instruction1BitOperation::RES_2cL(CPU& cpu)
 
 u8 Instruction1BitOperation::RES_2cpHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
-	RES_bcpHLq(data, 0x02, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	RES_bcpHLq(byte, 0x02, cpu);
 
 	return 16;
 }
@@ -768,8 +768,8 @@ u8 Instruction1BitOperation::RES_3cL(CPU& cpu)
 
 u8 Instruction1BitOperation::RES_3cpHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
-	RES_bcpHLq(data, 0x03, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	RES_bcpHLq(byte, 0x03, cpu);
 
 	return 16;
 }
@@ -832,8 +832,8 @@ u8 Instruction1BitOperation::RES_4cL(CPU& cpu)
 
 u8 Instruction1BitOperation::RES_4cpHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
-	RES_bcpHLq(data, 0x04, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	RES_bcpHLq(byte, 0x04, cpu);
 
 	return 16;
 }
@@ -896,8 +896,8 @@ u8 Instruction1BitOperation::RES_5cL(CPU& cpu)
 
 u8 Instruction1BitOperation::RES_5cpHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
-	RES_bcpHLq(data, 0x05, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	RES_bcpHLq(byte, 0x05, cpu);
 
 	return 16;
 }
@@ -960,8 +960,8 @@ u8 Instruction1BitOperation::RES_6cL(CPU& cpu)
 
 u8 Instruction1BitOperation::RES_6cpHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
-	RES_bcpHLq(data, 0x06, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	RES_bcpHLq(byte, 0x06, cpu);
 
 	return 16;
 }
@@ -1024,8 +1024,8 @@ u8 Instruction1BitOperation::RES_7cL(CPU& cpu)
 
 u8 Instruction1BitOperation::RES_7cpHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
-	RES_bcpHLq(data, 0x07, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	RES_bcpHLq(byte, 0x07, cpu);
 
 	return 16;
 }
@@ -1089,8 +1089,8 @@ u8 Instruction1BitOperation::SET_0cL(CPU& cpu)
 
 u8 Instruction1BitOperation::SET_0cpHLq(CPU& cpu)
 {
-	u8& data = mBus->read(*mHL);
-	SET_bcpHLq(data, 0x00, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	SET_bcpHLq(byte, 0x00, cpu);
 
 	return 16;
 }
@@ -1153,8 +1153,8 @@ u8 Instruction1BitOperation::SET_1cL(CPU& cpu)
 
 u8 Instruction1BitOperation::SET_1cpHLq(CPU& cpu)
 {
-	u8& data = mBus->read(*mHL);
-	SET_bcpHLq(data, 0x01, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	SET_bcpHLq(byte, 0x01, cpu);
 
 	return 16;
 }
@@ -1217,8 +1217,8 @@ u8 Instruction1BitOperation::SET_2cL(CPU& cpu)
 
 u8 Instruction1BitOperation::SET_2cpHLq(CPU& cpu)
 {
-	u8& data = mBus->read(*mHL);
-	SET_bcpHLq(data, 0x02, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	SET_bcpHLq(byte, 0x02, cpu);
 
 	return 16;
 }
@@ -1281,8 +1281,8 @@ u8 Instruction1BitOperation::SET_3cL(CPU& cpu)
 
 u8 Instruction1BitOperation::SET_3cpHLq(CPU& cpu)
 {
-	u8& data = mBus->read(*mHL);
-	SET_bcpHLq(data, 0x03, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	SET_bcpHLq(byte, 0x03, cpu);
 
 	return 16;
 }
@@ -1345,8 +1345,8 @@ u8 Instruction1BitOperation::SET_4cL(CPU& cpu)
 
 u8 Instruction1BitOperation::SET_4cpHLq(CPU& cpu)
 {
-	u8& data = mBus->read(*mHL);
-	SET_bcpHLq(data, 0x04, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	SET_bcpHLq(byte, 0x04, cpu);
 
 	return 16;
 }
@@ -1409,8 +1409,8 @@ u8 Instruction1BitOperation::SET_5cL(CPU& cpu)
 
 u8 Instruction1BitOperation::SET_5cpHLq(CPU& cpu)
 {
-	u8& data = mBus->read(*mHL);
-	SET_bcpHLq(data, 0x05, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	SET_bcpHLq(byte, 0x05, cpu);
 
 	return 16;
 }
@@ -1473,8 +1473,8 @@ u8 Instruction1BitOperation::SET_6cL(CPU& cpu)
 
 u8 Instruction1BitOperation::SET_6cpHLq(CPU& cpu)
 {
-	u8& data = mBus->read(*mHL);
-	SET_bcpHLq(data, 0x06, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	SET_bcpHLq(byte, 0x06, cpu);
 
 	return 16;
 }
@@ -1537,8 +1537,8 @@ u8 Instruction1BitOperation::SET_7cL(CPU& cpu)
 
 u8 Instruction1BitOperation::SET_7cpHLq(CPU& cpu)
 {
-	u8& data = mBus->read(*mHL);
-	SET_bcpHLq(data, 0x07, cpu);
+	auto& byte = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
+	SET_bcpHLq(byte, 0x07, cpu);
 
 	return 16;
 }
@@ -1551,9 +1551,9 @@ u8 Instruction1BitOperation::SET_7cA(CPU& cpu)
 	return 8;
 }
 
-void Instruction1BitOperation::BIT_bcr(const u8& registry, const u8 bit, CPU& cpu)
+void Instruction1BitOperation::BIT_bcr(const u8& byte, const u8 bit, CPU& cpu)
 {
-	setZFlag(cpu, BIT(registry, bit) == 0);
+	setZFlag(cpu, BIT(byte, bit) == 0);
 	setHFlag(cpu, 1);
 	setNFlag(cpu, 0);
 }

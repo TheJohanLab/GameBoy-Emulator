@@ -257,7 +257,7 @@ u8 Instruction8BitLogic::CPL(CPU& cpu)
 
 u8 Instruction8BitLogic::INC_pHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
+	auto& data = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
 	INC_R(cpu, data);
 
 	return 12;
@@ -265,7 +265,7 @@ u8 Instruction8BitLogic::INC_pHLq(CPU& cpu)
 
 u8 Instruction8BitLogic::DEC_pHLq(CPU& cpu)
 {
-	auto& data = mBus->read(*mHL);
+	auto& data = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
 	DEC_R(cpu, data);
 
 	return 12;

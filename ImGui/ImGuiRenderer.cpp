@@ -195,8 +195,13 @@ void ImGuiRenderer::renderRegistries(const ImVec2& pos, const ImVec2& size) cons
 		ImGui::Text("LCD STAT: 0x%X", (mMemoryRef->read(LCD_STATUS)));
 		ImGui::Text("TIMER :");
 		ImGui::Text("TIMA: 0x%X", (mTimerRef->getTIMA()));
+		ImGui::SameLine();
 		ImGui::Text("TMA: 0x%X", (mTimerRef->getTMA()));
-		ImGui::Text("TAC: 0x%X", (mTimerRef->getTAC()));
+		ImGui::SameLine();
+		ImGui::Text("TAC: 0x%X", (mTimerRef->getTAC().raw));
+		ImGui::Text("clock select: 0x%X", (mTimerRef->getTAC().bits.clock_select));
+		ImGui::SameLine();
+		ImGui::Text("enable: 0x%X", (mTimerRef->getTAC().bits.enable));
 		ImGui::End();
 
 		ImGui::PopStyleColor();

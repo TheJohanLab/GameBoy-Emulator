@@ -52,17 +52,17 @@ void Timer::handleTimer(const u8 opcodeDots)
 }
 
 
-u8 getTIMA() const
+const u8& Timer::getTIMA() const
 {
 	return mTIMARef;
 }
 
-u8 getTMA() const
+const u8& Timer::getTMA() const
 {
 	return mTMARef;
 }
 
-u8 getTAC() const
+const u_TAC& Timer::getTAC() const
 {
-	return mTACRef.raw;
+	return mTACRef;
 }

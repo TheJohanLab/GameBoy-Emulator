@@ -45,9 +45,9 @@ class Timer
 
 		void handleTimer(const u8 opcodeDots);
 
-		u8 getTIMA() const;
-		u8 getTMA() const;
-		u8 getTAC() const;
+		const u8& getTIMA() const;
+		const u8& getTMA() const;
+		const u_TAC& getTAC() const;
 		
 
 

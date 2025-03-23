@@ -81,13 +81,12 @@ void Instruction::updateHFlag(CPU& cpu, u8 byte, bool substract)
 void Instruction::setHFlag(CPU& cpu, u8 baseValue, u8 additionalValue, bool substract)
 {
 	flags* flagRegistry = cpu.getFlagRegistry();
-	flagRegistry->flags.H = isHalfOverflow(baseValue, additionalValue, substract) ? 1 : 0;
+	//flagRegistry->flags.H = isHalfOverflow(baseValue, additionalValue, substract) ? 1 : 0;
+	flagRegistry->flags.H = isHalfOverflow(baseValue, additionalValue) ? 1 : 0;
 }
 
 void Instruction::setHFlag(CPU& cpu, const u8 value)
 {
-	//flags* flagRegistry = cpu.getFlagRegistry();
-	//flagRegistry->flags.H = (value == 0x01) ? 1 : 0;
 	mFlags->flags.H = value;
 }
 
@@ -112,8 +111,7 @@ void Instruction::setCFlag(CPU& cpu, const u8& baseValue, const u8& additionnalV
 
 void Instruction::setCFlag(CPU& cpu, u8 value)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	flagRegistry->flags.C = (value == 0x01) ? 1 : 0;
+	mFlags->flags.C = value;
 }
 
 void Instruction::clearFlag(CPU& cpu, const char& flag)
@@ -142,33 +140,27 @@ void Instruction::setFlags(CPU& cpu, const u8& binaryFlags)
 	flags->F = binaryFlags;
 }
 
-bool Instruction::isHalfOverflow(const u8& baseValue, const u8& additionalValue, bool substract)
+bool Instruction::isHalfOverflow(const u8& baseValue, const u8& additionalValue)
 {
-	if (!substract)
-	{
-		u8 resultValue = (baseValue & 0x0F) + (additionalValue & 0x0F);
-		return resultValue > 0x0F;
-	}
-	else
-	{
-		//return ((baseValue ^ (baseValue - additionalValue)) & (1 << 4));
-		return ((baseValue & 0xF) - ((baseValue - additionalValue) & 0xF)) & 0x10;
-	}
+	return ((baseValue & 0x0F) + (additionalValue & 0x0F)) > 0x0F;
 }
 
-bool Instruction::isHalfOverflow(const u16& baseValue, const u16& additionalValue, bool substract)
+bool Instruction::isHalfOverflow(const u16& baseValue, const u16& additionalValue)
 {
-	if (!substract)
-	{
-		u16 resultValue = (baseValue & 0x0FFF) + (additionalValue & 0x0FFF);
-		return resultValue > 0x0FFF;
-	}
-	else
-	{
-		((baseValue & 0xFFF) - ((baseValue - additionalValue) & 0xFFF)) & 0x1000;
-		//return ((baseValue ^ (baseValue - additionalValue)) & (1 << 8));
+	u16 resultValue = (baseValue & 0x0FFF) + (additionalValue & 0x0FFF);
+	return resultValue > 0x0FFF;
+}
+
+bool Instruction::isHalfUnderflow(const u8& baseValue, const u8& additionalValue)
+{
+	return ((baseValue & 0x0F) - ((baseValue - additionalValue) & 0x0F)) & 0x10;
+}
+
+bool Instruction::isHalfUnderlow(const u16& baseValue, const u16& additionalValue)
+{
+	return ((baseValue & 0xFFF) - ((baseValue - additionalValue) & 0xFFF)) & 0x1000;
+	//return ((baseValue ^ (baseValue - additionalValue)) & (1 << 8));
 		//return (additionalValue & 0x0FFF) > (baseValue & 0x0FFF);
-	}
 }
 
 bool Instruction::isOverflow(const u8& baseValue, const u8& additionalValue, bool substract)

@@ -9,9 +9,9 @@ class Instruction8BitLogic : public Instruction
 	private:
 		static void INC_R(CPU& cpu, u8& registry);
 		static void DEC_R(CPU& cpu, u8& registry);
-		static void ADD_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
+		static void ADD_RcR(CPU& cpu, u8& dst, const u8 additionalValue);
 		static void ADC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
-		static void SUB_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
+		static void SUB_RcR(CPU& cpu, u8& registry, const u8 additionalValue);
 		static void SBC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
 		static void AND_R(CPU& cpu, u8* additionalValue, u8* dstRegistry);
 		static void XOR_R(CPU& cpu, u8* additionalValue, u8* dstRegistry);

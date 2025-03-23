@@ -10,29 +10,28 @@ private:
 		static void LD_Rcd8(CPU& cpu, u8& registry);
 
 public:
-		//Instruction8BitLoad(const char* name, u8(*pInstruction)(CPU & cpu), u8 clockCycles);
 		Instruction8BitLoad(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus);
 		virtual ~Instruction8BitLoad() = default;
 
 		static u8 LD_pBCqcA(CPU& cpu);	//0x02 LD (BC),A
-		static u8 LD_Bcd8(CPU& cpu);		//0x06 LD B,d8
+		static u8 LD_Bcd8(CPU& cpu);	//0x06 LD B,d8
 		static u8 LD_AcpBCq(CPU& cpu);	//0x0A LD A,(BC)
-		static u8 LD_Ccd8(CPU& cpu);		//0x0E LD C,d8
+		static u8 LD_Ccd8(CPU& cpu);	//0x0E LD C,d8
 
 		static u8 LD_pDEqcA(CPU& cpu);	//0x12 LD (DE),A
-		static u8 LD_Dcd8(CPU& cpu);		//0x16 LD D,d8
+		static u8 LD_Dcd8(CPU& cpu);	//0x16 LD D,d8
 		static u8 LD_AcpDEq(CPU& cpu);	//0x1A LD A,(DE)
-		static u8 LD_Ecd8(CPU& cpu);		//0x1E LD E,d8
+		static u8 LD_Ecd8(CPU& cpu);	//0x1E LD E,d8
 
 		static u8 LDI_pHLqcA(CPU& cpu);	//0x22 LDI (HL),A
-		static u8 LD_Hcd8(CPU& cpu);		//0x26 LD H,d8
+		static u8 LD_Hcd8(CPU& cpu);	//0x26 LD H,d8
 		static u8 LDI_AcpHLq(CPU& cpu);	//0x2A LDI A,(HL)
-		static u8 LD_Lcd8(CPU& cpu);		//0x2E LD L,d8
+		static u8 LD_Lcd8(CPU& cpu);	//0x2E LD L,d8
 
 		static u8 LDD_pHLqcA(CPU& cpu);	//0x32 LDD (HL),A
 		static u8 LD_pHLqcd8(CPU& cpu);	//0x36 LD (HL),d8
 		static u8 LDD_AcpHLq(CPU& cpu);	//0x3A LDD A,(HL)
-		static u8 LD_Acd8(CPU& cpu);		//0x3E LD A,d8
+		static u8 LD_Acd8(CPU& cpu);	//0x3E LD A,d8
 
 		static u8 LD_BcB(CPU& cpu);		//0x40 LD B,B
 		static u8 LD_BcC(CPU& cpu);		//0x41 LD B,C
@@ -102,11 +101,11 @@ public:
 		static u8 LD_AcA(CPU& cpu);		//0x7F LD A,A
 
 		static u8 LDH_pa8qcA(CPU& cpu);	//0xE0 LDH (a8),A
-		static u8 LD_pCqcA(CPU& cpu);		//0xE2 LD (C),A
+		static u8 LD_pCqcA(CPU& cpu);	//0xE2 LD (C),A
 		static u8 LD_pa16qcA(CPU& cpu);	//0xEA LDH (a16),A
 
 		static u8 LDH_Acpa8q(CPU& cpu);	//0xF0 LDH A,(a8)
-		static u8 LD_AcpCq(CPU& cpu);		//0xF2 LD A,(C)
+		static u8 LD_AcpCq(CPU& cpu);	//0xF2 LD A,(C)
 		static u8 LD_Acpa16q(CPU& cpu);	//0xFA LDH A,(a16)
 
 

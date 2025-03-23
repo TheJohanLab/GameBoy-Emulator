@@ -3,6 +3,7 @@
 #include "GameLoop.h"
 
 #include "ImGui/ImGuiHandler.h"
+#include "Timer/Timer.h"
 
 EmulatorState GameLoop::mInitCurrState{ EmulatorState::INIT };
 
@@ -17,11 +18,12 @@ void GameLoop::decVirtualWaitingDots(u16 dots)
 	GameLoop::waitingDots -= dots;
 }
 
-GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<ImGuiHandler> imGui)
+GameLoop::GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<ImGuiHandler> imGui, std::shared_ptr<Timer> timer)
 	:	mCPU(cpu),
 		mPPU(ppu),
 		mImGuiHandler(imGui),
-		mStateFactory(std::make_unique<EmulatorStateFactory>(cpu->getBootRom()))
+		mStateFactory(std::make_unique<EmulatorStateFactory>(cpu->getBootRom())),
+		mTimer(timer)
 {
 
 	mScreen = mPPU->getScreen(); //TODO check what to do with screen in GameLoop (singleton ?)
@@ -210,13 +212,17 @@ u8 GameLoop::step()
 {	
 	mCurrentOpcode = mCPU->getOpcode();
 
-	u8 currCycle = mCPU->executeOpcode(mCurrentOpcode);
+	u8 opcodeDots = mCPU->executeOpcode(mCurrentOpcode);
 
-	mPPU->render(currCycle);
+	mPPU->render(opcodeDots);
+
+	mCPU->writeMemory(0xFF07, 5);
+	mTimer->handleTimer(opcodeDots);
+
 
 	mCPU->getInterruptsManager()->callInterruptHandler();
 
-	return currCycle;
+	return opcodeDots;
 }
 
 void GameLoop::synchroniseFrame()

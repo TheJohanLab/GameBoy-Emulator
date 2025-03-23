@@ -33,4 +33,8 @@
 #define IF_OFFSET 0xFF0F
 #define IE_OFFSET 0xFFFF
 
+#define TIMA 0xFF05
+#define TMA 0xFF06
+#define TAC 0xFF07
+
 

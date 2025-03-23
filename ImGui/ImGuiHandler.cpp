@@ -74,6 +74,11 @@ void ImGuiHandler::setCartridgeReference(std::shared_ptr<const Cartridge> cartri
 	mImGuiRenderer->setCartridgeReference(cartridge);
 }
 
+void ImGuiHandler::setTimerReferences(std::shared_ptr<const Timer> timer)
+{
+	mImGuiRenderer->setTimerReferences(timer);
+}
+
 
 void ImGuiHandler::setStepMode(bool stepMode)
 {

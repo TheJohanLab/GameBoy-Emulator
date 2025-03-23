@@ -15,6 +15,7 @@ class Cartridge;
 class Registries;
 class CPU;
 class PPU;
+class Timer;
 
 class ImGuiRenderer
 {
@@ -28,6 +29,7 @@ private:
 
 	std::shared_ptr<const Memory> mMemoryRef{ nullptr };
 	std::shared_ptr<const Cartridge> mCartridgeRef{ nullptr };
+	std::shared_ptr<const Timer> mTimerRef{ nullptr };
 	
 	std::shared_ptr<u8> mOpcodeValue{ nullptr };
 	static std::string mOpcodeDescription;
@@ -69,6 +71,7 @@ public:
 	void setOpcodeReference(std::shared_ptr<u8>);
 	void setMemoryReference(std::shared_ptr<const Memory>);
 	void setCartridgeReference(std::shared_ptr<const Cartridge>);
+	void setTimerReferences(std::shared_ptr<const Timer>);
 
 	static void setOpcodeDesc(const std::string&);
 

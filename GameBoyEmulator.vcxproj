@@ -126,6 +126,7 @@
     <ClCompile Include="Registries\Registries.cpp" />
     <ClCompile Include="ImGui\ImGuiRenderer.cpp" />
     <ClCompile Include="Screen\Screen.cpp" />
+    <ClCompile Include="Timer\Timer.cpp" />
     <ClCompile Include="Utils\Log.cpp" />
     <ClCompile Include="PPU\Renderer\WindowRenderer.cpp" />
     <ClCompile Include="pch.cpp">
@@ -252,6 +253,7 @@
     <ClInclude Include="Registries\Registries.h" />
     <ClInclude Include="ImGui\ImGuiRenderer.h" />
     <ClInclude Include="Screen\Screen.h" />
+    <ClInclude Include="Timer\Timer.h" />
     <ClInclude Include="Utils\Addresses.h" />
     <ClInclude Include="Utils\Log.h" />
     <ClInclude Include="pch.h" />

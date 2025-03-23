@@ -12,6 +12,7 @@
 
 class WindowEventManager;
 class ImGuiHandler;
+class Timer;
 
 class GameLoop
 {
@@ -20,6 +21,7 @@ private:
 	std::shared_ptr<PPU> mPPU;
 	std::shared_ptr<BootRom> mBootRom;
 	std::shared_ptr<Screen> mScreen;
+	std::shared_ptr<Timer> mTimer;
 
 	std::unique_ptr<EmulatorStateFactory> mStateFactory;
 	std::shared_ptr<EmulatorBaseState> mCurrentEmulatorState{ nullptr };
@@ -46,7 +48,7 @@ private:
 
 
 public:
-	GameLoop(std::shared_ptr<CPU> cpu, std::shared_ptr<PPU> ppu, std::shared_ptr<ImGuiHandler> imGui);
+	GameLoop(std::shared_ptr<CPU>, std::shared_ptr<PPU>, std::shared_ptr<ImGuiHandler>, std::shared_ptr<Timer>);
 	virtual ~GameLoop() = default;
 
 	void setEmulatorState(EmulatorState state);

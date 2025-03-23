@@ -12,6 +12,8 @@
 
 #include "Registries/Registries.h"
 
+#include "Timer/Timer.h"
+
 
 //#include <string>
 //#include "Emulator/Emulator.h"
@@ -191,6 +193,10 @@ void ImGuiRenderer::renderRegistries(const ImVec2& pos, const ImVec2& size) cons
 		ImGui::SameLine();
 		ImGui::Text("Z: 0x%X", (mRegistries->getFlagsRef().flags.Z));
 		ImGui::Text("LCD STAT: 0x%X", (mMemoryRef->read(LCD_STATUS)));
+		ImGui::Text("TIMER :");
+		ImGui::Text("TIMA: 0x%X", (mTimerRef->getTIMA()));
+		ImGui::Text("TMA: 0x%X", (mTimerRef->getTMA()));
+		ImGui::Text("TAC: 0x%X", (mTimerRef->getTAC()));
 		ImGui::End();
 
 		ImGui::PopStyleColor();
@@ -405,6 +411,11 @@ void ImGuiRenderer::setMemoryReference(std::shared_ptr<const Memory> memory)
 void ImGuiRenderer::setCartridgeReference(std::shared_ptr<const Cartridge> cartridge)
 {
 	mCartridgeRef = cartridge;
+}
+
+void ImGuiRenderer::setTimerReferences(std::shared_ptr<const Timer> timer)
+{
+	mTimerRef = timer;
 }
 
 

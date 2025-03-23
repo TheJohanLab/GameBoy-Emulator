@@ -252,7 +252,7 @@ u8 PPU::readWX() const
 	return  mBus->read(WINDOW_X);
 }
 
-
+// cycle = dots
 void PPU::render(u8 cycle)
 {
 

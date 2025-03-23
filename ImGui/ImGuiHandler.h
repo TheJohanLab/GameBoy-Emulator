@@ -8,6 +8,7 @@
 #include "Emulator/States/EmulatorBaseState.h"
 #include "Registries/Registries.h"
 #include "Cartridge/Cartridge.h"
+#include "Timer/Timer.h"
 
 class CPU;
 class PPU;
@@ -30,6 +31,7 @@ public:
 	void setOpcodeReference(std::shared_ptr<u8>);
 	void setMemoryReference(std::shared_ptr<const Memory>);
 	void setCartridgeReference(std::shared_ptr<const Cartridge>);
+	void setTimerReferences(std::shared_ptr<const Timer>);
 
 	void setStepMode(bool);
 	void setGotoMode(std::string& input);

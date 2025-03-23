@@ -13,6 +13,9 @@ InstructionFactory::InstructionFactory(Registries& registries, std::shared_ptr<B
 
 std::unique_ptr<Instruction> InstructionFactory::createInstruction(InstructionEnum instructionEnum, const char* name, std::function<u8(CPU& cpu)> instruction) const
 {
+
+	Instruction::setDataReferences(mRegistriesRef, mBusRef);
+
 	switch (instructionEnum)
 	{
 	case InstructionEnum::I1BITOPERATION:	return std::make_unique<Instruction1BitOperation>(name, instruction, mRegistriesRef, mBusRef); break;

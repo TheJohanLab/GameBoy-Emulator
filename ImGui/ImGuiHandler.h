@@ -8,6 +8,7 @@
 #include "Emulator/States/EmulatorBaseState.h"
 #include "Registries/Registries.h"
 #include "Cartridge/Cartridge.h"
+#include "Timer/Timer.h"
 
 class CPU;
 class PPU;
@@ -24,12 +25,13 @@ private:
 public:
 	ImGuiHandler(SDL_Window*, SDL_Renderer*);
 
-	void setRegistriesReference(std::shared_ptr<Registries>);
+	void setRegistriesReference(const Registries & registries);
 	void setCPUReference(std::shared_ptr<CPU>);
 	void setPPUReference(std::shared_ptr<PPU>);
 	void setOpcodeReference(std::shared_ptr<u8>);
 	void setMemoryReference(std::shared_ptr<const Memory>);
 	void setCartridgeReference(std::shared_ptr<const Cartridge>);
+	void setTimerReferences(std::shared_ptr<const Timer>);
 
 	void setStepMode(bool);
 	void setGotoMode(std::string& input);

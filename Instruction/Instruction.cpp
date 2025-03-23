@@ -3,24 +3,34 @@
 #include "Instruction.h"
 #include "CPU/CPU.h"
 
+std::vector<std::reference_wrapper<u8>>* Instruction::mRegistries;
+std::vector<std::reference_wrapper<u16>>* Instruction::mDoubleRegistries;
+flags* Instruction::mFlags = nullptr;
+uint16_t* Instruction::mPC = nullptr;
+uint16_t* Instruction::mSP = nullptr;
+std::shared_ptr<Bus> Instruction::mBus = nullptr;
 
 Instruction::Instruction(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& registries, std::shared_ptr<Bus> bus)
-	:mName(name), mInstruction(instruction),
-	mBus(bus),
-	mRegistries(registries.getRegistriesRef()),
-	mAF(registries.getAFRef()), mBC(registries.getAFRef()), mDE(registries.getAFRef()), mHL(registries.getAFRef()),
-	mSP(registries.getSPRef()), mPC(registries.getPCRef())
+	:mName(name), mInstruction(instruction)
 {
+}
+
+void Instruction::setDataReferences(Registries& registries, std::shared_ptr<Bus> bus)
+{
+	mRegistries = &registries.getRegistriesRef();
+	mDoubleRegistries = &registries.getDoubleRegistriesRef();
+	mFlags = &registries.getFlagsRef();
+	mSP = &registries.getSPRef();
+	mPC = &registries.getPCRef();
+	mBus = bus;
 }
 
 
 
 u8 Instruction::readNextOpcode(CPU& cpu)
 {
-	u16* PC = cpu.getPC();
-	*PC += 1;
-
-	 u8 value = cpu.readMemory(*PC);
+	(*mPC)++;
+	u8 value = mBus->read(*mPC);
 
 #ifdef _DEBUG
 	 std::stringstream ss;
@@ -28,29 +38,20 @@ u8 Instruction::readNextOpcode(CPU& cpu)
 	 cpu.setNextOpcodesValue("0x" + ss.str());
 #endif
 
-#ifdef LOG_DEBUG
-	 GBE_LOG_INFO("readNextOpcode : {:#x}", value);
-#endif
-
 	 return value;
 }
 
 u16 Instruction::readNextTwoOpcodes(CPU& cpu)
 {
-	u16* PC = cpu.getPC();
-	u16 lsbValue = static_cast<u16>(cpu.readMemory((*PC) + 1)) & 0x00FF;
-	u16 msbValue = (static_cast<u16>(cpu.readMemory((*PC) + 2)) << 8) & 0xFF00;
+	u16 lsbValue = static_cast<u16>(mBus->read((*mPC) + 1)) & 0x00FF;
+	u16 msbValue = (static_cast<u16>(mBus->read((*mPC) + 2)) << 8) & 0xFF00;
 	u16 twoBytesValue = lsbValue | msbValue;
-	*PC += 2;
+	*mPC += 2;
 
 #ifdef _DEBUG
 	std::stringstream ss;
 	ss << std::hex << std::setw(4) << std::setfill('0') << static_cast<int>(twoBytesValue);
 	cpu.setNextOpcodesValue("0x" + ss.str());
-#endif
-
-#ifdef LOG_DEBUG
-	GBE_LOG_INFO("readNextTwoOpcodes : {:#x}", twoBytesValue);
 #endif
 
 	return twoBytesValue;
@@ -83,22 +84,24 @@ void Instruction::setHFlag(CPU& cpu, u8 baseValue, u8 additionalValue, bool subs
 	flagRegistry->flags.H = isHalfOverflow(baseValue, additionalValue, substract) ? 1 : 0;
 }
 
-void Instruction::setHFlag(CPU& cpu, u8 value)
+void Instruction::setHFlag(CPU& cpu, const u8 value)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	flagRegistry->flags.H = (value == 0x01) ? 1 : 0;
+	//flags* flagRegistry = cpu.getFlagRegistry();
+	//flagRegistry->flags.H = (value == 0x01) ? 1 : 0;
+	mFlags->flags.H = value;
 }
 
-void Instruction::setZFlag(CPU& cpu, u8 value)
+void Instruction::setZFlag(CPU& cpu, const u8 value)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	flagRegistry->flags.Z = (value == 0x00) ? 1 : 0;
+
+	mFlags->flags.Z = value;
 }
 
-void Instruction::setNFlag(CPU& cpu, u8 value)
+void Instruction::setNFlag(CPU& cpu, const u8 value)
 {
-	flags* flagRegistry = cpu.getFlagRegistry();
-	flagRegistry->flags.N = (value == 0x01) ? 1 : 0;
+	//flags* flagRegistry = cpu.getFlagRegistry();
+	//flagRegistry->flags.N = (value == 0x01) ? 1 : 0;
+	mFlags->flags.N = value;
 }
 
 void Instruction::setCFlag(CPU& cpu, const u8& baseValue, const u8& additionnalValue, bool substract)

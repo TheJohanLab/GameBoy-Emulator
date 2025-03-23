@@ -7,8 +7,8 @@ class Instruction8BitLogic : public Instruction
 {
 
 	private:
-		static void INC_R(CPU& cpu, u8* registry);
-		static void DEC_R(CPU& cpu, u8* registry);
+		static void INC_R(CPU& cpu, u8& registry);
+		static void DEC_R(CPU& cpu, u8& registry);
 		static void ADD_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
 		static void ADC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);
 		static void SUB_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry);

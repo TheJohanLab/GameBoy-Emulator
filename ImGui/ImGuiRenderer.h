@@ -15,6 +15,7 @@ class Cartridge;
 class Registries;
 class CPU;
 class PPU;
+class Timer;
 
 class ImGuiRenderer
 {
@@ -22,12 +23,13 @@ private:
 	SDL_Window* mWindow{ nullptr };
 	SDL_Renderer* mRenderer{ nullptr };
 
-	std::shared_ptr<Registries> mRegistries{ nullptr };
+	const Registries* mRegistries{ nullptr };
 	std::shared_ptr<CPU> mCPURef{ nullptr };
 	std::shared_ptr<PPU> mPPURef{ nullptr };
 
 	std::shared_ptr<const Memory> mMemoryRef{ nullptr };
 	std::shared_ptr<const Cartridge> mCartridgeRef{ nullptr };
+	std::shared_ptr<const Timer> mTimerRef{ nullptr };
 	
 	std::shared_ptr<u8> mOpcodeValue{ nullptr };
 	static std::string mOpcodeDescription;
@@ -63,12 +65,13 @@ public:
 	void renderGotoPopUp(std::string& input);
 	void processEvent(SDL_Event* event) const;
 		
-	void setRegistriesReference(std::shared_ptr<Registries>);
+	void setRegistriesReference(const Registries &);
 	void setCPUReference(const std::shared_ptr<CPU>);
 	void setPPUReference(const std::shared_ptr<PPU>);
 	void setOpcodeReference(std::shared_ptr<u8>);
 	void setMemoryReference(std::shared_ptr<const Memory>);
 	void setCartridgeReference(std::shared_ptr<const Cartridge>);
+	void setTimerReferences(std::shared_ptr<const Timer>);
 
 	static void setOpcodeDesc(const std::string&);
 

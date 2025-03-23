@@ -17,7 +17,9 @@ Registries::Registries()
 	HL.highRegistry = &H;
 	HL.lowRegistry = &L;
 
-	mRegistries = { A, B, C, D, E, H, L, F.F };
+	mRegistries = { A, F.F, B, C, D, E, H, L};
+	mConstRegistries = { A, F.F, B, C, D, E, H, L};
+	mDoubleRegistries = { mAF, mBC, mDE, mHL};
 }
 
 std::vector<std::reference_wrapper<u8>>& Registries::getRegistriesRef()
@@ -25,10 +27,15 @@ std::vector<std::reference_wrapper<u8>>& Registries::getRegistriesRef()
 	return mRegistries;
 }
 
+std::vector<std::reference_wrapper<u16>>& Registries::getDoubleRegistriesRef()
+{
+	return mDoubleRegistries;
+}
+
+
 const std::vector<std::reference_wrapper<const u8>>& Registries::getRegistriesRef() const
 {
-	//TODO
-	return std::vector<std::reference_wrapper<const u8>>();
+	return mConstRegistries;
 }
 
 const u16& Registries::getPCRef() const
@@ -51,24 +58,13 @@ u16& Registries::getSPRef()
 	return SP;
 }
 
-u16& Registries::getAFRef()
+const flags& Registries::getFlagsRef() const
 {
-	return mAF;
+	return F;
 }
 
-u16& Registries::getBCRef()
+flags& Registries::getFlagsRef()
 {
-	return mBC;
+	return F;
 }
-
-u16& Registries::getDERef()
-{
-	return mDE;
-}
-
-u16& Registries::getHLRef()
-{
-	return mHL;
-}
-
 

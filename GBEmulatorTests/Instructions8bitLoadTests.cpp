@@ -6,6 +6,261 @@
 #include "..\PPU\PPU.h"
 #include "..\Utils\Utils.h"
 
+#define TEST_LD_pRRq_A(reg, opcode) \
+TEST_METHOD(LD_p##reg##q_A) \
+{ \
+    cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get() = 0x0F; \
+	u16& reg = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::##reg##].get();\
+	reg = 0xC002;\
+	bus->write(0xC002, 0x00);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0F), bus->read(reg));\
+}
+
+#define TEST_LDI_pHLq_A(opcode) \
+TEST_METHOD(LDI_pHLq_A) \
+{ \
+    cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get() = 0x0A; \
+	u16& HL = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL].get();\
+	HL = 0xC002;\
+	bus->write(0xC002, 0x00);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), bus->read(HL-1));\
+	Assert::AreEqual(static_cast<u16>(0xC002+1), HL);\
+}
+
+#define TEST_LDD_pHLq_A(opcode) \
+TEST_METHOD(LDD_pHLq_A) \
+{ \
+    cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get() = 0x0A; \
+	u16& HL = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL].get();\
+	HL = 0xC002;\
+	bus->write(0xC002, 0x00);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), bus->read(HL+1));\
+	Assert::AreEqual(static_cast<u16>(0xC002-1), HL);\
+}
+
+#define TEST_LD_R_pHLq(reg, opcode) \
+TEST_METHOD(LD_##reg##_pHLq) \
+{ \
+	bus->write(0xC000, 0x0A);\
+	u16& HL = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL];\
+    u8& ##reg## = cpu->getRegistriesRef().getRegistriesRef()[Reg::##reg##].get();\
+	##reg## = 0x00;\
+	HL = 0xC000;\
+	u8 data = bus->read(HL);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), ##reg##);\
+}
+
+#define TEST_LD_pHLq_R(reg, opcode) \
+TEST_METHOD(LD_pHLq_##reg##) \
+{ \
+	cpu->getRegistriesRef().getRegistriesRef()[Reg::##reg##].get() = 0x0A;\
+	bus->write(0xC000, 0x00);\
+	u16& HL = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL];\
+	HL = 0xC000;\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), bus->read(HL));\
+}
+
+#define TEST_LD_pHLq_H(opcode) \
+TEST_METHOD(LD_pHLq_H) \
+{ \
+	bus->write(0xC123, 0x00);\
+	u16& HL = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL];\
+	HL = 0xC123;\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0xC1), bus->read(HL));\
+}
+
+#define TEST_LD_pHLq_L(opcode) \
+TEST_METHOD(LD_pHLq_L) \
+{ \
+	bus->write(0xC123, 0x00);\
+	u16& HL = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL];\
+	HL = 0xC123;\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x23), bus->read(HL));\
+}
+
+#define TEST_LD_R_d8(reg, opcode) \
+TEST_METHOD(LD_##reg##_d8) \
+{ \
+	u8& ##reg## = cpu->getRegistriesRef().getRegistriesRef()[Reg::##reg##].get();\
+	##reg## = 0x00;\
+	\
+	u16& PC = cpu->getRegistriesRef().getPCRef();\
+	PC = 0xC000;\
+	bus->write(0xC001, 0x0A);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), ##reg##);\
+}
+
+#define TEST_LD_A_pRRq(doubleReg, opcode) \
+TEST_METHOD(LD_A_p##doubleReg##) \
+{ \
+	u8& A = cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get();\
+	A = 0x00;\
+	\
+	u16& ##doubleReg## = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::##doubleReg##].get();\
+	##doubleReg## = 0xC000;\
+	bus->write(0xC000, 0x0A);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), A);\
+}
+
+#define TEST_LDI_A_pHLq(doubleReg, opcode) \
+TEST_METHOD(LDI_A_p##doubleReg##) \
+{ \
+	u8& A = cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get();\
+	A = 0x00;\
+	\
+	u16& ##doubleReg## = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::##doubleReg##].get();\
+	##doubleReg## = 0xC000;\
+	bus->write(0xC000, 0x0A);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), A);\
+	Assert::AreEqual(static_cast<u16>(0xC001), ##doubleReg##);\
+}
+
+#define TEST_LDD_A_pHLq(doubleReg, opcode) \
+TEST_METHOD(LDD_A_p##doubleReg##) \
+{ \
+	u8& A = cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get();\
+	A = 0x00;\
+	\
+	u16& ##doubleReg## = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::##doubleReg##].get();\
+	##doubleReg## = 0xC001;\
+	bus->write(0xC001, 0x0A);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), A);\
+	Assert::AreEqual(static_cast<u16>(0xC000), ##doubleReg##);\
+}
+
+#define TEST_LD_pHLq_d8(doubleReg, opcode) \
+TEST_METHOD(LD_pHLq_d8) \
+{ \
+	bus->write(0xC000, 0x00);\
+	cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::##doubleReg##].get() = 0xC000;\
+	\
+	u16& PC = cpu->getRegistriesRef().getPCRef();\
+	PC = 0xC000;\
+	bus->write(0xC001, 0x0A);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), bus->read(0xC000));\
+}
+
+#define TEST_LD_R_R(regDst, regSrc, opcode) \
+TEST_METHOD(LD_##regDst##_##regSrc##) \
+{ \
+	u8& dst = cpu->getRegistriesRef().getRegistriesRef()[Reg::##regDst##].get();\
+	u8& src = cpu->getRegistriesRef().getRegistriesRef()[Reg::##regSrc##].get();\
+	\
+	dst = 0x00;\
+	src = 0x0A;\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), dst);\
+}
+
+#define TEST_LDH_pn16q_A(opcode) \
+TEST_METHOD(LDH_pn16q_A) \
+{ \
+	cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get() = 0x0A;\
+	bus->write(0xFF05, 0x00);\
+	\
+	u16& PC = cpu->getRegistriesRef().getPCRef(); \
+	PC = 0xC000; \
+	bus->write(0xC001, 0x05); \
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), bus->read(0xFF05));\
+}
+
+#define TEST_LD_pCq_A(opcode) \
+TEST_METHOD(LD_pCq_A) \
+{ \
+	cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get() = 0x0A;\
+	cpu->getRegistriesRef().getRegistriesRef()[Reg::C].get() = 0x05;\
+	bus->write(0xFF05, 0x00);\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), bus->read(0xFF05));\
+}
+
+
+#define TEST_LD_pn16q_A(opcode) \
+TEST_METHOD(LD_pn16q_A) \
+{ \
+	cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get() = 0x0A;\
+	bus->write(0xFF05, 0x00);\
+	\
+	u16& PC = cpu->getRegistriesRef().getPCRef(); \
+	PC = 0xC000; \
+	bus->write(0xC001, 0x05); \
+	bus->write(0xC002, 0xFF); \
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), bus->read(0xFF05));\
+}
+
+#define TEST_LDH_A_pn16q(opcode) \
+TEST_METHOD(LDH_A_pn16q) \
+{ \
+	u8& A = cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get();\
+	A = 0x00;\
+	bus->write(0xFF05, 0x0A);\
+	\
+	u16& PC = cpu->getRegistriesRef().getPCRef(); \
+	PC = 0xC000; \
+	bus->write(0xC001, 0x05); \
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), A);\
+}
+
+#define TEST_LDH_A_pCq(opcode) \
+TEST_METHOD(LDH_A_pCq) \
+{ \
+	u8& A = cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get();\
+	A = 0x00;\
+	bus->write(0xFF05, 0x0A);\
+	cpu->getRegistriesRef().getRegistriesRef()[Reg::C].get() = 0x05;\
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), A);\
+}
+
+#define TEST_LD_A_pn16q(opcode) \
+TEST_METHOD(LD_A_pn16q) \
+{ \
+	u8& A = cpu->getRegistriesRef().getRegistriesRef()[Reg::A].get();\
+	A = 0x00;\
+	bus->write(0xFF05, 0x0A);\
+	\
+	u16& PC = cpu->getRegistriesRef().getPCRef(); \
+	PC = 0xC000; \
+	bus->write(0xC001, 0x05); \
+	bus->write(0xC002, 0xFF); \
+	\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), A);\
+}
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace Instructions_tests
@@ -14,6 +269,8 @@ namespace Instructions_tests
 	TEST_CLASS(I8BitLoadTests)
 	{
 	private:
+		static std::shared_ptr <Memory> memory;
+		static std::shared_ptr <Cartridge> cartridge;
 		static std::shared_ptr <Bus> bus;
 		static std::shared_ptr <PPU> ppu;
 		static std::shared_ptr<CPU> cpu;
@@ -22,7 +279,9 @@ namespace Instructions_tests
 
 		TEST_CLASS_INITIALIZE(ClassInitialize)
 		{
-			bus = std::make_shared<Bus>();
+			memory = std::make_shared<Memory>();
+			cartridge = std::make_shared<Cartridge>();
+			bus = std::make_shared<Bus>(memory, cartridge);
 			ppu = std::make_shared<PPU>(bus, nullptr);
 			cpu = std::make_shared<CPU>(bus, ppu);
 		}
@@ -32,220 +291,111 @@ namespace Instructions_tests
 
 		}
 
-		TEST_METHOD(LD_pRRqcR)
-		{
-
-			u8* A = cpu->getRegistries("A");
-			combinedRegistries* BC = cpu->getCombinedRegistries("BC");
-
-			*A = 0x0F;
-			cpu->setCombinedRegistries("BC", 0xC002);
-
-			cpu->executeOpcode(0x02);
-
-			u8 memoryValue = cpu->readMemory(*BC);
-			Assert::AreEqual(static_cast<u8>(0x0F), memoryValue);
-		}
-
-		TEST_METHOD(LD_Rcd8)
-		{
-			u8* B = cpu->getRegistries("B");
-
-			u16* PC = cpu->getPC();
-			*PC = 0xC000;
-			cpu->writeMemory(0xC001, 0x0F);
-			cpu->executeOpcode(0x06);
-
-			Assert::AreEqual(static_cast<u8>(0x0F), *B);
-		}
-
-		TEST_METHOD(LD_RcpRRq)
-		{
-
-			u8* A = cpu->getRegistries("A");
-			combinedRegistries* BC = cpu->getCombinedRegistries("BC");
-
-			cpu->setCombinedRegistries("BC", 0xC001);
-			cpu->writeMemory(0xC001, 0x0F);
-			cpu->executeOpcode(0x0A);
-
-			Assert::AreEqual(static_cast<u8>(0x0F), *A);
-		}
-
-		TEST_METHOD(LDI_pRRqcR)
-		{
-			u8* A = cpu->getRegistries("A");
-			combinedRegistries* HL = cpu->getCombinedRegistries("HL");
-
-			*A = 0x0F;
-			cpu->setCombinedRegistries("HL", 0xC002);
-
-			cpu->executeOpcode(0x22);
-
-			u16 HLValue = HL->getValue();
-			u8 memoryValue = cpu->readMemory(HLValue - 1);
-			//u16 HLval = static_cast<u16>((*(HL->reg1) << 8) & 0xFF00 | (*(HL->reg2) & 0x00FF));
-			Assert::AreEqual(static_cast<u8>(0x0F), memoryValue);
-			Assert::AreEqual(static_cast<u16>(0xC003), HLValue);
-		}
+		TEST_LD_pRRq_A(BC,	0x02);
+		TEST_LD_pRRq_A(DE,	0x12);
+		TEST_LDI_pHLq_A(	0x22);
+		TEST_LDD_pHLq_A(	0x32);
+		TEST_LD_R_pHLq(B,	0x46);
+		TEST_LD_R_pHLq(C,	0x4E);
+		TEST_LD_R_pHLq(D,	0x56);
+		TEST_LD_R_pHLq(E,	0x5E);
+		TEST_LD_R_pHLq(H,	0x66);
 
 
-		TEST_METHOD(LDI_RcpRRq)
-		{
-			u8* A = cpu->getRegistries("A");
-			combinedRegistries* HL = cpu->getCombinedRegistries("HL");
+		TEST_LD_R_pHLq(L,	0x6E);
+		TEST_LD_R_pHLq(A,	0x7E);
 
-			cpu->setCombinedRegistries("HL", 0xC005);
-			cpu->writeMemory(0xC005, 0x0F);
+		TEST_LD_pHLq_R(B, 0x70);
+		TEST_LD_pHLq_R(C, 0x71);
+		TEST_LD_pHLq_R(D, 0x72);
+		TEST_LD_pHLq_R(E, 0x73);
+		TEST_LD_pHLq_H(   0x74);
+		TEST_LD_pHLq_L(   0x75);
+		TEST_LD_pHLq_R(A, 0x77);
 
-			cpu->executeOpcode(0x2A);
+		TEST_LD_R_d8(B,	  0x06);
+		TEST_LD_R_d8(C,	  0x0E);
+		TEST_LD_R_d8(D,	  0x16);
+		TEST_LD_R_d8(E,	  0x1E);
+		TEST_LD_R_d8(H,	  0x26);
+		TEST_LD_R_d8(L,	  0x2E);
+		TEST_LD_R_d8(A,	  0x3E);
 
-			u16 HLValue = HL->getValue();
-			Assert::AreEqual(static_cast<u8>(0x0F), *A);
-			Assert::AreEqual(static_cast<u16>(0xC006), HLValue);
-		}
+		TEST_LD_A_pRRq(BC, 0x0A);
+		TEST_LD_A_pRRq(DE, 0x1A);
+		TEST_LDI_A_pHLq(HL, 0x2A);
+		TEST_LDD_A_pHLq(HL, 0x3A);
 
-		TEST_METHOD(LDD_pRRqcR)
-		{
-			u8* A = cpu->getRegistries("A");
-			combinedRegistries* HL = cpu->getCombinedRegistries("HL");
+		TEST_LD_pHLq_d8(HL, 0x36);
 
-			*A = 0x08;
-			cpu->setCombinedRegistries("HL", 0xC007);
+		TEST_LD_R_R(B, B, 0x40);
+		TEST_LD_R_R(B, C, 0x41);
+		TEST_LD_R_R(B, D, 0x42);
+		TEST_LD_R_R(B, E, 0x43);
+		TEST_LD_R_R(B, H, 0x44);
+		TEST_LD_R_R(B, L, 0x45);
+		TEST_LD_R_R(B, A, 0x47);
 
-			cpu->executeOpcode(0x32);
+		TEST_LD_R_R(C, B, 0x48);
+		TEST_LD_R_R(C, C, 0x49);
+		TEST_LD_R_R(C, D, 0x4A);
+		TEST_LD_R_R(C, E, 0x4B);
+		TEST_LD_R_R(C, H, 0x4C);
+		TEST_LD_R_R(C, L, 0x4D);
+		TEST_LD_R_R(C, A, 0x4F);
 
-			u16 HLValue = HL->getValue();
-			u8 memoryValue = cpu->readMemory(HLValue + 1);
-			//u16 HLval = static_cast<u16>((*(HL->reg1) << 8) & 0xFF00 | (*(HL->reg2) & 0x00FF));
-			Assert::AreEqual(static_cast<u8>(0x08), memoryValue);
-			Assert::AreEqual(static_cast<u16>(0xC006), HLValue);
-		}
+		TEST_LD_R_R(D, B, 0x50);
+		TEST_LD_R_R(D, C, 0x51);
+		TEST_LD_R_R(D, D, 0x52);
+		TEST_LD_R_R(D, E, 0x53);
+		TEST_LD_R_R(D, H, 0x54);
+		TEST_LD_R_R(D, L, 0x55);
+		TEST_LD_R_R(D, A, 0x57);
 
+		TEST_LD_R_R(E, B, 0x58);
+		TEST_LD_R_R(E, C, 0x59);
+		TEST_LD_R_R(E, D, 0x5A);
+		TEST_LD_R_R(E, E, 0x5B);
+		TEST_LD_R_R(E, H, 0x5C);
+		TEST_LD_R_R(E, L, 0x5D);
+		TEST_LD_R_R(E, A, 0x5F);
 
-		TEST_METHOD(LD_pRRqcd8)
-		{
-			combinedRegistries* HL = cpu->getCombinedRegistries("HL");
+		TEST_LD_R_R(H, B, 0x60);
+		TEST_LD_R_R(H, C, 0x61);
+		TEST_LD_R_R(H, D, 0x62);
+		TEST_LD_R_R(H, E, 0x63);
+		TEST_LD_R_R(H, H, 0x64);
+		TEST_LD_R_R(H, L, 0x65);
+		TEST_LD_R_R(H, A, 0x67);
 
-			u16* PC = cpu->getPC();
-			*PC = 0xC007;
-			cpu->writeMemory(*PC+1, 0x0A);
+		TEST_LD_R_R(L, B, 0x68);
+		TEST_LD_R_R(L, C, 0x69);
+		TEST_LD_R_R(L, D, 0x6A);
+		TEST_LD_R_R(L, E, 0x6B);
+		TEST_LD_R_R(L, H, 0x6C);
+		TEST_LD_R_R(L, L, 0x6D);
+		TEST_LD_R_R(L, A, 0x6F);
 
-			HL->setValue(0xC009);
-			cpu->executeOpcode(0x36);
+		TEST_LD_R_R(A, B, 0x78);
+		TEST_LD_R_R(A, C, 0x79);
+		TEST_LD_R_R(A, D, 0x7A);
+		TEST_LD_R_R(A, E, 0x7B);
+		TEST_LD_R_R(A, H, 0x7C);
+		TEST_LD_R_R(A, L, 0x7D);
+		TEST_LD_R_R(A, A, 0x7F);
 
-			u8 data = cpu->readMemory(*HL);
-			Assert::AreEqual(static_cast<u8>(0x0A), data);
-		}
-		
-		TEST_METHOD(LDD_RcpRRq)
-		{
-			u8* A = cpu->getRegistries("A");
-			combinedRegistries* HL = cpu->getCombinedRegistries("HL");
-
-			cpu->setCombinedRegistries("HL", 0xC00A);
-			cpu->writeMemory(*HL, 0x06);
-
-			cpu->executeOpcode(0x3A);
-
-			u16 HLValue = HL->getValue();
-			Assert::AreEqual(static_cast<u8>(0x06), *A);
-			Assert::AreEqual(static_cast<u16>(0xC009), HLValue);
-		}
-
-		//TODO Verifier ce test avec un PC correct (Actuellement write dans HRAM)
-		TEST_METHOD(LDH_pn8qA)
-		{
-			u8* A = cpu->getRegistries("A");
-			u16* PC = cpu->getPC();
-
-			cpu->setRegistries("A", 0xA8);
-			*PC = 0x0082;
-
-			cpu->executeOpcode(0xE0);
-
-			u8 data = cpu->readMemory(0xFF83);
-
-			Assert::AreEqual(static_cast<u8>(0xA8), data);
-		}
-
-		//TODO Verifier ce test avec un PC correct (Actuellement write dans HRAM)
-		TEST_METHOD(LDH_pCqcA)
-		{
-			u8* A = cpu->getRegistries("A");
-			u8* C = cpu->getRegistries("C");
-
-			cpu->setRegistries("A", 0xA9);
-			cpu->setRegistries("C", 0x84);
-
-			cpu->executeOpcode(0xE2);
-
-			u8 data = cpu->readMemory(0xFF84);
-
-			Assert::AreEqual(static_cast<u8>(0xA9), data);
-		}
-
-		TEST_METHOD(LD_pa16qcA)
-		{
-			u8* A = cpu->getRegistries("A");
-			u16* PC = cpu->getPC();
-
-			cpu->setRegistries("A", 0xAB);
-			*PC = 0xC00A;
-
-			cpu->executeOpcode(0xEA);
-
-			u8 data = cpu->readMemory(0xC00B);
-
-			Assert::AreEqual(static_cast<u8>(0xAB), data);
-		}
-
-		//TODO Verifier ce test avec un PC correct (Actuellement write dans HRAM)
-		TEST_METHOD(LDH_Acpa8q)
-		{
-			u8* A = cpu->getRegistries("A");
-			u16* PC = cpu->getPC();
-
-			cpu->setRegistries("A", 0x00);
-			*PC = 0x0083;
-			cpu->writeMemory(0xFF84, 0xAB);
-
-			cpu->executeOpcode(0xF0);
-
-			Assert::AreEqual(static_cast<u8>(0xAB), *A);
-		}
-
-		//TODO Verifier ce test avec un PC correct (Actuellement write dans HRAM)
-		TEST_METHOD(LDH_AcpCq)
-		{
-			u8* A = cpu->getRegistries("A");
-			u8* C = cpu->getRegistries("C");
-
-			cpu->setRegistries("A", 0x00);
-			cpu->setRegistries("C", 0x85);
-			cpu->writeMemory(0xFF85, 0xAC);
-
-			cpu->executeOpcode(0xF2);
+		TEST_LDH_pn16q_A( 0xE0);
+		TEST_LD_pCq_A(	  0xE2);
+		TEST_LD_pn16q_A(  0xEA);
+		TEST_LDH_A_pn16q( 0xF0);
+		TEST_LDH_A_pCq(   0xF2);
+		TEST_LD_A_pn16q(  0xFA);
 
 
-			Assert::AreEqual(static_cast<u8>(0xAC), *A);
-		}
-
-		TEST_METHOD(LD_Acpa16q)
-		{
-			u8* A = cpu->getRegistries("A");
-			u16* PC = cpu->getPC();
-
-			cpu->setRegistries("A", 0x00);
-			*PC = 0xC00A;
-			cpu->writeMemory(0xC00B, 0xAD);
-
-			cpu->executeOpcode(0xFA);
-
-			Assert::AreEqual(static_cast<u8>(0xAD), *A);
-		}
 	};
 	
+	std::shared_ptr<Memory> I8BitLoadTests::memory = nullptr;
+	std::shared_ptr<Cartridge> I8BitLoadTests::cartridge = nullptr;
 	std::shared_ptr<Bus> I8BitLoadTests::bus = nullptr;
 	std::shared_ptr<CPU> I8BitLoadTests::cpu = nullptr;
 	std::shared_ptr<PPU> I8BitLoadTests::ppu = nullptr;

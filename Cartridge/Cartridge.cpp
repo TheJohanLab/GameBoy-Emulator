@@ -43,3 +43,8 @@ u8 Cartridge::read(u16 address) const
         return 0xFF; // valeur de retour par defaut (souvent 0xFF lorsque la lecture est invalide)
     }
 }
+
+u8& Cartridge::read(u16 address)
+{
+    return mROMData[address];
+}

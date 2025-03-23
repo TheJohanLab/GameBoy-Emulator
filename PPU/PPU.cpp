@@ -252,7 +252,7 @@ u8 PPU::readWX() const
 	return  mBus->read(WINDOW_X);
 }
 
-
+// cycle = dots
 void PPU::render(u8 cycle)
 {
 
@@ -586,6 +586,7 @@ void PPU::STATInterruptHandler()
 	{
 		mode1Condition = STAT.flags.PPUMode == 0x01 ? 0x01 : 0x00;
 	}
+	//test
 	u8 mode2Condition = 0x00;
 	if (STAT.flags.mode2intSelect == 0x01)
 	{

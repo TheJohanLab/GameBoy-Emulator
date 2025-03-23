@@ -3,6 +3,7 @@
 #include "Emulator.h"
 #include "Interrupts/InterruptsManager.h"
 
+#include "Timer/Timer.h"
 
 
 namespace gbe {
@@ -35,6 +36,7 @@ namespace gbe {
 		mPPU = std::make_shared<PPU>(mBus, mScreen);
 		mCPU = std::make_shared<CPU>(mBus, mPPU);
 		mImGui = std::make_shared<ImGuiHandler>(mScreen->getWindow(), mScreen->getRenderer());
+		mTimer = std::make_shared<Timer>(mBus->read(TIMA), mBus->read(TMA), mBus->read(TAC));
 
 		auto weak_cpu = std::weak_ptr(mCPU);
 		if (weak_cpu.expired())
@@ -49,9 +51,10 @@ namespace gbe {
 		mImGui->setPPUReference(mPPU);
 		mImGui->setMemoryReference(mMemory);
 		mImGui->setCartridgeReference(mCartridge);
+		mImGui->setTimerReferences(mTimer);
 
 
-		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU, mImGui);
+		mGameLoop = std::make_shared<GameLoop>(mCPU, mPPU, mImGui, mTimer);
 
 		setCallbacks();
 

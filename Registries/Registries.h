@@ -5,7 +5,12 @@
 
 enum Reg
 {
-	A = 0, B, C, D, E, H, L, F	
+	A = 0, F, B, C, D, E, H, L	
+};
+
+enum DoubleReg
+{
+	AF = 0, BC, DE, HL
 };
 
 struct combinedRegistries 
@@ -89,9 +94,16 @@ class Registries
 	private:
 
 		//TODO Remove unused parts when it's working with new approch
-		u8 A{ 0 }, B{ 0 }, C{ 0 }, D{ 0 }, E{ 0 }, H{ 0 }, L{ 0 };
-		combinedRegistries AF, BC, DE, HL;
 		flags F;
+		u8 A{ 0 }; 
+		u8 C{ 0 }; 
+		u8 B{ 0 }; 
+		u8 D{ 0 }; 
+		u8 E{ 0 }; 
+		u8 L{ 0 };
+		u8 H{ 0 }; 
+
+		combinedRegistries AF, BC, DE, HL;
 		u16 SP{ 0xFFFE };
 		u16 PC{ 0x0 };
 		u8 IME{ 0 };
@@ -99,11 +111,14 @@ class Registries
 		
 		// New approch
 		std::vector<std::reference_wrapper<u8>> mRegistries;
+		std::vector<std::reference_wrapper<const u8>> mConstRegistries; 
+		std::vector<std::reference_wrapper<u16>> mDoubleRegistries; 
 
-		u16& mBC = *reinterpret_cast<u16*>(&B);
-		u16& mDE = *reinterpret_cast<u16*>(&D);
-		u16& mHL = *reinterpret_cast<u16*>(&H);
-		u16& mAF = *reinterpret_cast<u16*>(&A);
+
+		u16& mBC = *reinterpret_cast<u16*>(&C);
+		u16& mDE = *reinterpret_cast<u16*>(&E);
+		u16& mHL = *reinterpret_cast<u16*>(&L);
+		u16& mAF = *reinterpret_cast<u16*>(&F);
 
 	public:
 		Registries();
@@ -157,17 +172,16 @@ class Registries
 		const std::vector<std::reference_wrapper<const u8>>& getRegistriesRef() const;
 		std::vector<std::reference_wrapper<u8>>& getRegistriesRef();
 
+		std::vector<std::reference_wrapper<u16>>& getDoubleRegistriesRef();
+
 		const u16& getPCRef() const;
 		u16& getPCRef();
 
 		const u16& getSPRef() const;
 		u16& getSPRef();
 
-		u16& getAFRef();
-		u16& getBCRef();
-		u16& getDERef();
-		u16& getHLRef();
-
+		const flags& getFlagsRef() const;
+		flags& getFlagsRef();
 
 
 };

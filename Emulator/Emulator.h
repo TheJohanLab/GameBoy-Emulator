@@ -21,6 +21,8 @@
 //#include "Utils/Utils.h"
 #include "Utils/Addresses.h"
 
+class Timer;
+
 namespace gbe {
 
 	class Emulator 
@@ -36,6 +38,7 @@ namespace gbe {
 		std::shared_ptr<ImGuiHandler> mImGui;
 		std::shared_ptr<BootRom> mBootRom;
 		std::shared_ptr<GameLoop> mGameLoop;
+		std::shared_ptr<Timer> mTimer;
 		//std::shared_ptr<InterruptsManager> mInterruptsManager;
 
 	public:

@@ -17,14 +17,14 @@ protected:
 
 	static u8 readNextOpcode(CPU& cpu);
 	static u16 readNextTwoOpcodes(CPU& cpu);
-	static u8 getBit(u8 byte, u8 pos) { return (byte >> pos) & 0x01; }
-	static void setBit(u8& byte, u8 pos, u8 val) { byte = (byte & ~(0x01 << pos) | (val << pos)); }
+	//static u8 getBit(u8 byte, u8 pos) { return (byte >> pos) & 0x01; }
+	static void setBit(u8& byte, u8 pos, u8 val) { byte = (byte & ~(0x01 << pos) | (val << pos)); } //TODO to delete
 	
 	static void updateHFlag(CPU& cpu, u8 byte, bool substract);
 	static void setHFlag(CPU& cpu, u8 registry, u8 addValue, bool substract);
-	static void setHFlag(CPU& cpu, u8 value);
-	static void setZFlag(CPU& cpu, u8 value);
-	static void setNFlag(CPU& cpu, u8 value);
+	static void setHFlag(CPU& cpu, const u8 value);
+	static void setZFlag(CPU& cpu, const u8 value);
+	static void setNFlag(CPU& cpu, const u8 value);
 	static void setCFlag(CPU& cpu, const u8& baseValue, const u8& additionnalValue, bool substract = false);
 	static void setCFlag(CPU& cpu, u8 value);
 	
@@ -35,17 +35,16 @@ protected:
 	static bool isOverflow(const u8& baseValue, const u8& additionalValue, bool substract = false);
 	static bool isOverflow(const u16& baseValue, const u16& additionalValue, bool substract = false);
 
-	static void setClockCycle(Instruction& instance, const u8& clockCycle);
 
 	//New approch
-	std::vector<std::reference_wrapper<uint8_t>>& mRegistries; 
-	uint16_t& mPC;
-	uint16_t& mSP;
-	uint16_t& mBC;
-	uint16_t& mDE;
-	uint16_t& mHL;
-	uint16_t& mAF;
-	std::shared_ptr<Bus> mBus;
+	static std::vector<std::reference_wrapper<u8>>* mRegistries; 
+	static std::vector<std::reference_wrapper<u16>>* mDoubleRegistries; 
+
+	static flags* mFlags;
+	static u16* mPC;
+	static u16* mSP;
+
+	static std::shared_ptr<Bus> mBus;
 
 public:
 	//Instruction();
@@ -57,5 +56,7 @@ public:
 	//auto getFunctionPointer() const { return pmInstruction; }
 	//New approch
 	auto getFunctionPointer() const { return mInstruction; }
+
+	static void setDataReferences(Registries& registries, std::shared_ptr<Bus> bus);
 };
 

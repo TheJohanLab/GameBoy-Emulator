@@ -44,7 +44,7 @@ void ImGuiHandler::setOnQuitCallback(onRomLoaded callback)
 
 
 
-void ImGuiHandler::setRegistriesReference(std::shared_ptr<Registries> registries)
+void ImGuiHandler::setRegistriesReference(const  Registries & registries)
 {
 	mImGuiRenderer->setRegistriesReference(registries);
 }
@@ -72,6 +72,11 @@ void ImGuiHandler::setMemoryReference(std::shared_ptr<const Memory> memory)
 void ImGuiHandler::setCartridgeReference(std::shared_ptr<const Cartridge> cartridge)
 {
 	mImGuiRenderer->setCartridgeReference(cartridge);
+}
+
+void ImGuiHandler::setTimerReferences(std::shared_ptr<const Timer> timer)
+{
+	mImGuiRenderer->setTimerReferences(timer);
 }
 
 

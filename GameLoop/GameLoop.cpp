@@ -136,7 +136,6 @@ void GameLoop::handleBootFrame()
 
 inline void GameLoop::setCallbacks()
 {
-	//mPPU->getScreen()->setOnCloseEvent(BIND_FUNC_NO_ARGS(this, GameLoop::stopGame));
 	mPPU->setOnRenderListener(BIND_FUNC_1_ARG(this, GameLoop::render));
 
 	mStateFactory->setHandleFrameCallback(BIND_FUNC_NO_ARGS(this, GameLoop::handleFrame));
@@ -169,7 +168,6 @@ void GameLoop::handleFrame()
 			mCycles += step();
 		}
 
-		//GBE_LOG_INFO("cycles : {0}", mCycles);
 		return;
 	}
 
@@ -180,11 +178,7 @@ void GameLoop::handleFrame()
 	mCycles -= cyclesPerFrame;
 
 	//std::cout << "Nombre de cycles après reset : " << mCycles << std::endl;
-	//TODO Faire une methode qui gere tous les processus du CPU par frame
-	//u8 currCycle = mCPU.executeOpcode(0x01);
-	//mCPU.callInterruptHandler();
 
-	//GBE_LOG_INFO("synchronise frame");
 	synchroniseFrame();
 	
 	

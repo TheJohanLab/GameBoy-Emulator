@@ -30,8 +30,10 @@ protected:
 	
 	static void clearFlag(CPU& cpu, const char& flag);
 	static void setFlags(CPU& cpu, const u8& flags);
-	static bool isHalfOverflow(const u8& baseValue, const u8& additionalValue, bool substract = false);
-	static bool isHalfOverflow(const u16& baseValue, const u16& additionalValue, bool substract = false);
+	static bool isHalfOverflow(const u8& baseValue, const u8& additionalValue);
+	static bool isHalfOverflow(const u16& baseValue, const u16& additionalValue);
+	static bool isHalfUnderflow(const u8& baseValue, const u8& additionalValue);
+	static bool isHalfUnderlow(const u16& baseValue, const u16& additionalValue);
 	static bool isOverflow(const u8& baseValue, const u8& additionalValue, bool substract = false);
 	static bool isOverflow(const u16& baseValue, const u16& additionalValue, bool substract = false);
 

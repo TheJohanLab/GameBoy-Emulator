@@ -75,4 +75,7 @@ typedef struct RGB{
 #define SET_BIT(byte, pos, val) ((byte) = ((byte) & ~(1 << (pos))) | ((val) << (pos)))
 #define JOIN_BYTES(msb, lsb) ((MSB << 8) + LSB)
 
+#define GET_LOW_REG(reg) (*reinterpret_cast<u8*>(&reg))
+#define GET_HIGH_REG(reg) (*reinterpret_cast<u8*>(&(reg)+1))
+
 #define CONVERT_SEC_TO_DOT(sec) sec * 4194304

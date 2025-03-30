@@ -9,8 +9,8 @@ class Instruction16BitLoad : public Instruction
 private:
 	static void LD_RRcd16(CPU& cpu, combinedRegistries& registries);
 	static void LD_RRcd16(CPU& cpu, u16* registry);
-	static void PUSH_RR(CPU& cpu, combinedRegistries& registries);
-	static void POP_RR(CPU& cpu, combinedRegistries& registries);
+	static void PUSH_RR(CPU& cpu, u16& doubleRegistry);
+	static void POP_RR(CPU& cpu, u16& doubleRegistry);
 
 public:
 	Instruction16BitLoad(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus);

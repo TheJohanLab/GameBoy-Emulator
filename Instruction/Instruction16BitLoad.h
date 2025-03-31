@@ -17,7 +17,7 @@ public:
 	virtual ~Instruction16BitLoad() = default;
 
 	static u8 LD_BCcd16(CPU& cpu);	//0x01 LD BC,d16
-	static u8 LD_pa16qcSP(CPU& cpu);	//0x08 LD (a16),SP
+	static u8 LD_pa16qcSP(CPU& cpu);//0x08 LD (a16),SP
 	static u8 LD_DEcd16(CPU& cpu);	//0x11 LD DE,d16
 	static u8 LD_HLcd16(CPU& cpu);	//0x21 LD HL,d16
 	static u8 LD_SPcd16(CPU& cpu);	//0x31 LD SP,d16

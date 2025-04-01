@@ -38,6 +38,8 @@ void Instruction16BitLoad::POP_RR(CPU& cpu, u16& doubleRegistry)
 	lowRegistry = mBus->read((*mSP)++);
 	highRegistry = mBus->read((*mSP)++);
 
+	doubleRegistry;
+
 }
 
 /// Public methods ////
@@ -171,7 +173,7 @@ u8 Instruction16BitLoad::LDHL_SPcr8(CPU& cpu)
 
 u8 Instruction16BitLoad::LD_SPcHL(CPU& cpu)
 {
-	u8 HL = (*mDoubleRegistries)[DoubleReg::HL];
+	u16 HL = (*mDoubleRegistries)[DoubleReg::HL];
 	*mSP = HL;
 
 	return 8;

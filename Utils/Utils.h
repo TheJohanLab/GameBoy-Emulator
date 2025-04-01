@@ -76,6 +76,6 @@ typedef struct RGB{
 #define JOIN_BYTES(msb, lsb) ((MSB << 8) + LSB)
 
 #define GET_LOW_REG(reg) (*reinterpret_cast<u8*>(&reg))
-#define GET_HIGH_REG(reg) (*reinterpret_cast<u8*>(&(reg)+1))
+#define GET_HIGH_REG(reg) (*reinterpret_cast<u8*>(reinterpret_cast<u8*>(&reg) + 1))
 
 #define CONVERT_SEC_TO_DOT(sec) sec * 4194304

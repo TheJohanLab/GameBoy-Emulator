@@ -520,6 +520,22 @@ TEST_METHOD(AND_A_##reg)\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
 }
 
+#define TEST_AND_A_A(opcode) \
+TEST_METHOD(AND_A_A)\
+{\
+	u8& A_Reg = cpu->getRegistriesRef().getRegistriesRef()[Reg::A];\
+	flags& flags = cpu->getRegistriesRef().getFlagsRef();\
+	\
+	A_Reg = 0x05;\
+	flags.F = 0x00;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x05), A_Reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+}
+
 #define TEST_AND_A_pHLq( opcode) \
 TEST_METHOD(AND_A_pHLq)\
 {\
@@ -573,6 +589,22 @@ TEST_METHOD(XOR_A_##reg)\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
 }
 
+#define TEST_XOR_A_A(opcode) \
+TEST_METHOD(XOR_A_A)\
+{\
+	u8& A_Reg = cpu->getRegistriesRef().getRegistriesRef()[Reg::A];\
+	flags& flags = cpu->getRegistriesRef().getFlagsRef();\
+	\
+	A_Reg = 0x05;\
+	flags.F = 0x00;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x00), A_Reg);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+}
+
 #define TEST_XOR_A_pHLq( opcode) \
 TEST_METHOD(XOR_A_pHLq)\
 {\
@@ -588,13 +620,13 @@ TEST_METHOD(XOR_A_pHLq)\
 	Assert::AreEqual(static_cast<u8>(0x0E), A);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
-	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
 	\
 	A = 0x0A;\
 	bus->write(0xC000,0x0A);\
-	cpu->executeOpcode(opcode);\
 	flags.F = 0x01;\
+	cpu->executeOpcode(opcode);\
 	Assert::AreEqual(static_cast<u8>(0x00), A);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
@@ -630,6 +662,22 @@ TEST_METHOD(OR_A_##reg)\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
 }
 
+#define TEST_OR_A_A(opcode) \
+TEST_METHOD(OR_A_A)\
+{\
+	u8& A_Reg = cpu->getRegistriesRef().getRegistriesRef()[Reg::A];\
+	flags& flags = cpu->getRegistriesRef().getFlagsRef();\
+	\
+	A_Reg = 0x15;\
+	flags.F = 0x00;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x015), A_Reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+}
+
 #define TEST_OR_A_pHLq(opcode) \
 TEST_METHOD(OR_A_pHLq)\
 {\
@@ -645,13 +693,13 @@ TEST_METHOD(OR_A_pHLq)\
 	Assert::AreEqual(static_cast<u8>(0x5F), A);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
-	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
 	\
 	A = 0x00;\
 	bus->write(0xC000,0x00);\
-	cpu->executeOpcode(opcode);\
 	flags.F = 0x01;\
+	cpu->executeOpcode(opcode);\
 	Assert::AreEqual(static_cast<u8>(0x00), A);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
@@ -701,6 +749,22 @@ TEST_METHOD(CP_A_##reg)\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C); \
 }
 
+#define TEST_CP_A_A( opcode) \
+TEST_METHOD(CP_A_A)\
+{\
+	u8& A_reg = cpu->getRegistriesRef().getRegistriesRef()[Reg::A]; \
+	flags& flags = cpu->getRegistriesRef().getFlagsRef(); \
+	\
+	flags.F = 0x00;\
+	A_reg = 0xFE; \
+	cpu->executeOpcode(opcode); \
+	Assert::AreEqual(static_cast<u8>(0xFE), A_reg); \
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z); \
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N); \
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H); \
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C); \
+}
+
 #define TEST_CP_A_pHLq(opcode) \
 TEST_METHOD(CP_A_pHLq)\
 {\
@@ -743,6 +807,8 @@ TEST_METHOD(CP_A_pHLq)\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H); \
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C); \
 }
+
+
 
 
 #define TEST_ADD_A_d8(opcode) \
@@ -1125,7 +1191,7 @@ namespace Instructions_tests
 		TEST_AND_A_R(H, 0xA4);
 		TEST_AND_A_R(L, 0xA5);
 		TEST_AND_A_pHLq(0xA6);
-		TEST_AND_A_R(A, 0xA7);
+		TEST_AND_A_A(   0xA7);
 
 		TEST_XOR_A_R(B, 0xA8);
 		TEST_XOR_A_R(C, 0xA9);
@@ -1134,7 +1200,7 @@ namespace Instructions_tests
 		TEST_XOR_A_R(H, 0xAC);
 		TEST_XOR_A_R(L, 0xAD);
 		TEST_XOR_A_pHLq(0xAE);
-		TEST_XOR_A_R(A, 0xAF);
+		TEST_XOR_A_A(   0xAF);
 
 		TEST_OR_A_R(B, 0xB0);
 		TEST_OR_A_R(C, 0xB1);
@@ -1143,7 +1209,7 @@ namespace Instructions_tests
 		TEST_OR_A_R(H, 0xB4);
 		TEST_OR_A_R(L, 0xB5);
 		TEST_OR_A_pHLq(0xB6);
-		TEST_OR_A_R(A, 0xB7);
+		TEST_OR_A_A(   0xB7);
 
 		TEST_CP_A_R(B, 0xB8);
 		TEST_CP_A_R(C, 0xB9);
@@ -1152,7 +1218,7 @@ namespace Instructions_tests
 		TEST_CP_A_R(H, 0xBC);
 		TEST_CP_A_R(L, 0xBD);
 		TEST_CP_A_pHLq(0xBE);
-		TEST_CP_A_R(A, 0xBF);
+		TEST_CP_A_A(   0xBF);
 						  
 		TEST_ADD_A_d8(0xC6);
 		TEST_ADC_A_d8(0xCE);
@@ -1190,102 +1256,102 @@ namespace Instructions_tests
 
 			TEST_DAA(0xE5, 0x85, 0x00, 0x00, 0x01);
 		}
-		TEST_METHOD(DAA_old)
-		{
+		//TEST_METHOD(DAA_old)
+		//{
 
-			u8& A = cpu->getRegistriesRef().getRegistriesRef()[Reg::A];
-			flags& flags = cpu->getRegistriesRef().getFlagsRef(); \
-			flags.F = 0x00;
-			
-			A = 0x47;
-			cpu->executeOpcode(0x3C);	//INC A
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x48), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
+		//	u8& A = cpu->getRegistriesRef().getRegistriesRef()[Reg::A];
+		//	flags& flags = cpu->getRegistriesRef().getFlagsRef(); \
+		//	flags.F = 0x00;
+		//	
+		//	A = 0x47;
+		//	cpu->executeOpcode(0x3C);	//INC A
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x48), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
 
-			A = 0x09;
-			cpu->executeOpcode(0x3C);	//INC A
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x10), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
+		//	A = 0x09;
+		//	cpu->executeOpcode(0x3C);	//INC A
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x10), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
 
-			A = 0x99;
-			cpu->executeOpcode(0x3C);	//INC A
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x00), A);
-			Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
+		//	A = 0x99;
+		//	cpu->executeOpcode(0x3C);	//INC A
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x00), A);
+		//	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
 
-			A = 0xC3;
-			cpu->executeOpcode(0x3C);	//INC A
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x24), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
+		//	A = 0xC3;
+		//	cpu->executeOpcode(0x3C);	//INC A
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x24), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
 
-			A = 0xCB;
-			flags.flags.H = 1;
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x31), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
+		//	A = 0xCB;
+		//	flags.flags.H = 1;
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x31), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
 
-			flags.F = 0x00;
-			A = 0x47;
-			cpu->executeOpcode(0x3D);	//DEC A
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x46), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
+		//	flags.F = 0x00;
+		//	A = 0x47;
+		//	cpu->executeOpcode(0x3D);	//DEC A
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x46), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
 
-			A = 0x40;
-			cpu->executeOpcode(0x3D);	//DEC A
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x39), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
+		//	A = 0x40;
+		//	cpu->executeOpcode(0x3D);	//DEC A
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x39), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
 
-			A = 0x10;
-			cpu->executeOpcode(0x3D);	//DEC A
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x09), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
+		//	A = 0x10;
+		//	cpu->executeOpcode(0x3D);	//DEC A
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x09), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);
 
-			A = 0x00;
-			flags.flags.C = 1;
-			cpu->executeOpcode(0x3D);	//DEC A
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x99), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
+		//	A = 0x00;
+		//	flags.flags.C = 1;
+		//	cpu->executeOpcode(0x3D);	//DEC A
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x99), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
 
-			flags.flags.H = 1;
-			A = 0xCB;
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x65), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
+		//	flags.flags.H = 1;
+		//	A = 0xCB;
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x65), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
 
-			A = 0xE5;
-			cpu->executeOpcode(0x27);	//DAA
-			Assert::AreEqual(static_cast<u8>(0x85), A);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
-			Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
-		}
+		//	A = 0xE5;
+		//	cpu->executeOpcode(0x27);	//DAA
+		//	Assert::AreEqual(static_cast<u8>(0x85), A);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);
+		//	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);
+		//	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);
+		//}
 	};
 
 	std::shared_ptr<Memory> I8BitLogicTests::memory = nullptr;

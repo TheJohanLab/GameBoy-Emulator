@@ -8,6 +8,194 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
+
+#define TEST_INC_RR(highReg, lowReg, opcode) \
+TEST_METHOD(INC_##highReg##lowReg)\
+{\
+	u16& doubleRegistry = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::##highReg##lowReg];\
+	u8& highReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::##highReg]; \
+	u8& lowReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::##lowReg]; \
+	\
+	doubleRegistry = 0x1234;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast<u8>(0x12), highReg);\
+	Assert::AreEqual(static_cast <u8>(0x35), lowReg);\
+	Assert::AreEqual(static_cast <u16>(0x1235), doubleRegistry);\
+	\
+	doubleRegistry = 0x12FF;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x13), highReg);\
+	Assert::AreEqual(static_cast <u8>(0x00), lowReg);\
+	Assert::AreEqual(static_cast <u16>(0x1300), doubleRegistry); \
+	\
+	doubleRegistry = 0xFFFF;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x00), highReg);\
+	Assert::AreEqual(static_cast <u8>(0x00), lowReg);\
+	Assert::AreEqual(static_cast <u16>(0x0000), doubleRegistry); \
+}
+
+#define TEST_INC_SP(opcode) \
+TEST_METHOD(INC_SP)\
+{\
+	u16& SP = cpu->getRegistriesRef().getSPRef();\
+	SP = 0x1234;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast <u16>(0x1235), SP);\
+	\
+	SP = 0xFFFF;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast <u16>(0x0000), SP); \
+}
+
+#define TEST_DEC_RR(highReg, lowReg, opcode) \
+TEST_METHOD(DEC_##highReg##lowReg)\
+{\
+	u16& doubleRegistry = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::##highReg##lowReg];\
+	u8& highReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::##highReg]; \
+	u8& lowReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::##lowReg]; \
+	\
+	doubleRegistry = 0x1234;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast<u8>(0x12), highReg);\
+	Assert::AreEqual(static_cast <u8>(0x33), lowReg);\
+	Assert::AreEqual(static_cast <u16>(0x1233), doubleRegistry);\
+	\
+	doubleRegistry = 0x1200;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x11), highReg);\
+	Assert::AreEqual(static_cast <u8>(0xFF), lowReg);\
+	Assert::AreEqual(static_cast <u16>(0x11FF), doubleRegistry); \
+	\
+	doubleRegistry = 0x0000;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0xFF), highReg);\
+	Assert::AreEqual(static_cast <u8>(0xFF), lowReg);\
+	Assert::AreEqual(static_cast <u16>(0xFFFF), doubleRegistry); \
+}
+
+#define TEST_DEC_SP(opcode) \
+TEST_METHOD(DEC_SP)\
+{\
+	u16& SP = cpu->getRegistriesRef().getSPRef();\
+	\
+	SP = 0x1234;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast <u16>(0x1233), SP);\
+	\
+	SP = 0x0000;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast <u16>(0xFFFF), SP); \
+}
+
+#define TEST_ADD_HL_RR(highReg, lowReg, opcode) \
+TEST_METHOD(ADD_HL_##highReg##lowReg)\
+{\
+	u16& doubleRegistry = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::##highReg##lowReg]; \
+	u8& highReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::##highReg]; \
+	u8& lowReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::##lowReg]; \
+	u16& HLReg = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL]; \
+	u8& HReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::H]; \
+	u8& LReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::L]; \
+	\
+	flags& flags = cpu->getRegistriesRef().getFlagsRef();\
+	flags.flags.Z = 1;\
+	flags.flags.N = 1;\
+	flags.flags.H = 0;\
+	flags.flags.C = 0;\
+	\
+	doubleRegistry = 0x0002;\
+	HLReg = 0x0008;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast<u8>(0x00), highReg);\
+	Assert::AreEqual(static_cast<u8>(0x02), lowReg);\
+	Assert::AreEqual(static_cast<u16>(0x0002), doubleRegistry);\
+	Assert::AreEqual(static_cast<u16>(0x000A), HLReg);\
+	Assert::AreEqual(static_cast<u8>(0x00), HReg);\
+	Assert::AreEqual(static_cast<u8>(0x0A), LReg);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	\
+	doubleRegistry = 0x0005;\
+	HLReg = 0x0FFB;\
+	flags.flags.Z = 0;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast<u8>(0x00), highReg);\
+	Assert::AreEqual(static_cast<u8>(0x05), lowReg);\
+	Assert::AreEqual(static_cast<u16>(0x0005), doubleRegistry); \
+	Assert::AreEqual(static_cast<u16>(0x1000), HLReg);\
+	Assert::AreEqual(static_cast<u8>(0x10), HReg);\
+	Assert::AreEqual(static_cast<u8>(0x00), LReg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	\
+	doubleRegistry = 0x0002;\
+	HLReg = 0xFFFE;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast<u16>(0x0000), HLReg);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
+}
+
+#define TEST_ADD_HL_SP(opcode) \
+TEST_METHOD(ADD_HL_SP)\
+{\
+	u16& SP = cpu->getRegistriesRef().getSPRef();\
+	u16& HL = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL]; \
+	u8& H = cpu->getRegistriesRef().getRegistriesRef()[Reg::H]; \
+	u8& L = cpu->getRegistriesRef().getRegistriesRef()[Reg::L]; \
+	\
+	flags& flags = cpu->getRegistriesRef().getFlagsRef();\
+	flags.flags.Z = 1;\
+	flags.flags.N = 1;\
+	flags.flags.H = 0;\
+	flags.flags.C = 0;\
+	\
+	SP = 0x0002;\
+	HL = 0x0008;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast<u16>(0x0002), SP);\
+	Assert::AreEqual(static_cast<u16>(0x000A), HL);\
+	Assert::AreEqual(static_cast<u8>(0x00), H);\
+	Assert::AreEqual(static_cast<u8>(0x0A), L);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	\
+	SP = 0x0005;\
+	HL = 0x0FFB;\
+	flags.flags.Z = 0;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast<u16>(0x0005), SP); \
+	Assert::AreEqual(static_cast<u16>(0x1000), HL);\
+	Assert::AreEqual(static_cast<u8>(0x10), H);\
+	Assert::AreEqual(static_cast<u8>(0x00), L);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	\
+	SP = 0x0002;\
+	HL = 0xFFFE;\
+	cpu->executeOpcode(opcode);\
+	\
+	Assert::AreEqual(static_cast<u16>(0x0000), HL);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
+}
+
 namespace Instructions_tests
 {
 
@@ -35,108 +223,18 @@ namespace Instructions_tests
 		{
 		}
 
-		TEST_METHOD(INC_RR)
-		{
-			combinedRegistries* BC = cpu->getCombinedRegistries("BC");
-			
-			u8* B = cpu->getRegistries("B");
-			u8* C = cpu->getRegistries("C");
-
-			cpu->setCombinedRegistries("BC", 0x1234);
-			cpu->executeOpcode(0x03);
-
-			Assert::AreEqual(static_cast<u8>(0x12), *B);
-			Assert::AreEqual(static_cast <u8>(0x35), *C);
-
-			BC->setValue(0x12FF);
-			cpu->executeOpcode(0x03);
-			Assert::AreEqual(static_cast<u8>(0x13), *B);
-			Assert::AreEqual(static_cast <u8>(0x00), *C);
-
-			BC->setValue(0xFFFF);
-			cpu->executeOpcode(0x03);
-			Assert::AreEqual(static_cast<u8>(0x00), *B);
-			Assert::AreEqual(static_cast <u8>(0x00), *C);
-
-		}
-
-		TEST_METHOD(DEC_RR)
-		{
-			combinedRegistries* BC = cpu->getCombinedRegistries("BC");
-			u8* B = cpu->getRegistries("B");
-			u8* C = cpu->getRegistries("C");
-
-			BC->setValue(0x1234);
-			cpu->executeOpcode(0x0B);
-
-			Assert::AreEqual(static_cast<u8>(0x12), *B);
-			Assert::AreEqual(static_cast <u8>(0x33), *C);
-
-			BC->setValue(0x1200);
-			cpu->executeOpcode(0x0B);
-			Assert::AreEqual(static_cast<u8>(0x11), *B);
-			Assert::AreEqual(static_cast <u8>(0xFF), *C);
-
-			BC->setValue(0x0000);
-			cpu->executeOpcode(0x0B);
-			Assert::AreEqual(static_cast<u8>(0xFF), *B);
-			Assert::AreEqual(static_cast <u8>(0xFF), *C);
-
-
-		}
-
-		TEST_METHOD(ADD_HLcRR)
-		{
-
-			combinedRegistries* BC = cpu->getCombinedRegistries("BC");
-			combinedRegistries* HL = cpu->getCombinedRegistries("HL");
-			u8* B = cpu->getRegistries("B");
-			u8* C = cpu->getRegistries("C");
-			u8* H = cpu->getRegistries("H");
-			u8* L = cpu->getRegistries("L");
-			flags* flags = cpu->getFlagRegistry(); 
-			flags->flags.Z = 1;
-			flags->flags.N = 1;
-			flags->flags.H = 0;
-			flags->flags.C = 0;
-
-			BC->setValue(0x0002);
-			HL->setValue(0x0008);
-			cpu->executeOpcode(0x09);
-			Assert::AreEqual(static_cast<u8>(0x00), *B);
-			Assert::AreEqual(static_cast<u8>(0x02), *C);
-			Assert::AreEqual(static_cast<u16>(0x000A), HL->getValue());
-			Assert::AreEqual(static_cast<u8>(0x00), *H);
-			Assert::AreEqual(static_cast<u8>(0x0A), *L);
-			Assert::AreEqual(static_cast<u8>(0x00), *HL->getHighRegistry());
-			Assert::AreEqual(static_cast<u8>(0x0A), *HL->getLowRegistry());
-			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.N);
-			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.H);
-			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
-
-			BC->setValue(0x0005);
-			HL->setValue(0x0FFB);
-			flags->flags.Z = 0;
-			cpu->executeOpcode(0x09);
-			Assert::AreEqual(static_cast<u8>(0x00), *B);
-			Assert::AreEqual(static_cast<u8>(0x05), *C);
-			Assert::AreEqual(static_cast<u16>(0x1000), HL->getValue());
-			Assert::AreEqual(static_cast<u8>(0x10), *H);
-			Assert::AreEqual(static_cast<u8>(0x00), *L);
-			Assert::AreEqual(static_cast<u8>(0x10), *HL->getHighRegistry());
-			Assert::AreEqual(static_cast<u8>(0x00), *HL->getLowRegistry());
-			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.Z);
-			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.H);
-			Assert::AreEqual(static_cast <u8>(0x00), flags->flags.C);
-
-			BC->setValue(0x0002);
-			HL->setValue(0xFFFE);
-			cpu->executeOpcode(0x09);
-			Assert::AreEqual(static_cast<u16>(0x0000), HL->getValue());
-			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.H);
-			Assert::AreEqual(static_cast <u8>(0x01), flags->flags.C);
-		}
+		TEST_INC_RR(B, C,	0x03);
+		TEST_ADD_HL_RR(B, C,0x09);
+		TEST_DEC_RR(B, C,	0x0B);
+		TEST_INC_RR(D, E,	0x13);
+		TEST_ADD_HL_RR(D, E,0x19);
+		TEST_DEC_RR(D, E,	0x1B);
+		TEST_INC_RR(H, L,	0x23);
+		TEST_ADD_HL_RR(H, L,0x29);
+		TEST_DEC_RR(H, L,	0x2B);
+		TEST_INC_SP(		0x33);
+		TEST_ADD_HL_SP(		0x29);
+		TEST_DEC_SP(		0x3B);
 
 		
 	};

@@ -113,8 +113,7 @@ u8 Instruction16BitLogic::INC_SP(CPU& cpu)
 
 u8 Instruction16BitLogic::ADD_HLcSP(CPU& cpu)
 {
-	u16* SP = cpu.getSP();
-	ADD_HLcRR(cpu, *SP);
+	ADD_HLcRR(cpu, *mSP);
 
 	return 8;
 }

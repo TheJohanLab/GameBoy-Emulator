@@ -6,10 +6,9 @@
 class Instruction16BitLogic : public Instruction
 {
 private:
-	static void INC_RR(CPU& cpu, combinedRegistries* registries);
-	static void DEC_RR(CPU& cpu, combinedRegistries* registries);
-	static void ADD_HLcRR(CPU& cpu, combinedRegistries* registries);
-	static void ADD_HLcRR(CPU& cpu, u16 registriesValue);
+	static void INC_RR(CPU& cpu, u16& doubleRegistry);
+	static void DEC_RR(CPU& cpu, u16& doubleRegistry);
+	static void ADD_HLcRR(CPU& cpu, const u16& doubleRegistry);
 
 	public:
 		Instruction16BitLogic(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus);

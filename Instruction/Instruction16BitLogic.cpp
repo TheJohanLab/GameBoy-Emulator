@@ -2,34 +2,29 @@
 
 #include "Instruction16BitLogic.h"
 
-void Instruction16BitLogic::INC_RR(CPU& cpu, combinedRegistries* registries)
+void Instruction16BitLogic::INC_RR(CPU& cpu, u16& doubleRegistry)
 {
-	(*registries)++;
+	doubleRegistry++;
 }
 
-void Instruction16BitLogic::DEC_RR(CPU& cpu, combinedRegistries* registries)
+void Instruction16BitLogic::DEC_RR(CPU& cpu, u16& doubleRegistry)
 {
-	(*registries)--;
+	doubleRegistry--;
 }
 
-void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, combinedRegistries* registries)
+
+void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, const u16& doubleRegistry)
 {
-	ADD_HLcRR(cpu, registries->getValue());
-}
+	u16& HL = (*mDoubleRegistries)[DoubleReg::HL];
+	u32 result = HL + doubleRegistry;
+	HL = static_cast<u16>(result);
 
-void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, u16 registriesValue)
-{
-	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
-
-	u16 result = HLRegistries->getValue() + registriesValue;
-
-	flags* f = cpu.getFlagRegistry();
-
-	f->flags.H = isHalfOverflow(HLRegistries->getValue(), registriesValue) ? 1 : 0;
-	f->flags.C = isOverflow(HLRegistries->getValue(), registriesValue) ? 1 : 0;
-	clearFlag(cpu, 'N');
-
-	HLRegistries->setValue(result);
+	//f->flags.H = isHalfOverflow(HLRegistries->getValue(), registriesValue) ? 1 : 0;
+	//f->flags.C = isOverflow(HLRegistries->getValue(), registriesValue) ? 1 : 0;
+	setNFlag(cpu, 0x00);
+	setHFlag(cpu, ((HL & 0x0F00) + (doubleRegistry & 0x0F00)) > 0x0F00); //TODO check this
+	setCFlag(cpu, (result & 0xFF0000) > 0); //TODO check this
+	
 }
 
 Instruction16BitLogic::Instruction16BitLogic(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& reg, std::shared_ptr<Bus> bus)
@@ -39,15 +34,15 @@ Instruction16BitLogic::Instruction16BitLogic(const char* name, std::function<u8(
 
 u8 Instruction16BitLogic::INC_BC(CPU& cpu)
 {
-	combinedRegistries* BCRegistries = cpu.getCombinedRegistries("BC");
-	INC_RR(cpu, BCRegistries);
+	auto& BC = (*mDoubleRegistries)[DoubleReg::BC];
+	INC_RR(cpu, BC);
 
 	return 8;
 }
 
 u8 Instruction16BitLogic::ADD_HLcBC(CPU& cpu)
 {
-	combinedRegistries* BC = cpu.getCombinedRegistries("BC");
+	u16& BC = (*mDoubleRegistries)[DoubleReg::BC];
 	ADD_HLcRR(cpu, BC);
 
 	return 8;
@@ -55,23 +50,23 @@ u8 Instruction16BitLogic::ADD_HLcBC(CPU& cpu)
 
 u8 Instruction16BitLogic::DEC_BC(CPU& cpu)
 {
-	combinedRegistries* BCRegistries = cpu.getCombinedRegistries("BC");
-	DEC_RR(cpu, BCRegistries);
+	auto& BC = (*mDoubleRegistries)[DoubleReg::BC];
+	DEC_RR(cpu, BC);
 
 	return 8;
 }
 
 u8 Instruction16BitLogic::INC_DE(CPU& cpu)
 {
-	combinedRegistries* DERegistries = cpu.getCombinedRegistries("DE");
-	INC_RR(cpu, DERegistries);
+	auto& DE = (*mDoubleRegistries)[DoubleReg::DE];
+	INC_RR(cpu, DE);
 
 	return 8;
 }
 
 u8 Instruction16BitLogic::ADD_HLcDE(CPU& cpu)
 {
-	combinedRegistries* DE = cpu.getCombinedRegistries("DE");
+	u16& DE = (*mDoubleRegistries)[DoubleReg::DE];
 	ADD_HLcRR(cpu, DE);
 
 	return 8;
@@ -79,23 +74,23 @@ u8 Instruction16BitLogic::ADD_HLcDE(CPU& cpu)
 
 u8 Instruction16BitLogic::DEC_DE(CPU& cpu)
 {
-	combinedRegistries* DERegistries = cpu.getCombinedRegistries("DE");
-	DEC_RR(cpu, DERegistries);
+	auto& DE = (*mDoubleRegistries)[DoubleReg::DE];
+	DEC_RR(cpu, DE);
 
 	return 8;
 }
 
 u8 Instruction16BitLogic::INC_HL(CPU& cpu)
 {
-	combinedRegistries* BCRegistries = cpu.getCombinedRegistries("HL");
-	INC_RR(cpu, BCRegistries);
+	auto& HL = (*mDoubleRegistries)[DoubleReg::HL];
+	INC_RR(cpu, HL);
 
 	return 8;
 }
 
 u8 Instruction16BitLogic::ADD_HLcHL(CPU& cpu)
 {
-	combinedRegistries* HL = cpu.getCombinedRegistries("HL");
+	u16& HL = (*mDoubleRegistries)[DoubleReg::HL];
 	ADD_HLcRR(cpu, HL);
 
 	return 8;
@@ -103,16 +98,15 @@ u8 Instruction16BitLogic::ADD_HLcHL(CPU& cpu)
 
 u8 Instruction16BitLogic::DEC_HL(CPU& cpu)
 {
-	combinedRegistries* HLRegistries = cpu.getCombinedRegistries("HL");
-	DEC_RR(cpu, HLRegistries);
+	auto& HL = (*mDoubleRegistries)[DoubleReg::HL];
+	DEC_RR(cpu, HL);
 
 	return 8;
 }
 
 u8 Instruction16BitLogic::INC_SP(CPU& cpu)
 {
-	u16* SPRegistries = cpu.getSP();
-	*SPRegistries += 1;
+	(*mSP)++;
 
 	return 8;
 }
@@ -127,8 +121,7 @@ u8 Instruction16BitLogic::ADD_HLcSP(CPU& cpu)
 
 u8 Instruction16BitLogic::DEC_SP(CPU& cpu)
 {
-	u16* SPRegistries = cpu.getSP();
-	*SPRegistries -= 1;
+	(*mSP)--;
 
 	return 8;
 }

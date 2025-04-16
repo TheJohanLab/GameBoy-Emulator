@@ -8,6 +8,7 @@ std::vector<std::reference_wrapper<u16>>* Instruction::mDoubleRegistries;
 flags* Instruction::mFlags = nullptr;
 uint16_t* Instruction::mPC = nullptr;
 uint16_t* Instruction::mSP = nullptr;
+u8* Instruction::mIME = nullptr;
 std::shared_ptr<Bus> Instruction::mBus = nullptr;
 
 Instruction::Instruction(const char* name, std::function<u8(CPU& cpu)> instruction, Registries& registries, std::shared_ptr<Bus> bus)
@@ -22,6 +23,7 @@ void Instruction::setDataReferences(Registries& registries, std::shared_ptr<Bus>
 	mFlags = &registries.getFlagsRef();
 	mSP = &registries.getSPRef();
 	mPC = &registries.getPCRef();
+	mIME = &registries.getIMERef();
 	mBus = bus;
 }
 

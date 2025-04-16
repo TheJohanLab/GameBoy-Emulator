@@ -183,6 +183,9 @@ class Registries
 		const flags& getFlagsRef() const;
 		flags& getFlagsRef();
 
+		const u8& getIMERef() const;
+		u8& getIMERef();
+
 
 };
 

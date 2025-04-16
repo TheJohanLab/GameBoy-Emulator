@@ -841,3 +841,8 @@ void CPU::logOpcodesInfos(u8 opcode)
 
 }
 
+const bool CPU::getCPUStoppedStatus() const
+{
+	return mIsCPUStopped;
+}
+

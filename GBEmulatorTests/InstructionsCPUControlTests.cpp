@@ -38,36 +38,44 @@ namespace Instructions_tests
 
 		TEST_METHOD(DI)
 		{
-			cpu->setIMEFlag();
+			u8& IME = cpu->getRegistriesRef().getIMERef();
+			IME = 1;
 			cpu->executeOpcode(0xF3);
-			Assert::AreEqual(static_cast<u8>(0x00), cpu->getIMEFlag());
+			Assert::AreEqual(static_cast<u8>(0x00), IME);
 
-			cpu->clearIMEFlag();
+			IME = 0;
 			cpu->executeOpcode(0xF3);
-			Assert::AreEqual(static_cast<u8>(0x00), cpu->getIMEFlag());
+			Assert::AreEqual(static_cast<u8>(0x00), IME);
 		}
 
 		
 		TEST_METHOD(EI)
 		{
-			cpu->setIMEFlag();
+			u8& IME = cpu->getRegistriesRef().getIMERef();
+			IME = 1;
 			cpu->executeOpcode(0xFB);
-			Assert::AreEqual(static_cast<u8>(0x01), cpu->getIMEFlag());
+			Assert::AreEqual(static_cast<u8>(0x01), IME);
 
-			cpu->clearIMEFlag();
+			IME = 0;
 			cpu->executeOpcode(0xFB);
-			Assert::AreEqual(static_cast<u8>(0x01), cpu->getIMEFlag());
+			Assert::AreEqual(static_cast<u8>(0x01), IME);
 		}
 
 		//TODO
 		TEST_METHOD(HALT)
 		{
-
+			Assert::IsTrue(false);
 		}
 
-		//TODO
 		TEST_METHOD(STOP)
 		{
+			cpu->resumeCPUFromInterrupt();
+			cpu->executeOpcode(0x10);
+			Assert::AreEqual(cpu->getCPUStoppedStatus(), true);
+
+			cpu->stopCPU();
+			cpu->executeOpcode(0x10);
+			Assert::AreEqual(cpu->getCPUStoppedStatus(), true);
 
 		}
 		

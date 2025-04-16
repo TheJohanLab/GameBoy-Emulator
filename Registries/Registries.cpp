@@ -68,3 +68,13 @@ flags& Registries::getFlagsRef()
 	return F;
 }
 
+const u8& Registries::getIMERef() const
+{
+	return IME;
+}
+
+u8& Registries::getIMERef()
+{
+	return IME;
+}
+

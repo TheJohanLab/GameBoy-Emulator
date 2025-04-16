@@ -96,6 +96,7 @@ class CPU : std::enable_shared_from_this<CPU>
 		//New approch
 		Registries& getRegistriesRef() { return mRegistries; }
 
+		const bool getCPUStoppedStatus() const;
 
 
 

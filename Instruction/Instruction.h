@@ -45,6 +45,7 @@ protected:
 	static flags* mFlags;
 	static u16* mPC;
 	static u16* mSP;
+	static u8*	mIME;
 
 	static std::shared_ptr<Bus> mBus;
 

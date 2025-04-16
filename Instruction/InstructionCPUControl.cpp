@@ -14,12 +14,14 @@ u8 InstructionCPUControl::nop(CPU & cpu)
 
 u8 InstructionCPUControl::stop_0(CPU& cpu)
 {
-	//cpu.stopCPU();
+	cpu.stopCPU(); //TODO Check how to handle this without cpu reference
+
 	return 4;
 }
 
 u8 InstructionCPUControl::halt(CPU& cpu)
 {
+	//TODO Check if mandatory
 	return 4;
 }
 
@@ -30,12 +32,14 @@ u8 InstructionCPUControl::prefix_cb(CPU& cpu)
 
 u8 InstructionCPUControl::di(CPU& cpu)
 {
-	cpu.clearIMEFlag();
+	*mIME = 0;
+
 	return 4;
 }
 
 u8 InstructionCPUControl::ei(CPU& cpu)
 {
-	cpu.setIMEFlag();
+	*mIME = 1;
+
 	return 4;
 }

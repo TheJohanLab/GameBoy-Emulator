@@ -52,8 +52,8 @@ private:
 	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 	//static void JP_CCca16(CPU& cpu, Instruction& instance, const u8& flag);
 	static u8 JP_CCca16(CPU& cpu, const u8& flag);
-	static u8 JR_CCca16(CPU& cpu, const u8& flag);
-	static u8 RET_CC(CPU& cpu, const u8& flag);
+	static u8 JR_CCca16(CPU& cpu, bool flag);
+	static u8 RET_CC(CPU& cpu, bool flag);
 	static u8 CALL_CC(CPU& cpu, const u8& flag);
 	static void RST_VC(CPU& cpu, const u16& address);
 

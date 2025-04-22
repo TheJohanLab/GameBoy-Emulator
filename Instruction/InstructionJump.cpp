@@ -20,21 +20,20 @@ u8 InstructionJump::JP_CCca16(CPU& cpu, const u8& flag)
 	return 12;
 }
 
-u8 InstructionJump::JR_CCca16(CPU& cpu, const u8& flag)
+u8 InstructionJump::JR_CCca16(CPU& cpu, bool flag)
 {
-	u16* PC = cpu.getPC();
 	int8_t offset = static_cast<int8_t>(readNextOpcode(cpu));
 
 	if (flag)
 	{
-		*PC += (offset);
+		*mPC += (offset);
 		return 12;
 	}
 	
 	return 8;
 }
 
-u8 InstructionJump::RET_CC(CPU& cpu, const u8& flag)
+u8 InstructionJump::RET_CC(CPU& cpu, bool flag)
 {
 
 	if (flag)
@@ -100,46 +99,37 @@ InstructionJump::InstructionJump(const char* name, std::function<u8(CPU& cpu)> i
 
 u8 InstructionJump::JR_r8(CPU& cpu)
 {
-	u16* PC = cpu.getPC();
+	//u16* PC = cpu.getPC();
 	int8_t offset = static_cast<int8_t>(readNextOpcode(cpu));
 
-	*PC += (offset);
+	*mPC += (offset);
 
 	return 12;
 }
 
 u8 InstructionJump::JR_NZcr8(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-
-	return JR_CCca16(cpu, !f->flags.Z);
+	return JR_CCca16(cpu, mFlags->flags.Z != 0);
 }
 
 u8 InstructionJump::JR_Zcr8(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	
-	return JR_CCca16(cpu, f->flags.Z);
+	return JR_CCca16(cpu, mFlags->flags.Z == 0);
 }
 
 u8 InstructionJump::JR_NCcr8(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	return JR_CCca16(cpu, !f->flags.C);
+	return JR_CCca16(cpu, mFlags->flags.C != 0);
 }
 
 u8 InstructionJump::JR_Ccr8(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	
-	return JR_CCca16(cpu, f->flags.C);
+	return JR_CCca16(cpu, mFlags->flags.C == 0);
 }
 
 u8 InstructionJump::RET_NZ(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	
-	return RET_CC(cpu, !f->flags.Z);
+	return RET_CC(cpu, mFlags->flags.Z != 0);
 }
 
 u8 InstructionJump::JP_NZca16(CPU& cpu)
@@ -175,21 +165,15 @@ u8 InstructionJump::RST_00H(CPU& cpu)
 
 u8 InstructionJump::RET_Z(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	return RET_CC(cpu, f->flags.Z);
+	return RET_CC(cpu, mFlags->flags.Z == 0);
 }
 
 u8 InstructionJump::RET(CPU& cpu)
 {
-	u16* SP = cpu.getSP();
-	u16* PC = cpu.getPC();
+	u8 lowPC = mBus->read((*mSP)++);
+	u8 highPC = mBus->read((*mSP)++);
 
-	u8 lowPC = cpu.readMemory(*SP);
-	*SP += 1;
-	u8 highPC = cpu.readMemory(*SP);
-	*SP += 1;
-
-	*PC = (((highPC << 8) & 0xFF00) | (lowPC & 0x00FF)) -1;
+	*mPC = (((highPC << 8) & 0xFF00) | (lowPC & 0x00FF)) -1;
 
 	return 16;
 }
@@ -229,9 +213,7 @@ u8 InstructionJump::RST_08H(CPU& cpu)
 
 u8 InstructionJump::RET_NC(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-
-	return RET_CC(cpu, !f->flags.C);
+	return RET_CC(cpu, mFlags->flags.C != 0);
 }
 
 u8 InstructionJump::JP_NCca16(CPU& cpu)
@@ -256,9 +238,7 @@ u8 InstructionJump::RST_10H(CPU& cpu)
 
 u8 InstructionJump::RET_C(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-
-	return RET_CC(cpu, f->flags.C);
+	return RET_CC(cpu, mFlags->flags.C == 0);
 }
 
 u8 InstructionJump::RETI(CPU& cpu)

@@ -66,7 +66,7 @@ TEST_METHOD(DEC_##reg) \
     Assert::AreEqual(static_cast<u8>(0xFF), reg); \
     Assert::AreEqual(static_cast<u8>(0x00), flags.flags.Z); \
     Assert::AreEqual(static_cast<u8>(0x01), flags.flags.N); \
-    Assert::AreEqual(static_cast<u8>(0x00), flags.flags.H); \
+    Assert::AreEqual(static_cast<u8>(0x01), flags.flags.H); \
 }
 
 #define TEST_DAA(initialA, expectedA, expectedZ, expectedH, expectedC, ...) \
@@ -155,7 +155,7 @@ TEST_METHOD(DEC_pHLq) \
     Assert::AreEqual(static_cast<u8>(0xFF), bus->read(HL)); \
     Assert::AreEqual(static_cast<u8>(0x00), flags.flags.Z); \
     Assert::AreEqual(static_cast<u8>(0x01), flags.flags.N); \
-    Assert::AreEqual(static_cast<u8>(0x00), flags.flags.H); \
+    Assert::AreEqual(static_cast<u8>(0x01), flags.flags.H); \
 }
 
 #define TEST_SCF(opcode) \
@@ -1139,6 +1139,7 @@ namespace Instructions_tests
 		TEST_DEC_R(H, 0x25);
 		TEST_DEC_R(L, 0x2D);
 		TEST_DEC_R(A, 0x3D);
+
 
 		TEST_CPL(     0x2F);
 

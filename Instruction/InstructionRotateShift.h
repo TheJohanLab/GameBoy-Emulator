@@ -19,7 +19,7 @@ class InstructionRotateShift : public Instruction
 		static u8 RLC_E(CPU& cpu);			//0xCB03 RLC E
 		static u8 RLC_H(CPU& cpu);			//0xCB04 RLC H
 		static u8 RLC_L(CPU& cpu);			//0xCB05 RLC L
-		static u8 RLC_pHLq(CPU& cpu);			//0xCB06 RLC (HL)
+		static u8 RLC_pHLq(CPU& cpu);		//0xCB06 RLC (HL)
 		static u8 RLC_A(CPU& cpu);			//0xCB07 RLC A
 		static u8 RRC_B(CPU& cpu);			//0xCB08 RRC B
 		static u8 RRC_C(CPU& cpu);			//0xCB09 RRC C
@@ -83,14 +83,14 @@ class InstructionRotateShift : public Instruction
 
 
 private:
-	static void RLCr(u8& registry, flags& flagRegistry, CPU& cpu);
-	static void RRCr(u8& registry, flags& flagRegistry, CPU& cpu);
-	static void RLr(u8& registry, flags& flagResistry, CPU& cpu);
-	static void RRr(u8& registry, flags& flagRegistry, CPU& cpu);
-	static void SLAr(u8& registry, flags& flagRegistry, CPU& cpu);
-	static void SRAr(u8& registry, flags& flagRegistry, CPU& cpu);
-	static void SWAPr(u8& registry, flags& flagRegistry, CPU& cpu);
-	static void SRLr(u8& registry, flags& flagRegistry, CPU& cpu);
+	static void RLCr(CPU& cpu, u8& registry);
+	static void RRCr(CPU& cpu, u8& registry);
+	static void RLr(CPU& cpu, u8& registry);
+	static void RRr(CPU& cpu, u8& registry);
+	static void SLAr(CPU& cpu, u8& registry);
+	static void SRAr(CPU& cpu, u8& registry);
+	static void SWAPr(CPU& cpu, u8& registry);
+	static void SRLr(CPU& cpu, u8& registry);
 
 };
 

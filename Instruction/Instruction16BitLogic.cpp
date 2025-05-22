@@ -17,13 +17,12 @@ void Instruction16BitLogic::ADD_HLcRR(CPU& cpu, const u16& doubleRegistry)
 {
 	u16& HL = (*mDoubleRegistries)[DoubleReg::HL];
 	u32 result = HL + doubleRegistry;
+	u16 prevHL = HL;
 	HL = static_cast<u16>(result);
 
-	//f->flags.H = isHalfOverflow(HLRegistries->getValue(), registriesValue) ? 1 : 0;
-	//f->flags.C = isOverflow(HLRegistries->getValue(), registriesValue) ? 1 : 0;
 	setNFlag(cpu, 0x00);
-	setHFlag(cpu, ((HL & 0x0F00) + (doubleRegistry & 0x0F00)) > 0x0F00); //TODO check this
-	setCFlag(cpu, (result & 0xFF0000) > 0); //TODO check this
+	setHFlag(cpu, ((prevHL & 0x0FFF) + (doubleRegistry & 0x0FFF)) > 0x0FFF); 
+	setCFlag(cpu, (result & 0xFF0000) > 0);
 	
 }
 

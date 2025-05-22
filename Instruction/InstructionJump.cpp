@@ -3,17 +3,14 @@
 #include "InstructionJump.h"
 
 /// Private methods
-//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
 //void InstructionJump::JP_CCca16(CPU& cpu, Instruction& instance, const u8& flagCondition)
-u8 InstructionJump::JP_CCca16(CPU& cpu, const u8& flag)
+u8 InstructionJump::JP_CCca16(CPU& cpu, bool flag)
 {
-	u16* PC = cpu.getPC();
 	u16 adress = readNextTwoOpcodes(cpu);
-
 	
 	if (flag)
 	{
-		*PC = adress -1;
+		*mPC = adress -1;
 		return 16;
 	}
 	
@@ -45,16 +42,24 @@ u8 InstructionJump::RET_CC(CPU& cpu, bool flag)
 	return 8;
 }
 
-u8 InstructionJump::CALL_CC(CPU& cpu, const u8& flag)
+u8 InstructionJump::CALL_CC(CPU& cpu, bool flag)
 {
 	
 	u16 address = readNextTwoOpcodes(cpu);
 
 	if (flag)
 	{
-		u16* PC = cpu.getPC();
 		PUSH_PC(cpu);
-		*PC = address -1;
+		//(*mPC)++;
+		//u8 lowPC = *mPC & 0x00FF;
+		//u8 highPC = (*mPC & 0xFF00) >> 8;
+		//(*mSP)--;
+		//mBus->write(*mSP, highPC);
+		//(*mSP)--;
+		//mBus->write(*mSP, lowPC);
+
+		*mPC = address - 1; // -1 because PC will be incremented automatically after
+
 		return 24;
 	}
 	
@@ -66,28 +71,25 @@ void InstructionJump::RST_VC(CPU& cpu, const u16& address)
 	
 	PUSH_PC(cpu);
 
-	u16* PC = cpu.getPC();
-	*PC = address -1;
+	*mPC = address -1;
 }
 
 void InstructionJump::PUSH_PC(CPU& cpu)
 {
-	
-	u16* SP = cpu.getSP();
+	//TODO add an assert for this condition
 	//if (*SP <= 0xFF47)
 	//	throw std::runtime_error("Stack overflow : SP reached an invalid memory region");
-	u16* PC = cpu.getPC();
 
-	*PC += 1;
+	(*mPC)++;
 
-	u8 lowPC = *PC & 0x00FF;
-	u8 highPC = (*PC & 0xFF00) >> 8;
-	*SP -= 1;
-	cpu.writeMemory(*SP, highPC);
-	*SP -= 1;
-	cpu.writeMemory(*SP, lowPC);
+	u8 lowPC = *mPC & 0x00FF;
+	u8 highPC = (*mPC & 0xFF00) >> 8;
+	(*mSP)--;
+	mBus->write(*mSP, highPC);
+	(*mSP)--;
+	mBus->write(*mSP, lowPC);
 
-	*PC -= 1;
+	(*mPC)--;
 }
 
 
@@ -99,7 +101,6 @@ InstructionJump::InstructionJump(const char* name, std::function<u8(CPU& cpu)> i
 
 u8 InstructionJump::JR_r8(CPU& cpu)
 {
-	//u16* PC = cpu.getPC();
 	int8_t offset = static_cast<int8_t>(readNextOpcode(cpu));
 
 	*mPC += (offset);
@@ -134,32 +135,25 @@ u8 InstructionJump::RET_NZ(CPU& cpu)
 
 u8 InstructionJump::JP_NZca16(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-
-	return JP_CCca16(cpu, !f->flags.Z);
+	return JP_CCca16(cpu, mFlags->flags.Z != 0);
 }
 
-//TODO Verifier cette instruction
 u8 InstructionJump::JP_a16(CPU& cpu)
 {
-	u16* PC = cpu.getPC();
 	u16 adress = readNextTwoOpcodes(cpu);
-
-	*PC = adress -1;
+	*mPC = adress -1;
 
 	return 16;
 }
 
 u8 InstructionJump::CALL_NZca16(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	
-	return CALL_CC(cpu, !f->flags.Z);
+	return CALL_CC(cpu, mFlags->flags.Z != 0);
 }
 
 u8 InstructionJump::RST_00H(CPU& cpu)
 {
-	RST_VC(cpu, 0x0000);
+	RST_VC(cpu, 0x0000); 
 	return 16;
 }
 
@@ -170,7 +164,7 @@ u8 InstructionJump::RET_Z(CPU& cpu)
 
 u8 InstructionJump::RET(CPU& cpu)
 {
-	u8 lowPC = mBus->read((*mSP)++);
+	u8 lowPC = mBus->read( (*mSP)++);
 	u8 highPC = mBus->read((*mSP)++);
 
 	*mPC = (((highPC << 8) & 0xFF00) | (lowPC & 0x00FF)) -1;
@@ -180,26 +174,28 @@ u8 InstructionJump::RET(CPU& cpu)
 
 u8 InstructionJump::JP_Zca16(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	
-	return JP_CCca16(cpu, f->flags.Z);
+	return JP_CCca16(cpu, mFlags->flags.Z == 0);
 }
 
 u8 InstructionJump::CALL_Zca16(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	
-	return CALL_CC(cpu, f->flags.Z);
+	return CALL_CC(cpu, mFlags->flags.Z == 0);
 }
 
 u8 InstructionJump::CALL_a16(CPU& cpu)
 {
-	u16* PC = cpu.getPC();
 	u16 address = readNextTwoOpcodes(cpu);
 
 	PUSH_PC(cpu);
+	//(*mPC)++;
+	//u8 lowPC = *mPC & 0x00FF;
+	//u8 highPC = (*mPC & 0xFF00) >> 8;
+	//(*mSP)--;
+	//mBus->write(*mSP, highPC);
+	//(*mSP)--;
+	//mBus->write(*mSP, lowPC);
 
-	*PC = address - 1;
+	*mPC = address - 1; // -1 because PC will be incremented automatically after
 
 	return 24;
 }
@@ -218,16 +214,12 @@ u8 InstructionJump::RET_NC(CPU& cpu)
 
 u8 InstructionJump::JP_NCca16(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-
-	return JP_CCca16(cpu, !f->flags.C);
+	return JP_CCca16(cpu, mFlags->flags.C != 0);
 }
 
 u8 InstructionJump::CALL_NCca16(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-
-	return CALL_CC(cpu, !f->flags.C);
+	return CALL_CC(cpu, mFlags->flags.C != 0);
 }
 
 u8 InstructionJump::RST_10H(CPU& cpu)
@@ -243,23 +235,18 @@ u8 InstructionJump::RET_C(CPU& cpu)
 
 u8 InstructionJump::RETI(CPU& cpu)
 {
-	cpu.setIMEFlag();
+	*mIME = 1;
 	return RET(cpu);
 }
 
 u8 InstructionJump::JP_Cca16(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	
-	return JP_CCca16(cpu, f->flags.C);
-	
+	return JP_CCca16(cpu, mFlags->flags.C == 0);
 }
 
 u8 InstructionJump::CALL_Cca16(CPU& cpu)
 {
-	flags* f = cpu.getFlagRegistry();
-	
-	return CALL_CC(cpu, f->flags.C);
+	return CALL_CC(cpu, mFlags->flags.C == 0);
 }
 
 u8 InstructionJump::RST_18H(CPU& cpu)
@@ -274,13 +261,10 @@ u8 InstructionJump::RST_20H(CPU& cpu)
 	return 16;
 }
 
-// TODO Verifier que c'est bien la valeur de HL qui est stockee, et non la valeur à l'adresse HL
 u8 InstructionJump::JP_pHLq(CPU& cpu)
 {
-	u16* PC = cpu.getPC();
-	combinedRegistries* HL = cpu.getCombinedRegistries("HL");
-
-	*PC = HL->getValue() -1;
+	u16& HL = (*mDoubleRegistries)[DoubleReg::HL];
+	*mPC = HL -1;
 
 	return 4;
 }

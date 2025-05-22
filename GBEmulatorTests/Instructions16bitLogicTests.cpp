@@ -147,6 +147,47 @@ TEST_METHOD(ADD_HL_##highReg##lowReg)\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 }
 
+#define TEST_ADD_HL_HL(opcode) \
+TEST_METHOD(ADD_HL_HL)\
+{\
+u16& HLReg = cpu->getRegistriesRef().getDoubleRegistriesRef()[DoubleReg::HL]; \
+u8& highReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::H]; \
+u8& lowReg = cpu->getRegistriesRef().getRegistriesRef()[Reg::L]; \
+\
+flags& flags = cpu->getRegistriesRef().getFlagsRef(); \
+flags.flags.Z = 1; \
+flags.flags.N = 1; \
+flags.flags.H = 0; \
+flags.flags.C = 0; \
+\
+HLReg = 0x0008; \
+cpu->executeOpcode(opcode); \
+\
+Assert::AreEqual(static_cast<u8>(0x00), highReg); \
+Assert::AreEqual(static_cast<u8>(0x10), lowReg); \
+Assert::AreEqual(static_cast<u16>(0x0010), HLReg); \
+Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z); \
+Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N); \
+Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H); \
+Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C); \
+\
+HLReg = 0x0FFB; \
+flags.flags.Z = 0; \
+cpu->executeOpcode(opcode); \
+\
+Assert::AreEqual(static_cast<u16>(0x1FF6), HLReg); \
+Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z); \
+Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H); \
+Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C); \
+\
+HLReg = 0xFFFE; \
+cpu->executeOpcode(opcode); \
+\
+Assert::AreEqual(static_cast<u16>(0xFFFC), HLReg); \
+Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H); \
+Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C); \
+}
+
 #define TEST_ADD_HL_SP(opcode) \
 TEST_METHOD(ADD_HL_SP)\
 {\
@@ -230,13 +271,13 @@ namespace Instructions_tests
 		TEST_ADD_HL_RR(D, E,0x19);
 		TEST_DEC_RR(D, E,	0x1B);
 		TEST_INC_RR(H, L,	0x23);
-		TEST_ADD_HL_RR(H, L,0x29);
+		TEST_ADD_HL_HL(		0x29);
 		TEST_DEC_RR(H, L,	0x2B);
 		TEST_INC_SP(		0x33);
-		TEST_ADD_HL_SP(		0x29);
+		TEST_ADD_HL_SP(		0x39);
 		TEST_DEC_SP(		0x3B);
 
-		
+
 	};
 	std::shared_ptr<Memory> I16BitLogicTests::memory = nullptr;
 	std::shared_ptr<Cartridge> I16BitLogicTests::cartridge = nullptr;

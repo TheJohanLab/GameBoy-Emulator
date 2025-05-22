@@ -154,19 +154,20 @@ u8 Instruction16BitLoad::PUSH_AF(CPU& cpu)
 }
 
 
+// WARNING check this instruction is not working
 u8 Instruction16BitLoad::LDHL_SPcr8(CPU& cpu)
 {
-	int8_t e = static_cast<int8_t>(readNextOpcode(cpu));
-	u16 result = *mSP + e;
-	*mSP = result;
-	(*mDoubleRegistries)[DoubleReg::HL].get() = *mSP;
+	u8 e = readNextOpcode(cpu);
+	u16 unsignedResult = *mSP + e;
+	int8_t signed_e = static_cast<int8_t>(e);
+	u16 result = *mSP + signed_e;
+	(*mDoubleRegistries)[DoubleReg::HL].get() = result;
 	
 	setZFlag(cpu, 0x0);
 	setNFlag(cpu, 0x0);
 	
-	//TODO verifier ces flags
 	setHFlag(cpu, ((*mSP & 0x0F) + (e & 0x0F)) > 0x0F);
-	setCFlag(cpu, ( result & 0xFF00) > 0);
+	setCFlag(cpu, (unsignedResult & 0xFF00) > 0);
 
 	return 12;
 }

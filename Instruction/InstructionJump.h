@@ -20,22 +20,21 @@ class InstructionJump : public Instruction
 		static u8 JP_a16(CPU& cpu);		//0xC3 JP a16
 		static u8 CALL_NZca16(CPU& cpu);	//0xC4 CALL NZ,a16
 		static u8 RST_00H(CPU& cpu);		//0xC7 RST 00H
-		static u8 RET_Z(CPU& cpu);		//0xC8 RET Z
+		static u8 RET_Z(CPU& cpu);			//0xC8 RET Z
 		static u8 RET(CPU& cpu);			//0xC9 RET
 		static u8 JP_Zca16(CPU& cpu);		//0xCA JP Z,a16
-		static u8 CALL_Zca16(CPU& cpu);	//0xCC CALL Z,a16
+		static u8 CALL_Zca16(CPU& cpu);		//0xCC CALL Z,a16
 		static u8 CALL_a16(CPU& cpu);		//0xCD CALL a16
 		static u8 RST_08H(CPU& cpu);		//0xCF RST 08H
 
-		static u8 RET_NC(CPU& cpu);		//0xD0 RET NC
-		static u8 JP_NCca16(CPU& cpu);	//0xD2 JP NC,a16
+		static u8 RET_NC(CPU& cpu);			//0xD0 RET NC
+		static u8 JP_NCca16(CPU& cpu);		//0xD2 JP NC,a16
 		static u8 CALL_NCca16(CPU& cpu);	//0xD4 CALL NC,a16
 		static u8 RST_10H(CPU& cpu);		//0xD7 RST 10H
-		static u8 RET_C(CPU& cpu);		//0xD8 RET C
+		static u8 RET_C(CPU& cpu);			//0xD8 RET C
 		static u8 RETI(CPU& cpu);			//0xD9 RETI
-		//static u8 JP_Cca16(CPU& cpu, Instruction& instance);		//0xDA JP C,a16
 		static u8 JP_Cca16(CPU& cpu);		//0xDA JP C,a16
-		static u8 CALL_Cca16(CPU& cpu);	//0xDC CALL C,a16
+		static u8 CALL_Cca16(CPU& cpu);		//0xDC CALL C,a16
 		static u8 RST_18H(CPU& cpu);		//0xDF RST 18H
 
 		static u8 RST_20H(CPU& cpu);		//0xE7 RST 20H
@@ -49,12 +48,10 @@ class InstructionJump : public Instruction
 		static void PUSH_PC(CPU& cpu);
 
 private:
-	//TODO voir avec Merlin pour l'integration de l'instance ou trouver une autre solution
-	//static void JP_CCca16(CPU& cpu, Instruction& instance, const u8& flag);
-	static u8 JP_CCca16(CPU& cpu, const u8& flag);
+	static u8 JP_CCca16(CPU& cpu, bool flag);
 	static u8 JR_CCca16(CPU& cpu, bool flag);
 	static u8 RET_CC(CPU& cpu, bool flag);
-	static u8 CALL_CC(CPU& cpu, const u8& flag);
+	static u8 CALL_CC(CPU& cpu, bool flag);
 	static void RST_VC(CPU& cpu, const u16& address);
 
 };

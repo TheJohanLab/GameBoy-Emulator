@@ -27,9 +27,27 @@ void Instruction8BitLogic::DEC_R(CPU& cpu, u8& registry)
 void Instruction8BitLogic::ADD_RcR(CPU& cpu, u8& registry, const u8 additionalValue)
 {
 	u16 result = registry + additionalValue;
-	registry = result;
 
 	setHFlag(cpu, ((registry & 0x0F) + (additionalValue & 0x0F)) > 0x0F);
+
+	registry = result;
+
+	setCFlag(cpu, (result & 0xFF00) > 0);
+	setNFlag(cpu, 0x00);
+	setZFlag(cpu, registry == 0);
+
+}
+
+void Instruction8BitLogic::ADC_RcR(CPU& cpu, u8& registry, const u8 additionalValue)
+{
+	
+	u16 result = registry + additionalValue + mFlags->flags.C;
+
+
+	setHFlag(cpu, ((registry & 0x0F) + (additionalValue & 0x0F) + mFlags->flags.C) > 0x0F);
+
+	registry = result;
+
 	setCFlag(cpu, (result & 0xFF00) > 0);
 	setNFlag(cpu, 0x00);
 	setZFlag(cpu, registry == 0);
@@ -37,43 +55,33 @@ void Instruction8BitLogic::ADD_RcR(CPU& cpu, u8& registry, const u8 additionalVa
 }
 
 
-//void Instruction8BitLogic::ADC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry)
-//{
-//	u8 carryFlag = cpu.getFlagRegistry()->flags.C;
-//	setHFlag(cpu, *dstRegistry, *additionalValue + carryFlag, false);
-//	setCFlag(cpu, *dstRegistry, *additionalValue + carryFlag, false);
-//
-//	*dstRegistry += *additionalValue + carryFlag;
-//
-//	setNFlag(cpu, 0x00);
-//	setZFlag(cpu, *dstRegistry == 0);
-//
-//}
-
-
 void Instruction8BitLogic::SUB_RcR(CPU& cpu, u8& registry, const u8 additionalValue)
 {
 	u8 result = registry - additionalValue;
 
+
+	setHFlag(cpu, (additionalValue & 0x0F) > (registry & 0x0F));
+	setCFlag(cpu, additionalValue > registry );
+
 	registry = result;
 
-	setHFlag(cpu, ((registry & 0x0F) - (additionalValue & 0x0F)) < 0);
-	setCFlag(cpu, additionalValue > registry );
 	setNFlag(cpu, 0x01);
 	setZFlag(cpu, registry == 0);
 }
 
-//void Instruction8BitLogic::SBC_RcR(CPU& cpu, u8* additionalValue, u8* dstRegistry)
-//{
-//	u8 carryFlag = cpu.getFlagRegistry()->flags.C;
-//	setHFlag(cpu, *dstRegistry, *additionalValue + carryFlag, true);
-//	setCFlag(cpu, *dstRegistry, *additionalValue + carryFlag, true);
-//
-//	*dstRegistry -= (*additionalValue + carryFlag);
-//
-//	setNFlag(cpu, 0x01);
-//	setZFlag(cpu, *dstRegistry == 0);
-//}
+void Instruction8BitLogic::SBC_RcR(CPU& cpu, u8& registry, const u8 additionalValue)
+{
+	u8 result = registry - (additionalValue + mFlags->flags.C);
+
+
+	setHFlag(cpu, ((additionalValue + mFlags->flags.C) & 0x0F) > (registry & 0x0F));
+	setCFlag(cpu, (additionalValue + mFlags->flags.C) > registry);
+	
+	registry = result;
+	
+	setNFlag(cpu, 0x01);
+	setZFlag(cpu, registry == 0);
+}
 
 
 void Instruction8BitLogic::AND_R(CPU& cpu, u8& registry, const u8 additionalValue)
@@ -346,7 +354,7 @@ u8 Instruction8BitLogic::ADD_AcE(CPU& cpu)
 u8 Instruction8BitLogic::ADD_AcH(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
-	u8& H = (*mRegistries)[Reg::B];
+	u8& H = (*mRegistries)[Reg::H];
 	ADD_RcR(cpu, A, H);
 
 	return 4;
@@ -383,7 +391,7 @@ u8 Instruction8BitLogic::ADC_AcB(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& B = (*mRegistries)[Reg::B];
-	ADD_RcR(cpu, A, B + mFlags->flags.C);
+	ADC_RcR(cpu, A, B);
 
 	return 4;
 }
@@ -392,7 +400,7 @@ u8 Instruction8BitLogic::ADC_AcC(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& C = (*mRegistries)[Reg::C];
-	ADD_RcR(cpu, A, C + mFlags->flags.C);
+	ADC_RcR(cpu, A, C);
 
 	return 4;
 }
@@ -401,7 +409,7 @@ u8 Instruction8BitLogic::ADC_AcD(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& D = (*mRegistries)[Reg::D];
-	ADD_RcR(cpu, A, D + mFlags->flags.C);
+	ADC_RcR(cpu, A, D);
 
 	return 4;
 }
@@ -410,7 +418,7 @@ u8 Instruction8BitLogic::ADC_AcE(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& E = (*mRegistries)[Reg::E];
-	ADD_RcR(cpu, A, E + mFlags->flags.C);
+	ADC_RcR(cpu, A, E);
 
 	return 4;
 }
@@ -419,7 +427,7 @@ u8 Instruction8BitLogic::ADC_AcH(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& H = (*mRegistries)[Reg::H];
-	ADD_RcR(cpu, A, H + mFlags->flags.C);
+	ADC_RcR(cpu, A, H);
 
 	return 4;
 }
@@ -428,7 +436,7 @@ u8 Instruction8BitLogic::ADC_AcL(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& L = (*mRegistries)[Reg::L];
-	ADD_RcR(cpu, A, L + mFlags->flags.C);
+	ADC_RcR(cpu, A, L);
 
 	return 4;
 }
@@ -438,7 +446,7 @@ u8 Instruction8BitLogic::ADC_AcpHLq(CPU& cpu)
 	u8& A = (*mRegistries)[Reg::A];
 	u8 additionalValue = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
 
-	ADD_RcR(cpu, A, additionalValue + mFlags->flags.C);
+	ADC_RcR(cpu, A, additionalValue);
 
 	return 8;
 }
@@ -446,7 +454,7 @@ u8 Instruction8BitLogic::ADC_AcpHLq(CPU& cpu)
 u8 Instruction8BitLogic::ADC_AcA(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
-	ADD_RcR(cpu, A, A + mFlags->flags.C);
+	ADC_RcR(cpu, A, A);
 
 	return 4;
 }
@@ -527,7 +535,7 @@ u8 Instruction8BitLogic::SBC_AcB(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& B = (*mRegistries)[Reg::B];
-	SUB_RcR(cpu, A, B + mFlags->flags.C);
+	SBC_RcR(cpu, A, B);
 
 	return 4;
 }
@@ -536,7 +544,7 @@ u8 Instruction8BitLogic::SBC_AcC(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& C = (*mRegistries)[Reg::C];
-	SUB_RcR(cpu, A, C + mFlags->flags.C);
+	SBC_RcR(cpu, A, C);
 
 	return 4;
 }
@@ -545,7 +553,7 @@ u8 Instruction8BitLogic::SBC_AcD(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& D = (*mRegistries)[Reg::D];
-	SUB_RcR(cpu, A, D + mFlags->flags.C);
+	SBC_RcR(cpu, A, D);
 
 	return 4;
 }
@@ -554,7 +562,7 @@ u8 Instruction8BitLogic::SBC_AcE(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& E = (*mRegistries)[Reg::E];
-	SUB_RcR(cpu, A, E + mFlags->flags.C);
+	SBC_RcR(cpu, A, E);
 
 	return 4;
 }
@@ -563,7 +571,7 @@ u8 Instruction8BitLogic::SBC_AcH(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& H = (*mRegistries)[Reg::H];
-	SUB_RcR(cpu, A, H + mFlags->flags.C);
+	SBC_RcR(cpu, A, H);
 
 	return 4;
 }
@@ -572,7 +580,7 @@ u8 Instruction8BitLogic::SBC_AcL(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
 	u8& L = (*mRegistries)[Reg::L];
-	SUB_RcR(cpu, A, L + mFlags->flags.C);
+	SBC_RcR(cpu, A, L);
 
 	return 4;
 }
@@ -582,7 +590,7 @@ u8 Instruction8BitLogic::SBC_AcpHLq(CPU& cpu)
 	u8& A = (*mRegistries)[Reg::A];
 	u8 additionalValue = mBus->read((*mDoubleRegistries)[DoubleReg::HL]);
 
-	SUB_RcR(cpu, A, additionalValue + mFlags->flags.C);
+	SBC_RcR(cpu, A, additionalValue);
 
 	return 8;
 }
@@ -590,7 +598,7 @@ u8 Instruction8BitLogic::SBC_AcpHLq(CPU& cpu)
 u8 Instruction8BitLogic::SBC_AcA(CPU& cpu)
 {
 	u8& A = (*mRegistries)[Reg::A];
-	SUB_RcR(cpu, A, A + mFlags->flags.C);
+	SBC_RcR(cpu, A, A);
 
 	return 4;
 }

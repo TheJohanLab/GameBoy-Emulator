@@ -236,6 +236,22 @@ TEST_METHOD(ADD_A_##reg##)\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 }
 
+#define TEST_ADD_A_A(opcode) \
+TEST_METHOD(ADD_A_A)\
+{\
+	u8& A_reg = cpu->getRegistriesRef().getRegistriesRef()[Reg::A];\
+	flags& flags = cpu->getRegistriesRef().getFlagsRef();\
+	\
+	flags.F = 0x00;\
+	A_reg = 0x05;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+}
+
 #define TEST_ADD_A_pHLq(opcode) \
 TEST_METHOD(ADD_A_pHLq)\
 {\
@@ -308,6 +324,41 @@ TEST_METHOD(ADC_A_##reg##)\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
+	\
+	flags.F = 0x00;\
+	flags.flags.C = 1;\
+	A_reg = 0x0;\
+	reg = 0x0F;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x10), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+}
+
+#define TEST_ADC_A_A(opcode) \
+TEST_METHOD(ADC_A_A)\
+{\
+	u8& A_reg = cpu->getRegistriesRef().getRegistriesRef()[Reg::A];\
+	flags& flags = cpu->getRegistriesRef().getFlagsRef();\
+	\
+	flags.F = 0x00;\
+	flags.flags.C = 1;\
+	A_reg = 0x05;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0B), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	\
+	flags.F = 0x00;\
+	A_reg = 0x05;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x0A), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
 }
 
 #define TEST_ADC_A_pHLq(opcode) \
@@ -359,11 +410,11 @@ TEST_METHOD(SUB_A_##reg##)\
 	A_reg = 0x05;\
 	reg = 0xD3;\
 	cpu->executeOpcode(opcode);\
-	Assert::AreEqual(static_cast<u8>(0xF0), A_reg);\
+	Assert::AreEqual(static_cast<u8>(0x32), A_reg);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
-	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 	\
 	flags.F = 0x00;\
 	A_reg = 0x08;\
@@ -393,6 +444,22 @@ TEST_METHOD(SUB_A_##reg##)\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 }
 
+#define TEST_SUB_A_A(opcode) \
+TEST_METHOD(SUB_A_A)\
+{\
+	u8& A_reg = cpu->getRegistriesRef().getRegistriesRef()[Reg::A];\
+	flags& flags = cpu->getRegistriesRef().getFlagsRef();\
+	\
+	flags.F = 0x00;\
+	A_reg = 0x05;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x00), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+}
+
 #define TEST_SUB_A_pHLq(opcode) \
 TEST_METHOD(SUB_A_pHLq)\
 {\
@@ -405,11 +472,11 @@ TEST_METHOD(SUB_A_pHLq)\
 	HL = 0xC000;\
 	bus->write(0xC000,0xD3);\
 	cpu->executeOpcode(opcode);\
-	Assert::AreEqual(static_cast<u8>(0xF0), A_reg);\
+	Assert::AreEqual(static_cast<u8>(0x32), A_reg);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
-	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 	\
 	flags.F = 0x00;\
 	A_reg = 0x08;\
@@ -451,20 +518,59 @@ TEST_METHOD(SBC_A_##reg##)\
 	A_reg = 0x05;\
 	reg = 0xD3;\
 	cpu->executeOpcode(opcode);\
-	Assert::AreEqual(static_cast<u8>(0xEF), A_reg);\
+	Assert::AreEqual(static_cast<u8>(0x31), A_reg);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
-	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 	\
 	flags.F = 0x00;\
+	flags.flags.C = 1; \
 	A_reg = 0x08;\
-	reg = 0x08;\
+	reg = 0x07;\
 	cpu->executeOpcode(opcode);\
 	Assert::AreEqual(static_cast<u8>(0x00), A_reg);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	\
+	flags.F = 0x00; \
+	flags.flags.C = 1; \
+	A_reg = 0x05; \
+	reg = 0xD5; \
+	cpu->executeOpcode(opcode); \
+	Assert::AreEqual(static_cast<u8>(0x2F), A_reg); \
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z); \
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N); \
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H); \
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C); \
+}
+
+#define TEST_SBC_A_A(opcode) \
+TEST_METHOD(SBC_A_A)\
+{\
+	u8& A_reg = cpu->getRegistriesRef().getRegistriesRef()[Reg::A];\
+	flags& flags = cpu->getRegistriesRef().getFlagsRef();\
+	\
+	flags.F = 0x00;\
+	flags.flags.C = 1;\
+	A_reg = 0x05;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0xFF), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
+	\
+	flags.F = 0x00;\
+	flags.flags.C = 0; \
+	A_reg = 0x08;\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x00), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	\
 }
 
 #define TEST_SBC_A_pHLq(opcode) \
@@ -480,11 +586,11 @@ TEST_METHOD(SBC_A_pHLq)\
 	HL = 0xC000;\
 	bus->write(0xC000,0xD3);\
 	cpu->executeOpcode(opcode);\
-	Assert::AreEqual(static_cast<u8>(0xEF), A_reg);\
+	Assert::AreEqual(static_cast<u8>(0x31), A_reg);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
-	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 	\
 	flags.F = 0x00;\
 	A_reg = 0x08;\
@@ -494,6 +600,16 @@ TEST_METHOD(SBC_A_pHLq)\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	\
+	flags.F = 0x00;\
+	flags.flags.C = 1;\
+	A_reg = 0x08;\
+	bus->write(0xC000,0x08);\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0xFF), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 }
 
 #define TEST_AND_A_R(reg, opcode) \
@@ -899,11 +1015,11 @@ TEST_METHOD(SUB_A_d8)\
 	cpu->getRegistriesRef().getPCRef() = 0x8000;\
 	bus->write(0x8001, 0xD3);\
 	cpu->executeOpcode(opcode);\
-	Assert::AreEqual(static_cast<u8>(0xF0), A_reg);\
+	Assert::AreEqual(static_cast<u8>(0x32), A_reg);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
-	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 	\
 	flags.F = 0x00;\
 	A_reg = 0x08;\
@@ -948,11 +1064,22 @@ TEST_METHOD(SBC_A_d8)\
 	cpu->getRegistriesRef().getPCRef() = 0x8000;\
 	bus->write(0x8001, 0xD3);\
 	cpu->executeOpcode(opcode);\
-	Assert::AreEqual(static_cast<u8>(0xEF), A_reg);\
+	Assert::AreEqual(static_cast<u8>(0x31), A_reg);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
-	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
+	\
+	flags.F = 0x00;\
+	A_reg = 0x05;\
+	cpu->getRegistriesRef().getPCRef() = 0x8000;\
+	bus->write(0x8001, 0xD3);\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0x32), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 	\
 	flags.F = 0x00;\
 	A_reg = 0x08;\
@@ -961,8 +1088,21 @@ TEST_METHOD(SBC_A_d8)\
 	cpu->executeOpcode(opcode);\
 	Assert::AreEqual(static_cast<u8>(0x00), A_reg);\
 	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.H);\
 	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.C);\
+	\
+	flags.F = 0x00;\
+	flags.flags.C = 1;\
+	A_reg = 0x08;\
+	cpu->getRegistriesRef().getPCRef() = 0x8000;\
+	bus->write(0x8001, 0x08);\
+	cpu->executeOpcode(opcode);\
+	Assert::AreEqual(static_cast<u8>(0xFF), A_reg);\
+	Assert::AreEqual(static_cast <u8>(0x00), flags.flags.Z);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.N);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.H);\
+	Assert::AreEqual(static_cast <u8>(0x01), flags.flags.C);\
 }
 
 #define TEST_AND_A_d8(opcode) \
@@ -1156,7 +1296,7 @@ namespace Instructions_tests
 		TEST_ADD_A_R(H, 0x84);
 		TEST_ADD_A_R(L, 0x85);
 		TEST_ADD_A_pHLq(0x86);
-		TEST_ADD_A_R(A, 0x87); // TODO verifier ce test unit au niveau des flags
+		TEST_ADD_A_A(   0x87); 
 
 		TEST_ADC_A_R(B, 0x88);
 		TEST_ADC_A_R(C, 0x89);
@@ -1165,7 +1305,9 @@ namespace Instructions_tests
 		TEST_ADC_A_R(H, 0x8C);
 		TEST_ADC_A_R(L, 0x8D);
 		TEST_ADC_A_pHLq(0x8E);
-		TEST_ADC_A_R(A, 0x8F); 
+		TEST_ADC_A_A(   0x8F); 
+
+
 
 		TEST_SUB_A_R(B, 0x90);
 		TEST_SUB_A_R(C, 0x91);
@@ -1174,7 +1316,7 @@ namespace Instructions_tests
 		TEST_SUB_A_R(H, 0x94);
 		TEST_SUB_A_R(L, 0x95);
 		TEST_SUB_A_pHLq(0x96);
-		TEST_SUB_A_R(A, 0x97);
+		TEST_SUB_A_A(   0x97);
 
 		TEST_SBC_A_R(B, 0x98);
 		TEST_SBC_A_R(C, 0x99);
@@ -1183,7 +1325,7 @@ namespace Instructions_tests
 		TEST_SBC_A_R(H, 0x9C);
 		TEST_SBC_A_R(L, 0x9D);
 		TEST_SBC_A_pHLq(0x9E);
-		TEST_SBC_A_R(A, 0x9F);
+		TEST_SBC_A_A(   0x9F);
 
 		TEST_AND_A_R(B, 0xA0);
 		TEST_AND_A_R(C, 0xA1);

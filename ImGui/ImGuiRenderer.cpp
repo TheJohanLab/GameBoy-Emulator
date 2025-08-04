@@ -190,6 +190,7 @@ void ImGuiRenderer::renderRegistries(const ImVec2& pos, const ImVec2& size) cons
 		ImGui::SameLine();
 		ImGui::Text("H: 0x%X", (mRegistries->getFlagsRef().flags.H));
 		ImGui::Text("N: 0x%X", (mRegistries->getFlagsRef().flags.N));
+		ImGui::Text("IME: 0x%X", (mRegistries->getIME()));
 		ImGui::SameLine();
 		ImGui::Text("Z: 0x%X", (mRegistries->getFlagsRef().flags.Z));
 		ImGui::Text("LCD STAT: 0x%X", (mMemoryRef->read(LCD_STATUS)));

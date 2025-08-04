@@ -530,10 +530,6 @@ void PPU::draw()
 
 void PPU::setTile(u8 tileIndex, const std::vector<u8>& tileData)
 {
-	if (tileIndex >= 16)
-	{
-		int a{ 0 };
-	}
 	for (int i = 0; i < TILE_BYTE_SIZE; i++)
 	{
 		mBus->write(VRAM_BEG_ADDRESS + (tileIndex * TILE_BYTE_SIZE) + i, tileData[i]);
@@ -586,7 +582,6 @@ void PPU::STATInterruptHandler()
 	{
 		mode1Condition = STAT.flags.PPUMode == 0x01 ? 0x01 : 0x00;
 	}
-	//test
 	u8 mode2Condition = 0x00;
 	if (STAT.flags.mode2intSelect == 0x01)
 	{

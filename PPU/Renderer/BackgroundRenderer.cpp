@@ -20,7 +20,7 @@ void BackgroundRenderer::renderScanline()
 	{
 		for (int x = 0; x < SCREEN_WIDTH; x++)
 			mPPU->renderPixel(3, x, mPPU->readLY(), mPPU->getBGP().byte, false);
-
+	
 		return;
 	}
 

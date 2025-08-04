@@ -20,6 +20,11 @@ ObjectRenderer::ObjectRenderer(PPU* ppu)
 
 void ObjectRenderer::renderScanline()
 {
+	if (!mPPU->getLCDControl().flags.OBJEnable)
+	{
+		return;
+	}
+
 	// On récupère les 10 premiers objects de la line dans l'OAM
 	std::vector<u8> objectsOAMIndex;
 	objectsOAMIndex.reserve(LINE_OBJ_LIMIT);

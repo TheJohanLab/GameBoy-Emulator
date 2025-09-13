@@ -182,7 +182,7 @@ inline void PPU::incLY()
 		STAT.flags.LYC_LY = 0x00;
 		setLCDStatus(STAT.byte);
 	}
-	mBus->write(LY, (ly + 1) % 145); 
+	mBus->write(LY, (ly + 1) % 154); 
 	//mBus->write(LY, (ly + 1) % 144); 
 }
 
@@ -292,8 +292,9 @@ void PPU::render(u8 cycle)
 			incLY();
 			//mOAM->getObjects()[2].XPos = (mOAM->getObjects()[2].XPos + 1) % 256;
 
-			if (readLY() >= SCREEN_HEIGHT - 1)
+			if (readLY() >= SCREEN_HEIGHT)
 			{
+				mPPUModeDotsVBlank = mPPUModeDots;
 				setPPUMode(PPU_VBLANK);
 				//mOnVBlank(InterruptsTypes::VBLANK);
 				InterruptsManager::setInterrupt(InterruptsTypes::VBLANK);
@@ -330,21 +331,32 @@ void PPU::render(u8 cycle)
 #ifdef LOG_DEBUG
 		GBE_LOG_INFO("VBLANK Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_VBLANK_DOTS);
 #endif
+		mPPUModeDotsVBlank += cycle;
+
+		GBE_LOG_INFO("VBLANK Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_VBLANK_DOTS);
+		
 		if (mPPUModeDots >= PPU_VBLANK_DOTS) 
 		{
-
+			GBE_LOG_INFO("mPPUModeDots >= PPU_VBLANK_DOTS");
 			mPPUModeDots -= PPU_VBLANK_DOTS;
 			// 10 scanlines
 
 			draw();
 			// On incrémente la ligne
-			incLY();
+			//incLY();
 
 			// Si ligne suivante = 154 : on revient en haut et passe en OAM
 			// Interrupt ?
 			setPPUMode(PPU_OAM_SCAN);
 			STATInterruptHandler();
 
+		}
+
+		if (mPPUModeDotsVBlank >= (PPU_VBLANK_DOTS / 10))
+		{
+			GBE_LOG_INFO("VBLANK Mode - mPPUModeDotsVBlank : {0} / {1}", mPPUModeDotsVBlank, PPU_VBLANK_DOTS / 10);
+			mPPUModeDotsVBlank -= (PPU_VBLANK_DOTS / 10);
+			incLY();
 		}
 
 
@@ -370,10 +382,9 @@ void PPU::render(u8 cycle)
 	case PPU_DRAWING :
 
 
-
-
 		if (!mIsScanlineDrawn)
 		{
+			std::cout << (int)(mBus->read(LY)) << std::endl;
 			mDotsElapsed = renderPixelsScanline();
 			mIsScanlineDrawn = true;
 		}

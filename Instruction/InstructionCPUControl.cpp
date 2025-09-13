@@ -21,7 +21,7 @@ u8 InstructionCPUControl::stop_0(CPU& cpu)
 
 u8 InstructionCPUControl::halt(CPU& cpu)
 {
-	//TODO Check if mandatory
+    cpu.stopCPU();
 	return 4;
 }
 

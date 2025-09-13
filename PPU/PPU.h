@@ -43,6 +43,7 @@ private:
 	std::vector<std::array<int16_t, 3>> mCurrentLinePixelsInfos;
 
 	u16 mPPUModeDots{ 0 };
+	u16 mPPUModeDotsVBlank{ 0 };
 	std::array<Pixel, 4> mScreenColors;
 
 	bool mIsScanlineDrawn = false;

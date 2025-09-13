@@ -24,7 +24,7 @@ public:
 		if (pc == mGoToAddress || mWindowEventManager->isKeyPressed(SDLK_RETURN))
 		{
 			mSetModeCallback(EmulatorState::STEP);
-			//return;
+			return;
 		}
 
 		mHandleFrameCallback();

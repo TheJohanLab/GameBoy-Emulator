@@ -210,7 +210,7 @@ u8 GameLoop::step()
 
 	mPPU->render(opcodeDots);
 
-	mCPU->writeMemory(0xFF07, 5);
+	//mCPU->writeMemory(0xFF07, 5);
 	mTimer->handleTimer(opcodeDots);
 
 
@@ -239,7 +239,7 @@ void GameLoop::synchroniseFrame()
 
 }
 
-inline void GameLoop::render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray)
+inline void GameLoop::render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT + 1>& pixelArray)
 {
 	mScreen->startRendering(pixelArray);
 	mImGuiHandler->render();

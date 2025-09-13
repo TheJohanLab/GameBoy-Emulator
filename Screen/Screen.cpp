@@ -98,7 +98,7 @@ void Screen::startRendering() const
 	SDL_RenderClear(mRenderer);
 }
 
-void Screen::startRendering( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const
+void Screen::startRendering( std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT + 1>& pixelArray) const
 {
 
 	SDL_RenderClear(mRenderer);

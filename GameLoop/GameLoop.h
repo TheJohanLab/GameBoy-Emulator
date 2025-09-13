@@ -82,7 +82,7 @@ private:
 	inline u8 step();
 	inline u8 bootStep();
 	inline void synchroniseFrame();
-	inline void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray);
+	inline void render(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT + 1>& pixelArray);
 	inline void logInfos() const;
 
 	inline void reset();

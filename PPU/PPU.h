@@ -27,7 +27,7 @@ struct Pixel
 
 class PPU
 {
-	using onRenderCallback = std::function<void(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>&)>;
+	using onRenderCallback = std::function<void(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT + 1>&)>;
 	//TODO REMOVE LATER
 	using onVBlankEvent = std::function<void(InterruptsTypes)>;
 
@@ -36,7 +36,7 @@ private:
 	std::shared_ptr<Bus> mBus;
 	std::shared_ptr<Screen> mScreen;
 	std::shared_ptr<OAM> mOAM;
-	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT> mPixelArray{ 0 };
+	std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT + 1> mPixelArray{ 0 };
 
 	u8 mLY { 0 };
 	std::vector<u8> mObjectsOAMIndex;

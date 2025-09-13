@@ -182,7 +182,8 @@ inline void PPU::incLY()
 		STAT.flags.LYC_LY = 0x00;
 		setLCDStatus(STAT.byte);
 	}
-	mBus->write(LY, (ly + 1) % 144);
+	mBus->write(LY, (ly + 1) % 145); 
+	//mBus->write(LY, (ly + 1) % 144); 
 }
 
 inline void PPU::incSCY()
@@ -267,6 +268,7 @@ void PPU::render(u8 cycle)
 
 	//setPPUMode(PPU_DRAWING);
 
+	//TODO Reprendre la rom Fairylake a PC = 0x0183
 	mPPUModeDots += cycle;
 
 #ifdef LOG_DEBUG

@@ -110,32 +110,32 @@ u8 InstructionJump::JR_r8(CPU& cpu)
 
 u8 InstructionJump::JR_NZcr8(CPU& cpu)
 {
-	return JR_CCca16(cpu, mFlags->flags.Z != 0);
+	return JR_CCca16(cpu, mFlags->flags.Z == 0);
 }
 
 u8 InstructionJump::JR_Zcr8(CPU& cpu)
 {
-	return JR_CCca16(cpu, mFlags->flags.Z == 0);
+	return JR_CCca16(cpu, mFlags->flags.Z != 0);
 }
 
 u8 InstructionJump::JR_NCcr8(CPU& cpu)
 {
-	return JR_CCca16(cpu, mFlags->flags.C != 0);
+	return JR_CCca16(cpu, mFlags->flags.C == 0);
 }
 
 u8 InstructionJump::JR_Ccr8(CPU& cpu)
 {
-	return JR_CCca16(cpu, mFlags->flags.C == 0);
+	return JR_CCca16(cpu, mFlags->flags.C != 0);
 }
 
 u8 InstructionJump::RET_NZ(CPU& cpu)
 {
-	return RET_CC(cpu, mFlags->flags.Z != 0);
+	return RET_CC(cpu, mFlags->flags.Z == 0);
 }
 
 u8 InstructionJump::JP_NZca16(CPU& cpu)
 {
-	return JP_CCca16(cpu, mFlags->flags.Z != 0);
+	return JP_CCca16(cpu, mFlags->flags.Z == 0);
 }
 
 u8 InstructionJump::JP_a16(CPU& cpu)
@@ -148,7 +148,7 @@ u8 InstructionJump::JP_a16(CPU& cpu)
 
 u8 InstructionJump::CALL_NZca16(CPU& cpu)
 {
-	return CALL_CC(cpu, mFlags->flags.Z != 0);
+	return CALL_CC(cpu, mFlags->flags.Z == 0);
 }
 
 u8 InstructionJump::RST_00H(CPU& cpu)
@@ -159,7 +159,7 @@ u8 InstructionJump::RST_00H(CPU& cpu)
 
 u8 InstructionJump::RET_Z(CPU& cpu)
 {
-	return RET_CC(cpu, mFlags->flags.Z == 0);
+	return RET_CC(cpu, mFlags->flags.Z != 0);
 }
 
 u8 InstructionJump::RET(CPU& cpu)
@@ -174,12 +174,12 @@ u8 InstructionJump::RET(CPU& cpu)
 
 u8 InstructionJump::JP_Zca16(CPU& cpu)
 {
-	return JP_CCca16(cpu, mFlags->flags.Z == 0);
+	return JP_CCca16(cpu, mFlags->flags.Z != 0);
 }
 
 u8 InstructionJump::CALL_Zca16(CPU& cpu)
 {
-	return CALL_CC(cpu, mFlags->flags.Z == 0);
+	return CALL_CC(cpu, mFlags->flags.Z != 0);
 }
 
 u8 InstructionJump::CALL_a16(CPU& cpu)
@@ -209,17 +209,17 @@ u8 InstructionJump::RST_08H(CPU& cpu)
 
 u8 InstructionJump::RET_NC(CPU& cpu)
 {
-	return RET_CC(cpu, mFlags->flags.C != 0);
+	return RET_CC(cpu, mFlags->flags.C == 0);
 }
 
 u8 InstructionJump::JP_NCca16(CPU& cpu)
 {
-	return JP_CCca16(cpu, mFlags->flags.C != 0);
+	return JP_CCca16(cpu, mFlags->flags.C == 0);
 }
 
 u8 InstructionJump::CALL_NCca16(CPU& cpu)
 {
-	return CALL_CC(cpu, mFlags->flags.C != 0);
+	return CALL_CC(cpu, mFlags->flags.C == 0);
 }
 
 u8 InstructionJump::RST_10H(CPU& cpu)
@@ -230,7 +230,7 @@ u8 InstructionJump::RST_10H(CPU& cpu)
 
 u8 InstructionJump::RET_C(CPU& cpu)
 {
-	return RET_CC(cpu, mFlags->flags.C == 0);
+	return RET_CC(cpu, mFlags->flags.C != 0);
 }
 
 u8 InstructionJump::RETI(CPU& cpu)
@@ -241,12 +241,12 @@ u8 InstructionJump::RETI(CPU& cpu)
 
 u8 InstructionJump::JP_Cca16(CPU& cpu)
 {
-	return JP_CCca16(cpu, mFlags->flags.C == 0);
+	return JP_CCca16(cpu, mFlags->flags.C != 0);
 }
 
 u8 InstructionJump::CALL_Cca16(CPU& cpu)
 {
-	return CALL_CC(cpu, mFlags->flags.C == 0);
+	return CALL_CC(cpu, mFlags->flags.C != 0);
 }
 
 u8 InstructionJump::RST_18H(CPU& cpu)

@@ -39,7 +39,7 @@ class Screen
 
 
 		void startRendering() const;
-		void startRendering(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT>& pixelArray) const;
+		void startRendering(std::array<std::array<Pixel, SCREEN_WIDTH>, SCREEN_HEIGHT + 1>& pixelArray) const;
 		void render() const;
 
 	private:

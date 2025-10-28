@@ -223,6 +223,8 @@ void ImGuiRenderer::renderEmulatorData(const ImVec2& pos, const ImVec2& size) co
 		ImGui::Text("OpCode: %s", mOpcodeDescription.c_str());
 		ImGui::Text("Next Opcodes:  %s", mCPURef->getNextOpcodesValue().c_str());
 		ImGui::Text("SP:     0x%X", *(mCPURef->getSP()));
+		ImGui::Text("LY : 0x%X", CPU::getCurrLY());
+		ImGui::Text("LCD_STATUS : 0x%X", CPU::getCurrLCDStatus());
 
 		ImGui::End();
 

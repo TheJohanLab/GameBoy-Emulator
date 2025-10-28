@@ -9,6 +9,8 @@
 
 
 u16 CPU::mPC{ 0 };
+u8 CPU::mLY{ 0 }; //TODO Move to PPU
+u8 CPU::mLCDStatus{ 0 }; //TODO Move to PPU
 
 CPU::CPU()
 {
@@ -582,6 +584,13 @@ u8 CPU::executeOpcode(const u16 opcode)
 #ifdef _DEBUG 
 	//Show PC and opcode for ImGui
 	mPC = readPC();
+	mLY = readLY();
+	mLCDStatus = readLCDStatus();
+	//std::cout << "mPC : " << std::hex << mPC << "\n";
+	if (mPC == 363)
+	{
+		std::cout << "363\n";
+	}
 	ImGuiRenderer::setOpcodeDesc(mInstructionSet[opcode]->getName()); // TODO changer la facon de recuperer la description
 #endif
 

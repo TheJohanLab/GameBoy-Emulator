@@ -18,6 +18,8 @@ class CPU : std::enable_shared_from_this<CPU>
 {
 	private:
 		static u16 mPC;
+		static u8 mLY;
+		static u8 mLCDStatus;
 
 		std::shared_ptr<Bus> mBus;
 		std::shared_ptr<PPU> mPPU;
@@ -49,6 +51,9 @@ class CPU : std::enable_shared_from_this<CPU>
 		u16* getPC() { return mRegistries.getPC(); }
 		u16* getSP() { return mRegistries.getSP(); }
 
+		u8 readLY() const { return mBus->read(LY); }
+		u8 readLCDStatus() const { return mBus->read(LCD_STATUS); }
+		
 		void incPC() { *(mRegistries.getPC())+=1; }
 
 
@@ -102,6 +107,10 @@ class CPU : std::enable_shared_from_this<CPU>
 
 public:
 	static u16 getCurrPC() { return mPC; }
+	static u8 getCurrLY() { return mLY; }
+	static u8 getCurrLCDStatus() { return mLCDStatus; }
+
+
 };
 
 

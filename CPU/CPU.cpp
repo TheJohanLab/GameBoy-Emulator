@@ -586,23 +586,22 @@ u8 CPU::executeOpcode(const u16 opcode)
 	mPC = readPC();
 	mLY = readLY();
 	mLCDStatus = readLCDStatus();
-	//std::cout << "mPC : " << std::hex << mPC << "\n";
-	if (mPC == 363)
-	{
-		std::cout << "363\n";
-	}
+
 	ImGuiRenderer::setOpcodeDesc(mInstructionSet[opcode]->getName()); // TODO changer la facon de recuperer la description
 #endif
 
 	//Attente d'une interruption pour reprendre
-	if (mIsCPUStopped)
+	if (mCPUHalted)
 	{
 		// TODO Verifier l'attente lors d'un stop
 		return 4;
 	}
 
 	if (opcode == 0xCB) 
-		return executeOpcodeCB(0x00);
+	{
+		incPC();
+		return executeOpcodeCB(getOpcode());
+	}
 	
 
 	u8 cycles = (mInstructionSet[opcode]->getFunctionPointer())(*this);
@@ -747,21 +746,26 @@ u8* CPU::getMemoryDataPtr(const u16& address)
 	return value;
 }
 
-void CPU::setIMEFlag()
+void CPU::setIMEFlag(u8 value)
 {
-	mRegistries.setIME();
+	mRegistries.setIME(value);
 }
 
-void CPU::clearIMEFlag()
-{
-	mRegistries.clearIME();
-}
 
 u8 CPU::getIMEFlag() const
 {
 	return mRegistries.getIME();
 }
 
+void CPU::setEIFlag(u8 value)
+{
+	mEIFlag = value;
+}
+
+u8 CPU::getEIFlag() const
+{
+	return mEIFlag;
+}
 
 std::pair<interrupt_flag, interrupt_flag> CPU::getInterruptFlags() const
 {
@@ -799,14 +803,15 @@ void CPU::createInternalComponents(std::weak_ptr<CPU> cpu_weak)
 	mBootRom = std::make_shared<BootRom>(mBus, mPPU, cpu_weak);
 }
 
-void CPU::stopCPU()
+
+void CPU::haltCPU()
 {
-	mIsCPUStopped = true;
+	mCPUHalted = true;
 }
 
 void CPU::resumeCPUFromInterrupt()
 {
-	mIsCPUStopped = false;
+	mCPUHalted = false;
 }
 
 void CPU::resetMemory()
@@ -850,8 +855,13 @@ void CPU::logOpcodesInfos(u8 opcode)
 
 }
 
-const bool CPU::getCPUStoppedStatus() const
+const bool CPU::getCPUHaltedStatus() const
 {
-	return mIsCPUStopped;
+	return mCPUHalted;
 }
 
+void CPU::incPC() 
+{ 
+	*(mRegistries.getPC()) += 1 - mHaltBugFlag;
+	mHaltBugFlag = 0;
+}

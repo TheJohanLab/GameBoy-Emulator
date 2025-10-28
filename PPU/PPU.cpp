@@ -333,11 +333,11 @@ void PPU::render(u8 cycle)
 #endif
 		mPPUModeDotsVBlank += cycle;
 
-		GBE_LOG_INFO("VBLANK Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_VBLANK_DOTS);
+		//GBE_LOG_INFO("VBLANK Mode - mPPUModeDots : {0} / {1}", mPPUModeDots, PPU_VBLANK_DOTS);
 		
 		if (mPPUModeDots >= PPU_VBLANK_DOTS) 
 		{
-			GBE_LOG_INFO("mPPUModeDots >= PPU_VBLANK_DOTS");
+			//GBE_LOG_INFO("mPPUModeDots >= PPU_VBLANK_DOTS");
 			mPPUModeDots -= PPU_VBLANK_DOTS;
 			// 10 scanlines
 
@@ -354,7 +354,7 @@ void PPU::render(u8 cycle)
 
 		if (mPPUModeDotsVBlank >= (PPU_VBLANK_DOTS / 10))
 		{
-			GBE_LOG_INFO("VBLANK Mode - mPPUModeDotsVBlank : {0} / {1}", mPPUModeDotsVBlank, PPU_VBLANK_DOTS / 10);
+			//GBE_LOG_INFO("VBLANK Mode - mPPUModeDotsVBlank : {0} / {1}", mPPUModeDotsVBlank, PPU_VBLANK_DOTS / 10);
 			mPPUModeDotsVBlank -= (PPU_VBLANK_DOTS / 10);
 			incLY();
 		}
@@ -453,7 +453,7 @@ void PPU::initializePPU()
 
 void PPU::renderPixel(u8 pixelID, int x, int y, u8 palette, bool object)
 {
-	if (x < 0 || y < 0)
+	if (x < 0 || y < 0 || x > SCREEN_WIDTH || y > SCREEN_HEIGHT)
 		return;
 
 

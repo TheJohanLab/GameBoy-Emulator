@@ -30,7 +30,10 @@ class CPU : std::enable_shared_from_this<CPU>
 		std::shared_ptr<BootRom> mBootRom{ nullptr };
 		std::shared_ptr<InterruptsManager> mInterruptsManager{ nullptr };
 		
-		bool mIsCPUStopped{ false };
+		bool mCPUHalted{ false };
+		u8 mHaltBugFlag{ 0 };
+		u8 mEIFlag{ 0 };
+
 		std::string mNextOpcodes;
 
 		void initInstructionSet();
@@ -54,8 +57,7 @@ class CPU : std::enable_shared_from_this<CPU>
 		u8 readLY() const { return mBus->read(LY); }
 		u8 readLCDStatus() const { return mBus->read(LCD_STATUS); }
 		
-		void incPC() { *(mRegistries.getPC())+=1; }
-
+		void incPC();
 
 		void setRegistries(const std::string & registry, u8 value);
 		void setCombinedRegistries(const std::string& registries, u16 value);
@@ -71,9 +73,11 @@ class CPU : std::enable_shared_from_this<CPU>
 		u8* getMemoryDataPtr(const combinedRegistries& address);
 		u8* getMemoryDataPtr(const u16& address);
 
-		void setIMEFlag();
-		void clearIMEFlag();
+		void setIMEFlag(u8);
+		void clearIMEFlag(u8);
 		u8 getIMEFlag() const;
+
+		void setEIFlag(u8);
 
 		
 		std::pair<interrupt_flag, interrupt_flag> getInterruptFlags() const;
@@ -85,8 +89,9 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		void createInternalComponents(std::weak_ptr<CPU> cpu_weak);
 
-		void stopCPU();
+		void haltCPU();
 		void resumeCPUFromInterrupt();
+		void setHaltBugFlag() { mHaltBugFlag = 1; }
 
 		//std::shared_ptr<Registries> getRegistriesRef() { return std::shared_ptr<Registries>(&mRegistries); } //TODO make mRegistries shared_ptr
 
@@ -101,7 +106,7 @@ class CPU : std::enable_shared_from_this<CPU>
 		//New approch
 		Registries& getRegistriesRef() { return mRegistries; }
 
-		const bool getCPUStoppedStatus() const;
+		const bool getCPUHaltedStatus() const;
 
 
 

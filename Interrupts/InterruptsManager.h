@@ -60,4 +60,6 @@ private:
 	void none();
 
 	void getActiveInterruptFlags();
+
+	void handleHaltInterrupt(std::shared_ptr<CPU>);
 };

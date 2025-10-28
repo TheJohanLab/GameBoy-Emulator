@@ -216,6 +216,16 @@ u8 GameLoop::step()
 
 	mCPU->getInterruptsManager()->callInterruptHandler();
 
+	// Gestion du delai de l'instruction ei.
+	// Le flag EI permet de mettre IME=1 a la fin de l'instruction suivante.
+	// bitwise-OR pour ne pas interférer avec l'etat de IME hors-instuction EI
+	// bitwise-AND : on commence avec EIFlag = 2 => pas pris en compte. (juste apres l'instruction ei)
+	//								  EIFlag = 1 => pris en compte. (juste apres l'instruction suivante)
+	//								  EIFlag = 0 => pas pris en compte. (autres cas)
+	mCPU->setIMEFlag((mCPU->getEIFlag() & 0x01) | mCPU->getIMEFlag());
+	// Decrementation de EIFlag (par right-shift, pour eviter d'underflow)
+	mCPU->setEIFlag(mCPU->getEIFlag() >> 1);
+
 	return opcodeDots;
 }
 

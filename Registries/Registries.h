@@ -164,8 +164,7 @@ class Registries
 		void setSP(u16 value) { this->SP = value; }
 		void setPC(u16 value) { this->PC = value; }
 
-		void setIME() { this->IME = 1; }
-		void clearIME() { this->IME = 0; }
+		void setIME(u8 value) { this->IME = value; }
 		u8 getIME() const { return this->IME; } 
 
 		//New approch

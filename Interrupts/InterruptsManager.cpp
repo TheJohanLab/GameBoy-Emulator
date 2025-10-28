@@ -46,15 +46,19 @@ void InterruptsManager::clearInterrupts()
 void InterruptsManager::callInterruptHandler()
 {
 	auto cpu = mCPU_weak.lock();
-	if (!cpu->getIMEFlag())
-		return;
 
 	getActiveInterruptFlags();
+
+	if (!cpu->getIMEFlag())
+	{
+		handleHaltInterrupt(cpu);
+		return;
+	}
 
 	if (mActiveInterruptFlags.byte > 0x00)
 	{
 		cpu->resumeCPUFromInterrupt();
-		cpu->clearIMEFlag(); 
+		cpu->setIMEFlag(0x00); 
 		InstructionJump::PUSH_PC(*cpu);
 
 		if (mActiveInterruptFlags.flags.Vblank)
@@ -145,4 +149,14 @@ void InterruptsManager::getActiveInterruptFlags()
 	auto cpu = mCPU_weak.lock();
 	std::pair< interrupt_flag, interrupt_flag> interruptFlags = cpu->getInterruptFlags();
 	mActiveInterruptFlags.byte = ((interruptFlags.first.byte & interruptFlags.second.byte) & 0x0F);
+}
+
+
+void InterruptsManager::handleHaltInterrupt(std::shared_ptr<CPU> cpu)
+{
+	if (mActiveInterruptFlags.byte > 0x00) //Instruction pending
+	{
+		cpu->resumeCPUFromInterrupt();
+		cpu->setHaltBugFlag(); //TODO Check the infinite loop
+	}
 }

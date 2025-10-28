@@ -28,7 +28,7 @@ void BootRom::initializeBootRom()
 	mVBLankCnt = 0;
 	mBus->write(SCY, 0x64);
 	auto cpu = mCPU_weak.lock();
-	cpu->setIMEFlag();
+	cpu->setIMEFlag(0x01);
 	cpu->setInterruptEnable(0x01); // VBLANK interrupt only
 }
 
@@ -64,7 +64,7 @@ void BootRom::execute()
 		mPPU->resetPPUModeDots();
 		auto cpu = mCPU_weak.lock();
 		cpu->getInterruptsManager()->setActiveVBlankInterrupt();
-		cpu->clearIMEFlag();
+		cpu->clearIMEFlag(0x01);
 #ifdef _DEBUG //TODO verifier pourquoi cette ligne est en debug uniquement
 		mPPU->resetCurrCycles();
 #endif
@@ -97,7 +97,7 @@ void BootRom::scrollLogo()
 	*SP += 2;
 	cpu->getInterruptsManager()->clearInterrupts();
 
-	cpu->setIMEFlag();
+	cpu->setIMEFlag(0x01);
 
 
 }

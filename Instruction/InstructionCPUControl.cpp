@@ -14,14 +14,13 @@ u8 InstructionCPUControl::nop(CPU & cpu)
 
 u8 InstructionCPUControl::stop_0(CPU& cpu)
 {
-	cpu.stopCPU(); //TODO Check how to handle this without cpu reference
-
+	// cpu.stopCPU(); // STOP inutilisé : ne s'arrete qu'a un reset ou un input joypad poour l'ecomonie d'energie => Pas utile pour un emulateur
 	return 4;
 }
 
 u8 InstructionCPUControl::halt(CPU& cpu)
 {
-    cpu.stopCPU();
+    cpu.haltCPU();
 	return 4;
 }
 
@@ -39,7 +38,6 @@ u8 InstructionCPUControl::di(CPU& cpu)
 
 u8 InstructionCPUControl::ei(CPU& cpu)
 {
-	*mIME = 1;
-
+	cpu->setEIFlag(0x02);
 	return 4;
 }

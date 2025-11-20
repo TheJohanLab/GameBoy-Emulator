@@ -38,6 +38,6 @@ u8 InstructionCPUControl::di(CPU& cpu)
 
 u8 InstructionCPUControl::ei(CPU& cpu)
 {
-	cpu->setEIFlag(0x02);
+	cpu.setEIFlag(0x02);
 	return 4;
 }

@@ -64,7 +64,7 @@ void BootRom::execute()
 		mPPU->resetPPUModeDots();
 		auto cpu = mCPU_weak.lock();
 		cpu->getInterruptsManager()->setActiveVBlankInterrupt();
-		cpu->clearIMEFlag(0x01);
+		cpu->setIMEFlag(0x01);
 #ifdef _DEBUG //TODO verifier pourquoi cette ligne est en debug uniquement
 		mPPU->resetCurrCycles();
 #endif

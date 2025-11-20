@@ -384,7 +384,7 @@ void PPU::render(u8 cycle)
 
 		if (!mIsScanlineDrawn)
 		{
-			std::cout << (int)(mBus->read(LY)) << std::endl;
+			//std::cout << (int)(mBus->read(LY)) << std::endl;
 			mDotsElapsed = renderPixelsScanline();
 			mIsScanlineDrawn = true;
 		}

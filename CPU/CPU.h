@@ -74,11 +74,10 @@ class CPU : std::enable_shared_from_this<CPU>
 		u8* getMemoryDataPtr(const u16& address);
 
 		void setIMEFlag(u8);
-		void clearIMEFlag(u8);
 		u8 getIMEFlag() const;
 
 		void setEIFlag(u8);
-
+		u8 getEIFlag() const;
 		
 		std::pair<interrupt_flag, interrupt_flag> getInterruptFlags() const;
 		void setInterruptFlag(const u8 flags);
@@ -91,7 +90,7 @@ class CPU : std::enable_shared_from_this<CPU>
 
 		void haltCPU();
 		void resumeCPUFromInterrupt();
-		void setHaltBugFlag() { mHaltBugFlag = 1; 
+		void setHaltBugFlag() { mHaltBugFlag = 1; }
 
 		//std::shared_ptr<Registries> getRegistriesRef() { return std::shared_ptr<Registries>(&mRegistries); } //TODO make mRegistries shared_ptr
 

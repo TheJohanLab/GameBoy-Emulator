@@ -91,6 +91,8 @@ class CPU : std::enable_shared_from_this<CPU>
 		void haltCPU();
 		void resumeCPUFromInterrupt();
 		void setHaltBugFlag() { mHaltBugFlag = 1; }
+		// State at 0x0100 after the boot ROM: running (not halted), no pending EI / HALT bug, IME = 0.
+		void resetRunState() { mCPUHalted = false; mHaltBugFlag = 0; mEIFlag = 0; mRegistries.setIME(0); }
 
 		//std::shared_ptr<Registries> getRegistriesRef() { return std::shared_ptr<Registries>(&mRegistries); } //TODO make mRegistries shared_ptr
 

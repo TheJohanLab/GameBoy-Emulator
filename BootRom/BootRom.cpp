@@ -64,7 +64,10 @@ void BootRom::execute()
 		mPPU->resetPPUModeDots();
 		auto cpu = mCPU_weak.lock();
 		cpu->getInterruptsManager()->setActiveVBlankInterrupt();
-		cpu->setIMEFlag(0x01);
+		// Hand over like the DMG boot ROM: IME = 0 and the CPU running. The halted / EI / HALT-bug state
+		// of the previously loaded ROM used to survive here; with NO_BOOT (Debug config) a ROM loaded
+		// while the previous one sat in HALT never executed a single instruction (white screen).
+		cpu->resetRunState();
 #ifdef _DEBUG //TODO verifier pourquoi cette ligne est en debug uniquement
 		mPPU->resetCurrCycles();
 #endif

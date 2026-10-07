@@ -27,6 +27,7 @@ void BootRom::initializeBootRom()
 	mScrollingIter = 0;
 	mVBLankCnt = 0;
 	mBus->write(SCY, 0x64);
+	mBus->write(LCD_CONTROL, 0x91); // LCD on, BG on, tiles at 0x8000, map at 0x9800 (as the DMG boot ROM)
 	auto cpu = mCPU_weak.lock();
 	cpu->setIMEFlag(0x01);
 	cpu->setInterruptEnable(0x01); // VBLANK interrupt only
@@ -61,7 +62,7 @@ void BootRom::execute()
 		};
 		
 
-		mPPU->resetPPUModeDots();
+		mPPU->restartFrame(); // LY = 0, mode 2: start the ROM on a fresh frame
 		auto cpu = mCPU_weak.lock();
 		cpu->getInterruptsManager()->setActiveVBlankInterrupt();
 		// Hand over like the DMG boot ROM: IME = 0 and the CPU running. The halted / EI / HALT-bug state

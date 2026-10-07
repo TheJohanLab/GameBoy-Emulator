@@ -51,6 +51,8 @@ private:
 
 	u8 mStatLine{ 0 };
 
+	bool mLCDOn{ true };                          // last seen LCDC.7
+
 	//onVBlankEvent mOnVBlank{ nullptr };
 	onRenderCallback mOnRender{ nullptr };
 
@@ -128,6 +130,7 @@ public:
 	void setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData);
 
 	void resetPPUModeDots() { mPPUModeDots = 0; };
+	void restartFrame();
 	void reset();
 
 	//TO REMOVE LATER

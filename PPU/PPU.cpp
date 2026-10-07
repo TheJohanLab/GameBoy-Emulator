@@ -50,7 +50,7 @@ void PPU::setLCDControl(const u8 flags)
 
 void PPU::setLCDStatus(const u8 flags)
 {
-	mBus->write(LCD_STATUS, flags);
+	*mBus->getDataPtr(LCD_STATUS) = flags;
 }
 
 u8 PPU::getPPUMode() const
@@ -167,23 +167,14 @@ inline u8 PPU::readLYC() const
 
 inline void PPU::incLY()
 {
-	//mLY = (mLY + 1) % 144;
-	u8 ly = readLY();
-	u8 lyc = readLYC();
-	if (ly == lyc) 
-	{
-		LCD_status STAT = getLCDStatus();
-		STAT.flags.LYC_LY = 0x01;
-		setLCDStatus(STAT.byte);
-	}
-	else 
-	{
-		LCD_status STAT = getLCDStatus();
-		STAT.flags.LYC_LY = 0x00;
-		setLCDStatus(STAT.byte);
-	}
-	mBus->write(LY, (ly + 1) % 154); 
-	//mBus->write(LY, (ly + 1) % 144); 
+	// LY is written directly (CPU writes to LY are ignored by Memory). LY=LYC must be compared with
+	// the NEW line: it used to be compared with the previous one, i.e. one line late.
+	const u8 ly = (readLY() + 1) % 154;
+	*mBus->getDataPtr(LY) = ly;
+
+	LCD_status STAT = getLCDStatus();
+	STAT.flags.LYC_LY = (ly == readLYC()) ? 0x01 : 0x00;
+	setLCDStatus(STAT.byte);
 }
 
 inline void PPU::incSCY()
@@ -267,6 +258,25 @@ void PPU::render(u8 cycle)
 	*/
 
 	//setPPUMode(PPU_DRAWING);
+
+	// LCDC.7 = 0: LCD off. LY stays 0, STAT reports mode 0, nothing is drawn, no interrupt; the
+	// screen is blank (white). Turning it back on restarts a frame at LY = 0.
+	if (!getLCDControl().flags.LCD_PPUEnable)
+	{
+		if (mLCDOn)
+		{
+			mLCDOn = false;
+			*mBus->getDataPtr(LY) = 0;
+			setPPUMode(PPU_HBLANK);
+			mStatLine = 0;
+			for (auto& row : mPixelArray)
+				row.fill(mScreenColors[0]);
+			draw();
+		}
+		return;
+	}
+	if (!mLCDOn)
+		restartFrame();
 
 	//TODO Reprendre la rom Fairylake a PC = 0x0183
 	mPPUModeDots += cycle;
@@ -357,6 +367,7 @@ void PPU::render(u8 cycle)
 			//GBE_LOG_INFO("VBLANK Mode - mPPUModeDotsVBlank : {0} / {1}", mPPUModeDotsVBlank, PPU_VBLANK_DOTS / 10);
 			mPPUModeDotsVBlank -= (PPU_VBLANK_DOTS / 10);
 			incLY();
+			STATInterruptHandler(); // LY changed: LY=LYC must also fire on VBlank lines
 		}
 
 
@@ -405,6 +416,9 @@ void PPU::render(u8 cycle)
 
 		break;
 	}
+
+	// Evaluate the STAT interrupt line on every step (rising edge => IRQ), not only on mode changes.
+	STATInterruptHandler();
 
 	//mScreen->render(mPixelArray);
 	
@@ -459,6 +473,21 @@ void PPU::renderPixel(u8 pixelID, int x, int y, u8 palette, bool object)
 
 	Pixel pixelColor = mScreenColors[palette >> (2 * pixelID) & 0x03];
 	mPixelArray[y][x] = pixelColor;
+}
+
+void PPU::restartFrame()
+{
+	mPPUModeDots = 0;
+	mPPUModeDotsVBlank = 0;
+	mIsScanlineDrawn = false;
+	mStatLine = 0;
+	mLCDOn = true;
+
+	*mBus->getDataPtr(LY) = 0;
+	LCD_status STAT = getLCDStatus();
+	STAT.flags.LYC_LY = (readLYC() == 0) ? 0x01 : 0x00;
+	setLCDStatus(STAT.byte);
+	setPPUMode(PPU_OAM_SCAN);
 }
 
 
@@ -583,7 +612,11 @@ void PPU::waitForNextFrame()
 
 void PPU::STATInterruptHandler()
 {
+	// LY=LYC is compared continuously on hardware: a CPU write to LYC must be seen at once. Before,
+	// the flag was only updated in incLY(), so programming LYC = LY + 1 never gave a rising edge.
 	LCD_status STAT = getLCDStatus();
+	STAT.flags.LYC_LY = (readLY() == readLYC()) ? 0x01 : 0x00;
+	setLCDStatus(STAT.byte);
 	u8 LYCCondition = STAT.flags.LYCintSelect == 0x01 ? STAT.flags.LYC_LY : 0x00;
 	u8 mode0Condition = 0x00;
 	if (STAT.flags.mode0intSelect == 0x01)

@@ -14,7 +14,7 @@ public:
 	void renderScanline() override;
 
 private:
-	inline u8 getCurrentPixelColorID(u16 tileIndexInVRAM, u8 currXIndex, u8 xPosOnScreen, u8 pixelYInTile);
+	inline u8 getCurrentPixelColorID(u16 tileIndexInVRAM, u8 pixelXInTile, u8 pixelYInTile);
 
 };
 

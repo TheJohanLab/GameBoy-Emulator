@@ -237,7 +237,7 @@ void BootRom::initRegistries()
 	mBus->write(0xFF43, 0x00);
 	mBus->write(0xFF44, 0x00);
 	mBus->write(0xFF45, 0x00);
-	mBus->write(0xFF46, 0xFF);
+	*mBus->getDataPtr(0xFF46) = 0xFF; // register value only: writing it through the bus started a DMA from 0xFF00
 	mBus->write(0xFF47, 0xFC);
 	mBus->write(0xFF4A, 0x00);
 	mBus->write(0xFF4B, 0x00);

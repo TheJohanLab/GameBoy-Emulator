@@ -115,28 +115,35 @@ void PPU::writeOAM_Attrs(u8 index, const u8& data)
 
 OAM::Object PPU::readOAM(u8 index) const
 {
-	return mOAM->read(index);
+	// Read OAM from memory so that CPU writes to 0xFE00-0xFE9F are visible, not only DMA.
+	const u16 objectAddr = OAM_BEG_ADDRESS + 4 * index;
+	OAM::Object object;
+	object.YPos = mBus->read(objectAddr);
+	object.XPos = mBus->read(objectAddr + 1);
+	object.tileIndex = mBus->read(objectAddr + 2);
+	object.AttributeFlags.byte = mBus->read(objectAddr + 3);
+	return object;
 }
 
 u8 PPU::readOAM_YPos(u8 index) const
 {
-	return mOAM->readYPos(index);
+	return mBus->read(OAM_BEG_ADDRESS + 4 * index);
 }
 
 u8 PPU::readOAM_XPos(u8 index) const
 {
-	return mOAM->readXPos(index);
+	return mBus->read(OAM_BEG_ADDRESS + 4 * index + 1);
 }
 
 u8 PPU::readOAM_TileIndex(u8 index) const
 {
-	return mOAM->readTileIndex(index);
+	return mBus->read(OAM_BEG_ADDRESS + 4 * index + 2);
 
 }
 
 u8 PPU::readOAM_Attrs(u8 index) const
 {
-	return mOAM->readAttrs(index);
+	return mBus->read(OAM_BEG_ADDRESS + 4 * index + 3);
 
 }
 
@@ -357,6 +364,7 @@ void PPU::render(u8 cycle)
 
 			// Si ligne suivante = 154 : on revient en haut et passe en OAM
 			// Interrupt ?
+			mWindowLine = 0;
 			setPPUMode(PPU_OAM_SCAN);
 			STATInterruptHandler();
 
@@ -429,7 +437,10 @@ void PPU::render(u8 cycle)
 {
 	u64 scanlineBegin = SDL_GetPerformanceCounter();
 	renderScanline<BackgroundRenderer>();
+	mWindowDrawnOnLine = false;
 	renderScanline<WindowRenderer>();
+	if (mWindowDrawnOnLine)
+		mWindowLine++;
 	renderScanline<ObjectRenderer>();
 
 	double scanlineElapsedInSec = (double)(SDL_GetPerformanceCounter() - scanlineBegin) / SDL_GetPerformanceFrequency();
@@ -467,9 +478,12 @@ void PPU::initializePPU()
 
 void PPU::renderPixel(u8 pixelID, int x, int y, u8 palette, bool object)
 {
-	if (x < 0 || y < 0 || x > SCREEN_WIDTH || y > SCREEN_HEIGHT)
+	if (x < 0 || y < 0 || x >= SCREEN_WIDTH || y >= SCREEN_HEIGHT)
 		return;
 
+	// Remember the BG/window color index: objects with the BG-over-OBJ priority bit need it.
+	if (!object)
+		mBGColorIndex[x] = pixelID;
 
 	Pixel pixelColor = mScreenColors[palette >> (2 * pixelID) & 0x03];
 	mPixelArray[y][x] = pixelColor;
@@ -481,6 +495,7 @@ void PPU::restartFrame()
 	mPPUModeDotsVBlank = 0;
 	mIsScanlineDrawn = false;
 	mStatLine = 0;
+	mWindowLine = 0;
 	mLCDOn = true;
 
 	*mBus->getDataPtr(LY) = 0;
@@ -554,6 +569,7 @@ inline void PPU::renderScanline()
 void PPU::executeFullFrameRender()
 {
 	mLY = 0;
+	mWindowLine = 0;
 	for (int line = 0; line < SCREEN_HEIGHT; line++)
 	{
 		renderPixelsScanline();

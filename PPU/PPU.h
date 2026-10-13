@@ -51,6 +51,11 @@ private:
 
 	u8 mStatLine{ 0 };
 
+	bool mLCDOn{ true };                          // last seen LCDC.7
+	u8 mWindowLine{ 0 };                          // internal window line counter
+	bool mWindowDrawnOnLine{ false };
+	std::array<u8, SCREEN_WIDTH> mBGColorIndex{};  // BG/window color index of the current line
+
 	//onVBlankEvent mOnVBlank{ nullptr };
 	onRenderCallback mOnRender{ nullptr };
 
@@ -128,6 +133,10 @@ public:
 	void setTileMap(u8 tileMapIndex, const std::vector<u8>& tileMapData);
 
 	void resetPPUModeDots() { mPPUModeDots = 0; };
+	void restartFrame();
+	u8 getWindowLine() const { return mWindowLine; }
+	void markWindowLineDrawn() { mWindowDrawnOnLine = true; }
+	u8 getBGColorIndex(int x) const { return mBGColorIndex[x]; }
 	void reset();
 
 	//TO REMOVE LATER

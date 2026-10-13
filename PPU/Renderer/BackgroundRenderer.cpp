@@ -19,7 +19,7 @@ void BackgroundRenderer::renderScanline()
 	if (!mPPU->getLCDControl().flags.BG_WindowEnable) 
 	{
 		for (int x = 0; x < SCREEN_WIDTH; x++)
-			mPPU->renderPixel(3, x, mPPU->readLY(), mPPU->getBGP().byte, false);
+			mPPU->renderPixel(0, x, mPPU->readLY(), mPPU->getBGP().byte, false); // color 0, was 3 (black with BGP=0xE4)
 	
 		return;
 	}

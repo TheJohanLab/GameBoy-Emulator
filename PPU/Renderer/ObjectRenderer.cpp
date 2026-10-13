@@ -25,15 +25,11 @@ void ObjectRenderer::renderScanline()
 		return;
 	}
 
-	// On récupère les 10 premiers objects de la line dans l'OAM
-	std::vector<u8> objectsOAMIndex;
-	objectsOAMIndex.reserve(LINE_OBJ_LIMIT);
-
 	mObjectsOAMIndex.clear();
-	mCurrentLinePixelsInfos.assign(500, { -1, -1, -1 });
+	mCurrentLinePixelsInfos.assign(SCREEN_WIDTH, { -1, -1, -1 });
 
 	u8 spriteHeightMode = mPPU->getLCDControl().flags.OBJSize ? 16 : 8;
-		
+
 	storeObjectsInCurrentLine(spriteHeightMode);
 	storePixelsInfos(spriteHeightMode);
 	renderCurrentLineObjectsPixels(spriteHeightMode);
@@ -41,103 +37,41 @@ void ObjectRenderer::renderScanline()
 
 inline void ObjectRenderer::storeObjectsInCurrentLine(u8 spriteHeightMode)
 {
-	u8 objCnt = 0;
-	for (int i = 0; i < MAX_OBJECTS; i++)
+	// OAM scan: the first 10 objects (OAM order) covering this line. Y is stored + 16, so it must be
+	// computed in int: with u8 an object partly above the screen (Y < 16) wrapped and vanished.
+	const int ly = mPPU->readLY();
+	for (int i = 0; i < MAX_OBJECTS && mObjectsOAMIndex.size() < LINE_OBJ_LIMIT; i++)
 	{
-		auto objectY = mPPU->readOAM(i).YPos;
-		u8 objectYOnScreen = objectY - 16;
-
-		if (mPPU->readLY() >= (objectYOnScreen) && mPPU->readLY() < objectYOnScreen + spriteHeightMode)
-		{
+		const int objectYOnScreen = static_cast<int>(mPPU->readOAM_YPos(i)) - 16;
+		if (ly >= objectYOnScreen && ly < objectYOnScreen + spriteHeightMode)
 			mObjectsOAMIndex.emplace_back(i);
-			objCnt++;
-		}
-
-		if (objCnt >= LINE_OBJ_LIMIT)
-			break;
 	}
 }
 
 inline void ObjectRenderer::storePixelsInfos(u8 spriteHeightMode)
 {
-	// 1 - X bas = priorité haute
-	// 2 - index bas = priorité haute
-
+	// DMG object-to-object priority: smaller X wins, then lower OAM index (= earlier in the list).
+	// Transparent pixels (color 0) never claim a pixel.
 	for (const auto& objOamIndex : mObjectsOAMIndex)
 	{
-		OAM::Object object = mPPU->readOAM(objOamIndex);
-
-		int16_t objectXOnScreen = object.XPos;
-		//int16_t objectXOnScreen = object.XPos - 8;
+		const int16_t objectXOnScreen = static_cast<int16_t>(mPPU->readOAM_XPos(objOamIndex)) - 8; // X is stored + 8
 
 		for (int i = 0; i < TILE_WIDTH; i++)
 		{
-			// Current object doesn't overlap with any other object
-			if (mCurrentLinePixelsInfos[objectXOnScreen + i][X_COORD] == -1)
-			{
-				mCurrentLinePixelsInfos[objectXOnScreen + i][X_COORD] = objectXOnScreen;
-				mCurrentLinePixelsInfos[objectXOnScreen + i][INDEX] = objOamIndex;
-				mCurrentLinePixelsInfos[objectXOnScreen + i][PIXEL_INDEX] = i;
-			}
+			const int x = objectXOnScreen + i;
+			if (x < 0 || x >= SCREEN_WIDTH)
+				continue;
+			if (getPixelColorID(objOamIndex, i, spriteHeightMode) == 0)
+				continue;
 
-			//Current object overlaps
-			else
-			{
-				handleObjectsOverlap(objectXOnScreen, objOamIndex, i, spriteHeightMode);
-			}
+			auto& info = mCurrentLinePixelsInfos[x];
+			if (info[INDEX] == -1 || objectXOnScreen < info[X_COORD])
+				info = { objectXOnScreen, static_cast<int16_t>(objOamIndex), static_cast<int16_t>(i) };
 		}
 	}
 }
 
-void ObjectRenderer::handleObjectsOverlap(int16_t objectXOnScreen, u8 objOamIndex, u8 currentTilePixel, u8 spriteHeightMode)
-{
-	if (mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] != objectXOnScreen)
-	{
-		if (objectXOnScreen < mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD])
-		{
-			u8 pixelID = getPixelColorID(
-				objOamIndex,
-				currentTilePixel,
-				spriteHeightMode);
 
-			if (pixelID != 0)
-			{
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
-			}
-		}
-		else
-		{
-			u8 pixelID = getPixelColorID(
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX],
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX],
-				spriteHeightMode);
-
-			if (pixelID == 0)
-			{
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
-				mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
-			}
-		}
-	}
-	else
-	{
-		u8 pixelID = getPixelColorID(
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX],
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX],
-			spriteHeightMode);
-
-		if (pixelID == 0)
-		{
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][X_COORD] = objectXOnScreen;
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][INDEX] = objOamIndex;
-			mCurrentLinePixelsInfos[objectXOnScreen + currentTilePixel][PIXEL_INDEX] = currentTilePixel;
-		}
-
-	}
-}
 
 
 inline u8 ObjectRenderer::getPixelColorID(u8 objOamIndex, u8 currentXTilePixel, u8 spriteHeightMode) const
@@ -190,27 +124,23 @@ inline u8 ObjectRenderer::getPixelColorID(u8 objOamIndex, u8 currentXTilePixel, 
 
 inline void ObjectRenderer::renderCurrentLineObjectsPixels(u8 spriteHeightMode)
 {
-
+	const int ly = mPPU->readLY();
 	for (int pixel = 0; pixel < SCREEN_WIDTH; pixel++)
 	{
 		const auto& pixelInfo = mCurrentLinePixelsInfos[pixel];
-
 		if (pixelInfo[INDEX] == -1)
 			continue;
 
 		OAM::Object object = mPPU->readOAM(pixelInfo[INDEX]);
-
 		OAM::Attributes_Flags objectFlags = object.AttributeFlags;
-		u8 pixelColorID = getPixelColorID(
-			pixelInfo[INDEX], pixelInfo[PIXEL_INDEX], spriteHeightMode
-		);
 
+		// Priority bit = 1 (BG over OBJ): the object only shows where BG/window color is 0. It used
+		// to hide such objects completely.
+		if (objectFlags.attr.priority == 0x01 && mPPU->getBGColorIndex(pixel) != 0)
+			continue;
+
+		u8 pixelColorID = getPixelColorID(pixelInfo[INDEX], pixelInfo[PIXEL_INDEX], spriteHeightMode);
 		u8 palette = objectFlags.attr.DMGPalette ? mPPU->readOBP1() : mPPU->readOBP0();
-
-		if (pixelColorID != 0x00 && objectFlags.attr.priority == 0x00)
-		{
-			mPPU->renderPixel(pixelColorID, pixel, mPPU->readLY(), palette, true);
-		}
-
+		mPPU->renderPixel(pixelColorID, pixel, ly, palette, true);
 	}
 }

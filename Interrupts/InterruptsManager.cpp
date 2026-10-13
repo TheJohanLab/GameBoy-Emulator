@@ -57,9 +57,20 @@ void InterruptsManager::callInterruptHandler()
 
 	if (mActiveInterruptFlags.byte > 0x00)
 	{
+		const u8 pendingBefore = mActiveInterruptFlags.byte;
 		cpu->resumeCPUFromInterrupt();
 		cpu->setIMEFlag(0x00); 
-		InstructionJump::PUSH_PC(*cpu);
+		// Push the address of the NEXT instruction. PC already points to it here (executeOpcode() ran
+		// incPC()), whereas InstructionJump::PUSH_PC() is made for CALL/RST and pushes PC + 1: every
+		// RETI used to resume one byte too far.
+		{
+			u16* SP = cpu->getSP();
+			const u16 returnAddress = *cpu->getPC();
+			(*SP)--;
+			cpu->writeMemory(*SP, static_cast<u8>(returnAddress >> 8));
+			(*SP)--;
+			cpu->writeMemory(*SP, static_cast<u8>(returnAddress & 0xFF));
+		}
 
 		if (mActiveInterruptFlags.flags.Vblank)
 			(*mInterruptsList[VBLANK])();
@@ -72,7 +83,10 @@ void InterruptsManager::callInterruptHandler()
 		else if (mActiveInterruptFlags.flags.Joypad)
 			(*mInterruptsList[JOYPAD])();
 
-		cpu->setInterruptFlag(mActiveInterruptFlags.byte);
+		// Acknowledge only the serviced interrupt: the other IF bits (including requests that are not
+		// enabled in IE) must stay set.
+		const u8 servicedBit = pendingBefore & ~mActiveInterruptFlags.byte;
+		cpu->setInterruptFlag(static_cast<u8>(cpu->getInterruptFlags().second.byte & ~servicedBit));
 
 	}
 
@@ -148,15 +162,15 @@ void InterruptsManager::getActiveInterruptFlags()
 {
 	auto cpu = mCPU_weak.lock();
 	std::pair< interrupt_flag, interrupt_flag> interruptFlags = cpu->getInterruptFlags();
-	mActiveInterruptFlags.byte = ((interruptFlags.first.byte & interruptFlags.second.byte) & 0x0F);
+	mActiveInterruptFlags.byte = ((interruptFlags.first.byte & interruptFlags.second.byte) & 0x1F); // 5 sources incl. joypad
 }
 
 
 void InterruptsManager::handleHaltInterrupt(std::shared_ptr<CPU> cpu)
 {
-	if (mActiveInterruptFlags.byte > 0x00) //Instruction pending
-	{
+	// IME = 0: a pending interrupt only wakes the CPU from HALT; it is not serviced. This runs after
+	// EVERY instruction, so it must not arm the HALT bug: doing so froze PC (incPC() added 0) for as
+	// long as IE & IF != 0, i.e. forever, because nothing could reach the code that clears IF.
+	if (mActiveInterruptFlags.byte > 0x00 && cpu->getCPUHaltedStatus())
 		cpu->resumeCPUFromInterrupt();
-		cpu->setHaltBugFlag(); //TODO Check the infinite loop
-	}
 }

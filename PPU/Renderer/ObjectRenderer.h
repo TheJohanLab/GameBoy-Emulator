@@ -22,7 +22,6 @@ public:
 private:
 	inline void storeObjectsInCurrentLine(u8 spriteHeightMode);
 	inline void storePixelsInfos(u8 spriteHeightMode);
-	void handleObjectsOverlap(int16_t objectXOnScreen, u8 objOamIndex, u8 currentTilePixel, u8 spriteHeightMode);
 	inline u8 getPixelColorID(u8 objOamIndex, u8 currentXTilePixel, u8 spriteHeightMode) const;
 	inline void renderCurrentLineObjectsPixels(u8 spriteHeightMode);
 
